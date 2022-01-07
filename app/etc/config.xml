@@ -147,8 +147,7 @@
             </locale>
         </general>
         <combipac>
-            <apipath>http://62.12.1.67:3339/WebshopService.asmx?wsdl</apipath>
-            <!-- <apipath>http://80.126.114.165:3335/WebshopService.asmx?wsdl</apipath> -->
+            <apipath></apipath>
             <default_user>
                 <bedrijfnr>1</bedrijfnr>
                 <filiaalnr>1</filiaalnr>
