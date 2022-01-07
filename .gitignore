@@ -4,7 +4,8 @@
 !/var/.resource_config.json
 
 #server-config
-
+reports/GyzsManagement/getquery.txt
+reports/GyzsManagement/querylog.txt
 
 #development
 /nbproject/
