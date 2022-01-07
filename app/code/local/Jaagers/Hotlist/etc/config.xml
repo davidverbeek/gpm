@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Jaagers_Hotlist>
+    		<version>0.2.0</version>
+		</Jaagers_Hotlist>
+	</modules>
+	<global>
+		<models>
+        	<jaagers_hotlist>
+				<class>Jaagers_Hotlist_Model</class>
+    		</jaagers_hotlist>
+		</models>   
+	</global> 
+</config> 

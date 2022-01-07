@@ -1,0 +1,543 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $incrementId = $this->getOrderId(); ?>
+<?php $order = Mage::helper('multistepcheckout')->getSuccessOrderObj($incrementId); ?>
+<?php if (isset($incrementId) && $incrementId != ''): ?>
+    <?php Mage::log("OrderId::" . $incrementId, null, "orderslog.log"); ?>
+	<?php $orderId = $order->getId(); ?>
+    <?php if($orderId != ''): ?>
+        <?php
+        //FAQ details
+        $cid = '';
+        $cfname = '';
+        $clname = '';
+        if ($order->getCustomerId() != '') {
+            $customer = Mage::helper('multistepcheckout')->getCustomerOrderObj($order->getCustomerId()); 
+            $cid = $customer->getId();
+            $cfname = $customer->getFirstname();
+            $clname = $customer->getLastname();
+        }
+        if ($order->getCustomerId() === NULL) {
+            $customerName = $order->getBillingAddress()->getName();
+            $customerEmail = $order->getBillingAddress()->getEmail();
+            $cid = '';
+            $cfname = $customerName;
+            $clname = '';
+        } else {
+            $customerName = $order->getCustomerName();
+            $customerEmail = $order->getCustomerEmail();
+            $cid = $order->getCustomerId();
+            $cfname = $customerName;
+            $clname = '';
+        }
+
+        ?>
+    <?php endif; ?>
+
+    <?php $getCurSymbol = "EUR"; ?>
+
+    <?php
+
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+    if (Mage::helper('gtm')->getEnabled()) { ?>
+    <!-- Google Code for GYZS-adwords-conversions-new Conversion Page -->
+    <script type="text/javascript">
+        dataLayer.push({
+            'getBaseSubtotal': '<?php echo $getCurSymbol . $order->getBaseSubtotal(); ?>',
+            'orderId': '<?php echo $incrementId ?>'
+        });
+        window.addEventListener('load', function () {
+            if (window.ga && ga.create) {
+                logger(<?php echo $incrementId ?>, 'Google Analytics is loaded')
+            }
+            else {
+                logger(<?php echo $incrementId ?>, 'Google Analytics is not loaded')
+            }
+
+            if (window.google_tag_manager) {
+                logger(<?php echo $incrementId ?>, 'Google Tag Manager is loaded')
+            }
+            else {
+                logger(<?php echo $incrementId ?>, 'Google Tag Manager is not loaded')
+            }
+        }, false);
+
+        function logger(orderid,message){
+            var url = "<?php echo $this->getUrl('multistepcheckout/index/logger',array('_secure'=>true)); ?>";
+            new Ajax.Request(url, {
+                method: 'post',
+                parameters: {message: orderid + ' : ' + message},
+                onSuccess: function (data) {
+                    console.log(data.responseText);
+                }
+            });
+
+        }
+    </script>
+    <?php } ?>
+
+    <script type="text/javascript">
+        var sliSparkJsHost = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cscript src='" + sliSparkJsHost + "b.sli-spark.com/sli-spark.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script language="javascript" type="text/javascript">
+        var spark = new SliSpark("2811", "1");
+        spark.setPageType("checkout-confirmation");
+        spark.addTransaction("<?php echo $incrementId ?>", "<?php echo $incrementId ?>", "<?php echo $order->getBaseSubtotal() ?>", "<?php echo $order->getShippingInclTax() ?>", "<?php echo $order->getTaxAmount()?>");
+        <?php foreach($order->getAllVisibleItems() as $_item): ?>
+        <?php if ($_item->getParentItem()) continue; ?>
+        spark.addItem("<?php echo $_item->getSku() ?>", "<?php echo (int)$_item->getQtyOrdered() ?>", "<?php echo $_item->getPrice() ?>");
+        <?php endforeach;?>
+        spark.writeTrackCode();
+        spark.writeTransactionCode();
+    </script>
+
+    <div class="multiple-checkout">
+        <div class="thanks row clearfix">
+            <h1><?php echo $this->__('Thank you for your order'); ?> <?php echo $customerName; ?>!</h1>
+            <div class="bestselling_main clearfix">
+                <div class="news_form clearfix">
+
+                    <div class="bestselling">
+                        <h1><?php echo $this->__('order completion') ?></h1>
+                        <div class="left">
+                            <p><?php echo $this->__("Thanks for your order with GYZS. Herewith some useful information for your records. We've captured with your order number") ?>
+
+                                <?php if ($cid): ?>
+                                    <a href="<?php echo $this->getViewOrderUrl($orderId) ?>"><span><?php echo $this->__('GYZS-'); ?><?php echo $incrementId ?></span></a>
+                                <?php else: ?>
+                                    <span><?php echo $this->__('GYZS-'); ?><?php echo $incrementId ?></span>
+                                <?php endif; ?>
+
+                                <?php if ($cid): ?>
+                                    <?php echo $this->__('You can always view these via My orders.'); ?>
+                                <?php endif; ?>
+                            </p>
+                            <p>&nbsp;</p>
+                            <p><?php echo $this->__('We also mail your order for your confirmation.'); ?></p>
+                        </div>
+                        <?php
+                        echo $this->getLayout()->createBlock('cms/block')->setBlockId('order-completion')->toHtml();
+                        ?>
+                    </div>
+                </div>
+                <div class="news_form clearfix">
+                    <?php //echo $this->getChildHtml('checkout.newsletter');?>
+                    <div class="news_form_detail clearfix">
+                        <form action="<?php echo $this->getUrl('newsletter/subscriber/new', array('_secure' => true)) ?>"
+                          method="post" id="detailnewsletter-validate-detail">
+                          <div class="left">
+                            <p><?php echo $this->__('Always up to date with the latest discount? Yes, sign me up for rebate ...'); ?></p>
+                        </div>
+                        <div class="right">
+                            <input value="<?php echo $customerEmail; ?>" type="textbox" name="email" value=""/>
+                            <button type="submit"><?php echo $this->__('Sign Up') ?></button>
+                        </div>
+                    </form>
+                </div>
+                <script type="text/javascript">
+                        //<![CDATA[
+                        var newsletterSubscriberFormDetail = new VarienForm('detailnewsletter-validate-detail');
+                        //]]>
+                    </script>
+                </div>
+                <div class="social">
+                    <div class="social_detail">
+                        <h1><?php echo $this->__('Satisfied with your order?') . "<br> " . $this->__('Let everyone know!') ?></h1>
+                    </div>
+                    <div class="social-icon">
+                        <?php //echo $this->getChildHtml('bookmarks');?>
+                        <?php echo $this->getLayout()->createBlock('core/template')->setTemplate('socialshare/socialbar.phtml')->toHtml(); ?>
+                    </div>
+                </div>
+                <div class="process clearfix">
+                    <div class="process_det clearfix">
+                        <div class="process_detail ">
+                            <div class="title_div">
+                                <h1><?php echo $this->__('the sequel') ?></h1>
+                            </div>
+                            <ul>
+                                <?php
+                                $currentTime = "";
+                                $currentTime = Mage::getModel('core/date')->date('H:i');
+                                ?>
+                                <li class="spe"><?php echo $this->__('Order successfully completed') ?>
+                                    <span><?php echo $this->__('today at') ?><?php echo $currentTime; ?></span></li>
+                                    <li class="spe"><?php echo $this->__('Confirmation e-mail') ?>
+                                        (<?php echo $customerEmail ?>)
+                                        <span><?php echo $this->__('today at') ?><?php echo $currentTime; ?></span></li>
+                                        <li><?php echo $this->__('Track &amp; trace mail') ?><span>
+                                            <?php if (Mage::helper('multistepcheckout')->getDeliveryDay()) :
+                                            echo Mage::helper('multistepcheckout')->getDeliveryDay();
+                                            endif; ?> </span></li>
+                                            <?php if ($order): ?>
+                                                <li class="spe_extra"><?php echo $this->__('Send to') ?>
+                                                    <p><?php echo $this->__('Delivery address:') ?><?php echo $order->getShippingAddress()->format('oneline'); ?></p>
+                                                </li>
+                                            <?php endif; ?>
+                        </ul>
+                    </div>
+                    <h1><?php echo $this->__('Forgot something? With GYZS can add up to a day in advance any articles to your backorder! We call super service.') ?></h1>
+                </div>
+            </div>
+            <div class="faqform clearfix">
+                <form action="<?php echo $this->getUrl('customerfaq/index/save', array('_secure' => true)) ?>"
+                  method="post" id="faq">
+                  <div class="faqform_detail clearfix">
+                    <h1><?php echo $this->__('we may ask you something?') ?></h1>
+                    <div class="content clearfix">
+                        <div class="cont clearfix">
+                            <p><?php echo $this->__('What could be better in your opinion?') ?></p>
+                            <input type="textbox"
+                            placeholder="<?php echo $this->__('Fill in what we can do better') ?>"
+                            name="info1"
+                            onfocus="this.placeholder = '';"
+                            onblur="this.placeholder = '<?php echo $this->__('Fill in what we can do better') ?>'; "/>
+                        </div>
+                        <div class="cont clearfix">
+                            <p><?php echo $this->__('What did you really pleasant?') ?></p>
+                            <input type="textbox"
+                            placeholder="<?php echo $this->__("Fill in what you've experienced as pleasant") ?>"
+                            name="info2"
+                            onfocus="this.placeholder = '';"
+                            onblur="this.placeholder = '<?php echo $this->__("Fill in what you've experienced as pleasant") ?>'; "/>
+                        </div>
+                        <div class="cont clearfix">
+                            <p><?php echo $this->__('Do you have any comments?') ?>
+                                <span><?php echo $this->__('A good improvement could win a coupon of 5%.') ?></span>
+                            </p>
+                            <textarea name="question" rows="5" cols="50"
+                            placeholder="<?php echo $this->__("Do you have a good tip? Enter it here") ?>"
+                            onfocus="this.placeholder = '';"
+                            onblur="this.placeholder = '<?php echo $this->__("Do you have a good tip? Enter it here") ?>'; "></textarea>
+                        </div>
+                        <div class="cont clearfix">
+                            <p>&nbsp;</p>
+                            <input type="hidden" name="customer_id" value="<?php echo $cid ?> "/>
+                            <input type="hidden" name="name" value="<?php echo $cfname . ' ' . $clname ?>"/>
+                            <button class="btn" type="submit"><?php echo $this->__('Submit') ?></button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        
+        <script type="text/javascript">
+                    //<![CDATA[
+                    var faqForm = new VarienForm('faq', true);
+                    //]]>
+                </script>
+            </div>
+        </div>
+    </div>
+    <?php echo $this->getChildHtml('sli_sptopseller'); ?>
+    <?php //echo $this->getChildHtml('checkout.bought'); ?>
+    <?php
+
+// only render tracking scripts if is live
+//if (in_array($_SERVER['SERVER_NAME'], array('dev17.devgyzs.hostingxstest.nl', 'dev17.devgyzs.hostingxstest.nl'))) :
+
+    /*
+    - Machines en apparaten/accu machines: 4925
+    - Machines en apparaten/elektrische machines: 5118
+    - Machines en apparaten/meet- en detectie machines: 5960
+    - Machines en apparaten/pneumatisch gereedschap: 5476
+    - Machines en apparaten/tuinmachines: 5900
+    */
+
+    $orderItems = $order->getAllVisibleItems();
+
+    $_isDiffTracking = false;
+    $_hasDefaultProducts = false;
+    $_hasMachineProducts = false;
+
+    $_defaultsFinalPrice = (float)0.00;
+    $_machinesFinalPrice = (float)0.00;
+
+    $_productNames = array('default' => array(), 'machine' => array());
+
+    foreach ($orderItems as $orderItem) {
+
+        //var_dump($orderItem->getData());
+
+        $product = Mage::getModel('catalog/product')->load($orderItem->getProductId());
+        $categoryIds = $product->getCategoryIds();
+
+        $_isDiffTracking = (count(array_intersect($categoryIds, array(2724, 2487, 2751, 2806, 2408, 2809)))) ? true : false;
+
+        if ($_isDiffTracking) {
+            if (!$_hasMachineProducts) $_hasMachineProducts = true;
+            //$_machinesFinalPrice += $product->getFinalPrice() * $orderItem['qty_ordered'];
+            $_machinesFinalPrice += $orderItem->getRowTotal();
+            $_productNames['machine'][] = $orderItem->getName();
+        } else {
+            if (!$_hasDefaultProducts) $_hasDefaultProducts = true;
+            //$_defaultsFinalPrice += $product->getFinalPrice() * $orderItem['qty_ordered'];
+            $_defaultsFinalPrice += $orderItem->getRowTotal();
+            $_productNames['default'][] = $orderItem->getName();
+        }
+    }
+
+
+    $_defaultsFinalPrice = number_format($_defaultsFinalPrice, 2, '.', '');
+    $_machinesFinalPrice = number_format($_machinesFinalPrice, 2,'.','');
+
+
+    // $order must exist declared above
+    $_totalData = $order->getData();
+    $_grand = $_totalData['subtotal'];
+    $_subtotal = number_format($_grand, 2);
+
+    if ($_defaultsFinalPrice + $_machinesFinalPrice < 50) {
+        $verzendkosten = '6.20';
+    } elseif ($_defaultsFinalPrice + $_machinesFinalPrice < 100) {
+        $verzendkosten = '4.545';
+    } else {
+        $verzendkosten = 0;
+    }
+
+    // HURRA
+
+    ?>
+    <?php
+
+    // Helios_Gtm module enable and setting enable for gtm than only script execute
+    if (Mage::helper('gtm')->getEnabled()) { ?>
+    <?php if ($_hasMachineProducts && $_hasDefaultProducts) : ?>
+
+        <!-- START TRADE TRACKER CODE FOR GENERAL PRODUCTS -->
+
+        <script type="text/javascript">
+            dataLayer.push({
+                'tt.flag': 'DM',
+                'tt.type': 'sales',
+                'tt.campaignID': '8998',
+                'tt.trackingGroupID': '',
+                'tt.productIDD': '13607',
+                'tt.productIDM': '14190',
+                'tt.transactionID': '<?php echo $order->getIncrementId()  ?>',
+                'tt.transactionAmountD': '<?php echo $_defaultsFinalPrice ?>',
+                'tt.transactionAmountM': '<?php echo $_machinesFinalPrice ?>',
+                'tt.quantity': '',
+                'tt.email': '',
+                'tt.descrMerchant': '',
+                'tt.descrAffiliate': '',
+                'tt.currency': ''
+            });
+        </script>
+
+    <?php elseif ($_hasMachineProducts) : ?>
+
+
+        <script type="text/javascript">
+            dataLayer.push({
+                'tt.flag': 'M',
+                'tt.type': 'sales',
+                'tt.campaignID': '8998',
+                'tt.trackingGroupID': '',
+                'tt.productIDD': '',
+                'tt.productIDM': '14190',
+                'tt.transactionID': '<?php echo $order->getIncrementId() ?>',
+                'tt.transactionAmountD': '',
+                'tt.transactionAmountM': '<?php echo $_machinesFinalPrice ?>',
+                'tt.quantity': '',
+                'tt.email': '',
+                'tt.descrMerchant': '',
+                'tt.descrAffiliate': '',
+                'tt.currency': ''
+            });
+        </script>
+
+    <?php elseif ($_hasDefaultProducts) : ?>
+
+
+        <script type="text/javascript">
+            dataLayer.push({
+                'tt.flag': 'D',
+                'tt.type': 'sales',
+                'tt.campaignID': '8998',
+                'tt.trackingGroupID': '',
+                'tt.productIDD': '13607',
+                'tt.productIDM': '',
+                'tt.transactionID': '<?php echo $order->getIncrementId() ?>',
+                'tt.transactionAmountD': '<?php echo $_defaultsFinalPrice ?>',
+                'tt.transactionAmountM': '',
+                'tt.quantity': '',
+                'tt.email': '',
+                'tt.descrMerchant': '',
+                'tt.descrAffiliate': '',
+                'tt.currency': ''
+            });
+        </script>
+    <?php endif; ?>
+    <?php } ?>
+
+    <!-- Start Real-time Analytics Conversions Tracking -->
+    <script type="text/javascript">
+        var _fo = _fo || [];
+        _fo.push(["orderTotal", "<?php echo $order->getBaseSubtotal(); ?>"]);
+        _fo.push(["orderId", "<?php echo $incrementId; ?>"]);
+    </script>
+    <!-- <script async="async" type="text/javascript" src="//cdn.feedoptimise.com/fo.js#415"></script> -->
+
+    <?php Mage::log("baseSubtotal::" . $order->getGrandTotal(), null, "orderslog.log"); ?>
+<?php endif; ?>
+<?php if (isset($_COOKIE['partner'])) {
+    $tradetrackerData = array(
+        "OrderId" => $incrementId,
+        "base subtotal" => $getCurSymbol . " " . $order->getBaseSubtotal(),
+        "grand total" => $order->getGrandTotal(),
+        "subtotal" => $order->getSubtotal(),
+        "partner" => $_COOKIE['partner']
+    );
+    Mage::log(json_encode($tradetrackerData), null, "Tradetracker_code.log");
+    unset($_COOKIE['partner']);
+    setcookie('partner', null, -1, '/');
+}
+?>
+<script>
+    window.uetq = window.uetq || [];
+        window.uetq.push({'gv': <?php echo number_format($order->getGrandTotal(), 2, '.', '.') ?>, 'gc': 'EUR'}); // Pass the computed goal value
+    </script>
+
+    <?php
+
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+    if (Mage::helper('gtm')->getEnabled()) { ?>
+    <!-- START GOOGLE ANALYTICS Enhanced  ECOMMERCE TRACKING CODE -->
+    <?php /*Ask Kaushal before making any changes in following script code */ ?>
+    <script>
+        dataLayer.push({
+            'event': 'checkoutOption',
+            'ecommerce': {
+                'currencyCode': 'EUR',
+                'checkout': {
+                    'actionField': {'step': 6, 'option': 'Order Success', 'list': 'Product List'}
+                }
+            }
+        });
+        // Send transaction data with a pageview if available
+        // when the page loads. Otherwise, use an event when the transaction
+        // data becomes available.
+        <?php
+        $productsCheckoutOption = array();
+        $productscrtoTransactionpage = array();
+        foreach ($order->getAllVisibleItems() as $_item) {
+            $productsCheckoutOption[] = array(
+                'name' => $_item->getName(),
+                'id' => Mage::helper('common')->getGYZSSku($_item->getSku()),
+                'price' => number_format((float)$_item->getPrice(), 2, '.', ''),
+                'quantity' => (int)$_item->getQtyOrdered(),
+                'list' => 'Product List'
+            );
+            $productscrtoTransactionpage[] = array(
+                'id' => $_item->getSku(),
+                'price' => number_format((float)$_item->getPrice(), 2, '.', ''),
+                'quantity' => (int)$_item->getQtyOrdered()
+            );
+        } // End items foreach
+
+        $checkoutOption = array(
+            'event' => 'checkoutOption',
+            'ecommerce' => array(
+                'purchase' => array(
+                    'actionField' => array(
+                        'id' => $incrementId, // Transaction ID. Required for purchases and refunds.
+                        'affiliation' => Mage::app()->getStore()->getName(),
+                        'revenue' => number_format((float)$order->getBaseSubtotal(), 2, '.', ''), // Total transaction value (incl. tax and shipping)
+                        'tax' => number_format((float)$order->getTaxAmount(), 2, '.', ''),
+                        'shipping' => number_format((float)$order->getShippingInclTax(), 2, '.', ''),
+                        'list' => 'Product List'
+                    ),
+                    'products' => $productsCheckoutOption
+                )
+            )
+        );
+        //code for GTM Criteo Success page impression
+        $crtoTransactionpage = array(
+            'event' => 'crto_transactionpage',
+            'crto' => array(
+                'email' => $customerEmail,
+                'transactionid' => $incrementId,
+                'products' => $productscrtoTransactionpage
+            )
+        );
+        Mage::log(print_r($checkoutOption, 1), null, 'GoogleOrders.log');
+        Mage::log(print_r($crtoTransactionpage, 1), null, 'GoogleOrders.log');
+        ?>
+        //code for GTM Criteo Success page impression
+        dataLayer.push(<?php echo json_encode($checkoutOption); ?>);
+        //code for GTM Criteo Success page impression
+        dataLayer.push(<?php echo json_encode($crtoTransactionpage); ?>);
+    </script>
+
+<?php } //GTM Enabled endif; ?>
+<?php
+// Helios_Gtm module enable and setting enable for google ads than only script execute
+if(Mage::helper('gtm')->getGoogleAdsEnabled()){ ?>
+	<?php if($_gAdsCode = Mage::helper('gtm')->getGoogleAdsCode()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode; ?>"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', '<?php echo $_gAdsCode; ?>');
+		</script>
+		<!-- Event snippet for GYZS-adwords-conversions-new conversion page -->
+		<script>
+		  gtag('event', 'conversion', {
+			  'send_to': '<?php echo $_gAdsCode ."/" . Mage::helper('gtm')->getGoogleAdsLabel(); ?>',
+			  'value': '<?php echo $order->getBaseSubtotal(); ?>',
+			  'currency': 'EUR',
+			  'transaction_id': '<?php echo $incrementId; ?>'
+		  });
+		</script>
+	<?php endif; ?>
+	<?php if($_gAdsCode2 = Mage::helper('gtm')->getGoogleAdsCode2()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode2; ?>"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', '<?php echo $_gAdsCode2; ?>');
+		</script>
+	  	<!-- Event snippet for GYZS-adwords-conversions-new conversion page -->
+		<script>
+		  gtag('event', 'conversion', {
+			  'send_to': '<?php echo $_gAdsCode2 ."/" . Mage::helper('gtm')->getGoogleAdsLabel2(); ?>',
+			  'value': '<?php echo $order->getBaseSubtotal(); ?>',	
+			  'currency': 'EUR',
+			  'transaction_id': '<?php echo $incrementId; ?>'
+		  });
+		</script>
+	<?php endif; ?>
+<?php } ?>

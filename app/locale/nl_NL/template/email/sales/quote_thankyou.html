@@ -1,0 +1,57 @@
+<!--@subject {{var store.getFrontendName()}}: Nieuwe offerte aanvraag # {{var quote.getId()}} @-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+	<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+		<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+			<tr>
+				<td align="center" valign="top" style="padding:20px 0 20px 0">
+					<!-- [ header starts here] -->
+					<table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="670" style="border:1px solid #E0E0E0;">
+						<tr>
+							<td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" width="225" height="83" border="0"/></a></td>
+						</tr>
+						<!-- [ middle starts here] -->
+						<tr>
+							<td valign="top">
+								<p>
+									<strong>Geachte {{htmlescape var=$quote.getCustomerFirstname()}} {{htmlescape var=$quote.getCustomerLastname()}}</strong>,<br/>
+									Hartelijk dank voor uw offerte aanvraag via {{var store.getFrontendName()}}.<br/><br/>
+									
+									U krijgt u binnen 24 uur een offerte per mail toegezonden. Mocht u in de tussentijd al vragen hebben dan kunt u contact opnemen via <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> of telefonisch via <span class="nobr">{{config path='general/store_information/phone'}}</span>.
+								</p>
+								
+								<h3>Offerte</h3>
+								
+								<table width="100%">
+									<tr>
+										<th align="left" style="font-size:12px">Product naam</th>
+										<th align="right" style="font-size:12px" width="60">Prijs</th>
+										<th align="right" style="font-size:12px" width="80">Aantal</th>
+										<th align="right" style="font-size:12px" width="120">Subtotaal</th>
+									</tr>
+									{{var quote_items_html}}
+									{{var quote_totals_html}}
+								</table>
+
+								<div style="clear:both"></div>
+								<a href="{{var quote_checkout_url}}" title="Checout"><img width="145" height="30" src="{{var checkout_img}}" alt="Meteen afrekenen" /></a>
+								
+								<br />
+								
+								<p style="line-height: 16px;">
+									Nogmaals hartelijk dank voor uw aanvraag,<br/>
+									<strong>{{var store.getFrontendName()}}</strong>
+								</p>
+							</td>
+						</tr>
+					</table>
+					{{customVar code=email_footer}}
+					{{customVar code=email_disclaimer}}
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>

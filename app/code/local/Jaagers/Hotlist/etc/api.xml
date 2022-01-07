@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config>
+  <api>
+    <resources>
+      <jaagers_hotlist_objectmodel translate="title" module="jaagers_hotlist">
+        <title>Hotlists</title>
+        <!-- <model>Jaagers_Hotlist_Model_Objectmodel_Api</model> -->
+        <model>jaagers_hotlist/objectmodel_api</model>
+        <methods>
+          <testMethod translate="title" module="jaagers_hotlist">
+            <title>Test method</title>
+            <method>testMethod</method>
+          </testMethod>
+          <createList translate="title" module="jaagers_hotlist">
+            <title>Create hotlist</title>
+            <method>createList</method>
+          </createList>
+          <deleteList translate="title" module="jaagers_hotlist">
+            <title>Delete hotlist</title>
+            <method>deleteList</method>
+          </deleteList>
+          <updateList translate="title" module="jaagers_hotlist">
+            <title>Add product to hotlist</title>
+            <method>updateList</method>
+          </updateList>
+          <updateListName translate="title" module="jaagers_hotlist">
+            <title>Update hotlist name</title>
+            <method>updateListName</method>
+          </updateListName>
+        </methods>
+      </jaagers_hotlist_objectmodel>
+    </resources>
+    <v2>
+      <resources_function_prefix>
+		    <jaagers_hotlist_objectmodel>hotlist</jaagers_hotlist_objectmodel>
+      </resources_function_prefix>
+    </v2>
+  </api>
+</config>

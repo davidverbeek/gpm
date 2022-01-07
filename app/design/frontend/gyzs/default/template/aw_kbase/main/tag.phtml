@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+$maxTagsPerPage = (int)Mage::getStoreConfig('kbase/tag/mainpagetagcount');
+
+$autoSize = $this->getAutoSize();
+if(1 < $tagMaxCount = $this->getTagMaxCount()) $tagMaxCount--;
+
+
+DEFINE('FONT_SCALE_MIN', 0.75); // minimal tag font size
+DEFINE('FONT_SCALE_MAX', 3.0); // maximal tag font size
+
+DEFINE('FONT_SCALE_DIFF', FONT_SCALE_MAX - FONT_SCALE_MIN);
+
+?>
+<div class="kbase-block kbase-main-tag">
+    <h2 class="kbase-block-title"><?php printf(Mage::getStoreConfig('kbase/tag/title')) ?></h2>
+
+    <ul class="kbase-list level-0">
+    <?php $tagCounter = 0; ?>
+    <?php foreach($this->getTags() as $tag):
+        if ($tagCounter >= $maxTagsPerPage && $maxTagsPerPage) break;
+        $tagCounter++;
+        $size = $autoSize
+                ? 100*(FONT_SCALE_MIN + FONT_SCALE_DIFF * ($tag['weight']-1)/$tagMaxCount)
+                : 100;
+    ?>
+        <li>
+            <a style="font-size:<?php echo $size ?>%" href="<?php echo AW_Kbase_Helper_Url::getUrl(AW_Kbase_Helper_Url::URL_TYPE_TAG, $tag) ?>"><?php echo htmlspecialchars($tag['tag_name']) ?></a>
+
+        </li>
+    <?php endforeach; ?>
+    </ul>
+</div>

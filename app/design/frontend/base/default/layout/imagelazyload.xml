@@ -1,0 +1,11 @@
+<layout version="0.1.0">
+    <default>
+	 <reference name="head">
+		<action method="addItem" ifconfig="imagelazyload/general/jquery_enable_disable"><type>skin_js</type><name>js/lazyload/1.10.2.jquery.min.js</name></action>
+		<action method="addItem" ifconfig="imagelazyload/general/module_enable_disable"><type>skin_js</type><name>js/lazyload/jquery.lazyload.js</name></action>
+ 	</reference>
+	<reference name="before_body_end">
+		<block type="core/template" name="lazyload" as="lazyload" template="lazyload/lazyload.phtml"  />
+	</reference>
+    </default>
+</layout> 

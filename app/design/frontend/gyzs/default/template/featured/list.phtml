@@ -1,0 +1,360 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+
+$helper = $this->helper('shoppersettings/image');
+$imgX = 180;
+$imgY = $helper->calculateHeight($imgX);
+?>
+<div class="block block-bestsellers">
+<?php //echo $this->__('Featured Product');?>
+<?php
+    $_productCollection=$this->getProductCollection();
+    $_helper = $this->helper('catalog/output');
+?>
+<?php /*if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else:*/ ?>
+    <div class="block-content">
+
+    <?php // Grid Mode ?>
+
+    <?php $_collectionSize = $_productCollection->count() ?>
+    <?php $_columnCount = $this->getColumnCount(); ?>
+    <?php $i=0; foreach ($_productCollection as $_product): ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-grid">
+        <?php endif ?>
+            <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+                <?php $product=Mage::getModel('catalog/product')->load($_product->getId());?>
+                <?php $labelValue= strtolower($product->getResource()->getAttribute('label')
+                    ->getFrontend()->getValue($product));?>
+                    <img src="<?php echo $this->getSkinUrl('images/featuredlabel/'.$labelValue.'.jpg');?>" alt="<?php echo $this->__($labelValue);?>" width="50" height="50" />
+                <?php /*if($product->getFeatured()):?>
+                    <span><em><?php echo $this->__('Featured');?></em></span>
+                <?php elseif(strtotime($product->getSpecialFromDate())<=$todayDate && strtotime($product->getSpecialToDate()) >=$todayDate):?>
+                    <span><em><?php echo $this->__('Sale');?></em></span>
+                <?php elseif(strtotime($product->getNewsFromDate())<=$todayDate && strtotime($product->getNewsToDate()) >=$todayDate):?>
+                    <span><em><?php echo $this->__('New');?></em></span>
+                <?php endif;*/ ?>
+
+
+                <div class="regular">
+                    <?php
+                    if ($_product->getTypeId() == 'grouped'): ?>
+                        <div class="regular-associatedproducts">
+                            <?php
+                            $_associatedProducts = $_product->getTypeInstance(true)->getAssociatedProducts($_product);
+                            $dispcount = count($_associatedProducts); ?>
+                            <?php echo $dispcount; ?>
+                        </div>
+                    <?php
+                    endif;
+                    ?>
+                    <?php $productName = ($_product->getCustomProductName())?$_product->getCustomProductName():$_product->getName(); ?>
+                    <a href="<?php echo $_product->getProductUrl() ?>"
+                       title="<?php echo $this->htmlEscape($productName) ?>" class="product-image">
+                        <?php echo $this->helper('shoppersettings')->getLabel($_product); ?>
+                        <img
+                            class="cwslazyloader"
+                            data-src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($imgX, $imgY) ?>"
+
+                            width="<?php echo $imgX; ?>" height="<?php echo $imgY; ?>"
+                            alt="<?php echo $this->htmlEscape($productName) ?>"/>
+                    </a>
+
+                    <div class="product-info">
+                        <div class="product-sku">
+                            <?php
+                            if ($_product->getTypeId() != 'grouped'):
+                                ?>
+                                <span><?php echo Mage::helper('common')->getGYZSSku($_product->getSku()); ?></span>
+                            <?php
+                            else:
+                                echo $this->__('Grouped Product');
+                            endif; ?>
+
+                        </div>
+                        <?php $_productNameStripped = $this->stripTags($productName, null, true); ?>
+                        <a class="product-name" href="<?php echo $_product->getProductUrl() ?>"
+                           title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $productName, 'name'); ?></a>
+
+                        <div class="price-container">
+                            <?php echo $this->getPriceHtml($_product, true) ?>
+                            <?php if ($_product->getTypeId() != 'grouped'): ?>
+                                <div class="price-per-attr">
+                                    <?php
+                                    $verkoopeenheid = $_product->getData('verkoopeenheid');
+                                    $prijsfactor = $_product->getData('prijsfactor');
+                                    if ($prijsfactor == 1) $prijsfactor = '';
+                                    ?>
+                                    <span> <?php echo $this->__('Per') . " " . $prijsfactor . " " . $verkoopeenheid; ?></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="category-url">
+                        <?php if ($_product->getTypeId() != 'grouped'): ?>
+                            <a href="<?php echo $_product->getProductUrl(); ?>"
+                               title="<?php echo $this->__('View Product') ?>"><?php echo $this->__('View Product') ?></a>
+                        <?php else: ?>
+                            <a href="<?php echo $_product->getProductUrl(); ?>"
+                               title="<?php echo $this->__('View Variants') ?>"><?php echo $this->__('View Variants')." "."(".$dispcount.")";  ?></a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="hover">
+                    <?php if ($_product->getTypeId() != 'grouped'): ?>
+                        <div class="hover-compare">
+                            <input type="checkbox" class="checkbox">
+                            <span class="checkbox"></span>
+                            <a class="compare-link" href=""
+                               title="<?php echo $this->__('Compare') ?>"><?php echo $this->__('Compare') ?></a>
+                        </div>
+                    <?php endif; ?>
+                    <?php
+                    if ($_product->getTypeId() == 'grouped'): ?>
+                        <div class="hover-associatedproducts">
+                            <?php
+                            $_associatedProducts = $_product->getTypeInstance(true)->getAssociatedProducts($_product);
+                            $dispcount = count($_associatedProducts);?>
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($productName) ?>">
+                                <span><?php echo $dispcount; ?></span>
+                                <i class="fi-list-bullet"></i>
+                            </a>
+                        </div>
+                    <?php
+                    endif;
+                    ?>
+
+                    <?php if (Mage::getStoreConfig('shoppersettings/ajax/cart')) : //quick view button ?>
+                        <a href='<?php echo $this->getUrl('ajax/index/options', array('product_id' => $_product->getId())); ?>'
+                           data-fancybox-group="gallery" class='fancybox quick-view'
+                           id='fancybox<?php echo $_product->getId() ?>'><?php echo $this->__('quick view') ?></a>
+                    <?php endif; ?>
+                    <a href="<?php echo $_product->getProductUrl() ?>"
+                       title="<?php echo $this->htmlEscape($productName) ?>" class="product-image">
+                        <?php echo $this->helper('shoppersettings')->getLabel($_product); ?>
+                        <?php
+                        $_product->load('media_gallery');
+                        $back_img = $_product->getMediaGalleryImages()->getItemByColumnValue('label', 'back');
+                        if ($back_img) : ?>
+                            <img
+                                class="cwslazyloader"
+                                src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image', $back_img->getFile())->resize($imgX, $imgY) ?>"
+                                width="<?php echo $imgX; ?>" height="<?php echo $imgY; ?>"
+                                alt="<?php echo $this->htmlEscape($productName) ?>"/>
+                        <?php else : ?>
+                            <img
+                                class="cwslazyloader"
+                                data-src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($imgX, $imgY) ?>"
+                                width="<?php echo $imgX; ?>" height="<?php echo $imgY; ?>"
+                                alt="<?php echo $this->htmlEscape($productName) ?>"/>
+                        <?php endif; ?>
+                    </a>
+
+                    <div class="product-info">
+                        <!--<a class="product-view-details" href="#" title="<?php //echo $this->__('View Details')
+                        ?>"><?php //echo $this->__('View Details')
+                        ?></a>
+					<a href="<?php //echo $_product->getProductUrl()
+                        ?>" title="<?php //echo $this->htmlEscape($_product->getName())
+                        ?>">
+                    <?php //echo $this->helper('shoppersettings/data')->priceFormat( $this->getPriceHtml($_product, true) );
+                        ?></a>-->
+
+                        <div class="product-sku">
+                            <?php
+                            if ($_product->getTypeId() != 'grouped'):
+                                ?>
+                                <span><?php echo Mage::helper('common')->getGYZSSku($_product->getSku()); ?></span>
+                            <?php
+                            else:
+                                echo $this->__('Grouped Product');
+                            endif; ?>
+
+                        </div>
+
+                        <?php $_productNameStripped = $this->stripTags($productName, null, true); ?>
+
+                        <a class="product-name" href="<?php echo $_product->getProductUrl() ?>"
+                           title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $productName, 'name'); ?></a>
+                        <?php if ($_product->getRatingSummary()) {
+                            echo $this->getReviewsSummaryHtml($_product);
+                        } ?>
+                        <div class="price-container">
+                            <?php echo $this->getPriceHtml($_product, true) ?>
+                            <?php
+                            if ($_product->getTypeId() != 'grouped'): ?>
+                                <div class="price-per-attr">
+                                    <span> <?php echo $this->__('Per') . " " . $prijsfactor . " " . $verkoopeenheid; ?></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+
+                                <span class="ajax_loading" id='ajax_loading<?php echo $_product->getId()?>'><img
+                                        src='<?php echo $this->getSkinUrl('images/ajax-loader.gif')?>' alt="Loading.."/></span>
+
+                        <!--<ul class="add-to-links">
+						<?php /*if ($this->helper('wishlist')->isAllow()) : */
+                        ?>
+							<li><a href="<?php /*echo $this->helper('wishlist')->getAddUrl($_product) */
+                        ?>" class="link-wishlist" data-id="<?php /*echo $_product->getId(); */
+                        ?>"><span>+</span><?php /*echo $this->__('Add to Wishlist') */
+                        ?></a></li>
+						<?php /*endif; */
+                        ?>
+						<?php /*if ($_compareUrl=$this->getAddToCompareUrl($_product)) : */
+                        ?>
+							<li><a href="<?php /*echo $_compareUrl */
+                        ?>" class="link-compare" data-id="<?php /*echo $_product->getId(); */
+                        ?>"><span>+</span><?php /*echo $this->__('Add to Compare') */
+                        ?></a></li>
+						<?php /*endif; */
+                        ?>
+					</ul>-->
+                    </div>
+                    <div class="hover_bottom">
+                        <?php if ($_product->getTypeId() != 'grouped'): ?>
+                            <div class="extra-stock">
+                                <div class="stock-limit">
+                                    <!--<span class="signal"></span>
+                                        <span class="info">2.023 <?php /*echo $this->__('In stock') */
+                                    ?></span>-->
+                                    <?php if ((int)Mage::getConfig()->getNode('default/combipac')->enable_stock && !$_product->isGrouped()) : ?>
+                                        <div class="checkstock list <?php echo $_product->getSku(); ?>" id="<?php echo $_product->getSku(); ?>">
+
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="action-container">
+                                    <div class="qty-wrapper">
+                                        <input type="text" name="qty" id="qty_<?php echo $_product->getSku(); ?>" min="1" maxlength="5" onkeypress="validateNumber(event)" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty grid" />
+                                        <input type="hidden" class="hiddenstock"
+                                               id="stock_qty_<?php echo $_product->getSku(); ?>"
+                                               title="<?php echo $_product->getSku(); ?>"/>
+                                        <input type="hidden" class="hiddenstockstatus"
+                                               id="stock_qty_status_<?php echo $_product->getSku(); ?>"
+                                               value="<?php echo $_product->getArtikelstatus(); ?>"/>
+                                        <input type="hidden" class="hiddenindealpacking"
+                                               id="stock_qty_ideal_<?php echo $_product->getSku(); ?>"
+                                               value="<?php echo $_product->getIdealeverpakking(); ?>"/>
+                                        <input type="hidden" class="hiddenverkoopeenheid"
+                                               id="stock_qty_verkoopeenheid_<?php echo $_product->getSku(); ?>"
+                                               value="<?php echo $_product->getVerkoopeenheid(); ?>"/>
+                                        <input type="hidden" class="hiddenafwijkenidealeverpakking"
+                                               id="stock_qty_afwijkenidealeverpakking_<?php echo $_product->getSku(); ?>"
+                                               value="<?php echo $_product->getAfwijkenidealeverpakking(); ?>"/>
+                                        <input type="hidden" class="leverancier"
+                                               id="leverancier_<?php echo $_product->getSku(); ?>"
+                                               value="<?php echo $_product->getLeverancier(); ?>"/>
+                                    </div>
+                                    <div class="quantity-per-attr">
+											<span>
+                                                <?php if (!(int)$_product->getData('afwijkenidealeverpakking')): ?>
+                                                    <?php echo '&nbsp;x&nbsp;' . $_product->getData('idealeverpakking');
+                                                else :
+                                                    echo "&nbsp;x&nbsp;1";
+                                                    ?>
+                                                <?php endif; ?>
+                                                <?php echo $_product->getData('verkoopeenheid'); ?>
+                                        </span></div>
+                                    <div class="button-container">
+                                        <?php if ($_product->isSaleable()): ?>
+
+                                            <?php if (Mage::getStoreConfig('shoppersettings/ajax/cart')) : ?>
+
+                                                <?php if (!($_product->getTypeInstance(true)->hasRequiredOptions($_product) || $_product->isGrouped())) { ?>
+                                                     <button type="button"
+                                                                title="<?php echo $this->__('Add to Cart') ?>"
+                                                                id="cart_button_<?php echo $_product->getSku(); ?>"
+                                                                class="button btn-cart ajax-cart"
+                                                                data-url="<?php echo $this->getAddToCartUrl($_product); ?>"
+                                                                data-id="<?php echo $_product->getId(); ?>">
+                                                            <?php echo $this->__('Add to Cart') ?>
+                                                        </button>
+                                                <?php } else { ?>
+                                                    <button type="button"
+                                                                title="<?php echo $this->__('Add to Cart') ?>"
+                                                                id="cart_button_<?php echo $_product->getSku(); ?>"
+                                                                class="button btn-cart show-options"
+                                                                data-id="<?php echo $_product->getId(); ?>">
+                                                            <?php echo $this->__('Add to Cart') ?>
+                                                        </button>
+                                                <?php } ?>
+
+                                            <?php else: ?>
+                                                <button type="button"
+                                                            title="<?php echo $this->__('Add to Cart') ?>"
+                                                            id="cart_button_<?php echo $_product->getSku(); ?>"
+                                                            class="button btn-cart"
+                                                            onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')">
+                                                        <?php echo $this->__('Add to Cart') ?>
+                                                    </button>
+                                            <?php endif; ?>
+
+                                        <?php else: ?>
+                                            <p class="availability out-of-stock">
+                                                <span><?php echo $this->__('Out of stock') ?></span></p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($_product->getTypeId() != 'grouped'): ?>
+                            <div class="view-product">
+
+                                <a href="<?php echo $_product->getProductUrl(); ?>"
+                                   title="<?php echo $this->__('View Product') ?>"><?php echo $this->__('View Product') ?></a>
+                            </div>
+                        <?php else: ?>
+                            <div class="view-variants">
+                                <a href="<?php echo $_product->getProductUrl(); ?>"
+                                   title="<?php echo $this->__('View Variants') ?>"><?php echo $this->__('View Variants')." "."(".$dispcount.")";  ?></a>
+
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </ul>
+        <?php endif ?>
+        <?php endforeach ?>
+        <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+
+
+
+</div>
+<?php //endif; ?>
+</div>

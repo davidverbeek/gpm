@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+$searchedPhrase = htmlspecialchars(
+        ($value = AW_Kbase_Helper_Url::getParam(AW_Kbase_Helper_Url::URL_PARAM_NAME_QUERY))
+            ? $value
+            : urldecode(Mage::app()->getRequest()->getParam(AW_Kbase_Helper_Url::URL_PARAM_NAME_QUERY))
+     );
+?>
+<div class="kbase-main-search">
+    <h1 class="kbase-block-title"><?php printf(Mage::getStoreConfig('kbase/search/title')) ?></h1>
+    <form action="<?php echo AW_Kbase_Helper_Url::getUrl(AW_Kbase_Helper_Url::URL_TYPE_SEARCH) ?>">
+        <label for="kbase_search_input"><?php echo $this->__('Search Knowledge Base') ?></label>
+        <input type="text" id="kbase_search_input" class="input-text input-clear" name="query" value="<?php echo $this->htmlEscape($searchedPhrase); ?>" title="<?php echo $this->__('Search our Frequently Asked Questions ...'); ?>" placeholder="<?php echo $this->__('Search our Frequently Asked Questions ...'); ?>"/>
+        <button type="submit" title="<?php echo $this->__('Search') ?>" class="button form-button secondary-search-button"><span><?php echo $this->__('Search') ?> <i class="fa fa-search"></i></span></button>
+    </form>
+</div>

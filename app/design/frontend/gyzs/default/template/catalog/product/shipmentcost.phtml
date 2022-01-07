@@ -1,0 +1,19 @@
+<?php
+
+	$_product = Mage::registry('current_product');
+	$_taxpercent = Mage::helper('common')->getTaxPercent($_product);
+	$shipmentcost = Mage::helper('common')->getShipmentIncTax($_taxpercent, $_product->getTansmission());
+	$getCountry = Mage::helper('common')->getCountry();
+
+	if($_product->getTansmission()) {
+
+		if(is_array(Mage::helper('common')->shippingCost($getCountry))){
+			echo $message = "<span class='paidshipping-desk'>de verzendkosten voor <a target='_blank' href=" . Mage::getBaseUrl() . 'klantenservice/bezorgen-en-afhalen/#verzendkosten' . ">afwijkende pakketten</a> in ".$getCountry." bedragen ".Mage::helper('core')->currency($shipmentcost)." Incl. btw</span>";
+		} else {
+			echo $message = "<span class='paidshipping-desk'>de verzendkosten voor <a target='_blank' href=" . Mage::getBaseUrl() . 'klantenservice/bezorgen-en-afhalen/#verzendkosten' . ">afwijkende pakketten</a> in ".$getCountry."</span>";
+		}
+
+	} else {
+		echo $message = "<span class='paidshipping-desk'>" . $this->__('Free') . " " . "<a target='_blank' href=" . Mage::getBaseUrl() . 'klantenservice/bezorgen-en-afhalen/#verzendkosten' . ">" . $this->__('Shipping msg') . "</a>" . " " . $this->__('from') . " " . Mage::helper('core')->currency(100, true, false) . "</span>";
+	}
+?>

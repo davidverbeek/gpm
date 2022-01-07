@@ -1,0 +1,108 @@
+%s quote(s) confirmed,%s offerte(s) bevestigd
+-- Please Select --,-- Selecteer --
+Aantal,Aantal
+Action,Actie
+Address,Adres
+Already registered? You can login here.,Al geregistreerd? U kunt hier inloggen.
+Ask for a Quote,Vraag een offerte aan
+Bekijk,Bekijk
+Bekijk/Bevestig,Bekijk/Bevestig
+Bevestig offerte,Bevestig offerte
+Cannot save contact address information,Kan adresgegevens niet opslaan
+Cannot save contact information,Kan contactgegevens niet opslaan
+Change status to confirmed,Wijzig status naar bevestigd
+Change status to pending,Wijzig status naar te bevestigen
+Change status to open,Wijzig status naar nieuw
+City,Plaatsnaam
+Company,Bedrijfsnaam
+Confirm Password,Bevestig wachtwoord
+Created,Aangemaakt
+Edit/Order,Wijzigen/Bestellen
+Country,Land
+Customer Groups Quote Only Option,Customer Groups Quote Only Option
+Customer Name,Klantnaam
+Date,Datum
+Datum,Datum
+Details,Details
+Email Address,E-mailadres
+Excl. Tax,Excl. Btw
+Ext. Prijs,Ext. Prijs
+Fax,2e Tel.nummer
+Grand Total,Eindtotaal
+Hartelijk dank voor uw offerte aanvraag. Doorgaans krijgt u binnen 24 uur een offerte per mail toegezonden. ,Hartelijk dank voor uw offerte aanvraag. Doorgaans krijgt u binnen 24 uur een offerte per mail toegezonden. 
+Incl. Tax,Incl. Btw
+Invalid customer data,Ongeldige klantgegevens
+Mijn offertes,Mijn offertes
+Mocht u in de tussentijd al vragen hebben dan horen wij het graag. ,Mocht u in de tussentijd al vragen hebben dan horen wij het graag. 
+My Quotes,Mijn offertes
+New Quote,Nieuwe Offerte
+New Quote Notification,Nieuwe Offerte Melding
+New Quote Thankyou,Nieuwe Offerte Bedankt
+Offerte #,Offerte #
+Offerte #%s - %s,Offerte #%s - %s
+Offerte aanvragen,Offerte aanvragen
+Offerte datum: ,Offerte datum: 
+Password,Wachtwoord
+Please select a quote,Selecteer een offerte
+Please select a valid quote status,Selecteer een geldige offerte status
+Please select at least one quote,Selecteer ten minste één offerte
+Prijs,Prijs
+Proceed to Checkout,Doorgaan naar afrekenen
+Product naam,Product naam
+Product overzicht,Product overzicht
+Producten,Producten
+Quote,Offerte
+Quote #,Offerte #
+Quote # %s,Offerte # %s
+Quote with id %s was not found,Quote with id %s was not found
+Quotes,Offertes
+Quotes settings,Offerte instellingen
+Requested In (Store),Aangevraagd in (winkel)
+Send Notification Email To,Send Notification Email To
+"Sorry, Checkout is not available, you can only place a quote.","Sorry, Checkout is not available, you can only place a quote."
+State/Province,Provincie
+Status,Status
+Status updated for %s quote(s),Status bijgewerkt voor %s offerte(s)
+Street Address,Straatnaam
+Street Address ,Straatnaam 
+Subtotaal,Subtotaal
+Telephone,Telefoon
+Terug,Terug
+The quote has been saved,De offerte is opgeslagen
+The quote has been updated,De offerte is bijgewerkt
+Updated,Gewijzigd
+Quote %s is already converted and cannot be edited,Offerte %s is al omgezet naar een bestelling en kan niet meer gewijzigd worden
+The quote must be confirmed in order to be converted to order,De offerte moet eerst bevestigd worden voordat deze naar een bestelling omgezet kan worden
+The quote status has been changed to confirmed,De offerte status is gewijzigd naar bevestigd
+Totaal,Totaal
+Totaal: %s,Totaal: %s
+U heeft nog geen offertes aangevraagd,U heeft nog geen offertes aangevraagd.
+Uw gegevens,Uw gegevens
+Verder winkelen,Verder winkelen
+View Quote,Bekijk offerte
+Your Contact Information and your Quote (#%s) have been successfully saved,Uw contactgegevens en uw offerte (#%s) zijn succesvol opgeslagen
+Zip/Postal Code,Postcode
+open,nieuw
+pending,te bevestigen
+confirmed,bevestigd
+converted,besteld
+Open,Nieuw
+Pending,Te bevestigen
+Confirmed,Bevestigd
+Converted,Besteld
+Return to cart," ""Terug naar de winkelwagen"""
+Edit Quote #%s,Offerte #%s wijzigen
+Create New Quote for %s in %s,Nieuwe offerte aanmaken voor %s in %s
+Create New Quote for New Customer in %s,Nieuwe offerte aanmaken voor nieuwe klant in %s
+Create New Quote for %s,Nieuwe offerte aanmaken voor %s
+Create New Quote for New Customer,Nieuwe offerte aanmaken voor nieuwe klant
+Create New Quote,Nieuwe offerte aanmaken
+Email Confirmation,Stuur e-mail naar klant
+Edit and Send Quote,Opslaan als offerte
+"Check to save as quote, uncheck to save as order","Aanvinken om op te slaan als offerte, uitvinken om op te slaan als bestelling"
+Save quote/order,Wijzigingen opslaan
+Quote number,Offertenummer
+%d articles,%d artikelen
+Quote %s,Offerte  %s
+Quotation order,Offerte bestellen
+Application date,Aanvraagdatum

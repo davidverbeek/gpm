@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:typens="urn:{{var wsdl.name}}" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+    name="{{var wsdl.name}}" targetNamespace="urn:{{var wsdl.name}}">
+	
+	<types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" schemaLocation="http://schemas.xmlsoap.org/soap/encoding/" />
+            <complexType name="attributesCreateAttributeEntity">
+                <all>
+                    <element name="attribute_code" type="xsd:string" />
+                    <element name="is_global" type="xsd:boolean" />
+                    <element name="frontend_input" type="xsd:string" />
+                    <element name="default_value_text" type="xsd:string" />
+                    <element name="default_value_yesno" type="xsd:string" />
+                    <element name="default_value_date" type="xsd:string" />
+                    <element name="default_value_textarea" type="xsd:string" />
+                    <element name="is_unique" type="xsd:boolean" />
+                    <element name="is_required" type="xsd:boolean" />
+                    <element name="apply_to" type="typens:ArrayOfString" />
+                    <element name="is_configurable" type="xsd:boolean" />
+                    <element name="is_searchable" type="xsd:boolean" />
+                    <element name="is_visible_in_advanced_search" type="xsd:boolean" />
+                    <element name="is_comparable" type="xsd:boolean" />
+                    <element name="is_used_for_price_rules" type="xsd:boolean" />
+                    <element name="is_wysiwyg_enabled" type="xsd:boolean" />
+                    <element name="is_html_allowed_on_front" type="xsd:boolean" />
+                    <element name="is_visible_on_front" type="xsd:boolean" />
+                    <element name="used_in_product_listing" type="xsd:boolean" />
+                    <element name="used_for_sort_by" type="xsd:string" />
+                    <element name="frontend_class" type="xsd:string" />
+                    <element name="is_filterable" type="xsd:boolean" />
+                    <element name="is_filterable_in_search" type="xsd:boolean" />
+                    <element name="backend_type" type="xsd:string" />
+                    <element name="default_value" type="xsd:string" />
+                    <element name="frontend_label" type="xsd:string" />
+                </all>
+            </complexType>
+            <!--
+            <complexType name="resourceNameMethodNameEntityArray">
+                <complexContent>
+                    <restriction base="resourceNameMethodNameEntityArray">
+                        <attribute ref="soap:arrayType" wsdl:arrayType="typens:resourceNameMethodNameEntity[]" />
+                    </restriction>
+                </complexContent>
+            </complexType>
+            -->
+        </schema>
+    </types>
+    
+    <message name="attributesTestMethodRequest">
+        <part name="sessionId" type="xsd:string" />     
+        <part name="args" type="xsd:string" />
+    </message>
+    <message name="attributesTestMethodResponse">
+        <part name="result" type="xsd:string" />
+    </message>
+    <message name="attributesCreateSetRequest">
+        <part name="sessionId" type="xsd:string" />     
+        <part name="name" type="xsd:string" />
+    </message>
+    <message name="attributesCreateSetResponse">
+        <part name="result" type="xsd:string" />
+    </message>
+    <message name="attributesCreateAttributeRequest">
+        <part name="sessionId" type="xsd:string" />     
+        <part name="name" type="xsd:string" />
+        <part name="attributeData" type="typens:attributesCreateAttributeEntity" />
+        <part name="store" type="xsd:string" />
+    </message>
+    <message name="attributesCreateAttributeResponse">
+        <part name="result" type="xsd:string" />
+    </message>
+    <message name="attributesEditAttributeRequest">
+        <part name="sessionId" type="xsd:string" />     
+        <part name="name" type="xsd:string" />
+        <part name="attributeData" type="typens:attributesCreateAttributeEntity" />
+        <part name="store" type="xsd:string" />
+    </message>
+    <message name="attributesEditAttributeResponse">
+        <part name="result" type="xsd:string" />
+    </message>
+    <message name="attributesAddAttributeToSetRequest">
+        <part name="sessionId" type="xsd:string" />     
+        <part name="setId" type="xsd:string" />
+        <part name="groupName" type="xsd:string" />
+        <part name="attributeId" type="xsd:string" />
+    </message>
+    <message name="attributesAddAttributeToSetResponse">
+        <part name="result" type="xsd:string" />
+    </message>
+    <portType name="{{var wsdl.handler}}PortType">
+        <operation name="attributesTestMethod">
+            <documentation>Test Method</documentation>
+            <input message="typens:attributesTestMethodRequest" />
+            <output message="typens:attributesTestMethodResponse" />
+        </operation>
+        <operation name="attributesCreateSet">
+            <documentation>Create Attribute Set</documentation>
+            <input message="typens:attributesCreateSetRequest" />
+            <output message="typens:attributesCreateSetResponse" />
+        </operation>
+        <operation name="attributesCreateAttribute">
+            <documentation>Create Attribute</documentation>
+            <input message="typens:attributesCreateAttributeRequest" />
+            <output message="typens:attributesCreateAttributeResponse" />
+        </operation>
+        <operation name="attributesEditAttribute">
+            <documentation>Edit Attribute</documentation>
+            <input message="typens:attributesEditAttributeRequest" />
+            <output message="typens:attributesEditAttributeResponse" />
+        </operation>
+        <operation name="attributesAddAttributeToSet">
+            <documentation>Add attribute To Set</documentation>
+            <input message="typens:attributesAddAttributeToSetRequest" />
+            <output message="typens:attributesAddAttributeToSetResponse" />
+        </operation>
+    </portType>
+    <binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="attributesTestMethod">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="attributesCreateSet">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="attributesCreateAttribute">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="attributesEditAttribute">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="attributesAddAttributeToSet">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+    </binding>
+    <service name="{{var wsdl.name}}Service">
+        <port name="{{var wsdl.handler}}Port" binding="typens:{{var wsdl.handler}}Binding">
+            <soap:address location="{{var wsdl.url}}" />
+        </port>
+    </service>
+</definitions>

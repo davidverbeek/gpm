@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Hs_Common>
+      <active>true</active>
+      <codePool>local</codePool>
+      <depends>
+      	<Mage_Catalog />
+      	<Amasty_Brands />
+      </depends>
+      <version>0.1.0</version>
+    </Hs_Common>
+  </modules>
+</config>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<config>
+    <modules>
+        <Hs_Achterafbetalen>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Icepay_IceAdvanced />
+            </depends>
+        </Hs_Achterafbetalen>
+    </modules>
+</config> 

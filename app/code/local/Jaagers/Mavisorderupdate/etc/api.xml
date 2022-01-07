@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<config>
+   <api>
+     <resources>
+     <!-- START GUSTOMER GROUP RESOURCES -->
+       <jaagers_mavisorderupdate_objectmodel>
+            <model>jaagers_mavisorderupdate/objectmodel_api</model>
+            <title>Update order with Mavis Order#</title>
+            <methods>
+	       	 	<update translate="title" module="jaagers_attributes">
+                    <title>Update Order</title>
+                    <method>update</method>
+                </update>
+            </methods>
+       </jaagers_mavisorderupdate_objectmodel>
+     <!-- END CUSTOMER GROUP RESOURCES -->
+    </resources>
+    <v2>
+      <resources_function_prefix>
+           <jaagers_mavisorderupdate_objectmodel>mavisorderupdate</jaagers_mavisorderupdate_objectmodel>
+      </resources_function_prefix>
+    </v2>
+  </api>
+</config>

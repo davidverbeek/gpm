@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <CapacityWebSolutions_ImageLazyLoad>
+            <active>true</active>
+            <codePool>community</codePool>
+        </CapacityWebSolutions_ImageLazyLoad>
+    </modules>
+</config>

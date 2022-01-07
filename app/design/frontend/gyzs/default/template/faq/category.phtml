@@ -1,0 +1,40 @@
+<?php
+	$collection 			= $this->getCollection();
+	$faqCategory 		= $this->getFaqCategory();
+?>
+<div class="page-title">
+	<h1><?php echo $faqCategory->getCategoryName();?></h1>
+</div>
+<div class="faq-category">
+	<div class="box-head">
+		<div class="search-title">
+			<h2><?php echo $this->__('Search FAQ');?></h2>
+		</div>
+		<div class="faq-search">
+			<form name="faqsearch" action="<?php echo $this->getUrl('*/*/search') ?>" method="post" id="search-form">
+				<ul>
+					<li>
+						<input name="keyword" id="keyword" class="input-text required-entry" type="text" maxlength="100" size="80" />
+						<button type="submit" title="<?php echo $this->__('SEARCH') ?>" class="button"><span><span><?php echo $this->__('SEARCH') ?></span></span></button>
+					</li>
+				</ul>
+			</form>
+		</div>	
+	</div>
+	<?php if(count($collection)) :?>
+		<div class="faq-questions">		
+			<?php foreach ($collection as $faq):?>
+			<div class="faq-detail">
+				<h2 class="faq-title">
+					<a href="<?php echo $this->getFaqUrl($faq)?>" title="<?php echo $faq->getQuestion()?>"><?php echo $faq->getQuestion()?></a>
+				</h2>
+				<div class="faq_answer">
+					<?php echo $faq->getAnswer();?>
+				</div>
+			</div>
+			<?php endforeach;?>
+	</div>
+	<?php else: ?>
+		<p class="note-msg"><?php echo $this->__('There are no FAQs matching the selection.') ?></p>
+	<?php endif?>
+</div>

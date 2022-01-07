@@ -1,0 +1,732 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php
+$_helper = $this->helper('catalog/output');
+$_product = $this->getProduct();
+$mediaDownaloadRoot = Mage::getBaseUrl('media') . 'catalog/downloads/';
+if($_product->getInternetmemo2() == '') { $custom_downloads = $_product->getInternetmemo2(); }else{ $custom_downloads = ''; }
+$_downloads = $_product->getDownloads()."|".$custom_downloads;
+$_featuredHelper = Mage::helper('featured');
+$_currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+$tierPriceClass = 'group-price';
+if(empty($_product->getData('group_price'))){
+		$tierPriceClass = '';
+}
+?>
+<script type="text/javascript">
+	//var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<?php echo $this->getChildHtml('global_messages') ?>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="product-main-container" itemscope itemtype="http://schema.org/Product">
+	<div class="product-view" id="prodmain">
+		<div class="product-essential">
+			<div class="row clearfix">
+				<form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+					<div class="mobile-product-name-top">
+						<?php if (!$_product->isGrouped()): ?>
+							<div class="floatingcart">
+								<?php echo $this->getChildHtml('addtocart') ?>
+							</div>
+						<?php endif; ?>
+					</div>
+					<div class="product-name-top">
+						<div class="product-name">
+							<?php $productName = ($_product->getCustomProductName())?$_product->getCustomProductName():$_product->getName(); ?>
+							<h1 itemprop="name"><?php echo $productName; ?></h1>
+							<?php if ($_product->isAvailable()): ?>
+								<?php if (!$_product->isGrouped()): ?>
+									<div class="no-display" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+										<span itemprop="price"><?php echo Mage::helper('common')->getProductInclPrice($_product); ?></span>
+										<span itemprop="priceCurrency"><?php echo $_currencyCode; ?></span>
+										<link itemprop="availability" href="http://schema.org/InStock" />
+										<span class="productsku"><?php echo $_product->getSku(); ?></span>
+									</div>
+								<?php endif; ?>
+							<?php endif; ?>
+						</div>
+																						<div class="product-number-wrap clearfix">
+								<?php if(!empty($_product->getLeverancierartikelnr())) : ?>
+									<div class="product-supplier clearfix" style="">
+										<span class="supplier-name label"><?php echo $this->__('Leveranciersnummer'); ?></span>
+										<span class="supplier-number number"><?php echo $_product->getLeverancierartikelnr(); ?></span>
+									</div>
+								<?php endif; ?>
+								<?php if($_product->getEancode() > 0) : ?>
+									<div class="product-ean clearfix" style="">
+										<span class="ean-name label"><?php echo $this->__('Eancode'); ?></span>
+										<span class="ean-number number"><?php echo $_product->getEancode(); ?></span>
+									</div>
+								<?php endif; ?>
+								<div class="product-sku clearfix" style="">
+									<span class="art-name label"><?php echo $this->__('Sku'); ?></span>
+									<span class="sku-number number "><?php echo Mage::helper('common')->getGYZSSku($_product->getSku()); ?></span>
+								</div> 
+							</div>
+					</div>
+					<input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+					<?php if (!$_product->isGrouped()): ?>
+
+						<div class="clearfix product-img-box">
+							<?php echo $this->getChildHtml('media') ?>
+						</div>
+						
+						<div class="mobile-product-img-box">
+							<?php echo $this->getChildHtml('mobileproductslider'); ?>
+						</div>
+
+						<div class="product-shop">
+							<div class="product-shop-info">
+																														<?php echo $this->getReviewsSummaryHtml($_product, false, true) ?>
+								<div class="featured-label">
+									<?php echo $this->getChildHtml('featuredlabel'); ?>
+								</div>
+								<?php
+									$adviceprice = $disc = $checkIfAdvisePriceIsLowe = 0;
+
+									if ($_product->getData('adviesprijs') > 0){
+										$adviceprice = str_replace(',', '.', $_product->getData('adviesprijs'));
+										$adviceprice = (float)$adviceprice;
+										$_taxHelper  = $this->helper('tax');
+										$_coreHelper = $this->helper('core');
+										//$prijsfactor = $_product->getData('prijsfactor');
+										$prijsfactor = Mage::helper('featured')->getPrijsfactorValue($_product);
+										if($_product->getGroupPrice() <= $_product->getFinalPrice()){
+											$_product->setPrice($_product->getGroupPrice());
+											$_product->setFinalPrice($_product->getGroupPrice());
+										}
+										$_finalPrice = $_taxHelper->getPrice($_product, $_product->getFinalPrice()*$prijsfactor);
+										$checkIfAdvisePriceIsLower = (($_product->getFinalPrice() * $prijsfactor) -  str_replace(',', '.', $_product->getData('adviesprijs')));
+										$calcPrice = $adviceprice - $_finalPrice;
+										$disc = round(($calcPrice / $adviceprice) * 100);
+
+									}
+								?>
+								
+								<?php if (($adviceprice > 0) && $disc > 3 && ($checkIfAdvisePriceIsLower < 0)): ?>
+									<div class="clearfix advice-price <?php echo $tierPriceClass; ?>">
+										<div class="adviceprice">
+											<span class="price tooltip-up" data-tool="<?php echo $this->__('This is the retail price of our supplier. If the retail price unknown, we show the sales price applied in the market.');?>"><?php echo $_coreHelper->currency($adviceprice, true, false) ?></span>
+										</div>
+										<div class="savepercentage">
+											<?php echo $this->__('you save ').$disc."%";?>
+										</div>
+									</div>
+								<?php endif; ?>
+
+								<?php echo $this->getPriceHtml($_product) ?>
+								
+								<?php if ($_product->getTypeId() != 'grouped'): ?>
+									<div class="stuck-cost-wrap">                     
+										<div class="price-per-attr">
+												<span><?php echo $this->__('Price') . " "; ?> <?php echo $this->__('per') . " " . $_featuredHelper->getStockAndUnit($_product); ?><span class="for-mobile"></span><span class="for-desktop">,</span></span>
+										</div>
+										<div class="shipping-cost">
+											<?php echo $this->getChildHtml('product.view.shipmentcost'); ?>
+										</div>
+									</div>	
+								<?php endif; ?>
+								<?php echo $this->getTierPriceHtml() ?>
+								<?php if (!$_product->isGrouped()): ?>
+									<div class="productdetail">
+										<div class="extra-stock">
+											<div class="stock-limit">
+												<?php if ((int) Mage::getConfig()->getNode('default/combipac')->enable_stock && !$_product->isGrouped()) : ?>
+													<div class="checkstock list <?php echo str_replace('.', '', $_product->getSku()); ?> <?php if($_product->getManualproduct()){ echo "manualproduct"; } ?>" id="<?php echo str_replace('.', '', $_product->getSku()); ?>">
+														<?php 
+															if($_product->getManualproduct()){
+																$unit = $_featuredHelper->getProductUnit($_product->getData('verkoopeenheid'));
+																$stockInformation = $_product->getStockItem();
+																if (!(int) $_product->getData('afwijkenidealeverpakking')){
+																	$stockInfo = $_product->getData('idealeverpakking');
+																} else {
+																	$stockInfo = 1;
+																}
+																$label = $_featuredHelper->getStockUnit($stockInfo, $unit);
+																if($stockInformation->getQty() > 0){
+																	$instockDeliveryText = Mage::helper('featured')->getInstockDeliveryText();
+																	if($stockInfo == 1){
+																		$label = $_featuredHelper->getStockUnit($stockInformation->getQty(), $unit);
+																	}
+																	if($_product->getSku() == '9000108') {
+																		echo '<span class="green"></span><span class="stock">Beschikbaar</span><span class="now-order">Verzending: binnen 5 werkdagen</span><input type="hidden" name="levertijd" class="levertijd" value="' . $_product->getLevertijd() . '">';
+																	}else{
+																		echo '<span class="green"></span><span class="stock">' . number_format($stockInformation->getQty(),0) . ' ' . $label .'</span><span class="stock"> In voorraad</span><span class="now-order">'.$instockDeliveryText.'</span><input type="hidden" name="levertijd" class="levertijd" value="' . $_product->getLevertijd() . '">';
+																	}
+																} else {
+																	echo '<span class="yellow"></span><span class="stock">verzending: binnen ' . $_product->getLevertijd() . ' dagen</span>';
+																}
+															}
+														?>
+													</div>
+												<?php endif; ?>
+											</div>
+											<div class="qty-container clearfix">
+												<?php $unit = $_featuredHelper->getProductUnit($_product->getData('verkoopeenheid')); ?>
+												<label for="qty"><?php echo $this->__('Qty') ?>:</label>
+												<input type="text" name="qty" id="qty_<?php echo str_replace('.', '', $_product->getSku()); ?>" maxlength="5" onkeypress="validateNumber(event)" value="<?php echo max($this->getProductDefaultQty() * 1, 1) ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+												<input type="hidden" class="hiddenstock"
+															 id="stock_qty_<?php echo str_replace('.', '', $_product->getSku()); ?>"
+															 title="<?php echo str_replace('.', '', $_product->getSku()); ?>"
+															 value="<?php if($_product->getManualproduct()) { echo $stockInformation->getQty(); } ?>"/>
+												<input type="hidden" class="hiddenstockstatus"
+															 id="stock_qty_status_<?php echo str_replace('.', '', $_product->getSku()); ?>"
+															 value="<?php echo $_product->getArtikelstatus(); ?>"/>
+												<input type="hidden" class="hiddenindealpacking"
+															 id="stock_qty_ideal_<?php echo str_replace('.', '', $_product->getSku()); ?>"
+															 value="<?php echo $_product->getIdealeverpakking(); ?>"/>
+												<input type="hidden" class="hiddenverkoopeenheid"
+															 id="stock_qty_verkoopeenheid_<?php echo str_replace('.', '', $_product->getSku()); ?>"
+															 value="<?php echo $unit; ?>"/>
+												<input type="hidden" class="hiddenafwijkenidealeverpakking"
+															 id="stock_qty_afwijkenidealeverpakking_<?php echo str_replace('.', '', $_product->getSku()); ?>"
+															 value="<?php echo $_product->getAfwijkenidealeverpakking(); ?>"/>
+												<input type="hidden" class="leverancier"
+															 id="leverancier_<?php echo str_replace('.', '', $_product->getSku()); ?>"
+															 value="<?php echo $_product->getLeverancier(); ?>"/>
+											</div>
+											<div class="quantity-per-attr">
+												<span  id="stock-label-<?php echo $_product->getSku(); ?>" class="stock-label-<?php echo $_product->getSku(); ?>">
+													<?php if (!(int) $_product->getData('afwijkenidealeverpakking')): ?>
+														<?php $stockInfo = $_product->getData('idealeverpakking'); ?>
+														<?php if ($stockInfo != '1'): ?>
+															<?php echo '&nbsp;x&nbsp;' . $stockInfo; ?>
+														<?php endif; ?>
+													<?php else :
+														$stockInfo = 1; ?>
+													<?php endif; ?>
+													<?php echo $_featuredHelper->getStockUnit($stockInfo, $unit); ?>
+												</span>
+											</div>
+										</div>
+
+										<?php if (!$this->hasOptions()): ?>
+											<div class="add-to-box mark">
+												<?php if ($_product->isSaleable()): ?>
+													<?php echo $this->getChildHtml('addtocart') ?>
+												<?php endif; ?>
+											</div>
+											<?php echo $this->getChildHtml('extra_buttons') ?>
+										<?php endif; ?>
+
+										<?php if ($_product->isSaleable() && $this->hasOptions()): ?>
+											<?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+										<?php endif; ?>
+									</div>
+								<?php endif; ?>
+												
+								<div class="product-brief">
+									<div class="product-detail-left" id="leftdetail">
+										<ul>
+											<li><a href="#pi-desc" id="prod-desc" title="<?php echo $this->__('Product Description') ?>"><?php echo $this->__('Product Description') ?></a></li>
+											<li><a href="#pi-spec" id="prod-spec" title="<?php echo $this->__('Specifications') ?>"><?php echo $this->__('Specifications') ?></a><span class="spec-count"></span></li>
+											<?php //if ($_downloads) : ?>
+											<li><a href="#pi-dwn" id="prod-dwn" title="<?php echo $this->__('Downloads') ?>"><?php echo $this->__('Downloads') ?></a><span class="dwn-count"></span></li>
+											<?php //endif; ?>
+											<li><a href="#product-reviews" id="prod-rew" title="<?php echo $this->__('Reviews') ?>"><?php echo $this->__('Reviews') ?></a><span class="rev-count"></span></li>
+											<li><a href="#prodpage_similar" id="prod-select" title="<?php echo $this->__('Special Selection') ?>"><?php echo $this->__('Special Selection') ?></a><sup>(Tip)</sup></li>
+										</ul>
+									</div>
+
+									<div class="product-detail-right">
+										<ul>
+											<li class="delineur"><h3 id="prod-info"><?php echo $this->__('Delivery Throughout Europe') ?></h3></li>
+											<li class="freedel">
+												<?php if(!$_product->getTansmission()){ ?>
+													<h3 id="prod-desc"><?php echo $this->__('Free delivery from') ?>
+														<span><?php $currency_symbol = Mage::app()->getLocale()->currency($_currencyCode)->getSymbol(); echo $currency_symbol . " "; ?>100,00</span>
+													</h3>
+											<?php } else { ?>
+												<h3 id="prod-desc"><?php echo $this->__('Low shipping costs for length freight and pallets'); ?></h3>
+											<?php } ?>
+											</li>
+											<li class="satcustomers"><h3 id="prod-spec"><span>150.000</span><?php echo " " . $this->__('satisfied customers') ?>	</h3></li>
+											<li class="cusrating"><h3 id="prod-rew"><?php echo $this->__('A') . " " ?><span>9.3</span><?php echo " " . $this->__('customer rating') ?></h3></li>
+											<li class="cusaward"><h3 id="prod-dwn"><?php echo $this->__('An award-winning customer service') ?></h3></li>
+										</ul>
+									</div>
+								</div>
+								<div class="clear"></div>
+							
+								<?php 
+								$categoryIds = $_product->getCategoryIds(); 
+								if(in_array("2262", $categoryIds) || $_product->getSku() == '9000108') { ?>
+									<div class="clearer"></div>
+									<div class="warning_chemische">
+										<div class="warning_icon"><i class="fa fa-exclamation-triangle fa-2x"></i></div>
+										<div class="warning_text"><?php echo $this->__('Gebruik dit product veilig. Lees vóór gebruik eerst de productinformatie.') ?></div>
+										<div class="clearer"></div>
+									</div>	
+								<?php } ?>
+								<?php echo $this->getChildHtml('shopper_product_addthis') ?>
+							</div>
+						</div>
+					<?php else : ?>
+						<?php echo $this->getChildHtml('product_type_data'); ?>
+					<?php endif; ?>
+					<div class="clearer"></div>
+					<?php if ($_product->isSaleable() && $this->hasOptions()): 
+						echo $this->getChildChildHtml('container2', '', true, true);
+					endif; ?>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<?php if (!$_product->isGrouped()): ?>
+		<?php /* if ($_product->getRelatedProductIds()): ?>
+			<div class="block bulkdeals" id="relatedproducts">
+				<div class="row clearfix">
+					<div class="block-title">
+						<h2 id="block-title"><?php echo $this->__('combinations & bulkdeals') ?></h2>
+					</div>
+					<div class="block-content">
+						<?php echo $this->getChildHtml('content_related') ?>						
+					</div>
+				</div>
+			</div>
+		<?php endif; */ ?>
+		<div class="product-informatie-container" id="productinformatie">
+			<div class="row clearfix">
+				<div class="block-title">
+					<h2><?php echo $this->__('Product Information') ?></h2>
+					<span class="shorttext"><?php echo $this->__('Specifications to ask') ?></span>
+				</div>
+				<div class="clearfix block-content">
+					<div class="productinformatie">
+						<ol id="product-accordion">
+							<?php $_video = $this->getProduct()->getVideo(); ?>
+							<?php if (($_video) && (count($_video) > 0)): ?>
+								<dt id="pi-video">
+								<h3><?php echo $this->__('Video') ?></h3>
+								</dt>
+								<dd class="video" itemprop="video">
+									<?php if (strpos($_video, 'www.youtube.com') !== false):
+										$data = $_video;
+										$videoCode = substr($data, strpos($data, "v") + 2);
+									?>
+										<div class="embed-responsive embed-responsive-16by9">
+											<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<?php echo strtok($videoCode, '&t='); ?>" frameborder="0" allowfullscreen></iframe>
+										</div>
+									<?php endif; ?>
+								</dd>
+							<?php endif; ?>
+
+							<dt id="pi-desc">
+								<h3><?php echo $this->__('Description') ?></h3>
+							</dt>
+							<dd class="description" itemprop="description">
+								<div class="descandimg">
+									<div class="prdesc fullwidth">
+										<div class="morecontent2">
+											<?php
+												if($_product->getData('custom_product_description') != ''){
+													echo html_entity_decode($_product->getData('custom_product_description'), ENT_QUOTES, 'UTF-8');
+												}else{
+													echo html_entity_decode($_product->getData('short_description'), ENT_QUOTES, 'UTF-8');
+												}
+											?>
+										</div>
+									</div>
+								</div>
+							</dd>
+
+							<?php if($_product->getData('product_label_description') != ''){ ?>
+							<dt id="pi-desc">
+								<h3><?php echo $this->__('Wat staat er op het etiket?') ?></h3>
+							</dt>
+							<dd class="description" itemprop="description">
+								<div class="descandimg">
+									<div class="prdesc fullwidth">
+										<div class="morecontent2">
+											<?php echo html_entity_decode($_product->getData('product_label_description'), ENT_QUOTES, 'UTF-8'); ?>
+										</div>
+									</div>
+								</div>
+							</dd>
+							<?php } ?>
+
+							<dt id="pi-spec" class="active">
+									<h3><?php echo $this->__('Specifications') ?>
+											<span class="details-count"></span>
+									</h3>
+							</dt>
+							<dd class="specifications">	
+								<?php echo $this->getChildHtml('view.attributes'); ?>
+								<div class="view-all-specs">
+									<span><?php echo $this->__('View all specifications') ?></span>
+								</div>
+							</dd>
+
+							<dt id="pi-dwn">
+								<h3><?php echo $this->__('Downloads') ?>
+									<span class="downloads-count"></span>
+								</h3>
+							</dt>
+							<dd class="downloads">
+								<?php if (!$_downloads) : ?>
+									<div class="nodownloads">
+										<?php echo sprintf($this->__("There are no documents available for the %s"), $productName); ?>
+									</div>
+								<?php else: ?>
+									<ul class="data-table" id="product-downloads-table">
+										<?php 
+											$downloads_not_available = 0;
+											foreach ((array) explode('|', $_downloads) as $download) : if (empty($download)) continue;
+
+												if (substr_count($download, ',') > 0) {
+													list($file, $name) = explode(',', $download);
+												} else {
+													$file = $download;
+													$name = basename($download);
+												}
+
+												if (0 === strpos($file, 'http://') || 0 === strpos($file, 'https://')) {
+													$download_type = 'remote'; 
+												} else {
+													$file_name = $file;
+													$file = $mediaDownaloadRoot . $file;
+													$download_type = 'local';
+													$fileInfo = pathinfo($file);
+												}
+
+												if (!isset($fileInfo['extension'])) {
+													$fileInfo['extension'] = 'unknown';
+												}
+												$file_headers = @get_headers($file);
+
+												
+												//if($file_headers[0] == 'HTTP/1.1 200 OK') {
+													//$downloads_not_available = 1;
+										?>
+											<li class="download-item download-<?php echo $download_type; ?> file-type-<?php echo $fileInfo['extension']; ?>">
+												<a href="<?php echo str_replace('&','',$file); ?>" target="_blank">
+													<span></span>
+													<p><?php if(isset($name) && !empty($name)) echo str_replace('&','',ucfirst($name)); else echo str_replace('&','',$file_name); ?></p>
+												</a>
+											</li> 
+											<?php //} ?>
+											
+										<?php endforeach; 
+										
+										//if($downloads_not_available == 0) {
+											//echo '<div class="nodownloads">'.sprintf($this->__("There are no documents available for the %s"), $productName).'</div>';
+										   //} 
+										
+										?>
+													
+
+									</ul>
+									<div class="view-all-dwns">
+											<span><?php echo $this->__('View all downloads') ?></span>
+									</div>
+								<?php endif; ?>
+							</dd>
+						</ol>
+					</div>
+					<div class="productmisc">
+						<div class="product-detail-service" id="garantiesservice">
+							<?php echo $this->getChildHtml('garanties.service'); ?>
+						</div>
+					</div>
+				</div>
+					
+				<div class="clearfix block-content-bottom">
+					<div class="productinformatie">
+						<ol id="product-accordion2">
+							<?php
+								$categoryIds = $_product->getCategoryIds();
+								if(!empty($categoryIds))
+								{
+									$faqIds = Mage::helper('faq')->getProductFaqIds($categoryIds);
+									$faqproIds = Mage::helper('faq')->getProFaqIds($_product->getId());
+									$finalfaqIds = array_merge($faqIds, $faqproIds);
+									$finalfaqIds = array_unique($finalfaqIds);
+								}
+							?>
+
+							<dt id="frequentlyaskedques">
+								<h3><?php echo $this->__('Frequently asked questions') ?>
+									<span class="faq-count"><?php echo count($finalfaqIds); ?></span>
+								</h3>
+							</dt>
+							<dd class="frequently-asked-questions">
+								<div id="faq-accordian">
+									<?php if (count($finalfaqIds) > 0): ?>
+										<ul>
+											<?php
+												for ($i = 0; $i < count($finalfaqIds); $i++) {
+													$faq = Mage::getModel('faq/faq')->load($finalfaqIds[$i]);
+													?>
+													<li <?php
+													if ($i == 0): echo 'class="active"';
+													endif;
+													?> >
+													<h3><?php echo $this->__('Question:') . ' ' . $faq['question'] ?></h3>
+														<div class="faq-answer">
+															<h5><?php echo $this->__('Answer:') . ' ' . $faq['answer'] ?></h5>
+														</div>
+													</li>
+											<?php } ?>
+										</ul>
+									<?php else: ?>
+										<div class="nofaq-title">
+											<h3><?php echo $this->__('Do you have a question?') ?></h3>
+										</div>
+										<div class="nofaq-suggest">
+											<h5>
+												<?php echo sprintf($this->__("There are no questions asked about %s, here you can (if you're logged in) easily ask a question. Then we provide a quick response."), $productName);
+												?>
+											</h5>
+										</div>
+									<?php endif; ?>
+								</div>
+							</dd>
+
+						</ol>
+					</div>
+						<?php echo $this->getChildHtml('product_view_faq_login') ?>
+				</div>
+			</div>
+
+			<div class="product-reviews-container" id="product-reviews">
+				<div class="row clearfix">
+					<div class="block-title">
+						<h2><?php echo $this->__('What customers say') ?>
+							<span class="reviewcount"></span>
+						</h2>
+					</div>
+					<div class="block-content">
+						<div class="productreviews">
+							<?php echo $this->getChildHtml('product_additional_data_review') ?>
+							<?php echo $this->getChildHtml('product_review') ?>
+						</div>
+						<div class="productreview-misc">
+							<div id="reviewform">
+								<div class="text">
+									<span><?php echo $this->__('Write your own review') ?></span>
+								</div>
+								<div class="review_form">
+									<?php echo $this->getChildHtml('product_additional_data_review') ?>
+									<?php echo $this->getChildHtml('review_form') ?>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	<?php endif; ?>
+
+	<?php echo $this->getChildHtml('product.special.selections'); ?>
+
+	<div class="product-detail-blogs">
+		<div class="">
+			<div class="customersblog">	
+				<?php echo $this->getChildHtml('product.info.recently_viewed'); ?>
+			</div>
+			<div class="gyzsblog">
+				<?php echo $this->getChildHtml('associated.list'); ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	Translator.add('Read full description', '<?php echo $this->__("Read full description"); ?>');
+	Translator.add('Read less description', '<?php echo $this->__("Read less description"); ?>');
+	Translator.add('View all downloads', '<?php echo $this->__("View all downloads"); ?>');
+	Translator.add('View less downloads', '<?php echo $this->__("View less downloads"); ?>');
+	Translator.add('View all specifications', '<?php echo $this->__("View all specifications"); ?>');
+	Translator.add('View less specifications', '<?php echo $this->__("View less specifications");?>');
+	Translator.add('Buy', '<?php echo $this->__("Buy"); ?>');
+	Translator.add('Click & Buy', '<?php echo $this->__("Click & Buy"); ?>');
+</script>
+
+<script type="text/javascript">
+
+	<?php if (!Mage::getStoreConfig('shoppersettings/ajax/cart', Mage::app()->getStore()->getId())) : ?>
+		var productAddToCartForm = new VarienForm('product_addtocart_form');
+		productAddToCartForm.submit = function (button, url) {
+			if (this.validator.validate()) {
+				var form = this.form;
+				var oldUrl = form.action;
+
+				if (url) {
+					form.action = url;
+				}
+				var e = null;
+				try {
+					this.form.submit();
+				} catch (e) {
+				}
+				this.form.action = oldUrl;
+				if (e) {
+					throw e;
+				}
+
+				if (button && button != 'undefined') {
+					button.disabled = true;
+				}
+			}
+		}.bind(productAddToCartForm);
+	<?php else : ?>
+		function setAjaxData(data, iframe) {
+				if (data.status != 'ERROR' && jQuery('.cart-top-container').length) {
+						jQuery('.cart-top-container').replaceWith(data.cart_top);
+				}
+		}
+		function showMessage(message, productname)
+		{
+				jQuery('.details_after .product-details').html(productname);
+				var $alert = jQuery('.details_after');
+				$alert.slideDown(400);
+				$alert.slideDown('400', function () {
+						setTimeout(function () {
+								$alert.slideUp('400', function () {
+										jQuery(this).slideUp(400, function () { 
+										})
+								});
+						}, 7000)
+				});
+		}
+		var productAddToCartForm = new VarienForm('product_addtocart_form');
+		productAddToCartForm.submit = function (button, url) {
+			if (this.validator.validate()) {
+				var form = this.form;
+				var oldUrl = form.action;
+				if (url) {
+					form.action = url;
+				}
+				var e = null;
+				if (!url) {
+					url = jQuery('#product_addtocart_form').attr('action');
+				}
+
+				if (url.indexOf('amlist/list') !== -1) {
+						this.form.submit();
+				} else {
+					url = url.replace("checkout/cart", "ajax/index"); 
+					var data = jQuery('#product_addtocart_form').serialize();
+					data += '&isAjax=1';
+					jQuery('#ajax_loading' + jQuery('#product_addtocart_form').find("[name='product']").val()).css('display', 'block');
+					try {
+						jQuery.ajax({
+							url: url,
+							dataType: 'jsonp',
+							type: 'post',
+							data: data,
+							success: function (data) {
+								jQuery('#ajax_loading' + jQuery('#product_addtocart_form').find("[name='product']").val()).css('display', 'none');
+								setAjaxData(data, true);
+								if(data.status == 'ERROR') {
+									location.reload();
+								}
+								showMessage(data.message, data.rpname);
+							}
+						});
+					} catch (e) {
+					}
+				}
+
+				this.form.action = oldUrl;
+				if (e) {
+					throw e;
+				}
+			}
+		}.bind(productAddToCartForm);
+	<?php endif; ?>
+</script>
+
+<?php
+
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+if(Mage::helper('gtm')->getEnabled()){
+$customerEmail =  Mage::helper('featured')->getCustomerEmail();	
+ //code for GTM Enhanced Ecommerce product detail page impression ?>
+		<script type="text/javascript">
+			dataLayer.push({
+				'event': 'ProductDetail',
+				'ecommerce': {
+					'actionField': {'list': 'Product List'},    // 'detail' actions have an optional list property.
+					'detail': {
+						'currencyCode' : 'EUR',
+						'products': [{
+							'name': '<?php echo $productName; ?>',         // Name or ID is required.
+							'id': '<?php echo Mage::helper('common')->getGYZSSku($_product->getSku()); ?>',
+							'price': '<?php echo $_product->getPrice(); ?>'
+						 }]
+					 }
+				 }
+			});
+		</script>
+		<?php //code for GTM Criteo product detail page impression ?>
+		<script type="text/javascript">
+			dataLayer.push({            
+				'event': 'crto_productpage',
+				crto: {           	
+					'email': '<?php echo $customerEmail ?>',
+					'products': ['<?php echo $_product->getSku(); ?>']
+				}
+			});
+		</script>
+<?php } ?>
+<style>
+.warning_chemische {
+	margin-top:20px; 
+	border:1px solid #ebebeb; 
+	padding:10px;
+}
+.warning_text {
+    float:left; 
+	margin-top:3px; 
+	margin-left: 2%; 
+	width:93%;
+}
+.warning_icon {
+	float:left; 
+	width:5%;
+}
+
+@media only screen and (max-width: 767px) {
+	.warning_icon .fa-2x {
+		top: 5px;
+		position: relative;
+	}
+	.warning_text {
+		margin-left: 8%;
+		width: 87%;
+	}
+}
+</style>

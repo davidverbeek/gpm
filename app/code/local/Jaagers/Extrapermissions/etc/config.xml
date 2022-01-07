@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config>
+      <modules>
+        <Jaagers_Extrapermissions>
+          <version>0.1.0</version>
+        </Jaagers_Extrapermissions>
+      </modules>
+	  
+   <global>
+
+   
+   
+      <helpers>
+       <extrapermissions>
+           <class>Jaagers_Extrapermissions_Helper</class>
+       </extrapermissions>
+      </helpers>   
+
+	  
+	   <models>
+            <extrapermissions>
+                <class>Jaagers_Extrapermissions_Model</class>
+                <resourceModel>extrapermissions_mysql4</resourceModel>
+            </extrapermissions>
+        </models>
+	 <resources>
+	 
+            <customerattribute1333007731_setup>
+                <setup>
+                    <module>Jaagers_Extrapermissions</module>
+					<class>Mage_Customer_Model_Entity_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </customerattribute1333007731_setup>
+            <customerattribute1333007731_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </customerattribute1333007731_write>
+            <customerattribute1333007731_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </customerattribute1333007731_read>
+
+	 </resources>
+	 
+   </global> 
+   
+
+</config> 

@@ -1,0 +1,29 @@
+<?php
+/* @var $quote Mage_Sales_Model_Quote */
+$quote = $this->getQuote();
+
+/* @var $coreHelper Mage_Core_Helper_Data */
+$coreHelper = Mage::helper('core');
+
+$totals = $quote->getTotals();
+$total = reset($totals);
+
+
+/* @var $total Mage_Sales_Model_Quote_Address_Total */
+?>
+
+<?php foreach ( $totals as $total ): ?>
+<tr>
+	<td align="right" colspan="3" style="font-weight: bold"><?php echo $total->getTitle(); ?></td>
+	<td align="right"><?php 
+	
+	if ( 'subtotal' === $total->getCode() )
+		$munny = $total->getData('value_excl_tax');
+	else
+		$munny = $total->getData('value');
+	
+	echo $coreHelper->currency( $munny, true, false);
+	
+	?></td>
+</tr>
+<?php endforeach; ?>

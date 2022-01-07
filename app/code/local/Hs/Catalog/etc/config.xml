@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Hs_Catalog>
+            <version>0.0.1</version>					
+        </Hs_Catalog>
+    </modules>
+    <global>
+        <blocks>
+            <hs_catalog>
+                <class>Hs_Catalog_Block</class>
+            </hs_catalog>
+            <catalog>
+                <rewrite>
+                   <product_list>Hs_Catalog_Block_Product_List</product_list>
+                </rewrite>
+            </catalog>
+            <page>
+                <rewrite>
+                    <html_topmenu>Hs_Catalog_Block_Page_Html_Topmenu</html_topmenu>
+                </rewrite>
+            </page>
+        </blocks>
+        <cache>
+            <types>
+                <product_loading>
+                    <label>Category Loading</label>
+                    <description>Cache of category loading.</description>
+                    <tags>catalog_category_custom_cache</tags>
+                </product_loading>
+            </types>
+        </cache>
+    </global>
+    <frontend>
+        <routers>
+            <hscatalog>
+                <use>standard</use>
+                <args>
+                    <module>Hs_Catalog</module>
+                    <frontName>hscatalog</frontName>
+                </args>
+            </hscatalog>
+        </routers>
+    </frontend>
+</config>

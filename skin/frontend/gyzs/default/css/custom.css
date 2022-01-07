@@ -1,0 +1,202 @@
+.header-links li:before {
+    content: '';
+    display: block;
+    float: left;
+    background: url(../images/sprite.png);
+    height: 10px;
+    width: 10px;
+    background-position: -73px -42px;
+    margin: 2px 7px 0 0;
+}
+@media (min-width: 1224px) {
+    .fixed-nav {
+        border-right: 1px solid #ddd;
+    }
+}
+@media (min-width: 991px) and (max-width: 1290px) {
+    .row.chckoutsteps {
+        max-width: 100%;
+    }
+    #co-billing-form #billing-new-address-form li .field.input-postcode, #co-billing-form #shipping li .field.input-postcode.pcnl-input-housenumber,
+    #co-billing-form #shipping li .field.input-postcode, #co-billing-form #billing-new-address-form li .field.input-postcode{
+        width: 100% !important;
+    }
+    #co-billing-form #shipping li .input-postcode.other-housenumber label, #co-billing-form #billing-new-address-form li .input-postcode.other-housenumber label{
+        margin-left: 0;
+        padding-right: 0;
+    }
+    #billing-new-address-form li.fields .input-box input.input-text.vtnumber, #billing-new-address-form li.fields .input-box input.input-text.referencenumber{
+        width: 74%;
+    }
+    #co-billing-form #billing-new-address-form li .input-postcode label, #co-billing-form #shipping li .input-postcode.pcnl-input-housenumber label, #co-billing-form #shipping li .input-postcode label, #co-billing-form #billing-new-address-form li .input-postcode label {
+        width: 23.5% !important;
+    }
+    #co-billing-form #billing-new-address-form li .input-postcode.pcnl-input-housenumber label, #co-billing-form #shipping li .input-postcode.pcnl-input-housenumber label {
+        padding: 0;
+    }
+/*    #shipping-addition-house {
+        margin-left: 10px;
+        width: 85%;
+        right: 0;
+        float: left;
+    }*/
+    #co-billing-form #billing-new-address-form .input-postcode.pcnl-input-housenumber .input-box, #co-billing-form #shipping .input-postcode.pcnl-input-housenumber .input-box, #co-billing-form #billing-new-address-form .input-postcode.pcnl-input-housenumber .input-box {
+        width: 76.5%;
+    }
+    #co-billing-form #billing-new-address-form li .field.input-postcode.pcnl-input-housenumber {
+        margin-top: 8px;
+    }
+    .your-order-list .list-items .td-name {
+        margin-right: 0;
+    }
+}
+@media screen and (max-width: 990px) {
+    .col2-right-layout .checkout-account-step-billing.col-main {
+        width: 100%;
+    }
+    .sidebar-right {
+        width: 100%;
+        float: left;
+        margin-top: 0;
+    }
+    .row.chckoutsteps {
+        max-width: 100%;
+    }
+    #co-billing-form #billing-new-address-form li .input-postcode label {
+        width: 23.5%;
+    }
+    .col2-right-layout .userdeliveryoptions.col-main {
+        width: 100%;
+    }
+    .your-order-list .list-items .td-name {
+        margin-right: 0;
+    }
+    .col2-right-layout .payment-options-container.col-main {
+        width: 100%;
+    }
+    .col2-right-layout .multiple-checkout-outer.col-main {
+        width: 100%;
+    }
+    .thanks .bestselling .left {
+        width: 100%;
+        padding-right: 0;
+    }
+    .thanks .bestselling .right1 {
+        width: 100%;
+        margin-top: 20px;
+    }
+    .news_form_detail .left {
+        width: 100%;
+        padding-bottom: 0;
+    }
+    .news_form_detail .right {
+        float: left !important;
+        width: 100%;
+    }
+    .news_form input {
+        max-width: 75%;
+        margin-bottom: 20px;
+    }
+    .social_detail {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+@media screen and (max-width: 767px) {
+    .payment-heading, #review-order .totalitems > div.heading {
+        width: 100%;
+    }
+    .comment-box > label {
+        line-height: 25px;
+        margin: 0;
+        padding-left: 15px;
+        float: left;
+        padding-right: 15px;
+        margin-bottom: 20px;
+    }
+    #payment-options-container .comment-box .buttons-set {
+        width: 95%;
+    }
+    .discount-form > label {
+        padding-bottom: 0;
+        width: 100%;
+        padding: 25px 20px 0px 30px;
+        box-sizing: border-box;
+    }
+    #payment-options-container .discount .discount-form .input-box {
+        margin-left: 020px;
+        width: 56%;
+        margin-bottom: 20px;
+    }
+    #review-order .delivery-method-temp .box, #review-order .subsequent-deliveries-info, #review-order .delivery-method, #review-order .discount .box, #review-order .shippinginfo .col-narrow .box, #review-order .paymentmethodinfo, #review-order .totalitems{
+        padding: 20px 15px;
+    }
+    .checkout-accoutnt-step .page-title.title-buttons, .paymentinfo-and-payment .page-title.title-buttons, .col-main .multiple-checkout .page-title.title-buttons {
+        border-bottom: 0px;
+        text-align: left;
+        padding: 12px;
+    }
+    .login-checkout .col-1, .login-checkout .col-2, .login-checkout .col-1 .col-1-1, .login-checkout .col-2 .col-2-1, .login-checkout .col-1 .col-1-2 input, .login-checkout .col-2 .col-2-2 input,
+    .login-checkout .col-1 .col-1-2, .login-checkout .col-2 .col-2-2, .kbase.kbase-search .catalog-customer-service, .kbase.kbase-article .catalog-customer-service, .kbase.kbase-article-tag .catalog-customer-service, .kbase.kbase-article-category .catalog-customer-service,
+    .addresses-list.col2-set .col-1, .addresses-list.col2-set .col-2, #review-order .discount .box-title, #review-order .subsequent-deliveries-info .box-title, #review-order .delivery-method .box-title, #review-order .paymentmethodinfo .box-title,
+    #review-order .subsequent-deliveries-info .box-content, #review-order .delivery-method .box-content, #review-order .paymentmethodinfo .box-content,#review-order .delivery-method-temp .box-content,
+    #review-order .subsequent-deliveries-info .box-title, #review-order .discount .box-title, #review-order .delivery-method .box-title, #review-order .delivery-method-temp .box-title, #review-order .paymentmethodinfo .box-title{ 
+        width: 100%;
+    }
+    .login-checkout .col-1 .col-1-2, .login-checkout .col-2 .col-2-2{
+        margin: 0;
+    }
+    .login-checkout .col-1 .col-1-1, .login-checkout .col-2 .col-2-1 {
+        margin: 20px 0;
+    }
+    .checkout-progress li.active.last{
+        right: 0;
+    }
+    .checkout-progress .formobile a {
+        color: #000;
+        display: block;
+        font-family: source_sans_prosemibold;
+        font-size: 17px;
+        line-height: 66px;
+        overflow: hidden;
+        padding-left: 0;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: pre;
+    }
+    #co-billing-form #billing-new-address-form .input-box {
+        float: left;
+        width: 100%;
+    }
+    #billing-new-address-form li.wide .input-box input.input-text.singles.email {
+        width: 100%;
+        height: 46px;
+        box-sizing: border-box;
+    }
+    .form-list .customer-name-prefix-middlename-suffix .name-firstname input.input-text, .form-list .customer-name-prefix-middlename .name-firstname input.input-text {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 605px) {    
+    #co-billing-form #billing-new-address-form li .input-postcode.pcnl-input-housenumber label, #co-billing-form #billing-new-address-form li .input-postcode label,#billing-buttons-container .button,.checkout-bottom-left-btn,
+    .delivery-bottom-controls > button, #review-buttons-container, .checkout-account-step-billing .newsletter .left, .checkout-account-step-billing .newsletter .right, .delivery-options-top .options-list-top.left, .delivery-options-top .options-list-top.right,
+    .sp-methods.paymentmethodslist .right-dropdowns, .sp-methods.paymentmethodslist .left-methods, .faqform .content .cont p, .sp-methods.paymentmethodslist{
+        width: 100%;
+    }
+    .checkout-account-step-billing .newsletter .right {
+        line-height: 1.4;
+    }
+    #billing-new-address-form li.wide .input-box input.input-text.singles.email, #billing-new-address-form li.wide .input-box input.input-text, #billing-new-address-form li.fields .input-box input.input-text.street, #billing-new-address-form li.fields .input-box input.input-text.city,
+    .form-list .customer-name-prefix-middlename-suffix .name-firstname input.input-text, .form-list .customer-name-prefix-middlename .name-firstname input.input-text{
+        box-sizing: border-box;
+        width: 100%;
+        height: 46px;
+    } 
+    .bestselling_main {
+        margin-bottom: 0;
+    }
+    .col2-set.login-checkout {
+        margin-top: 20px;
+        padding: 0;
+    }
+}

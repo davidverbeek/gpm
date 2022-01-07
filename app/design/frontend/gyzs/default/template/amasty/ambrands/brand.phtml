@@ -1,0 +1,81 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2017 Amasty (https://www.amasty.com)
+ * @package Amasty_Brands
+ */
+?>
+<?php
+/** @var Amasty_Brands_Block_Brand $this */
+$brand = $this->getBrand();
+
+$content    = "<h1 class='brand-title'>" . $brand->getName() . " " . $this->__('At Gyzs.nl') . " </h1><br/>";
+$content    .= $brand->getDescription();
+
+$contentParts = explode('<!-- pagebreak -->', $content);
+$columnCount  = count($contentParts);
+
+if ($columnCount > 1) {
+    $content = '<div class="brand-description col' . $columnCount . '-set">';
+
+    for ($i = 0; $i < $columnCount; $i++) {
+        $currentColumn = $i + 1;
+        $content    .= '<div class="col-' . $currentColumn . '">';
+        $content    .= $contentParts[$i];
+        $content    .= '</div>';
+    }
+
+    $content .= '</div>';
+}
+
+?>
+
+<!-- <div class="title-breadcrumbs-wrap" style="display: none;">
+	<div class="page-title category-title-name">
+		<h1 class="h1"><?php //echo $brand->getTitle() ?></h1>
+	</div>
+</div> -->
+
+
+<div>
+    <?php //echo $this->getLayout()->getBlock('breadcrumbs')->toHtml(); ?>
+</div>
+
+<div class="brand-page">
+    <?php if($brand->getDescription()){ ?>
+    	<div class="brand-top-desc">
+    		<div class="block-content">
+    		    <?php echo $content; ?>
+    		</div>
+    	</div>
+    <?php } ?>
+	
+    <!-- <div class="page-title category-title">
+        <h1><?php //echo $brand->getTitle()?></h1>
+    </div> -->
+    <?php //echo $this->getImageHtml() ?>
+    <!-- <div class="category-description std"><?php //echo $brand->getDescription()?></div> -->
+    <?php echo $this->getChildHtml('product_list'); ?>
+</div>
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function(){
+		jQuery('.title-breadcrumbs-wrap').prependTo('.ambrands-index-view .col2-left-layout .main');
+		jQuery('.title-breadcrumbs-wrap').show();
+	})
+
+
+    // ===================================================
+    // Product Listing Nice select initialised
+    // ===================================================
+    enquire.register('screen and (max-width: ' + (bp.large) + 'px)', {
+        match: function() {
+            jQuery(".amasty-sidebar-filter-wrap").appendTo(jQuery("#narrow-by-list") );
+        },
+        unmatch: function() {
+        	jQuery(".amasty-sidebar-filter-wrap").appendTo(jQuery(".ambrands-index-view .col-left-first") );
+        }
+    });
+	
+</script>

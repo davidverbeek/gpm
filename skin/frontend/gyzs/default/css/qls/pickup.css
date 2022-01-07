@@ -1,0 +1,95 @@
+.qls-modal-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+}
+.qls-modal-dialog:before{
+    content: "";
+    background-color: #636363;
+    height: 100%;
+    left: 0;
+    opacity: 0.6;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 8;
+}
+.qls-modal-dialog > .qls-selector {
+    position: relative;
+    z-index: 9;
+    width: 88%;
+    margin: 0 auto;
+    padding-top: 4vh;
+}
+.qls-ls-close {
+    background-color: #39ae37;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: -1px;
+    top: 4vh;
+    border: none;
+}
+.qls-ls-close:before {
+    content: "\f00d";
+    font-family: FontAwesome;
+    color: #FFF;
+    font-size: 15px;
+}
+.qls-iframe {
+    width: 100%;
+    height: calc(100vh - 8vh);
+}
+.qls-pickup.button {
+    background: #eac92d;
+    border-radius: 0;
+    color: #000;
+    font-family: source_sans_proregular;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 12px 20px 12px;
+    border: none;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+}
+.qls-pickup.button:hover {
+    background:#39ae37;
+}
+.qls-pickup-div {
+    width: 67%;
+    margin-bottom: 24px;
+    float: right;
+}
+.nice-select span.pickupselected{
+	color: #000;
+}
+.pickup-message{
+    font-size: 12px;
+    padding-top: 5px;
+    width: 80%;
+}
+@media only screen and (max-width: 1024px) {
+    .qls-selector-inner {
+        background: #FFF;
+        padding: 4vh 0 0 0;
+    }
+    .qls-iframe {
+        height: calc(100vh - 12vh);
+    }
+}
+@media only screen and (max-width: 767px) {
+    .qls-ls-close {
+        width: 25px;
+        height: 25px;
+    }
+    .qls-pickup-div {
+        width: 100%;
+        float: none;
+        padding-left: 20px;
+    }
+}

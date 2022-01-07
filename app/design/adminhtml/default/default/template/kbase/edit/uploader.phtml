@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+$element = $this->getElement();
+
+?>
+<tr id="<?php echo $element->getHtmlId() ?>_container">
+    <td class="label"><label for="<?php echo $element->getHtmlId() ?>_uploader"><?php echo $element->getLabel() ?></label></td>
+    <td colspan="2" class="value" style="white-space:nowrap;width:auto;">
+        <input type="file" value="" name="<?php echo $element->getName() ?>" id="<?php echo $element->getHtmlId() ?>_uploader" class="<?php echo $element->getClass() ?>" />
+        <?php if($element->getValue()): ?>
+            <br />
+            <span class="<?php echo $element->getClass() ?>">
+                <a href="<?php echo $this->getUrl('*/*/downloadAttachment', array('id' => $this->getRequest()->getParam('id'))) ?>" title="<?php echo $this->__('Download') ?>"><?php echo htmlspecialchars($element->getValue()) ?></a>
+            </span>
+            <input type="checkbox" name="<?php echo $element->getName() ?>_delete" id="<?php echo $element->getHtmlId() ?>_delete" class="delete" />
+            <label for="<?php echo $element->getHtmlId() ?>_delete"><?php echo $this->__('Delete file') ?></label>
+            <input type="hidden" id="<?php echo $element->getHtmlId() ?>_old" name="<?php echo $element->getName() ?>_old" value="<?php echo $element->getValue() ?>" />
+        <?php endif; ?>
+    </td>
+</tr>

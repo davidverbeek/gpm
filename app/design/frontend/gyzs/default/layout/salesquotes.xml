@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	
+    <salesquotes_quote_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+            <action method="setHeaderTitle" translate="title">
+                <title>Quote</title>
+            </action>	
+        </reference>
+         <reference name="head">
+                <action method="addCss" ifconfig="postcodenl_api/config/enabled"><script>postcodenl/api/css/lookup.css</script></action>
+                <action method="addCss">
+                    <stylesheet>css/multifees.css</stylesheet>
+                </action>
+                <action method="addItem">
+                    <type>skin_js</type>
+                    <script>js/jquery.nice-select.js</script>
+                </action>
+                <action method="addItem">
+                    <type>skin_css</type>
+                    <name>css/multistepcheckout/nice-select.css</name>
+                </action>
+            <action method="addJs" ifconfig="postcodenl_api/config/enabled"><script>postcodenl/api/lookup.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="postcodenl_api/jsinit" name="postcodenl.jsinit" template="postcodenl/api/jsinit.phtml" />
+            <block type="page/html" name="quote.quotepage" template="salesquotes/quote/quote.phtml">   
+                <block type="techtwo_salesquotes/quote_info" name="quote.quotepage.info" template="salesquotes/quote/quote/info.phtml" />         
+                <block type="techtwo_salesquotes/quote_summary" name="quote.quotepage.summary" template="salesquotes/quote/quote/summary.phtml">            	
+                    <action method="addItemRender">
+                        <type>default</type>
+                        <block>checkout/cart_item_renderer</block>
+                        <template>salesquotes/review/item.phtml</template>
+                    </action>
+                    <action method="addItemRender">
+                        <type>grouped</type>
+                        <block>checkout/cart_item_renderer_grouped</block>
+                        <template>salesquotes/review/item.phtml</template>
+                    </action>
+                    <action method="addItemRender">
+                        <type>configurable</type>
+                        <block>checkout/cart_item_renderer_configurable</block>
+                        <template>salesquotes/review/item.phtml</template>
+                    </action>
+                    <block type="checkout/cart_totals" name="checkout.onepage.review.info.totals" as="totals" template="salesquotes/quote/quote/totals.phtml"/>
+                </block>
+            </block>
+        </reference>
+                
+        <reference name="right">
+            <remove name="cart_sidebar"/> 
+            <block type="reports/product_viewed" before="right.permanent.callout" name="right.reports.product.viewed" template="reports/product_viewed.phtml" />
+        </reference>
+    </salesquotes_quote_index>
+    
+        
+    <salesquotes_quote_quotesuccess>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="page/html" name="quote.success" template="salesquotes/quote/success.phtml"/>
+        </reference>
+    </salesquotes_quote_quotesuccess>
+    
+    
+    <customer_account>
+        <!-- Mage_Sales -->
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="techtwo_salesquotes">
+                <name>salesquotes</name>
+                <path>salesquotes/quote/history/</path>
+                <label>Mijn offertes</label>
+            </action>
+        </reference>
+    </customer_account>
+    
+    
+    <salesquotes_quote_history>
+        <update handle="customer_account"/>
+        <reference name="content">
+            <block type="techtwo_salesquotes/customer_quotes" name="salesquotes.customer.quotes"/>
+            <block type="customer/account_dashboard" name="customer.account.link.back" template="customer/account/link/back.phtml"/>
+        </reference>
+    </salesquotes_quote_history>
+	
+    <salesquotes_quote_viewquote>
+        <update handle="customer_account"/>
+        <reference name="content">	        
+            <block type="techtwo_salesquotes/customer_quote_view" name="salesquotes.customer.quotes.view">
+                <block type="sales/order_items" name="order_items" template="sales/order/items.phtml">
+                    <action method="addItemRender">
+                        <type>default</type>
+                        <block>sales/order_item_renderer_default</block>
+                        <template>sales/order/items/renderer/default.phtml</template>
+                    </action>
+                    <action method="addItemRender">
+                        <type>grouped</type>
+                        <block>sales/order_item_renderer_grouped</block>
+                        <template>sales/order/items/renderer/default.phtml</template>
+                    </action>
+                    <block type="sales/order_tax" name="tax" template="sales/order/tax.phtml" />
+                    
+                </block>
+                <block type="checkout/cart_totals" name="checkout.quote.info.totals" as="totals" template="salesquotes/customer/quote/totals.phtml"/>
+            </block>
+        </reference>	    
+    </salesquotes_quote_viewquote>
+	
+    <sales_email_quote_items>
+        <block type="sales/order_email_items" name="items" template="email/quote/items.phtml">
+            <action method="addItemRender">
+                <type>default</type>
+                <block>sales/order_item_renderer_default</block>
+                <template>sales/order/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>sales/order_item_renderer_grouped</block>
+                <template>sales/order/items/renderer/default.phtml</template>
+            </action>
+        </block>
+    </sales_email_quote_items>
+</layout>

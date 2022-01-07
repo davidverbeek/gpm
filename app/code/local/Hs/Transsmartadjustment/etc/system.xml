@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <transsmart_shipping translate="label" module="transsmartadjustment">
+            <groups>
+                <connection_2 translate="label">
+                    <label>Connection Details User 2</label>
+                    <sort_order>31</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <username_2 translate="label">
+                            <label>Username 2</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Environment would be used same as User 1.</comment>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </username_2>
+                        <password_2 translate="label">
+                            <label>Password 2</label>
+                            <frontend_type>password</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </password_2>
+                    </fields>
+                </connection_2>
+                <transsmartadjustment translate="label" module="transsmartadjustment">
+                    <label>Shipment Carrier Change (Bpost column in sales order grid)</label>
+                    <sort_order>670</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <carrier_change translate="Shipment Carrier Change">
+                            <label>Shipment Carrier Change</label>
+                            <comment>Please select carrier for one click shipment carrier change.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>transsmart_shipping/adminhtml_system_config_source_basedata_carrierprofile
+                            </source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </carrier_change>
+                        <custom_name translate="Shipment Carrier custom Name">
+                            <label>Shipment Carrier Custom Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </custom_name>
+                    </fields>
+                </transsmartadjustment>
+            </groups>
+        </transsmart_shipping>
+    </sections>
+</config>

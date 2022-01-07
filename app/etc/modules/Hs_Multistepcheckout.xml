@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Hs_Multistepcheckout>
+            <active>true</active>
+            <codePool>local</codePool>
+            <!-- <depends>
+                <Transsmart_Shipping />
+            </depends> -->
+        </Hs_Multistepcheckout>
+    </modules>
+</config> 

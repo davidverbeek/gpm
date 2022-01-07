@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<config>
+   <api>
+     <resources>
+     <!-- START GUSTOMER GROUP RESOURCES -->
+       <jaagers_myapi>
+            <model>jaagers_myapi/api</model>
+            <title>Get attribute info</title>
+            <methods>
+	       	 	<attributecodeid translate="title" module="jaagers_myapi">
+                    <title>attribute code id</title>
+                    <method>attributecodeid</method>
+                </attributecodeid>
+				<attributesetid translate="title" module="jaagers_myapi">
+                    <title>attribute set id</title>
+                    <method>attributesetid</method>
+                </attributesetid>
+				<isassigned translate="title" module="jaagers_myapi">
+                    <title>attribute set id</title>
+                    <method>isassigned</method>
+                </isassigned>
+            </methods>
+       </jaagers_myapi>
+     <!-- END CUSTOMER GROUP RESOURCES -->
+    </resources>
+    <v2>
+      <resources_function_prefix>
+           <jaagers_myapi>magepro</jaagers_myapi>
+      </resources_function_prefix>
+    </v2>
+  </api>
+</config>

@@ -1,0 +1,163 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+  <?php if($_orderIds = $this->getOrderIds()): ?>
+   
+        <?php foreach ($_orderIds as $orderId=>$incrementId): ?>
+      
+         <?php $order = Mage::getModel('sales/order')->loadByIncrementId($incrementId); ?>
+        <?php endforeach; ?>
+<?php
+$cid = '';
+$cfname = '';
+$clname = '';
+if($order->getCustomerId()!='')
+{
+	$customer = Mage::getModel('customer/customer')->load(6);	
+	$cid = $customer->getId();	
+	$cfname = $customer->getFirstname();
+	$clname = $customer->getLastname();	
+}
+  if($order->getCustomerId() === NULL)
+{
+$customerName = $order->getBillingAddress()->getName();
+$customerEmail = $order->getBillingAddress()->getEmail();
+$cid = '';
+}
+else
+{
+
+$customerName = $order->getCustomerName();
+$customerEmail = $order->getCustomerEmail();
+$cid = $order->getCustomerId();
+}
+$shipping_address_data = $order->getShippingAddress();
+$billing_address_data = $order->getBillingAddress();
+?>
+    <?php endif; ?>
+
+<div class="multiple-checkout">
+   <div class="thanks row">
+<h1><?php echo $this->__('Thank you for your order');?> <?php echo $customerName; ?>!</h1>
+   <div class="bestselling_main">
+  <div class="row">
+	<div class="bestselling">
+	<h1><?php echo $this->__('order completion')?></h1>
+	<div class="left">
+	
+	<p><?php echo $this->__("Thanks for your order with GYZS. Herewith some useful information for your records. We've captured with your order number")?> <span>GYZS-<?php echo $incrementId ?>
+      </span>
+		<?php echo $this->__('You can view this always through My orders.'); ?></p>
+
+	<p>&nbsp;</p>
+	<p><?php echo $this->__('We also mail your order for your confirmation.');?></p>
+	</div>
+	<div class="right1">
+	<p><strong><?php echo $this->__("So, what's next?"); ?></strong></p>
+	<p><?php echo $this->__("You've placed a backorder when the order coming your way soon. The rest of the order you can expect tomorrow.")?></p>
+	<p>&nbsp;</p>
+	<p><?php echo $this->__('Any questions? our')?> <span><?php echo $this->__('klantenservice')?></span> <?php echo $this->__('is waiting for you!')?></p>
+	</div>
+	</div>
+</div>
+
+<div class="news_form">
+<div class="news_form_detail">
+ <form action="<?php echo $this->getUrl() ?>newsletter/subscriber/new/" method="post" id="detailnewsletter-validate-detail">
+<div class="left">
+<p><?php echo $this->__('Always up to date with the latest discount? Yes, sign me up for rebate ...'); ?></p>
+</div>
+<div class="right"><input type="textbox" name="email" value="" /><button type="submit"><?php echo $this->__('Sign Up')?></button></div>
+</form>
+</div>
+ <script type="text/javascript">
+    //<![CDATA[
+        var newsletterSubscriberFormDetail = new VarienForm('detailnewsletter-validate-detail');
+    //]]>
+    </script>
+</div>
+<div class="social">
+<div class="social_detail">
+<h1><?php echo $this->__('Satisfied with your order? Let everyone know!')?></h1>
+</div>
+</div>
+<div class="process">
+<div class="process_det">
+<div class="process_detail">
+<div class="title_div">
+<h1><?php echo $this->__('the sequel')?></h1>
+</div>
+<ul>
+<?php  
+ 
+$currentTime = Mage::helper('multistepcheckout/data')->getCurrentTime();
+//Mage::log("OrderId::".$incrementId,null,"orderslog.log");
+//Mage::log("currentTime::".$currentTime,null,"orderstime.log");
+?>
+<li class="spe"><?php echo $this->__('Order successfully completed')?> <span><?php echo $this->__('today at')?> <?php echo $currentTime; ?></span></li>
+<li class="spe"><?php echo $this->__('Confirmation e-mail')?> (<?php echo $customerEmail ?>) <span><?php echo $this->__('today at')?> <?php echo $currentTime; ?></span></li>
+<li><?php echo $this->__('Track &amp; trace mail')?> <span><?php echo $this->__('expect tonight')?> 20:30</span></li>
+<li class="spe_extra"><?php echo $this->__('Verzending eerste levering')?>
+<p><?php echo $this->__('delivery address')?> <?php echo $billing_address_data['city'].' '.$billing_address_data['postcode'].' '.$billing_address_data['country_id'];?></p>
+</li>
+<li><?php echo $this->__('Track &amp; trace mail')?></li>
+<li class="spe_extra"><?php echo $this->__('Shipping backorder')?>
+<p><?php echo $this->__('delivery address')?> <?php echo $shipping_address_data['city'].' '.$shipping_address_data['postcode'].' '.$shipping_address_data['country_id'];?></p>
+</li>
+</ul>
+</div>
+<h1><?php echo $this->__('Forgot something? With GYZS can add up to a day in advance any articles to your backorder! We call super service.')?></h1>
+</div>
+</div>
+<div class="faqform">
+	<form action="<?php echo $this->getUrl('') ?>customerfaq/index/save" method="post" id="frequently-asked-questions">
+<div class="faqform_detail">
+<h1><?php echo $this->__('we may ask you something?')?></h1>
+<div class="content">
+<div class="cont">
+<p><?php echo $this->__('What could be better in your opinion?')?></p>
+<input type="textbox" name="info1" /></div>
+<div class="cont">
+<p><?php echo $this->__('What did you really pleasant?')?></p>
+<input type="textbox" name="info2" /></div>
+<div class="cont">
+<p><?php echo $this->__('Do you have any comments?')?><span><?php echo $this->__('A good improvement could win a coupon of 5%.')?></span></p>
+<textarea name="question" rows="5" cols="50"></textarea></div>
+<div class="cont">
+<p>&nbsp;</p>
+<input type="hidden" name="customer_id" value="<?php echo $cid?> " />
+<input type="hidden" name="name" value="<?php echo $cfname.' '.$clname?>" />
+		
+<button class="btn" type="submit"><?php echo $this->__('Submit')?></button></div>
+</div>
+</div>
+							
+</form>
+</div>
+
+	</div>
+	</div>
+</div>

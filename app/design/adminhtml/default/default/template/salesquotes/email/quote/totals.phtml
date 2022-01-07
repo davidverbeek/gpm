@@ -1,0 +1,125 @@
+<?php
+/* @var $quote Mage_Sales_Model_Quote */
+$quote = $this->getQuote();
+/* @var $coreHelper Mage_Core_Helper_Data */
+$coreHelper = Mage::helper('core');
+
+$totals = $quote->getTotals();
+
+$total = reset($totals);
+
+// Mage::log(gettype($totals),null,'hello_total.log');
+// Mage::log(array_keys($totals),null,'hello_total.log');
+/* @var $total Mage_Sales_Model_Quote_Address_Total */
+?>
+
+<?php $default =''; foreach ( $totals as $total ): 
+    switch ($total->getCode()) {
+        case 'subtotal':
+            // if ( 'subtotal' === $total->getCode() )
+                $munny_ecxl = $total->getData('value_excl_tax');
+            // else
+                $munny = $total->getData('value');
+
+           $subtotal_incl = '<tr style="background-color:#fff">
+            
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:5px;margin-bottom:5px;margin-left:38px;font-size:14px;line-height:20px;color:#000">Subtotaal Incl. btw</p></td>
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="ffont-family:Arial;margin-top:5px;margin-bottom:5px;padding-right:110px;text-align:right;font-size:14px;line-height:20px">'.$coreHelper->currency( $munny, true, false).'</p></td></tr>';
+
+            $subtotal_excl = '<tr style="background-color:#fff">
+             
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:5px;margin-bottom:5px;margin-left:38px;font-size:14px;line-height:20px;color:#000;">Subtotaal Excl. btw</p></td>
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:5px;margin-bottom:5px;padding-right:110px;text-align:right;font-size:14px;line-height:20px;">'.$coreHelper->currency( $munny_ecxl, true, false).'</p></td></tr>';
+
+            break;
+
+        case 'tax':
+            // if ( 'subtotal' === $total->getCode() )
+                // $munny_ecxl = $total->getData('value_excl_tax');
+            // else
+                $munny = $total->getData('value');
+
+          $tax = '<tr style="background-color:#fff">
+             
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:10px;margin-bottom:10px;margin-left:38px;font-size:14px;line-height:20px;color:#000">BTW</p></td>
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:10px;margin-bottom:10px;padding-right:110px;text-align:right;font-size:14px">'.$coreHelper->currency( $munny, true, false).'</p></td></tr>';
+
+            break;
+
+        case 'grand_total':
+            // if ( 'subtotal' === $total->getCode() )
+                // $munny_ecxl = $total->getData('value_excl_tax');
+            // else
+                $munny = $total->getData('value');
+
+           $grand_total = '<tr>
+        <td colspan="2" style="height:20px">
+            <hr style="color:#ddd;display:block;height:1px;border:0;border-top:1px solid #ddd;width:540px;margin:0 auto">
+        </td>
+    </tr><tr style="background-color:#fff">
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-left:38px;margin-top:15px;margin-bottom:15px;font-size:20px;line-height:20px;color:#000;font-weight:normal">Totaal incl. btw</p></td>
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:15px;margin-bottom:15px;padding-right:110px;text-align:right;font-size:20px;font-weight:bold;line-height:20px">'.$coreHelper->currency( $munny, true, false).'</p></td></tr>
+            <tr>
+        <td colspan="2" style="height:20px">
+            <hr style="color:#ddd;display:block;height:1px;border:0;border-top:1px solid #ddd;width:540px;margin:0 auto">
+        </td>
+    </tr>';
+
+            break;
+
+        case 'shipping':
+            // if ( 'subtotal' === $total->getCode() )
+                // $munny_ecxl = $total->getData('value_excl_tax');
+            // else
+                $munny = $total->getData('value');
+
+           $shipping = '<tr style="background-color:#fff">
+             
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:5px;margin-bottom:5px;margin-left:38px;font-size:14px;line-height:20px;color:#000">Verzendkosten</p></td>
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-family:Arial;margin-top:5px;margin-bottom:5px;padding-right:110px;text-align:right;font-size:14px;line-height:20px">'.$coreHelper->currency( $munny, true, false).'</p></td></tr>';
+
+            break;
+
+        default:
+            $munny = $total->getData('value');
+
+            $default .= '<tr style="background-color:#fff">
+            
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="margin:0 40px 0 30px;font-size:12px;line-height:20px;color:#000;padding-left:0px">'.$total->getTitle().'</p></td>
+            <td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-size:12px;line-height:28px;color:#000;font-weight:bold;margin:0 30px 0 0">'.$coreHelper->currency( $munny, true, false).'</p></td></tr>';
+            break;
+    }
+
+
+
+
+
+
+?>
+
+
+
+<!-- <tr style="background-color:#fff">
+	<td align="right" colspan="3" style="font-weight: bold"></td>
+	<td valign="top" align="left" style="width:425px;" class="a-left"><p style="margin:0 40px 0 30px;font-size:12px;line-height:20px;color:#000;padding-left:0px"><?php //echo $total->getTitle(); ?></p></td>
+	<td valign="top" align="left" style="width:425px;" class="a-left"><p style="font-size:12px;line-height:28px;color:#000;font-weight:bold;margin:0 30px 0 0"><?php 
+	
+	// if ( 'subtotal' === $total->getCode() )
+	// 	$munny = $total->getData('value_excl_tax');
+	// else
+	// 	$munny = $total->getData('value');
+	
+	// echo $coreHelper->currency( $munny, true, false);
+	
+	?></p></td>
+</tr> -->
+<?php endforeach; 
+
+echo $subtotal_incl;
+echo $shipping;
+echo $default;
+echo $grand_total;
+echo $subtotal_excl;
+echo $tax;
+
+?>

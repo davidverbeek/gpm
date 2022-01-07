@@ -1,0 +1,50 @@
+<?php
+
+//Mage::getModel('catalog/layer')->getCurrentCategory();
+		//Mage::getSingleton('catalog/layer')->getCurrentCategory();
+		$_helper    = $this->helper('catalog/output');
+		$layer = Mage::getModel('catalog/layer');
+		$_category = $layer->getCurrentCategory();
+		$currentCategoryId= $_category->getId();
+		$currentCategoryName= $_category->getName();
+		 if ($_imgUrl = $_category->getImageUrl()) {
+			$_imgHtml = '<p class="category-image"><img class="cwslazyloader" data-src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></p>';
+			$_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+		}
+
+    $content    = "";
+    //replace category description by static description attribute
+    if($_category->getCustomCategoryDescription() != ''){
+        $content    .= $_category->getCustomCategoryDescription();
+    }
+    else{
+        $content    .= $_category->getDescription();
+    }
+    $contentParts = explode('<!-- pagebreak -->', $content);
+    array_shift($contentParts);
+    $columnCount  = count($contentParts);
+
+    // if ($columnCount > 1) {
+        $content = '<div class="cat-description col' . $columnCount . '-set">';
+
+        for ($i = 0; $i < $columnCount; $i++) {
+            $currentColumn = $i + 1;
+            $content    .= '<div class="col-' . $currentColumn . '">';
+            $content    .= $contentParts[$i];
+            $content    .= '</div>';
+        }
+
+        $content .= '</div>';
+    // }
+
+    ?>
+	<?php if($_category->getDescription()): ?>
+<div class="catalog-bottom-block" id="cat-desc">
+<div class="block-title">
+<h2><?php echo $currentCategoryName ?></h2>
+</div>
+<div class="block-content">
+	<?php //echo $content; ?>
+</div>
+</div>
+<?php endif;?>

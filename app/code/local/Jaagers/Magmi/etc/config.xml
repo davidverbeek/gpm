@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Jaagers_Magmi>
+      <version>0.1.1</version>
+    </Jaagers_Magmi>
+  </modules>
+  <global>
+    <helpers>
+      <magmi>
+        <class>Jaagers_Magmi_Helper</class>
+      </magmi>
+    </helpers>
+	<models>
+    <magmi>
+        <class>Jaagers_Magmi_Model</class>
+        <resourceModel>magmi_mysql4</resourceModel>
+    </magmi>
+	</models>
+  <resources>
+      <magmi_setup>
+        <setup>
+          <module>Jaagers_Magmi</module>
+        </setup>
+        <connection>
+          <use>core_setup</use>
+        </connection>
+      </magmi_setup>
+      <magmi_write>
+        <connection>
+          <use>core_write</use>
+        </connection>
+      </magmi_write>
+      <magmi_read>
+        <connection>
+          <use>core_read</use>
+        </connection>
+      </magmi_read>
+    </resources>
+  </global>
+  <!-- <crontab>
+    <jobs>
+      <magmi_processindex>
+        <schedule>
+          <cron_expr>*/5 * * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>magmi/cron::processIndex</model>
+        </run>
+      </magmi_processindex>
+    </jobs>
+  </crontab> -->
+</config> 

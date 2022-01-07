@@ -1,0 +1,124 @@
+<?php
+    $read = Mage::getSingleton('core/resource')->getConnection('core_read');
+    $result = $read->query("SELECT `main_table`.slide_text, `main_table`.slide_button, `main_table`.slide_link, `main_table`.`image` FROM `mage_shopper_slides` AS `main_table` INNER JOIN `mage_shopper_slides_store` AS `store_table` ON main_table.slide_id = store_table.slide_id WHERE (store_table.store_id in (0, '3')) AND (`status` = '1') ORDER BY `main_table`.sort_order ASC limit 1");
+    $slide = $result->fetch(); 
+    $style = "background:url('". Mage::getBaseUrl('media') . $slide['image'] . "') 50% 0 no-repeat;";    
+?>
+<div id="flexslidercontainer">
+    <div class="slider">
+        <div id="slide-timeline" class="tmline"></div>
+        <div id="flexslider" class="flexslider">
+           <div class="flex-viewport">
+              <ul class="slides">
+              <li style="<?php echo $style; ?>" data-img-height="0">
+                    <div class="row text-right">
+                        <div class="content">
+							<div class="border"></div>
+							<p><?php echo nl2br($slide['slide_text']); ?></p>
+							<button class="button button_white" <?php echo ( empty($slide['slide_link']) ? '' : 'onclick="window.location=\''.$slide['slide_link'].'\'"' ); ?> ><?php echo $slide['slide_button']; ?></button>
+					    </div>
+                    </div>
+                </li>  
+              </ul>
+           </div>
+        </div>
+     </div>
+     <ol class="flex-control-nav flex-control-paging"><li><a class="flex-active">1</a></li><li><a class="">2</a></li><li><a class="">3</a></li><li><a class="">4</a></li><li><a>5</a></li><li><a>6</a></li><li><a>7</a></li></ol>
+    <style>
+        .flexslider .slides>li  {
+            display:block !important;
+        }
+        .cms-index-index .slider{
+            margin-bottom: 0px !important;
+        }
+        
+        @media only screen and (max-width: 767px) {
+            .flexslider .slides>li {
+                height: 180px !important;
+            }
+            .cms-index-index .slider{
+                margin-bottom: 30px !important;
+            }
+            
+           
+        }
+
+    </style>
+    <script>
+
+    var CONFIG_SLIDESHOW = {
+	smoothHeight: true,
+	height: "460"
+    }
+    
+        setSlideHeight = function () {
+		/*update slides to include cloned li*/
+		$flexslides = jQuery("#flexslider").find('ul.slides').children('li');
+		if (_resizeLimit['slideshow'] <= 1 && Shopper.responsive) {
+			/*iphone resolution ( <= 767 ). hide content and show small image*/
+			jQuery('div.content', $flexslides).hide();
+			jQuery('img.small_image', $flexslides).show();
+			var maxSlideHeight = null;
+			$flexslides.each(function (i, v) {
+				if (jQuery('img.small_image', this).length) {
+					jQuery(this).css('background-image', 'none');
+					jQuery(this).height(jQuery('img.small_image', this).height());
+					maxSlideHeight = Math.max(maxSlideHeight, jQuery(this).height());
+				}
+			});
+			/*//auto height - by tallest slide*/
+			$flexslides.height(maxSlideHeight);
+		} else {
+			jQuery('img.small_image', $flexslides).hide();
+			jQuery('div.content', $flexslides).show();
+			/*//restore original content margin top*/
+			jQuery('div.content', $flexslides).css('marginTop', '30px');
+			/*//restore bg image*/
+			$flexslides.each(function (i, v) {
+				jQuery(this).css('background-image', jQuery(this).attr('data-bg'));
+			});
+			if (CONFIG_SLIDESHOW.height != 'auto') {
+				$flexslides.height(CONFIG_SLIDESHOW.height);
+			} else {
+				var maxSlideHeight = null;
+				/*//set slide height according to height of content and image*/
+				$flexslides.each(function (i, v) {
+					var $imgH = jQuery(this).attr('data-img-height');
+					/*//count content height*/
+					var $contentH = jQuery('div.content', this).actual('height') + parseInt(jQuery('div.content', this).css('marginTop')) + parseInt(jQuery('div.content', this).css('marginBottom'));
+					jQuery(this).height(Math.max($imgH, $contentH) + 'px');
+					maxSlideHeight = Math.max(maxSlideHeight, jQuery(this).height());
+				});
+				if (CONFIG_SLIDESHOW.smoothHeight) {
+					/*//smooth height*/
+				} else {
+					/*//auto height - by tallest slide*/
+					$flexslides.height(maxSlideHeight);
+				}
+			}
+			/*//adjust content vertical center*/
+			$flexslides.each(function (i, v) {
+				vericalCenterSlideContent(jQuery(this));
+			});
+		}
+    }
+
+    vericalCenterSlideContent = function ($slide) {
+		var $content = jQuery('div.content', $slide);
+		var $contentH = $content.height()
+				+ parseInt($content.css('marginTop'))
+				+ parseInt($content.css('marginBottom'));
+		if ($slide.height() > $contentH) {
+			$content.css('marginTop', Math.floor(($slide.height() - $contentH) / 2 + 30) + 'px');
+		}
+    }
+    var $flexslider = jQuery("#flexslider");
+	$flexslides = $flexslider.find('ul.slides').children('li');
+    $flexslides.each(function (i, v) {
+		jQuery(this).attr('data-bg', jQuery(this).css('background-image'));
+	});
+    
+    setSlideHeight();
+    </script>
+
+</div>

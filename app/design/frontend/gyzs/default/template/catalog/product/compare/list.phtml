@@ -1,0 +1,269 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this Mage_Catalog_Block_Product_Compare_List */
+?>
+
+<?php	 $_total=$this->getItems()->getSize() ?>
+		<?php 
+			foreach($this->getItems() as $prod){
+			$ccat_ids = $prod->getCategoryIds();
+		if(!isset($ccat_ids[0])){$ccat_ids[0] = '4887';}
+		$catModel = Mage::getModel('catalog/category')->load($ccat_ids[0]);
+
+		$categories = array();
+		 $_categoryCollection = $catModel->getCollection()
+			->addAttributeToSelect('url_path')
+			->addAttributeToFilter('entity_id',$ccat_ids);
+		}
+		 foreach ($_categoryCollection as $c )
+		 {
+			 $f = $c->toArray();
+			 $categories[$f['entity_id']] = $f;
+		 }
+
+		// seems to be sorted at level, but since I can't figure it out.. I suppose I best sort it - Jonathan
+		if (!function_exists('category_level_sort')) {
+			function category_level_sort($a, $b)
+			{
+				if ($a['level'] == $b['level'])
+					return 0;
+				return ($a['level'] < $b['level']) ? -1 : 1;
+			}
+		}
+
+		usort($categories, 'category_level_sort');
+
+		$category_url = end($categories);
+		if(isset($category_url['url_path'])) {
+			$category_url = $category_url['url_path'];
+		} else {
+			$category_url = ' ';
+		}
+		unset($_categoryCollection, $categories);
+		?>
+<div class="row clearfix">
+	<div class="page-title title-buttons">
+		<h1><?php echo $this->__('Product comparisons of')." <span>".$_total." ".$this->__('items')."</span>" ?></h1>
+		<a href="<?php echo Mage::getUrl().$category_url ?>" title="<?php echo Mage::getUrl().$category_url ?>" class="thcategory" >
+			<span></span>
+		</a>
+	</div>
+	<?php if($_total): ?>
+		<ul class="product-comaprison-list <?php echo $_total ?>" id="product_comparison">
+			<li>
+				<div class="product-remove">
+				</div>
+				<div class="pc-basic-info">
+				</div>
+				<div class="pc-product-attributes">
+					<ul class="attributes">
+						<li>
+							<h2 class="code"><?php echo $this->__('General') ?></h2>
+						</li>
+						<?php foreach ($this->getAttributes() as $_attribute): ?>
+							<li>
+								<h2><span class="nobr"><?php echo $_attribute->getStoreLabel() ?></span></h2>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</li>
+			<?php $i = 0; ?>
+			<?php foreach($this->getItems() as $_item): ?>
+			<?php $i++; ?>
+			<li>
+				<?php //if ($_total>2): ?>
+						<div class="product-remove">
+							<div class="a-right">
+								<a href="<?php echo $this->helper('catalog/product_compare')->getRemoveUrl($_item) ?>" class="btn-remove" title="<?php echo $this->__('Remove') ?>" onclick="return confirm('<?php echo $this->__('Are you sure you would like to remove this item from the compare products?') ?>');">
+									<?php echo $this->__('Remove') ?>
+								</a>
+							</div>
+						</div>
+				<?php //endif ?>
+				<div class="pc-basic-info">
+					<div class="product-shop-row">
+						<a class="product-image" href="#" onclick="setPLocation('<?php echo $this->getProductUrl($_item) ?>', true)" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>"><img class="cwslazyloader" data-src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(180,180); ?>" width="180" height="180" alt="<?php echo $this->stripTags($_item->getName(), null, true) ?>" /></a>
+						<div class="product-sku">
+							<?php
+							if ($_item->getTypeId() != 'grouped'):
+								
+								?>
+								<span><?php echo Mage::helper('common')->getGYZSSku($_item->getSku()); ?></span>
+							<?php
+							else:?>
+								<span class="grp-text"> <?php echo $this->__('Grouped Product'); ?> </span>
+							<?php endif; ?>
+						</div>
+						<h2 class="product-name"><a href="#" onclick="setPLocation('<?php echo $this->getProductUrl($_item) ?>', true)" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>"><?php echo $this->helper('catalog/output')->productAttribute($_item, $_item->getName(), 'name') ?></a></h2>
+						<div class="compare-price-container">
+							<?php echo $this->getPriceHtml($_item, true, '-compare-list-top') ?>
+							<?php if ($_item->getTypeId() != 'grouped'): ?>
+									<div class="price-per-attr">
+										<span><?php echo $this->__('per') . " " . $_featuredHelper->getStockAndUnit($_product); ?></span>
+									</div>
+								<?php endif; ?>
+						</div>
+						<span class="bottomtriangle"></span>				
+					</div>
+				</div>
+				<div class="pc-product-attributes">
+				
+					<ul class="attributes">
+						<li>
+							<div>GYZS12432214234</div>
+						</li>
+						<?php foreach ($this->getAttributes() as $_attribute): ?>
+						<li>
+							<?php switch ($_attribute->getAttributeCode()) {
+								case "price": ?>
+									<?php echo $this->getPriceHtml($_item, true, '-compare-list-' . $_attribute->getCode()) ?>
+									<?php break;
+								case "small_image": ?>
+									<img class="cwslazyloader" data-src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(125, 125); ?>" width="125" height="125" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+									<?php break;
+								case "date":
+									  echo substr($this->getProductAttributeValue($_item, $_attribute),0,10);
+									  break;
+								default: ?>
+									<div class="std">
+										<?php echo $this->helper('catalog/output')->productAttribute($_item, $this->getProductAttributeValue($_item, $_attribute), $_attribute->getAttributeCode()) ?>
+									</div>
+									<?php break;
+							} ?>
+						</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+				<div class="add-to-row">
+						<div class="extra-stock">
+                                        <div class="stock-limit">
+                                            <?php if ((int)Mage::getConfig()->getNode('default/combipac')->enable_stock && !$_item->isGrouped()) : ?>
+                                                <div class="checkstock list <?php echo $_item->getSku(); ?>" id="<?php echo $_item->getSku(); ?>">
+
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="action-container">
+                                            <div class="qty-wrapper">
+                                                <input type="text" name="qty" id="qty_<?php echo $_product->getSku(); ?>" min="1" maxlength="5" onkeypress="validateNumber(event)" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty grid" />
+                                                <input type="hidden" class="hiddenstock"
+                                                       id="stock_qty_<?php echo $_item->getSku(); ?>"
+                                                       title="<?php echo $_item->getSku(); ?>"/>
+                                                <input type="hidden" class="hiddenstockstatus"
+                                                       id="stock_qty_status_<?php echo $_item->getSku(); ?>"
+                                                       value="<?php echo $_item->getArtikelstatus(); ?>"/>
+                                                <input type="hidden" class="hiddenindealpacking"
+                                                       id="stock_qty_ideal_<?php echo $_item->getSku(); ?>"
+                                                       value="<?php echo $_item->getIdealeverpakking(); ?>"/>
+                                                <input type="hidden" class="hiddenverkoopeenheid"
+                                                       id="stock_qty_verkoopeenheid_<?php echo $_item->getSku(); ?>"
+                                                       value="<?php echo $_item->getVerkoopeenheid(); ?>"/>
+                                                <input type="hidden" class="hiddenafwijkenidealeverpakking"
+                                                       id="stock_qty_afwijkenidealeverpakking_<?php echo $_item->getSku(); ?>"
+                                                       value="<?php echo $_item->getAfwijkenidealeverpakking(); ?>"/>
+                                                <input type="hidden" class="leverancier"
+                                                       id="leverancier_<?php echo $_item->getSku(); ?>"
+                                                       value="<?php echo $_item->getLeverancier(); ?>"/>
+                                            </div>
+                                            <div class="quantity-per-attr">
+											<span> <?php if (!(int)$_item->getData('afwijkenidealeverpakking')): ?>
+                                                    <?php echo '&nbsp;x&nbsp;' . $_item->getData('idealeverpakking');
+                                                else :
+                                                    echo "&nbsp;x&nbsp;1";
+                                                    ?>
+                                                <?php endif; ?>
+                                                <?php echo $_item->getData('verkoopeenheid'); ?>
+                                            </span></div>
+                                            <div class="button-container">
+                                                <?php if ($_item->isSaleable()): ?>
+
+                                                    <?php if (Mage::getStoreConfig('shoppersettings/ajax/cart')) : ?>
+
+                                                        <?php if (!($_item->getTypeInstance(true)->hasRequiredOptions($_item) || $_item->isGrouped())) { ?>
+                                                            <button type="button"
+                                                                        title="<?php echo $this->__('Buy') ?>" id="cart_button_<?php echo $_item->getSku(); ?>" class="button btn-cart ajax-cart" data-url="<?php echo $this->getAddToCartUrl($_item); ?>" data-id="<?php echo $_item->getId(); ?>">
+                                                                    <?php echo $this->__('Buy') ?>
+                                                                </button>
+                                                        <?php } else { ?>
+                                                            <button type="button"
+                                                                        title="<?php echo $this->__('Buy') ?>"
+                                                                        id="cart_button_<?php echo $_item->getSku(); ?>"
+                                                                        class="button btn-cart show-options"
+                                                                        data-id="<?php echo $_item->getId(); ?>">
+                                                                    <?php echo $this->__('Buy') ?>
+                                                                </button>
+                                                        <?php } ?>
+
+                                                    <?php else: ?>
+                                                        <button type="button"
+                                                                    title="<?php echo $this->__('Buy') ?>"
+                                                                    id="cart_button_<?php echo $_item->getSku(); ?>"
+                                                                    class="button btn-cart"
+                                                                    onclick="setLocation('<?php echo $this->getAddToCartUrl($_item) ?>')">
+                                                                <?php echo $this->__('Buy') ?>
+                                                            </button>
+                                                    <?php endif; ?>
+
+                                                <?php else: ?>
+                                                    <p class="availability out-of-stock">
+                                                        <span><?php echo $this->__('Out of stock') ?></span></p>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="view-product">
+
+                                        <a href="<?php echo $_item->getProductUrl(); ?>"
+                                           title="<?php echo $this->__('View Product') ?>"><?php echo $this->__('View Product') ?></a>
+                                    </div>
+				</div>
+			</li>
+		<?php endforeach; ?>
+    </ul>
+    <script type="text/javascript">
+        function removeItem(url)
+        {
+            new Ajax.Request(url, {
+                parameters: {isAjax: 1, method: 'POST'},
+                onLoading: function(){$('compare-list-please-wait').show();},
+                onSuccess: function(transport) {
+                    $('compare-list-please-wait').hide();
+                    window.location.reload();
+                    window.opener.location.reload();
+                }
+            });
+        }
+    </script>
+<?php else: ?>
+<div class="nofancycomnapre">
+	<h3 align="center"><?php echo $this->__('Please select products to compare') ?></h3>
+	<div class="buttons-set">
+	    <button type="button" title="<?php echo $this->__('Close Window') ?>" class="button" onclick="window.close();"><span><?php echo $this->__('Close Window') ?></span></button>
+	</div>
+</div>
+<?php endif; ?>
+</div>

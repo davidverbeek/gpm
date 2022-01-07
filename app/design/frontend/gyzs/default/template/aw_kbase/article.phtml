@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+$article = $this->getArticle();
+$attachmentUrl = Mage::getUrl('kbase/article/attachment', array(
+        AW_Kbase_Helper_Url::URL_PARAM_NAME_ARTICLE_ID => $article->getArticleId())
+    );
+$ratingPercent = ($article->getArticleRating())/5*100;
+$author = $article->getAuthor()->getFirstname().' '.$article->getAuthor()->getLastname();
+
+?>
+<div class="kbase kbase-article std">
+<script type="text/javascript" src="<?php echo $this->getSkinUrl();?>js/stars.js"></script>
+	<div class="row">
+    <?php echo $this->getChildHtml('kbase_breadcrumbs'); ?>
+    <?php //echo $this->getChildHtml('kbase_header'); ?>
+	<div class="kbasearticledetailtop">
+		 <div class="block-title light">
+			<h1 class=""><?php echo htmlspecialchars($article->getArticleTitle()) ?></h1>
+		</div>
+    	<div class="backlinkandsearch clearfix">
+			<div class="kbase-backlinkcontainer">
+				<div class="backlink">
+					<a href="<?php echo $this->getUrl('klantenservice') ?>" title="<?php echo $this->__('Back to Customer Service') ?>"><?php echo $this->__('Back to Customer Service') ?></a>  
+				</div>
+			</div>
+			<?php echo $this->getChildHtml('kbase_main_search'); ?>
+		</div>
+	</div>
+	
+	<div class="clearfix">
+		<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('catalog-customer-service')->toHtml(); ?>
+	   
+		<div class="kbase-listing" id="kbase_article">
+			<ol>
+				<dt class="kbase-listing-term kbase-listing-short">
+					<h2 class="kbase-listing-general"><?php echo htmlspecialchars($article->getArticleTitle()) ?></h2>
+					
+					<?php if(AW_Kbase_Helper_Data::getFrontendEnabled()): ?>
+						<?php if($this->getRatingEnabled()): ?>
+							<div class="kbase-listing-rating" >
+								<div class="rating-box">
+									<div style="width: <?php echo $ratingPercent ?>%;" class="rating"></div>
+								</div>
+							</div>
+						<?php endif; ?>
+
+					<?php endif; ?>
+				</dt>
+				<dd class="kbase-listing-full">
+					<div class="kbase-listing-description std">
+						<div class="kbase-article-text"><?php echo $this->getProcessedText() ?></div>
+						<?php if($article->getArticleAttachment()): ?>
+							<p class="kbase-article-attachment">
+								<span><?php echo $this->__('Attachment:') ?></span>
+								<a href="<?php echo $attachmentUrl ?>" ><?php echo htmlspecialchars($article->getArticleAttachment()) ?></a>
+							</p>
+						<?php endif; ?>
+					</div>
+					<div class="kbase-article-rating">
+								<?php if(AW_Kbase_Helper_Data::isArticleVoteAllowed($article->getId())): ?>
+								<form class="clearfix" action="<?php echo AW_Kbase_Helper_Url::secureUrl(Mage::getUrl('*/*/vote', array(AW_Kbase_Helper_Url::URL_PARAM_NAME_ARTICLE_ID => $article->getArticleId()))) ?>"
+										  method="get" >
+																				<div class="customerrating">
+												<h3><?php echo $this->__('Your review for this answer') ?></h3>
+												<div class="ratingstars">
+													<span id='ratings' class="ratingsive"></span>
+													<input type="hidden" name="rating" id="rating<?php echo $i;?>" value="" class="radio" />
+													<script type="text/javascript">
+														
+														function rating<?php echo $i;?>(val)
+														{
+															var value=val;
+															$('rating').value=value;
+															///alert('You rated it ' + value + ' star(s)!');
+														}
+
+														  var s = new Stars({
+																container: 'ratings',
+																maxRating: 5,
+																//bindField: 'rating_<?php //echo $_rating->getId() ?>',
+																imagePath: '<?php echo $this->getSkinUrl();?>images/',
+																callback: rating
+														});
+													</script>            
+												</div>
+										</div>
+										<div class="actions">
+												<button type="submit" class="votebutton">
+												<span><?php echo $this->__('Vote') ?></span>
+												</button>
+										</div>
+									</form>
+								<?php endif; ?>
+					</div>
+				</dd>
+			</ol>
+		</div>
+   </div>
+</div>
+</div>

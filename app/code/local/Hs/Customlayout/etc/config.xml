@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <global>
+        <page>
+            <layouts>
+                <custom_about_us>
+                    <label>About Us Page</label>
+                    <template>page/about-us.phtml</template>
+                </custom_about_us>
+            </layouts>
+        </page>
+    </global>
+</config>

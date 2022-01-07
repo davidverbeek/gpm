@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <indexer translate="title" module="jaagers_indexer">
+	            <title>Product indexer</title>
+	            <model>Jaagers_Indexer_Model_Objectmodel_Api</model>
+	            <methods>
+	            	<startBatch translate="title" module="jaagers_indexer">
+	                    <title>Index products</title>
+	                    <method>startBatch</method>
+	                </startBatch>
+	            </methods>
+            </indexer>
+        </resources>
+        <resources_alias>
+            <resourcename>indexer</resourcename>
+        </resources_alias>
+        <v2>
+            <resources_function_prefix>
+                <resourcename>indexer</resourcename>
+            </resources_function_prefix>
+        </v2>
+    </api>
+</config>

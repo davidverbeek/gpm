@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Helios Team
+ * @copyright Copyright (c) 2017 Helios
+ * @package Helios_Sli
+ */
+-->
+<layout version="1.0.0">
+	<default translate="label" module="page">
+		<reference name="head">
+			<block type="sliconfiguration/sliurl" name="sliconfiguration_sliurl_head" template="helios/sli/sliurl_head.phtml" /> 
+		</reference>
+		<reference name="before_body_end">
+			<block type="sliconfiguration/sliurl" name="sliconfiguration_sliurl" template="helios/sli/sliurl.phtml" /> 
+		</reference>
+	</default>
+</layout>

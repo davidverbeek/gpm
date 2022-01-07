@@ -1,0 +1,226 @@
+<?php
+
+/** @var $this Jaagers_Price_Block_Product_Search_Sli_Stock */
+$_product = $this->getProduct();
+$mode = $this->getMode();
+$helper = Mage::helper('checkout/cart');
+
+if ($_product) :
+
+    //if product is set then return stock html
+
+    if (trim(strtolower($mode)) == 'grid') :
+        ?>
+
+
+        <div class="extra-stock">
+            <div class="stock-limit">
+                <?php if ((int)Mage::getConfig()->getNode('default/combipac')->enable_stock && !$_product->isGrouped()) : ?>
+                    <div class="checkstock list <?php echo $_product->getSku(); ?>"
+                         id="<?php echo $_product->getSku(); ?>">
+
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="action-container">
+                <div class="qty-wrapper">
+                    <?php $unit = Mage::helper('featured')->getProductUnit($_product->getData('verkoopeenheid')); ?>
+                    <input type="text" name="qty" id="qty_<?php echo $_product->getSku(); ?>" min="1" maxlength="5" onkeypress="validateNumber(event)" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty grid" />
+
+                    <input type="hidden" class="hiddenstock"
+                           id="stock_qty_<?php echo $_product->getSku(); ?>"
+                           title="<?php echo $_product->getSku(); ?>"/>
+                    <input type="hidden" class="hiddenstockstatus"
+                           id="stock_qty_status_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getArtikelstatus(); ?>"/>
+                    <input type="hidden" class="hiddenindealpacking"
+                           id="stock_qty_ideal_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getIdealeverpakking(); ?>"/>
+                    <input type="hidden" class="hiddenverkoopeenheid"
+                           id="stock_qty_verkoopeenheid_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $unit; ?>"/>
+                    <input type="hidden" class="hiddenafwijkenidealeverpakking"
+                           id="stock_qty_afwijkenidealeverpakking_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getAfwijkenidealeverpakking(); ?>"/>
+                    <input type="hidden" class="leverancier"
+                           id="leverancier_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getLeverancier(); ?>"/>
+                </div>
+                <div class="quantity-per-attr">
+                                                <span id="stock-label-<?php echo $_product->getSku(); ?>"
+                                                      class="stock-label-<?php echo $_product->getSku(); ?>">
+
+                                                    <?php if (!(int)$_product->getData('afwijkenidealeverpakking')): ?>
+                                                        <?php $stockInfo = $_product->getData('idealeverpakking'); ?>
+                                                        <?php if ($stockInfo != '1'): ?>
+                                                            <?php echo '&nbsp;x&nbsp;' . $stockInfo; ?>
+                                                        <?php endif; ?>
+                                                        <?php
+                                                    else :
+                                                        $stockInfo = 1;
+                                                        ?>
+                                                    <?php endif; ?>
+
+
+                                                    <?php echo Mage::helper('featured')->getStockUnit($stockInfo, $unit); //$_product->getData('verkoopeenheid');
+                                                    ?>
+
+
+                                                </span></div>
+                <div class="button-container">
+                    <?php if ($_product->isSaleable()): ?>
+
+                        <?php if (Mage::getStoreConfig('shoppersettings/ajax/cart')) : ?>
+
+                            <?php if (!($_product->getTypeInstance(true)->hasRequiredOptions($_product) || $_product->isGrouped())) { ?>
+                                <button type="button"
+                                            title="<?php echo $helper->__('Add to Cart') ?>"
+                                            id="cart_button_<?php echo $_product->getSku(); ?>"
+                                            class="button btn-cart ajax-cart"
+                                            data-url="<?php echo $helper->getAddUrl($_product); ?>"
+                                            data-id="<?php echo $_product->getId(); ?>">
+                                        <?php echo $helper->__('Add to Cart') ?>
+                                    </button>
+                            <?php } else { ?>
+                                <button type="button"
+                                            title="<?php echo $helper->__('Add to Cart') ?>"
+                                            id="cart_button_<?php echo $_product->getSku(); ?>"
+                                            class="button btn-cart show-options"
+                                            data-id="<?php echo $_product->getId(); ?>">
+                                        <?php echo $helper->__('Add to Cart') ?>
+                                    </button>
+                            <?php } ?>
+
+                        <?php else: ?>
+                            <button type="button"
+                                        title="<?php echo $helper->__('Add to Cart') ?>"
+                                        id="cart_button_<?php echo $_product->getSku(); ?>"
+                                        class="button btn-cart"
+                                        onclick="setLocation('<?php echo $helper->getAddUrl($_product) ?>')">
+                                    <?php echo $helper->__('Add to Cart') ?>
+                                </button>
+                        <?php endif; ?>
+
+                    <?php else: ?>
+                        <p class="availability out-of-stock">
+                            <span><?php echo $helper->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php else : ?>
+
+        <div class="extra-stock">
+            <div class="stock-limit">
+                <?php if ((int) Mage::getConfig()->getNode('default/combipac')->enable_stock && !$_product->isGrouped()) : ?>
+                    <div class="checkstock list <?php echo $_product->getSku(); ?>" id="<?php echo $_product->getSku(); ?>">
+
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="action-container">
+                <div class="qty-wrapper">
+                    <?php $unit = Mage::helper('featured')->getProductUnit($_product->getData('verkoopeenheid')); ?>
+                    <input type="number" name="qty" id="qty" min="1" maxlength="5" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty" oninput="validity.valid||(value=1);" />
+                    <input type="hidden" class="hiddenstock"
+                           id="stock_qty_<?php echo $_product->getSku(); ?>"
+                           title="<?php echo $_product->getSku(); ?>"/>
+                    <input type="hidden" class="hiddenstockstatus"
+                           id="stock_qty_status_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getArtikelstatus(); ?>"/>
+                    <input type="hidden" class="hiddenindealpacking"
+                           id="stock_qty_ideal_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getIdealeverpakking(); ?>"/>
+                    <input type="hidden" class="hiddenverkoopeenheid"
+                           id="stock_qty_verkoopeenheid_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $unit; ?>"/>
+                    <input type="hidden" class="hiddenafwijkenidealeverpakking"
+                           id="stock_qty_afwijkenidealeverpakking_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getAfwijkenidealeverpakking(); ?>"/>
+                    <input type="hidden" class="leverancier"
+                           id="leverancier_<?php echo $_product->getSku(); ?>"
+                           value="<?php echo $_product->getLeverancier(); ?>"/>
+                </div>
+                <div class="quantity-per-attr">
+                                                                    <span  id="stock-label-<?php echo $_product->getSku(); ?>" class="stock-label-<?php echo $_product->getSku(); ?>">
+
+                                                                        <?php if (!(int) $_product->getData('afwijkenidealeverpakking')): ?>
+                                                                            <?php $stockInfo = $_product->getData('idealeverpakking'); ?>
+                                                                            <?php if($stockInfo!=1):?>
+                                                                                <?php echo '&nbsp;x&nbsp;' . $stockInfo; ?>
+                                                                            <?php endif;?>
+                                                                            <?php
+                                                                        else :
+                                                                            $stockInfo = 1;
+                                                                            ?>
+                                                                        <?php endif; ?>
+
+
+                                                                        <?php echo Mage::helper('featured')->getStockUnit($stockInfo, $unit); //$_product->getData('verkoopeenheid');    ?>
+
+                                                                    </span>
+                </div>
+                <div class="button-container">
+                    <?php if ($_product->isSaleable()): ?>
+
+                        <?php if (Mage::getStoreConfig('shoppersettings/ajax/cart')) : ?>
+
+                            <?php if (!($_product->getTypeInstance(true)->hasRequiredOptions($_product) || $_product->isGrouped())) {
+                                ?>
+                                <input type="hidden" name="super_group[<?php echo $_product->getId() ?>]" maxlength="12" value="<?php echo $_product->getQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty group_<?php echo $_product->getSku(); ?>" />
+                                    <button type="button"
+                                            title="<?php echo $this->__('Buy Now') ?>"
+                                            id="cart_button_<?php echo $_product->getSku(); ?>"
+                                            class="button btn-cart ajax-cart"
+                                            data-url="<?php echo $helper->getAddUrl($_product); ?>"
+                                            data-id="<?php echo $_product->getId(); ?>"
+                                            onclick="setLocation('<?php echo $helper->getAddUrl($_product) ?>' + 'qty/' + $j(this).previous().value)"
+                                    >
+                                        <?php echo $this->__('Buy') ?>
+                                    </button>
+                            <?php } else { ?>
+                                <?php /* <button type="button"
+                                                                                      title="<?php echo $this->__('Buy') ?>"
+                                                                                      id="cart_button_<?php echo $_product->getSku(); ?>"
+                                                                                      class="button btn-cart show-options"
+                                                                                      data-id="<?php echo $_product->getId(); ?>"
+                                                                                      onclick="setLocation('<?php echo $this->getAddToCartUrl($_item) ?>' + 'qty/' + $j(this).previous().value)"
+                                                                                      >
+                                                                                      <span><span><em></em><?php echo $this->__('Buy') ?></span></span>
+                                                                                      </button> */ ?>
+                                    <input type="hidden" id="super_group_<?php echo $_product->getId() ?>" name="super_group[<?php echo $_product->getId() ?>]" maxlength="12" value="<?php echo $_product->getQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty group_<?php echo $_product->getSku(); ?>" />
+                                    <button type="button"
+                                            title="<?php echo $this->__('Buy Now') ?>"
+                                            class="button btn-cart validation-passed ajax-group-cart"
+                                            data-id="<?php echo $_product->getId(); ?>"
+                                            data-url="<?php echo $helper->getAddUrl($_product) ?>"><span><span><?php echo $this->__('Buy') ?></span></span></button>
+                            <?php } ?>
+
+                        <?php else: ?>
+                            <button type="button"
+                                        title="<?php echo $this->__('Buy Now') ?>"
+                                        id="cart_button_<?php echo $_product->getSku(); ?>"
+                                        class="button btn-cart"
+                                        onclick="setLocation('<?php echo $helper->getAddUrl($_product) ?>')">
+                                    <?php echo $this->__('Buy') ?>
+                                </button>
+                        <?php endif; ?>
+
+                    <?php else: ?>
+                        <p class="availability out-of-stock">
+                            <button type="button"
+                                    title="<?php echo $this->__('Buy') ?>"
+                                    id="cart_button_<?php echo $_product->getSku(); ?>"
+                                    class="button btn-cart"
+                                    onclick="setLocation('<?php echo $helper->getAddUrl($_product) ?>')">
+                                <?php echo $this->__('Buy') ?>
+                            </button>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php else: ?>
+
+<?php endif; ?>

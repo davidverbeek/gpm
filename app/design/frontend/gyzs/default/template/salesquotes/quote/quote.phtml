@@ -1,0 +1,171 @@
+<div class="page-title">
+	<h2>Offerte aanvragen</h2>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<div class="big block light">
+    <h3 class="block-title">Voorwaarden</h3>
+    <ul class="block-content">
+        <?php $allOk = true; ?>
+        <?php $cartTotals = Mage::getSingleton('checkout/cart')->getQuote()->getTotals(); ?>
+			
+        <?php /*<li<?php if (!$check = $cartTotals['grand_total']->value >= 500) echo ' class="error"'; ?>><strong>Uw winkelwagen bevat voor minimaal € 500,- aan producten</strong><br />
+        <?php if ( $check ): ?>
+            Ja (€ <?php echo number_format($cartTotals['grand_total']->value, 2, ",", ".") ?>)
+        <?php else: $allOk = false; ?>
+            Nee (€ <?php echo number_format($cartTotals['grand_total']->value, 2, ",", ".") ?>)
+        <?php endif; ?><br /></li>
+        <?php */?>
+        <li<?php if (!$check = Mage::getSingleton('customer/session')->isLoggedIn()) echo ' class="error"'; ?>><strong>U heeft een account bij GYZS.nl en u bent ingelogd</strong><br />
+        <?php if ($check): ?>
+            Ja
+        <?php else: $allOk = false; ?>
+            Nee. <a id="login-link" href="<?php echo $this->getUrl('salesquotes/quote/loginCustomer').'?backurl='.rawurlencode($_SERVER['REQUEST_URI']); ?>">Account aanmaken of inloggen kan hier.</a>
+        <?php endif; ?><br /></li>
+
+        <?php /*<li<?php
+        $check = Mage::getSingleton('customer/session')->isLoggedIn()
+                                        && Mage::getModel('newsletter/subscriber')->loadByCustomer(Mage::getSingleton('customer/session')->getCustomer())->isSubscribed();
+
+        if (!$check) echo ' class="error"'; ?>><strong>U bent aangemeld voor onze e-mailservice</strong><br />
+        <?php if ($check): ?>
+            Ja
+        <?php else: $allOk = false; ?>
+            Nee. <a href="<?php echo $this->getUrl('newsletter/manage').'?backto='.rawurlencode($_SERVER['REQUEST_URI']); ?>">Aanmelden kan hier.</a>
+        <?php endif; ?><br /></li> */?>
+    </ul>
+</div>
+
+<?php if ($allOk): ?>
+
+<p class="info">Controleer uw gegevens en klik op <b>Offerte aanvragen</b> om een offerte aan te vragen.</p>
+
+<form action="<?php echo $this->getUrl('salesquotes/quote/save',array('_secure'=>true)); ?>" id="quoteForm" method="post">
+    <?php echo $this->getBlockHtml('formkey'); ?>
+	<?php echo $this->getChildHtml('quote.quotepage.info'); ?>
+	<?php echo $this->getChildHtml('quote.quotepage.summary'); ?>
+	<div class="clear"></div>
+    <div class="button-set clearfix">
+		<button class="form-button button uiSizeLarge right theme-btn" type="submit">Offerte aanvragen</button>
+        
+	</div>
+</form>
+
+<script type="text/javascript">
+    var quoteForm = new VarienForm('quoteForm', true);
+</script>
+
+<?php else: ?>
+
+	<div class="button-set block light">
+		<a href="<?php echo $this->getUrl('checkout/cart',array('_secure'=>true)); ?>" class="form-button right button" type="submit"><span><?php echo $this->__('My Cart'); ?></span></a>
+        <br class="clear" />
+	</div>
+
+<?php endif; ?>
+
+<script type="text/javascript" >
+    function updateCartItem(itemId)
+    {
+		
+        jQuery("#loader_cart_"+itemId).show();
+        var qty = $$('[name="cart[' + itemId + '][qty]"]')[0].value;
+        var url = '<?php echo $this->getUrl('multistepcheckout/index/updatecartItem'); ?>';
+		
+        new Ajax.Request(url,
+        {
+            method: 'post',
+            parameters: {itemId: itemId, qty: qty},
+            onSuccess: function (transport) {
+
+                // var response = JSON.Parse(transport.responseText);
+                var response = transport.responseText.evalJSON();
+
+                if(response==null){
+                    window.location.reload();
+                }
+
+                if (typeof (response.itemBlock) != 'undefined') {
+
+                    var itemBlock = response.itemBlock;
+
+                    if (response.itemBlock.indexOf('<table id="shopping-cart-table" ') == -1) {
+                                                        var content = response.itemBlock;
+
+                    } else {
+                        var begin = response.itemBlock.indexOf('<table id="shopping-cart-table theme-cart-table" class="data-table cart-table">');// + '<table id="shopping-cart-table" class="data-table cart-table theme-cart-table">'.length;
+                        var end = response.itemBlock.indexOf('</table>');
+                        var content = response.itemBlock.substring(begin, end);
+
+                    }
+                    console.log(content);    
+                    $('quote-total-table').update(response.totalBlock);
+                    $('quote-rev-table').update(content);
+
+
+
+                    //checkStock();
+                    //$('shopping-cart-content').update(content);
+                    if (response.success) {
+                        var taxrow = jQuery("#quote-total-table tfoot tr.taxincl");
+                        var subtotal_excl_tax = jQuery("#quote-total-table tfoot tr.subtotal-excl-tax");        
+                        subtotal_excl_tax.after(taxrow);
+                        jQuery('#quote-total-table tbody tr.shipping-row a.selected-country-anchore img.country-selected-image').css('display','none');
+                        jQuery('#demo-htmlselect-basic').ddslick({
+                        //callback function: do anything with selectedData
+                        onSelected: function (data)
+                        {
+                            /*
+                             we are calling custom created function.
+                             that function will display selected option detail.
+                             */
+                            displaySelectedData("Callback Function on Dropdown Selection", data);
+
+                        }
+                        });
+
+                        jQuery("#loader_cart_"+itemId).hide();
+
+                        //alert("We successfully updaeted cart"  );
+                    }
+                }
+            },
+            onFailure: function () {
+                alert('Something went wrong...')
+            }
+        });
+    }
+
+
+
+
+    
+    if (jQuery(window).width() > 1024) {
+        jQuery('.cartedit').live({
+            mouseenter: function () {
+                jQuery('.quote-update-box', this).show().animate({opacity: 1}, 200);
+            },
+            mouseleave: function () {
+                jQuery('.quote-update-box', this).hide().animate({opacity: 0}, 200);
+            }
+        });
+    }
+    if (jQuery(window).width() <= 1024) {
+        jQuery(".cartedit a").live("click", function () {
+            if (!jQuery(this).parent().children('.quote-update-box').is(':visible')) {
+                jQuery(this).parent().children('.quote-update-box').css('display', 'block');
+                jQuery('.miscbuttons span', this).css('display', 'block');
+            }
+        });
+        
+        jQuery('.miscbuttons').on("click touch", function () {
+            jQuery(this).parent().hide();
+        });
+    }
+  
+
+
+
+</script>
+
+

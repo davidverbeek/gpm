@@ -1,0 +1,22 @@
+<?php
+/* @var $quote Mage_Sales_Model_Quote */
+$quote = $this->getQuote();
+$items = $quote->getItemsCollection();
+
+
+
+/* @var $coreHelper Mage_Core_Helper_Data */
+$coreHelper = Mage::helper('core');
+?>
+
+<?php foreach ( $items as $item ): ?>
+
+	
+<tr>
+	<td align="left"><?php echo $item->getData('name'); ?></td>
+	<td align="left"><?php echo $item->getData('qty'); ?></td>
+        <td align="right"><?php echo $coreHelper->currency($item->getData('price'),true,false); ?></td>
+	<!--<td align="right"><?php // echo $coreHelper->currency($item->getData('row_total'),true,false); ?></td>-->
+</tr>
+	
+<?php endforeach; ?>

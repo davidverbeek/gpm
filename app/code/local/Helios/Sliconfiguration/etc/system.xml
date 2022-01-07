@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<sliconfiguration translate="label" module="sliconfiguration">
+			<label>SLI Configuration</label>
+			<tab>helios</tab>
+			<sort_order>1</sort_order>
+			<frontend_type>text</frontend_type>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>0</show_in_store>
+			<groups>
+				<sli_script_load translate="label">
+					<label>General Configuration</label>
+					<frontend_type>text</frontend_type>
+					<show_in_default>1</show_in_default>
+					<fields>
+						<sli_load_from translate="label">
+							<label>Script Load From</label>
+							<frontend_type>select</frontend_type>
+							<source_model>sliconfiguration/loadoptions</source_model>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>Select the source from where to load SLI Script.</comment>
+						</sli_load_from>
+
+						<enable_sli_search translate="label">
+                            <label>Enable SLI Search</label>
+							<frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<comment>Select Yes to enable SLI Search</comment>
+                        </enable_sli_search>
+
+					</fields>
+				</sli_script_load>
+				<sli_header_fields translate="label">
+					<label>SLI Header Configuration</label>
+					<frontend_type>text</frontend_type>
+					<show_in_default>1</show_in_default>
+					<fields>
+						<thirdparty_css_url translate="label">
+							<label>SLI CSS URL</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>example : //gyzs.resultspage.com/autocomplete/sli-rac.css</comment>
+						</thirdparty_css_url>
+						<local_css_path translate="label">
+							<label>GYZS CSS Path</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>example : sli/sli-rac.css</comment>
+						</local_css_path>
+						<thirdparty_js_url translate="label">
+							<label>SLI JS URL</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>example : //gyzs.resultspage.com/autocomplete/sli-rac.config.js</comment>
+						</thirdparty_js_url>
+						<local_js_path translate="label">
+							<label>GYZS JS Path</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>example : sli/sli-rac.config.js</comment>
+						</local_js_path>
+					</fields>
+				</sli_header_fields>
+
+				<sli_footer_field translate="label">
+					<label>SLI Footer Configuration</label>
+					<frontend_type>text</frontend_type>
+					<show_in_default>1</show_in_default>
+					<fields>
+						<sli_thirdparty_js_footer translate="label">
+							<label>SLI JS Link</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>example : //gyzs.resultspage.com/recommendations/wrapper.js</comment>
+						</sli_thirdparty_js_footer>
+						<sli_local_js_footer translate="label">
+							<label>GYZS JS Path</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>example : sli/wrapper.js</comment>
+						</sli_local_js_footer>
+					</fields>
+				</sli_footer_field>
+
+			</groups>
+		</sliconfiguration>
+	</sections>
+</config>

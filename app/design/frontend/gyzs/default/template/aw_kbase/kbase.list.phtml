@@ -1,0 +1,140 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+$item = Mage::app()->getLayout()->createBlock('kbase/list_item')
+            ->setCategory($this->getCategory());
+$blockId = 'kbase_'.$this->getBlockType();
+
+?>
+<div class="row">
+<div class="kbase kbase-<?php echo $this->getBlockType() ?>">
+	
+    <?php echo $this->getChildHtml('kbase_breadcrumbs'); ?>
+    <?php //echo $this->getChildHtml('kbase_header'); ?>
+	 <div class="block-title light " id="overzicht">
+        <h1 class=""><?php echo htmlspecialchars($this->getTitle()) ?></h1>
+    </div>
+    <?php echo $this->getChildHtml('kbase_main_search'); ?>
+
+   
+
+    <?php if($this->_collection->getSize()): ?>
+        <?php echo $this->getChildHtml('kbase_sorter'); ?>
+
+        <table cellpadding="0" cellspacing="0" width="100%" class="kbase-listing" id="<?php echo $blockId ?>" >
+                <col />
+                <?php if($this->getRatingEnabled()): ?>
+                    <col width="100px" align="center" />
+                <?php endif; ?>
+            <thead>
+                <tr>
+                    <th><?php echo $this->__('Article') ?></th>
+                    <?php if($this->getRatingEnabled()): ?>
+                        <th class="a-center"><?php echo $this->__('Rating') ?></th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $even = true;
+                    foreach($this->_collection->getItems() as $article): ?>
+                        <tr class="kbase-listing kbase-listing-short <?php echo $this->getEven() ? 'kbase-even' : 'kbase-odd'; ?>" onclick="window.location='#<?php echo $article->getArticleUrlKey() ?>'">
+                            <td class="kbase-listing-general"><a href="#<?php echo $article->getArticleUrlKey() ?>" title="<?php echo $article->getArticleTitle() ?>"><?php echo $article->getArticleTitle() ?></a></a>
+                            </td>
+                            <?php if($this->getRatingEnabled()): ?>
+                                <td class="kbase-listing-rating">
+                                    <div class="rating-box">
+                                        <div style="width: <?php echo ($article->getArticleRating())/5*100; ?>%;" class="rating"></div>
+                                    </div>
+                                </td>
+                            <?php endif; ?>
+                        </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <br />
+        <table cellpadding="0" cellspacing="0" width="100%" class="kbase-listing" id="<?php echo $blockId ?>-articles" >        
+            <tbody>
+                <?php $even = true;
+                    foreach($this->_collection->getItems() as $article): ?>
+                        <tr class="kbase-listing-full <?php echo $this->getEven() ? 'kbase-even' : 'kbase-odd'; ?>" id="<?php echo $article->getArticleUrlKey() ?>" >
+                            <td>
+                                <div class="kbase-listing-general">
+                                    <p class="kbase-listing-title">
+                                        <h3><?php echo htmlspecialchars($article->getArticleTitle()); ?></h3>
+                                    </p>
+                                    <div class="kbase-listing-description std">
+                                        <?php echo $article->getArticleText(); ?>
+                                    </div>
+                                    <?php /* if($article->getArticleTags()): ?>
+                                    <p class="kbase-listing-tag">
+                                        <?php echo $this->__('Tags:') ?>
+                                        <?php foreach($article->getArticleTags() as $tag): ?>
+                                            <a href="<?php echo AW_Kbase_Helper_Url::getUrl(AW_Kbase_Helper_Url::URL_TYPE_TAG, array('tag_name' => $tag)) ?>"><?php echo $tag ?></a>
+                                        <?php endforeach; ?>
+                                    </p>
+                                    <?php endif; */ ?>
+                                </div>
+                                <div class="kbase-article-rating" >
+                                    <a class="right" href="#overzicht"><?php echo $this->__('Terug naar overzicht'); ?></a>
+
+                                <?php if($this->getRatingEnabled()): 
+                                        $ratingPercent = ($article->getArticleRating())/5*100;
+                                    ?>
+                                        <span><?php echo $this->__('Rating:') ?></span>
+                                        <div class="rating-box">
+                                            <div style="width: <?php echo $ratingPercent ?>%;" class="rating"></div>
+                                        </div>
+                                        <div class="clear"></div>
+                                        <?php if(AW_Kbase_Helper_Data::isArticleVoteAllowed($article->getId())): ?>
+                                        <form action="<?php echo AW_Kbase_Helper_Url::secureUrl(Mage::getUrl('*/*/vote', array(AW_Kbase_Helper_Url::URL_PARAM_NAME_ARTICLE_ID => $article->getArticleId()))) ?>"
+                                                  method="get" >
+                                                <label for="rating"><?php echo $this->__('Rate this article:') ?></label>
+                                                <input type="hidden" name="id" value="<?php echo $article->getId() ?>">
+                                                <select name="rating" id="rating" >
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                                <button class="button form-button" title="<?php echo $this->__('Vote') ?>" type="submit"><span><span><?php echo $this->__('Vote') ?></span></span></button>
+                                            </form>
+                                        <?php endif; ?>
+                                <?php endif; ?>
+
+                                </div>
+                            </td>
+                        </tr>
+                        
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <script type="text/javascript">
+        //<![CDATA[
+            initGrid('<?php echo $blockId ?>');
+        //]]>
+        </script>
+
+        <?php echo $this->getChildHtml('kbase_pager'); ?>
+    <?php else: ?>
+        <p><?php echo $this->__('No articles found'); ?></p>
+    <?php endif; ?>
+
+</div>
+</div>

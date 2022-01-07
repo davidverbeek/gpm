@@ -1,0 +1,34 @@
+<?php 
+$storeId = Mage::app()->getStore()->getStoreId();
+$lazy_load_enabled = Mage::getStoreConfig('imagelazyload/general/module_enable_disable',$storeId);
+if($lazy_load_enabled=="1"){
+	$placeholder  = Mage::getStoreConfig('imagelazyload/general/upload_file');
+	if($placeholder!=""){
+		$placeholder_path = Mage::getBaseUrl('media') .'lazyload/'. Mage::getStoreConfig('imagelazyload/general/upload_file');
+	}else{
+		$placeholder_path = Mage::getBaseUrl('media') .'lazyload/loader.gif';
+	}
+	$img_threshold  = Mage::getStoreConfig('imagelazyload/general/threshold');
+	$img_threshold_value ='';
+	if($img_threshold!=""){
+		$img_threshold_value  = $img_threshold;
+	}
+?>
+<script type="text/javascript" charset="utf-8">
+ jQuery( document ).ready(function() {
+	 var placeholder = '<?php echo $placeholder_path;?>'; 
+	 var img_threshold = '<?php echo $img_threshold_value;?>'; 
+		jQuery("img.cwslazyloader").lazyload({
+			effect : "fadeIn",
+			data_attribute  : "src",
+			offset: img_threshold,
+			placeholder : placeholder,
+			load : function(elements_left, settings) {
+				this.style.width = "auto";
+			}
+		});
+});
+  </script>
+<?php
+}
+?>

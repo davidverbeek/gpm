@@ -1,0 +1,103 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<div class="footer-container">
+	<div class="footer-banners"><?php echo $this->getChildHtml('shopper_footer_banners'); ?></div>
+	<div class="footer-info">
+		<div class="row clearfix">
+			<div class="grid_8">
+				<div class="grid_3 information"><?php echo $this->getChildHtml('footer_block1'); ?></div>
+				<div class="grid_3 information"><?php echo $this->getChildHtml('footer_block2'); ?></div>
+				<div class="grid_3 information"><?php echo $this->getChildHtml('footer_block3'); ?></div>
+				<footer class="footer-copyright">
+					<div class="footer-top">
+						<address><?php echo $this->getCopyright(); ?></address>
+					</div>
+					<div class="footer-bottom">
+						<?php echo $this->getChildHtml('shopper_footer_links'); ?>
+					</div>
+				</footer>
+			</div>
+			<div class="grid_4">
+				<div class="contact_information">
+					<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('contact_information')->toHtml() ?>
+				</div>
+				
+				<div class="footer_newsletter">
+					<?php echo $this->getChildHtml('footer.newsletter'); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+		Translator.add('Read more', '<?php echo $this->__('Read more') ?>');
+		Translator.add('Read less', '<?php echo $this->__('Read less') ?>');
+</script>
+
+<?php
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+if(Mage::helper('gtm')->getEnabled()){
+	$customerEmail =  Mage::helper('featured')->getCustomerEmail();
+?>
+<?php if(Mage::getBlockSingleton('page/html_header')->getIsHomePage()) : ?>
+	<script type="text/javascript">
+		//<![CDATA[
+			jQuery(window).on("load", function(){
+			dataLayer.push({'event': 'crto_homepage',crto: {'email': '<?php echo $customerEmail ?>'}});
+		});
+		//]]>
+	</script>
+	<?php endif; ?>
+<?php } ?>
+
+<?php
+// Helios_Gtm module enable and setting enable for google ads than only script execute
+if(Mage::helper('gtm')->getGoogleAdsEnabled()){ ?>
+	<?php if($_gAdsCode = Mage::helper('gtm')->getGoogleAdsCode()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode; ?>"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', '<?php echo $_gAdsCode; ?>');
+		</script>
+	<?php endif; ?>
+	<?php if($_gAdsCode2 = Mage::helper('gtm')->getGoogleAdsCode2()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode2; ?>"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', '<?php echo $_gAdsCode2; ?>');
+		</script>
+	<?php endif; ?>
+<?php } ?>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+<modules>
+   <Jaagers_Attributes>
+      <active>true</active>
+      <codePool>local</codePool>
+      <version>0.3.0</version>
+      <depends>
+		<Mage_Api />
+	  </depends>
+   </Jaagers_Attributes>
+</modules>
+</config>

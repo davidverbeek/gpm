@@ -1,0 +1,14 @@
+<?php
+/**
+ * @var $this Geissweb_Euvatgrouper_Block_Adminhtml_Notice
+ */
+?>
+<?php if (!$this->isInstalled()): ?>
+    <div class="notification-global">
+        <span class="f-right">
+            <a href="<?php echo $this->getSkipUrl() ?>"><?php echo $this->__('Taxes and VAT are already set up. Skip this step.') ?></a>
+        </span>
+        <strong><?php echo $this->helper('euvatgrouper')->__('EU VAT Enhanced has been installed.') ?></strong>
+        <?php echo $this->helper('euvatgrouper')->__('Please run the <a href="%s">Setup</a> to set up VAT for your country.', $this->getSetupUrl()) ?>
+    </div>
+<?php endif ?>

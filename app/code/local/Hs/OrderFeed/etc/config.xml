@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Hs_OrderFeed>
+            <version>0.1.0</version>
+        </Hs_OrderFeed>
+    </modules>
+    <global>
+        <helpers>
+            <orderfeed>
+                <class>Hs_OrderFeed_Helper</class>
+            </orderfeed>
+        </helpers>
+        <models>
+            <orderfeed>
+                <class>Hs_OrderFeed_Model</class>
+                <resourceModel>orderfeed_mysql4</resourceModel>
+            </orderfeed>
+        </models>
+    </global>    
+</config> 

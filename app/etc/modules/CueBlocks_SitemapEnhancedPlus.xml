@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <CueBlocks_SitemapEnhancedPlus>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <CueBlocks_CronStatus/>
+            </depends>
+        </CueBlocks_SitemapEnhancedPlus>
+    </modules>
+</config>

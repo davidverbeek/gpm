@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Hs_Minifier>
+			<version>0.1.0</version>
+		</Hs_Minifier>
+	</modules>
+	<global>
+		<helpers>
+			<core>
+				<rewrite>
+					<data>Hs_Minifier_Helper_Core_Data</data>
+				</rewrite>
+			</core>
+			<minifier>
+         <class>Hs_Minifier_Helper</class>
+      </minifier>
+		</helpers>
+	</global>
+	<default>
+		<dev>
+			<js>
+				<minimize_js>0</minimize_js>
+			</js>
+		</dev>
+	</default>
+</config> 

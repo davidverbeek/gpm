@@ -1,0 +1,198 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * Shoping cart sidebar
+ *
+ * @see Mage_Checkout_Block_Cart_Sidebar
+ */
+?>
+<?php $_cartQty = Mage::helper('checkout/cart')->getSummaryCount(); //$this->getSummaryCount(); 
+if (is_null($_cartQty))
+    $_cartQty = 0;
+?>
+<?php $params = $this->getRequest()->getParams();
+if (array_key_exists('isAjax', $params) && empty($params['isAjax'])) :
+    ?>
+    <div class="cart-top-title">
+        <?php /* <a href="<?php //echo $this->getUrl('checkout/cart') ?>" class="clearfix">
+          <span class="icon"></span>
+          <?php //echo $this->__('Shopping cart'); ?>
+          </a> */ ?>
+        <?php if ($_cartQty == 0): ?>
+            <a class="summary" href="<?php echo $this->getUrl('checkout/cart') ?>" title="<?php echo $this->__('Shopping Cart') ?>"><span class="emptycart"><?php echo Mage::helper('checkout/cart')->getItemsCount(); ?></span></a>
+        <?php else : ?>
+            <a class="summary" href="<?php echo $this->getUrl('checkout/cart') ?>" title="<?php echo $this->__('Shopping Cart') ?>"><span><?php echo Mage::helper('checkout/cart')->getItemsCount(); ?></span></a>
+    <?php endif; ?>
+    </div>
+<?php endif; ?>
+<div class="cart-top-container">
+    <div class="cart-top">
+        <?php if ($_cartQty == 0): ?>
+            <a class="summary" href="<?php echo $this->getUrl('checkout/cart') ?>" title="<?php echo $this->__('Shopping Cart') ?>"><span class="emptycart"><?php echo Mage::helper('checkout/cart')->getItemsCount(); ?></span></a>
+        <?php else : ?>
+            <a class="summary" href="<?php echo $this->getUrl('checkout/cart') ?>" title="<?php echo $this->__('Shopping Cart') ?>"><span><?php echo Mage::helper('checkout/cart')->getItemsCount(); ?></span></a>
+            <?php endif; ?>
+        <div class="subtotal" onclick="setLocation('<?php echo $this->getUrl('checkout/cart'); ?>')">
+            <?php if ($this->canApplyMsrp()): ?>
+                <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+<?php else: ?>
+                <span class="label"></span> 
+                <div class="excl-tax">
+                <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php echo Mage::helper('tax')->getIncExcText(false) ?>
+                </div>
+                    <?php $_subtotalInclTax = $this->getSubtotalInclTax(); //if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?>
+                    <div class="incl-tax">
+                    <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?>
+                    </div>
+                <?php //endif; ?>
+<?php endif; ?>
+        </div>
+    </div>
+    <div class="details carttopdetail">
+        <div class="details-border"></div>
+        <?php $_items = $this->getRecentItems() ?>
+            <?php if (count($_items)): ?>
+            <p class="block-subtitle text-recently">
+    <?php echo $this->__('Your Shopping Cart') ?>
+                <span><a href="<?php echo $this->getUrl('checkout/cart'); ?>" title="<?php echo $this->__('View Shopping Cart') ?>"><?php echo $this->__('View') ?></a></span>
+            </p>
+            <ol class="cart-sidebar mini-products-list">
+                <?php foreach ($_items as $_item): ?>
+        <?php echo $this->getItemHtml($_item) ?>
+    <?php endforeach; ?>
+            </ol>
+            <?php if(Mage::helper('checkout/cart')->getItemsCount()>3):?>
+            <div class="cart-item-count">
+                    <?php echo $this->__('Total');?>&nbsp;(<a href="<?php echo $this->getUrl('checkout/cart');?>"><?php echo Mage::helper('checkout/cart')->getItemsCount(); ?> <?php echo $this->__('Items');?></a>)
+            </div>
+            <?php endif;?>
+            <div class="subtotal-wrapper">
+                <div class="subtotal">
+                    <?php if ($this->canApplyMsrp()): ?>
+                        <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+    <?php else: ?>
+                        <span class="label"><?php echo $this->__('Subtotal') ?></span>
+                        <div class="left-cart-subtotal">
+                            <span class="subtotal-excl"><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?></span>
+                            <?php /* <span> <?php echo $this->__('Excl. Tax'); ?></span> */ ?>
+                            <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?>
+                                <span class="cart-top-subtotal-incl"><?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo $this->__('Incl.') ?></span>
+                        <?php endif; ?>
+                        </div>
+    <?php endif; ?>
+                </div>
+            </div>
+            <div class="buttons clearfix">
+                <button type="button" title="<?php echo $this->__('View Shopping Cart') ?>" class="button btn-checkout" onclick="setLocation('<?php echo $this->getUrl('checkout/cart'); //$this->getCheckoutUrl() ?>')"><span><span><?php echo $this->__('Continue to Checkout') ?></span></span></button>
+            </div>
+        <?php else: ?>
+            <p class="a-center emptycart"><?php echo $this->__('You have no items in your shopping cart.') ?></p>
+<?php endif ?>
+    </div>
+    <div class="details_after">
+        <div class="details-border"></div>
+        <p class="block-subtitle text-recently"><?php echo $this->__('Product added') ?>
+            <span><a href="<?php echo $this->getUrl('checkout/cart'); ?>" title="<?php echo $this->__('View Shopping Cart') ?>"><?php echo $this->__('View') ?></a></span>
+        </p>
+        <ol class="cart-sidebar mini-products-list">
+            <li class="item clearfix">
+                <div class="product-details">
+                </div>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<script type="text/javascript">
+var deleting = 0;
+productRemoveFromCartAjax = function(url, elem){
+
+    var name = jQuery( this ).next().text();
+    var sku  = '';
+    var productlist = 'Product List';
+
+    var conf = confirm("<?php echo $this->__('Are you sure you would like to remove this item from the shopping cart?') ?>");
+    if(conf==true){
+        
+        deleting = deleting + 1;
+        jQuery(elem).parent().parent().animate({ opacity: 0.5 }, 200, function() { });
+        if (!url) {
+        }
+        url = url.replace("checkout/cart","ajax/index");
+
+        url += '&isAjax=1';
+        var data = 'isAjax=1';
+        try {
+            jQuery.ajax( {
+                url : url,
+                dataType : 'json',
+                type : 'post',
+                data : data,
+                success : function(data) {
+
+                    // Code for Google tag manager - Added by Chirag Bathani.
+                    var name = jQuery.trim(jQuery(elem).next().text());
+                    var sku  = jQuery.trim(jQuery(elem).next().next().text());
+                    var productlist = 'Product List';
+                    // jQuery( ".product-details .product-name" ).each(function( index ) {
+                    //     if(jQuery( this ).text() == name){
+                    //         sku = jQuery.trim(jQuery( this ).prev().text());
+                    //     }
+                    // });
+
+                   <?php
+
+                      // Helios_Gtm module enable and setting enable for gtm than only script execute
+                      if(Mage::helper('gtm')->getEnabled()){ ?>
+                          dataLayer.push({
+                              'event': 'removeFromCart',
+                              'ecommerce': {
+                                  'remove': {
+                                      'actionField': {'list': 'Product List'},
+                                      'products': [{        //  removing a product to a shopping cart.
+                                          'name': name,
+                                          'id': sku,
+                                          'list': productlist
+                                      }]
+                                  }
+                              }
+                          });
+                    <?php } ?>
+        
+                    window.location.reload(true);
+                    // setAjaxData(data, true);
+                },
+                error: function (data) {
+                    deleting = deleting - 1;
+                }
+            }); 
+        } catch (e) {
+        }
+    } else {
+        return false;
+    }
+}     
+</script>

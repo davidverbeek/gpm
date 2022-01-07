@@ -1,0 +1,49 @@
+<?php
+$time = uniqid('shopper_');
+$routeName = Mage::app()->getRequest()->getRouteName();
+if ($routeName == 'kbase'):
+    ?>
+    <?php $cmsPage = Mage::getModel('cms/page')->load('home','identifier');   ?>
+    <?php
+    echo $this->getLayout()
+            ->createBlock('wordpress/post_associated')
+            ->setTemplate("wordpress/post/associated_clientservice.phtml")
+            ->setTitle($this->__('From GYZS Blog'))
+            ->setEntity('cms_page')
+            ->setObject($cmsPage)
+            ->setCount(5)
+            ->toHtml()
+    ?>
+    <div class="blogsandforums-container">
+        <div class="row">
+            <div class="blogsandforums clearfix">
+                <div class="blogmee">
+                    <div class="heading">
+                        <h2><?php echo $this->__('Blog it') ?></h2>
+                    </div>
+                    <div class="blog-description">
+                        <p>
+                            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('customer-service-blog')->toHtml(); ?>
+                        </p>
+                    </div>
+                    <div class="bloglink">
+                        <a href="" title="<?php echo $this->__('Go to the blog') ?>"><i class="fa fa-angle-right right-arrow"></i> <?php echo $this->__('Go to the blog') ?></a>
+                    </div>
+                </div>
+                <div class="forums">
+                    <div class="heading">
+                        <h2><?php echo $this->__('Forum') ?></h2>
+                    </div>
+                    <div class="blog-description">
+                        <p>
+                            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('customer-service-forum')->toHtml(); ?>
+                        </p>
+                    </div>
+                    <div class="bloglink">
+                        <a href="" title="<?php echo $this->__('Go to the forum') ?>"><i class="fa fa-angle-right right-arrow"></i> <?php echo $this->__('Go to the forum') ?></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

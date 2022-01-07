@@ -1,0 +1,88 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Store switcher template
+ *
+ * @see Mage_Core_Block_Store_Switcher
+ */
+?>
+<?php if (count($this->getGroups()) > 1): ?>
+    <?php
+    $stores = array();
+    $_current = null;
+    foreach ($this->getGroups() as $_group) {
+        $_selected = $_selected_option = '';
+        if (($_group->getId() == $this->getCurrentGroupId())) {
+            $_current = $_group;
+            $_selected = ' class="selected"';
+            $_selected_option = ' selected="selected"';
+        }
+        $groups[] = '<li' . $_selected . '><a href="' . $_group->getHomeUrl() . '" title="' . $this->htmlEscape($_group->getName()) . '">' . $this->htmlEscape($_group->getName()) . '</a></li>';
+    }
+    ?>
+    <div class="header-switch store-switch">
+        <span>
+            <span class="current"><?php echo $this->htmlEscape($_current->getName()); ?></span>
+        </span>
+        <div class="header-dropdown">
+            <span></span>
+            <ul><?php echo implode('', $groups); ?></ul>
+        </div>
+    </div>
+    <div class="store-switcher">
+        <select id="select-store" title="<?php echo $this->__('Select Store') ?>" onchange="location.href = this.value">
+            <?php /* foreach ($this->getStores() as $_store): ?>
+              <option value="<?php echo $_store->getUrl('') ?>"<?php if($_store->getId()==$this->getCurrentStoreId()): ?> selected="selected"<?php endif; ?>><?php echo $_store->getName() ?></option>
+              <?php endforeach; */ ?>
+            <?php foreach ($this->getGroups() as $_group): ?>
+                <?php $_selected = ($_group->getId() == $this->getCurrentGroupId()) ? ' selected="selected"' : '' ?>
+                <option value="<?php echo $_group->getHomeUrl() ?>"<?php echo $_selected ?>><?php echo $this->htmlEscape($_group->getName()) ?></option>
+            <?php endforeach; ?>
+        </select>
+        <?php
+        $itemsLi = array();
+        $itemCur = '';
+        foreach ($this->getGroups() as $_group) {
+            if ($_group->getId() == $this->getCurrentGroupId()):
+                $itemCur = $this->htmlEscape($_group->getName());
+                $li_sel = 'class="selected"';
+            endif;
+            $itemsLi[] = '<li ' . $li_sel . '> <a href="' . $_group->getHomeUrl() . '" title="' . $this->htmlEscape($_group->getName()) . '">' . $this->htmlEscape($_group->getName()) . '</a></li>';
+        }
+        ?>
+        <div class="responsive-header-switchers">
+            <span class="current"><?php echo $this->__($itemCur) ?></span>
+            <div class="responsive-header-downs">
+                <span></span>
+                <ul>
+                    <?php echo implode('', $itemsLi); ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

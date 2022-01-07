@@ -1,0 +1,22 @@
+<?php
+	$_helper    = $this->helper('catalog/output');
+	$layer = Mage::getModel('catalog/layer');
+	$_category = $layer->getCurrentCategory();
+	// $content    = "<h2>" . $_helper->categoryAttribute($_category, $_category->getName(), 'name') . " " . $this->__('At GYZS.nl') . "</h2>";
+	$content    = "";
+	//replace category description by static description attribute
+	if($_category->getCustomCategoryDescription() != ''){
+		$content    .= $_category->getCustomCategoryDescription();
+	}
+	else{
+		$content    .= $_category->getDescription();
+	}
+	$content    .= $_category->getDescription();
+	$contentParts = explode('<!-- pagebreak -->', $content);
+	if($contentParts): ?>
+	<div class="catalog-top-description-block">
+		<div class="block-content">
+			<?php echo $contentParts[0]; ?> <a href="#cat-desc"><?php echo $this->__('Read more') ?></a>
+		</div>
+	</div>
+<?php endif;?>

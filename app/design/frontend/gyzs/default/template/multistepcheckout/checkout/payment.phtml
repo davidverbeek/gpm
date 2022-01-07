@@ -1,0 +1,494 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Shopping cart template
+ *
+ * @see Mage_Checkout_Block_Cart
+ */
+?>
+<?php 
+$checkoutSingleton = Mage::getSingleton('checkout/session')->getQuote();
+$customerSession = Mage::getSingleton('customer/session');
+$address = $checkoutSingleton->getShippingAddress(); ?>
+<?php
+	/*
+		ID - 2 - BusinessHomeland
+		ID - 3 - Business EU
+
+		Not showing achterafbetalen payment method for this group id.
+
+	*/
+	$groupId = $checkoutSingleton->getCustomer()->getGroupId();
+
+	if($checkoutSingleton->getCheckoutMethod() == 'guest' && !empty($customerSession->getTempVatValidation())) {
+		$groupId = $customerSession->getTempVatValidation()->getGroup();
+	}
+
+?>
+	<div class="paymentinfo-and-payment col2-right-layout">
+		<div class="row main">
+
+
+			<!--  <div class="box-title">
+		<h2><?php echo $this->__('Payment Information and payment'); ?></h2>
+	</div> -->
+
+			<!-- <div class="payment-mobiletitle">
+		<h1><?php echo $this->__('Payment method'); ?></h1>
+	</div> -->
+			<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+			<!-- <div class="box-text">
+		<?php echo $this->__("If we under green for stables everything you want as quickly as possible. Charge, so you could choose here how and when you want to receive your order. It's your choice!"); ?>
+	</div> -->
+			<div id="payment-options-container" class="col-main payment-options-container">
+
+				<div class="payment-options-container-wrap">
+					<div class="page-title title-buttons">
+						<div class="checkout-billing-top left">Hoe wil je betalen?</div>
+						<div class="checkout-billing-top right">
+							<?php echo $this->__('Chosen?') ?> <a href="javascript:void(0)"
+																  class="false-check"><?php echo $this->__('Proceed') ?></a>
+						</div>
+					</div>
+
+					<form action="<?php echo $this->getUrl('multistepcheckout/index/savePayment', array('_secure' => true)) ?>"
+						  method="post" id="multistepcheckout-payment-form">
+						<div class="box-content">
+							<div id="errordisplay"
+								 style="display: none;"><?php echo $this->__('Select your bank or credit card company to proceed with checkout') ?></div>
+							<div class="tool-tip" id="payment-tool-tip" style="display:none;">
+								<div class="btn-close"><a href="#" id="payment-tool-tip-close"
+														  title="<?php echo $this->__('Close') ?>"><?php echo $this->__('Close') ?></a>
+								</div>
+								<div class="tool-tip-content"><img
+											src="<?php echo $this->getSkinUrl('images/cvv.gif') ?>"
+											alt="<?php echo $this->__('Card Verification Number Visual Reference') ?>"
+											title="<?php echo $this->__('Card Verification Number Visual Reference') ?>"/>
+								</div>
+							</div>
+							<!-- Payment methods forms list -->
+							<div class="payment-heading">
+								<h3><?php echo $this->__('Payment Method') ?></h3>
+							</div>
+							<ul class="sp-methods paymentmethodslist">
+								<?php
+								$_methods       = $this->getMethods();
+								$_methodsCount  = count($_methods);
+								?>
+								<?php foreach ($_methods as $_method): 
+										$_code = $_method->getCode();
+										if ($_code == 'achterafbetalen' && ( $groupId == 2 || $groupId == 3 ) ){
+											continue;
+										}
+									?>
+									<?php $style = ''; ?>
+									<?php if($_code == 'cashondelivery'): $style = 'style=display:none'; endif;?>
+									<li <?php echo $style; ?>>
+										<div class="left-methods <?php if($_code == 'cashondelivery'): echo 'rembours'; endif;?>">
+											<?php if ($_methodsCount > 1): ?>
+												<input type="radio" id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" onclick="payment.switchMethod('<?php echo $_code ?>')" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio payment-method" >
+											<?php else :?>
+												<span class="no-display"><input type="radio " id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" checked="checked" class="radio payment-method" ></span>
+											<?php endif;?>
+											<label for="p_method_<?php echo $_code ?>"><?php echo $_method->getTitle() ?></label>
+											<?php if($_code == 'cashondelivery' || $_code == 'achterafbetalen'):?>
+												<?php
+												$totals = Mage::getSingleton('checkout/cart')->getQuote()->getTotals();
+												//$subtotal = $totals["subtotal"]->getValue();
+												$subtotal = Mage::getModel('checkout/cart')->getQuote()->getGrandTotal();
+
+												$feeCollection = Mage::getResourceModel('multifees/fee_collection')
+													->addFeeStoreFilter()
+													->addStatusFilter()
+													->addCheckoutPaymentTypeFilter()
+													->load();
+												$price=0;
+												$sesFees=0;
+												foreach($feeCollection as $_fee) {
+													if($_fee->getCheckoutMethod()==$_code){
+
+														$optionCollection = Mage::getResourceModel('multifees/option_collection')
+															->addFeeFilter($_fee->getId())
+															->load();
+
+														$options = $optionCollection->getItems();
+														if ($options) {
+															foreach ($options as $option) {
+																$optionId = $option->getId();
+																$price = 0;
+																if (Mage::helper('multifees')->isTypeFixed($option->getPriceType())) {
+																	$price = $option->getPrice();
+																} else {
+																	if ($subtotal > 0) {
+																		//$price = ($subtotal / (100 + $option->getPrice())) * 100;
+																		$price = ($subtotal * $option->getPrice()) / 100;
+																	}
+																}
+
+																$sesFees += $price;
+																$taxes=$address->getAppliedTaxes();
+																$priceInclTax = Mage::helper('multifees')->getMultifeesTax($taxes, $price);
+															}
+														}
+													}
+
+													//$options = $this->_prepareFeeOptions($fees, $method);
+													//$price=$options->getFinalPrice();
+
+												}
+
+											endif; ?>
+											<?php if ($_code == 'cashondelivery'): ?>
+												<div class="rembours-method">
+													<ul>
+														<li class="payment-descr" id="payment-descr" style="display:none;">
+															<span><?php echo $this->__('via PostNL rembours');?></span>
+														</li>
+													</ul>
+													<img title="<?php echo $this->__('Remoburs') ?>" src="<?php echo $this->getSkinUrl('images/icepay/nl/rembourslogo.png') ?>" alt="<?php echo $this->__('Remoburs') ?>" />
+													<div class="misctext">
+														<span class="extraprice"><span class="price"><?php echo "+".$this->helper('checkout')->formatPrice($priceInclTax);?></span></span><span class="incl-text">incl.</span>
+														<!--<span class="free">Gratis</span>--><?php // for free price ?>
+													</div>
+												</div>
+											<?php endif; ?>
+										</div>
+										<?php if($html = $this->getChildHtml('payment.method.'.$_code)) : ?>
+											<div class="right-dropdowns">
+												<?php echo $html; ?>
+											</div>
+										<?php endif; ?>
+										<!-- Added for Icepay AchterafBetalen additional fields -->
+										<?php if ($_code == 'achterafbetalen') : ?>
+											<div class="right-dropdowns">
+												<div class="payment-img-price">
+													<div class="icepayimage">
+														<img title="<?php echo $this->__('Achterafbetalen') ?>"
+															 style="height:23px;"
+															 src="<?php echo $this->getSkinUrl('images/icepay/black.png') ?>"
+															 alt="<?php echo $this->__('Achterafbetalen') ?>"/>
+													</div>
+													<div class="misctext">
+													<span class="extraprice">+<span
+																class="price"><!--€&nbsp;0,08--><?php echo $this->helper('checkout')->formatPrice($sesFees); ?></span></span>
+														<span class="incl-text">incl.</span>
+													</div>
+												</div>
+											</div>
+											<div id='payment_form_achterafbetalen' class="right-dropdowns post-pay-method-dropdown"
+												 <?php if ($this->getSelectedMethodCode() != $_code) { ?>style="display:none;" <?php } ?>>
+
+												<div class="text-information">
+													<p><?php echo $this->__('Om een aanvraag te doen bij Focum AchterAfbetalen moet onderstaande informatie verplicht worden ingevuld.') ?></p>
+													<?php $afterPayInfoUrl = $this->getUrl("klantenservice/betalen-en-geldzaken",array("_fragment"=>"Achteraf_betalen_met_Afterpay")); ?>
+													<p><?php echo $this->__('Indien u kiest voor deze betaaloptie gaat u akkoord met de <a href="'.$afterPayInfoUrl.' ">Algemene Voorwaarden </a> AchterAfbetalen van Focum.') ?></p>
+
+												</div>
+
+												<ul class="form-list icepayadvformlist clearfix ">
+													<li class="icepay-add-filed clearfix gender-wrap validation-wrapper field-row">
+														<div class="inline-form clearfix">
+															<label class="gender-lable"><?php echo $this->__('Geslacht') ?> </label>
+
+															<div class="radio-field-wrap">
+																<input type="radio" class="validate-one-required-by-name"
+																	   value="M" id="Man" name="payment[gender]">
+																<label for="Man"><?php echo $this->__('Man') ?> </label>
+																<input type="radio" class=""
+																	   value="F" id="Vrouw" name="payment[gender]">
+																<label for="Vrouw"><?php echo $this->__('Vrouw') ?> </label>
+															</div>
+														</div>
+													</li>
+													<li class="icepay-add-filed clearfix validation-wrapper field-row">
+														<div class="input-info ">
+															<label for="payment_account_no"><?php echo $this->__('Rekeningnummer') ?></label>
+															<input id="payment_account_no"
+																   class="account-number validate-account-number required-entry"
+																   value=""
+																   name="payment[account_no]" type="text"
+																   placeholder="<?php echo $this->escapeHtml('NLxxBANK0xxxxxxxx') ?>">
+														</div>
+														<div class="text-info">
+														<span>
+															<?php echo $this->__('Vul hier je rekeningnummer in (IBAN)') ?>
+														</span>
+														</div>
+
+													</li>
+													<li class="icepay-add-filed clearfix teliphone-field validation-wrapper field-row">
+														<div class="input-info">
+															<label for="payment_mobile_no"><?php echo $this->__('Telefoonnummer') ?></label>
+															<input type="text" readonly name="payment[telephonecode]"
+																   value="+31" title="Telefoon"
+																   class="input-text  telephonecode"
+																   id="billing:telephonecode" placeholder="+31">
+															<input id="payment_mobile_no"
+																   class="validate-telefoon cust-telephone required-entry" value=""
+																   name="payment[mobile_no]" type="text"
+																   placeholder="<?php echo $this->escapeHtml('0224 212026') ?>">
+														</div>
+														<div class="text-info">
+														<span>
+															<?php echo $this->__('Vul hier je telefoonnummer in') ?>
+														</span>
+														</div>
+													</li>
+													<li class="icepay-add-filed clearfix validation-wrapper field-row">
+														<div class="input-info">
+															<label for="payment_birthdate"><?php echo $this->__('Geboortedatum') ?></label>
+															<input id="payment_birthdate"
+																   class="cust-dob required-entry validate-date-au" value=""
+																   name="payment[dob]" type="text" placeholder="dd/mm/yyyy">
+														</div>
+														<div class="text-info">
+														<span>
+															<?php echo $this->__('Vul hier je geboortedatum in') ?>
+														</span>
+														</div>
+													</li>
+												</ul>
+											</div>
+										<?php endif; ?>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+							<?php echo $this->getChildHtml('checkout_billing_items') ?>
+
+						</div>
+						<div class="comment-box">
+							<label><?php echo $this->__('Do you have any comments on your order to us? Let us know here.'); ?></label>
+							<?php echo $this->getChildHtml('agreements'); ?>
+						</div>
+					</form>
+					<?php /*<form id="discount-coupon-form" action="<?php echo $this->getUrl('checkout/cart/couponPost') ?>" method="post"><?php */ ?>
+					<?php echo $this->getChildHtml('coupon') ?>
+
+					<div class="buttons-set bottoms">
+						<div class="backlink-btn checkout-bottom-left-btn">
+							<a href="<?php echo $this->getUrl('multistepcheckout/index/product'); ?>"><i class="fa fa-angle-left" aria-hidden="true"></i><?php echo $this->__('Previous step') ?></a>
+						</div>
+						<button type="button" title="<?php echo $this->__('Continue') ?>"
+								class="button false-check checkout-bottom-right-btn">
+							<span><?php echo $this->__('This is correct, go through') ?></span>
+						</button>
+					</div>
+
+				</div>
+				<div class="bottom-text">
+					<p><?php echo $this->__('Your data are sent through a secure connection to GYZS.nl') ?></p>
+				</div>
+
+			</div>
+
+
+			<div class="sidebar-right">
+
+				<?php echo $this->getChildHtml('checkout_cart_sidebar') ?>
+
+				<div class="grand-total-checkout-sidebar"><?php echo $this->getChildHtml('totals'); ?></div>
+
+				<div class="help-text">
+					<span><?php echo $this->__('Do you have any questions or are you stuck? We love to help!') ?></span>
+					<span><?php echo $this->__('You can chat with us on') ?><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('ph_no')->toHtml(); ?></span>
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+	<script type="text/javascript">
+
+
+		//< ![CDATA[
+		var customForm = new VarienForm('payment_form_achterafbetalen');
+		//]]>
+
+		Validation.add('validate-account-number', 'Vul alstublieft een geldig IBAN rekeningnummer in (NLxxBANK0xxxxxxxx)\n', function (v) {
+			return /^[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}$/.test(v);
+		});
+
+		Validation.add('validate-telefoon', 'Vul hier alstublieft een geldig telefoonnummer in (+31 0224 212026)', function (v) {
+
+			var isValid = true;
+
+			if (v.length < 10) {
+				isValid = false;
+			}
+
+			if (!/^\(?\+?\d{1,3}\)?\s?-?\s?[\d\s]*$/.test(v)) {
+				isValid = false;
+			}
+
+			return isValid;
+		});
+
+
+		jQuery(window).on("load", function () {
+			var payMethod = '<?php echo $this->getSelectedMethodCode(); ?>';
+			jQuery('.payment-descr').show();
+			if(jQuery('.payment-descr-'+payMethod)){
+				if(jQuery('#payment_form_'+payMethod+' li').length > 0){
+  				jQuery('.payment-descr-'+payMethod).hide();
+				} else {
+					jQuery('#payment_form_'+payMethod).hide();
+				}
+  		}
+		});
+
+		jQuery(".payment-method").change(function () {
+			var payMethod = jQuery(this).val()
+			if (payMethod == 'achterafbetalen') {
+				jQuery("#payment_form_achterafbetalen").show();
+			} else {
+				jQuery("#payment_form_achterafbetalen").hide();
+			}
+
+
+			// for description section show hide
+  		jQuery('.payment-descr').show();
+			if(jQuery('.payment-descr-'+payMethod)){
+				if(jQuery('#payment_form_'+payMethod+' li').length > 0){
+  				jQuery('.payment-descr-'+payMethod).hide();
+				} else {
+					jQuery('#payment_form_'+payMethod).hide();
+				}
+  		}
+
+		});
+		//<![CDATA[
+		var payment = new paymentForm('multistepcheckout-payment-form');
+
+		function toggleToolTip(event) {
+			if ($('payment-tool-tip')) {
+				/*$('payment-tool-tip').setStyle({
+				 top: (Event.pointerY(event)-510)+'px',
+				 left: (Event.pointerX(event)-800)+'px'
+				 })*/
+				$('payment-tool-tip').toggle();
+			}
+			Event.stop(event);
+		}
+
+		if ($('payment-tool-tip-close')) {
+			Event.observe($('payment-tool-tip-close'), 'click', toggleToolTip);
+		}
+		$$('.cvv-what-is-this').each(function (element) {
+			Event.observe(element, 'click', toggleToolTip);
+		});
+
+		jQuery('.false-check').live({
+			click: function () {
+				var flag = false;
+				if (jQuery('#p_method_icepayadv_03').is(':checked')) {
+					if (Validation.validate("icepayadv_03_icepay_issuer") === false) {
+						flag = false;
+						jQuery("#errordisplay").show();
+					} else {
+						flag = true;
+						jQuery("#errordisplay").hide();
+					}
+				}
+				else if (jQuery('#p_method_icepayadv_01').is(':checked')) {
+					if (Validation.validate("icepayadv_01_icepay_issuer") === false) {
+						flag = false;
+						jQuery("#errordisplay").show();
+					} else {
+						flag = true;
+						jQuery("#errordisplay").hide();
+					}
+				}
+				else if (jQuery('#p_method_achterafbetalen').is(':checked')) {
+					if (!customForm.validator.validate()) {
+						flag = false;
+						jQuery("#errordisplay").show();
+					} else {
+						flag = true;
+						jQuery("#errordisplay").hide();
+					}
+
+				}
+				else {
+					flag = true;
+				}
+				console.log(flag);
+				if (flag === true) {
+					document.getElementById('multistepcheckout-payment-form').submit();
+				}
+			}
+		});
+
+		//]]>
+	</script>
+<?php
+
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+if (Mage::helper('gtm')->getEnabled()) {
+	/*Ask Kaushal before making any changes in following script code */ ?>
+	<script type="text/javascript">
+		jQuery(window).on("load", function () {
+			dataLayer.push({
+				'event': 'checkoutOption',
+				'ecommerce': {
+					'currencyCode': 'EUR',
+					'checkout': {
+						'actionField': {'step': 4, 'option': 'Select Payment Method', 'list': 'Product List'}
+					}
+				}
+			});
+		});
+	</script>
+<?php } ?>
+<?php
+// Helios_Gtm module enable and setting enable for google ads than only script execute
+if(Mage::helper('gtm')->getGoogleAdsEnabled()){ ?>
+	<?php if($_gAdsCode = Mage::helper('gtm')->getGoogleAdsCode()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode; ?>"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', '<?php echo $_gAdsCode; ?>');
+		</script>
+	<?php endif; ?>
+	<?php if($_gAdsCode2 = Mage::helper('gtm')->getGoogleAdsCode2()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode2; ?>"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', '<?php echo $_gAdsCode2; ?>');
+		</script>
+	<?php endif; ?>
+<?php } ?>

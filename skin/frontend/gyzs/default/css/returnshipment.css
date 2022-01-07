@@ -1,0 +1,24 @@
+.retouren-page {
+    font-size: 16px;
+    padding: 0 0 40px;
+}
+.retouren-page h4 {
+    font-family: source_sans_prosemibold;
+    font-size: 18px;
+    margin: 30px 0 0;
+    color: #000;
+    text-transform: inherit;
+}
+.retouren-page iframe {
+    margin: 30px auto 0;
+    display: block;
+    border: solid 2px #eee;
+}
+.retouren-page a {
+    color:#00c;
+}
+@media only screen and (max-width:767px) {
+    .retouren-page iframe {
+        width: 100% !important;
+    }
+}

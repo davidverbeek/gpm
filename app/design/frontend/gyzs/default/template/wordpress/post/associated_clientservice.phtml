@@ -1,0 +1,46 @@
+<?php
+/**
+ * @category    Fishpig
+ * @package     Fishpig_Wordpress
+ * @license     http://fishpig.co.uk/license.txt
+ * @author      Ben Tideswell <help@fishpig.co.uk>
+ */
+?>
+<?php if (($posts = $this->getPostCollection()) !== false): ?>
+    <div class="block-blog">
+        <div class="row clearfix">
+            <?php if (count($posts) > 0): ?>
+                <div class="block-title">
+                    <?php if ($title = $this->getTitle()): ?>
+                        <h1><?php echo $title; ?></h1>
+                    <?php endif; ?>
+                </div>
+                <div class="block-content">
+                    <ul>
+                        <?php foreach ($posts as $post): ?>
+                            <li class="item">
+                                <div class="blog-title">
+                                    <div class="wrdprs-title">
+                                        <?php echo Mage::getBlockSingleton('wordpress/post_meta')->getTermsAsHtml($post, 'category'); ?>
+                                    </div>
+                                </div>
+                                <div class="blog-image">
+                                    <?php if ($featuredImage = $post->getFeaturedImage()): ?>
+                                        <a target="_blank" href="<?php echo $post->getPermalink() ?>" class="product-image" title="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"><img class="cwslazyloader" data-src="<?php echo Mage::helper('common')->convertCdnUrl($featuredImage->getMediumImage(),Mage::getBaseUrl(),Mage::getBaseUrl('skin')); ?>" alt="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"/></a>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="short-description">
+                                    <h3>
+                                        <?php echo $this->escapeHtml($post->getPostTitle()) ?>
+                                    </h3>
+                                    <a target="_blank" href="<?php echo $post->getPermalink() ?>" title="<?php echo $this->__('Read more') ?>"><?php echo $this->__('Read more') ?></a>
+                                </div>
+                                <?php /* <a href="<?php echo $post->getPermalink() ?>"><?php echo $this->escapeHtml($post->getPostTitle()) ?></a><?php */ ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

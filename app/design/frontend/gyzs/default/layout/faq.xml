@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	
+	<faq_index_index>	
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="head">
+		</reference>
+		<reference name="left">
+	        <block type="cms/block" name="teaser_area">
+				<action method="setBlockId"><block_id>teaser_area</block_id></action> 
+			</block>
+		</reference>
+		<reference name="content">
+				<block type="faq/faq" name="faq" template="faq/faq.phtml" />
+		</reference>
+	</faq_index_index>		
+	<faq_category_view>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="left">
+			<block type="faq/left" name="faq.left" template="faq/left.phtml" before="-"/>
+		</reference>
+		<reference name="head">
+		</reference>
+		<reference name="content">
+			<block type="faq/category" name="faq" template="faq/category.phtml" />
+		</reference>
+	</faq_category_view>
+	<faq_category_detail>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="left">
+			<block type="faq/left" name="faq.left" template="faq/left.phtml" before="-"/>
+		</reference>
+		<reference name="head">
+		</reference>
+		<reference name="content">
+			<block type="faq/detail" name="faq" template="faq/detail.phtml" />
+		</reference>
+	</faq_category_detail>
+	<faq_category_search>
+		<reference name="head">
+		</reference>
+		<reference name="root">
+				<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="left">
+			<block type="faq/left" name="faq.left" template="faq/left.phtml" before="-"/>
+			<block type="cms/block" name="teaser_area">
+				<action method="setBlockId"><block_id>teaser_area</block_id></action> 
+			</block>
+		</reference>
+		<reference name="content">
+				<block type="faq/result" name="result" template="faq/result.phtml" />
+		</reference>
+	</faq_category_search>	
+	<faq_index_search>
+		<reference name="head">
+		</reference>
+		<reference name="left">
+			<block type="faq/left" name="faq.left" template="faq/left.phtml" before="-"/>
+			<block type="cms/block" name="teaser_area">
+				<action method="setBlockId"><block_id>teaser_area</block_id></action> 
+			</block>
+		</reference>
+		<reference name="root">
+				<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="content">
+				<block type="faq/result" name="result" template="faq/result.phtml" />
+		</reference>
+	</faq_index_search>
+	<!-- <catalog_product_view>
+		<reference name="head">
+		</reference>
+    <reference name="product.info">
+			<block type="faq/faq" name="product.faq" as="product-faqs" template="faq/product_faq.phtml" />
+			<block type="faq/question" name="suggest.question" as="suggestQuestion" template="faq/suggest_question.phtml"/>
+    </reference>
+  </catalog_product_view> -->
+</layout> 

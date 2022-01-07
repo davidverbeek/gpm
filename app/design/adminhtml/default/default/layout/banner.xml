@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <banner_adminhtml_banner_index>
+        <reference name="content">
+            <block type="banner/adminhtml_banner" name="banner"/>
+        </reference>
+    </banner_adminhtml_banner_index>
+    <banner_adminhtml_banner_category>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="banner/adminhtml_banner_edit_tab_category" name="banner.edit.tab.category"/>
+        </block>
+    </banner_adminhtml_banner_category>
+</layout>

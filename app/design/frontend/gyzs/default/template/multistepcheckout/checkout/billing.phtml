@@ -1,0 +1,1644 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+$post = Mage::app()->getRequest()->getPost(); 
+
+$route = Mage::app()->getFrontController()->getRequest()->getRouteName();
+$action = Mage::app()->getFrontController()->getRequest()->getActionName();
+if($action=='register'){
+    $action = "register";
+}
+
+$customerEmail = Mage::getSingleton('customer/session')->getCustomer()->getEmail(); 
+
+if($customerEmail!=null){
+    $action = "login";
+}
+
+?>
+<?php $customerEmail = Mage::getSingleton('customer/session')->getCustomer()->getEmail(); ?> 
+<?php
+if (($this->getAddress()->getCompanyType()) == ''):
+    $this->getAddress()->setCompanyType('personal');
+endif;
+
+$_countries = Mage::getModel('directory/country')
+                        ->getResourceCollection()
+                        ->loadByStore()
+                        ->toOptionArray(false);
+
+$customerAddressId = '';
+if ($this->getAddressId('billing')):
+    $customerAddressId = $this->getAddressId('billing');
+
+    //why email address is set
+    $this->getAddress()->setEmail($customerEmail);
+
+endif;
+
+$_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping();
+?>
+
+<div class="co-billing-wrap">
+    <div class="page-title title-buttons">
+        
+            <?php /*if ($route == 'multistepcheckout' && $action == 'guest'): ?>
+                <div class="checkout-billing-top left"><?php echo $this->__('Enter your details') ?></div>
+            <?php else*/ if ($route == 'multistepcheckout'): ?>
+                <?php if(!Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+                    <div class="checkout-billing-top left"><?php echo $this->__('Enter your billing information') ?></div>
+                <?php else: ?>
+                    <div class="checkout-billing-top left"><?php echo $this->__('Check with your account'); ?></div>
+                <?php endif; ?>
+            <?php else: ?>
+                <div class="checkout-billing-top left"><?php echo $this->__('Check with your account'); ?></div>
+            <?php endif; ?>
+            
+            <?php /*if ($route == 'multistepcheckout' && $action == 'guest'): ?>
+                <div class="checkout-billing-top right">
+                    <?php echo $this->__('Do you already have an account?') ?> <a onclick="setLocation('<?php echo $this->getUrl('multistepcheckout/index/login', array('_secure' => true)); ?>')"><?php echo $this->__('Login') ?></a>
+                </div>
+            <?php else  */ if ($route == 'multistepcheckout'): ?>
+                <?php if(!Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+                    <div class="checkout-billing-top right">
+                        <?php echo $this->__('Do you already have an account?') ?> <a  onclick="setLocation('<?php echo $this->getUrl('multistepcheckout/index/login', array('_secure' => true)); ?>')"><?php echo $this->__('Login') ?></a>
+                    </div>
+                <?php else: ?>
+            
+                <div class="checkout-billing-top right">
+                    
+                </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        
+        
+
+        
+    </div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<form id="co-billing-form" method="post" action="<?php echo $this->getUrl('multistepcheckout/index/saveAddress', array('_secure' => true)) ?>" role="presentation" autocomplete="off">
+    <?php echo $this->getBlockHtml('formkey'); ?>
+    <input type="hidden" name="selected_billing" id="selected_billing" value="<?=$customerAddressId; ?>">
+    <input type="hidden" name="selected_shipping" id="selected_shipping" value="<?=$_pAddsses; ?>">
+    <fieldset class="fildsetop">
+        <?php if ($action == 'login'): ?>
+            <input type="hidden" id="billing_method" name="billing[method_post]" value="login" />
+        <?php else: ?>
+            <input type="hidden" id="billing_method" name="billing[method_post]" value="guest" />
+        <?php endif; ?>
+        <ul class="form-list">
+            <?php if ($this->customerHasAddresses()): ?>
+                <li class="wide address-field">
+                    <label><?php echo $this->__('Choose an address') ?></label>
+                    <div class="input-box">
+                        <?php //echo $this->getAddressesHtmlSelect('billing')?>
+                        <?php $customerId = Mage::getSingleton('customer/session')->getCustomer(); ?>
+                        <?php $customer = Mage::getModel('customer/customer')->load($customerId->getId()); ?>
+                        <select name="billing[allshipping]" id="billing-allshipping" class="wide">
+                            <?php foreach ($customer->getAddresses() as $address): ?>
+                                <option <?php  if ($customerAddressId == $address->getId()) { echo "selected"; } ?> value="<?php echo $address->getId() ?>">
+                                    <?php echo $address->format('oneline') ?>
+                                </option>
+                                <?php $addressArray[$address->getId()] = $address->getData(); ?>
+                                <?php endforeach; ?>
+                            <option value="0"><?php echo $this->__('New Address'); ?></option>
+                        </select>
+                        <script type="text/javascript">
+                            var addressJson = [];
+                            <?php foreach ($customer->getAddresses() as $address): ?>
+                                <?php
+                                $addressData = array();
+                                $addressData['city'] = trim($address->getCity());
+                                $addressData['prefix'] = $address->getPrefix();
+                                $addressData['country'] = $address->getCountryId();
+                                $addressData['region'] = $address->getRegion();
+                                $addressData['Firstname'] = $address->getFirstname();
+                                $addressData['Middlename'] = $address->getMiddlename();
+                                $addressData['Lastname'] = $address->getLastname();
+                                $addressData['street1'] = $address->getStreet(1);;
+                                $addressData['street2'] = trim($address->getStreet(2));
+                                $addressData['postcode'] = trim($address->getPostcode());
+                                $addressData['email'] = $customerEmail;
+                                $addressData['telephone'] = $address->getTelephone();
+                                $addressData['postcode_input'] = substr($address->getPostcode(), 0, 4);
+                                $addressData['postcode_inputdegit'] = substr($address->getPostcode(),-2);
+                                $addressData['company_type'] = $address->getCompanyType();
+                                $addressData['company'] = $address->getCompany();
+                                $addressData['vat_id'] = $address->getVatId();
+                                $addressData['referentie'] = $address->getReferentie();
+                                $billingStreetData = Mage::helper('postcodenl_api')->splitStreetData($address->getStreet());
+                                $addressData['houseNumber'] = $billingStreetData['houseNumber'];
+                                $addressData['houseNumberAddition'] = (isset($addressData['houseNumberAddition']) && !empty($addressData['houseNumberAddition']))?$addressData['houseNumberAddition']:'';
+                                ?>
+                                addressJson[<?php echo $address->getId(); ?>] = <?php echo json_encode($addressData); ?>;
+                            <?php endforeach; ?>
+                        </script>
+                    </div>
+                </li>
+            <?php endif; ?>
+            <?php $selectedCountry=Mage::getSingleton('checkout/session')->getQuote()->getShippingAddress()->getCountryId(); ?>
+            <li id="billing-new-address-form"<?php /* if ($this->customerHasAddresses()): ?> style="display:none;"<?php endif; */ ?>>
+                <fieldset id="customer-billing-address-form">
+                    <input type="hidden" name="billing[address_id]" value="<?php echo $customerAddressId; ?>" id="billing:address_id" class="address_id" />
+                    <ul>
+                        <li>
+                            <div class="field">
+                                <label for="billing:company_type" class="required"><?php echo $this->__('Order Type') ?></label>
+                                <div class="input-box radio-selection company-type">
+                                    <input type="radio" name="billing[company_type]" id="billing:company_type_personal" value="personal"  onclick="displayField(this.value);"<?php if (trim($this->getAddress()->getCompanyType()) == 'personal'): ?>checked="checked" <?php else: ?> checked="checked"<?php endif; ?> />
+                                    <label for="billing:company_type_personal"><?php echo $this->__('Personal'); ?></label>
+                                    <input type="radio" name="billing[company_type]" id="billing:company_type_business" value="business" onclick="displayField(this.value);" <?php if (trim($this->getAddress()->getCompanyType()) == 'business'): ?>checked="checked"<?php endif; ?>  />
+                                    <label for="billing:company_type_business"><?php echo $this->__('Business'); ?></label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="field">
+                                <label for="billing:country_id" class="required"><?php echo $this->__('Country') ?></label>
+                                <div class="input-box country">
+
+                                    <?php if (count($_countries) > 0): ?>
+                                        <select name="billing[country_id]" id="billing:country_id" class="accnt-country-select validate-select">
+                                            <option value="">-- Please Select --</option>
+                                            <?php foreach ($_countries as $_country): ?>
+                                                <option value="<?php echo $_country['value'] ?>">
+                                                    <?php echo $_country['label']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    <?php endif; ?>    
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="fields" id="business-company"  style="display:none;">
+                            <div class="field">
+                                <label for="billing:company"><?php echo $this->__('Company name') ?></label>
+                                <div class="input-box">
+                                    <input type="text" id="billing:company" name="billing[company]" value="<?php if($this->getAddress()->getCompanyType() != "personal") { echo $this->escapeHtml(($this->getAddress()->getCompany())); }?>" title="<?php echo $this->__('Company') ?>" class="input-text singles company <?php echo $this->helper('customer/address')->getAttributeValidationClass('company') ?>" placeholder="<?php echo $this->__('Company name') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Company name') ?>';" autocomplete="<?php echo $this->__('Company name') ?>" />
+                                </div>
+                            </div>
+                        </li>
+                        <?php if ($this->helper('customer/address')->isVatAttributeVisible()) : ?>
+                            <li class="fields" id="business-vat" style="display:none;">
+                                <label for="billing:vat_id"><?php echo $this->__('VAT Number') ?><span class="show-info"><div class="remodal-bg"><a href="#" title="click for more info" data-remodal-target="modal"></a></div></span></label>
+                                <div class="input-box">
+                                    <input type="text" id="billing:vat_id" name="billing[vat_id]" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()) ?>" title="<?php echo $this->__('VAT Number') ?>" class="input-text vtnumber <?php echo $this->helper('customer/address')->getAttributeValidationClass('vat_id') ?>" placeholder="<?php echo $this->__('Bijvoorbeeld: BE0835569924') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('VAT Number') ?>';"  autocomplete="<?php echo $this->__('VAT Number') ?>" />
+                                    <span class="optional">(<?php echo $this->__('optional') ?>)</span>
+                                </div>
+                            </li>
+                        <?php endif; ?>
+                        <li class="fields" id="business-ref" style="display:none;">
+                            <label for="billing:referentie"><?php echo $this->__('Reference') ?></label>
+                            <div class="input-box">
+                                <input type="text" id="billing:referentie" name="billing[referentie]" value="<?php echo $this->escapeHtml(($this->getAddress()->getReferentie())) ?>" title="<?php echo $this->__('Referentie Number') ?>" class="input-text referencenumber " placeholder="<?php echo $this->__('Reference') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Reference') ?>';
+                                       " autocomplete="<?php echo $this->__('Reference') ?>" /><span class="optional">(<?php echo $this->__('optional') ?>)</span>
+                            </div>
+                        </li>
+                        <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setTemplate('multistepcheckout/checkout/widget/name.phtml')->setObject($this->getAddress()->getFirstname() ? $this->getAddress() : $this->getQuote()->getCustomer())->setForceUseCustomerRequiredAttributes(!$this->isCustomerLoggedIn())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?></li>
+
+                        <li class="fields">
+                            <div class="field other-input input-postcode">
+                                <label for="billing:postcode" class="required "><?php echo $this->__('Postcode') ?></label>
+                                <div class="input-box codepost">
+                                    <input type="text" title="<?php echo $this->__('Postcode') ?>" name="billing[postcode]" id="billing:postcode" value="<?php echo $this->escapeHtml(($this->getAddress()->getPostcode())) ?>" class="input-text singles postcode validate-zip-international <?php echo $this->helper('customer/address')->getAttributeValidationClass('postcode') ?>" placeholder="<?php echo $this->__('1234') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('1234') ?>';"  autocomplete="<?php echo $this->__('1234') ?>" />
+                                </div>
+                            </div>
+                            <div class="field other-housenumber input-postcode">
+                                <label for="billing:housenumber" class="required"><?php echo $this->__('Housenumber') ?></label>
+                                <div class="input-box codepost">
+                                    <input type="text" title="<?php echo $this->__('Housenumber') ?>" name="billing[housenumber]" id="billing:housenumber" value="" class="input-text singles postcode validate-zip-international " placeholder="<?php echo $this->__('12') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('12') ?>';"  autocomplete="<?php echo $this->__('12') ?>" />
+                                </div>
+                            </div>
+                        </li>
+                        <?php $_streetValidationClass = $this->helper('customer/address')->getAttributeValidationClass('street'); ?>
+                        <li class="wide">
+                            <label for="billing:street1" class="required"><?php echo $this->__('Address') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('Street Address') ?>" name="billing[street][]" id="billing:street1" value="<?php echo $this->escapeHtml(trim($this->getAddress()->getStreet(1))) ?>" class="input-text <?php echo $_streetValidationClass ?>" placeholder="<?php echo $this->__('Address') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Address') ?>';" autocomplete="<?php echo $this->__('Address') ?>"  />
+                            </div>
+                        </li>
+                        <?php $_streetValidationClass = (str_replace('required-entry', '', $_streetValidationClass)); ?>
+                        <?php for ($_i = 2, $_n = $this->helper('customer/address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+                            <li class="wide <?php if ($_i == 2): echo "remove-addressfield"; endif; ?>">
+                                <div class="input-box">
+                                    <input type="text" title="<?php echo $this->__('Street Address %s', $_i) ?>" name="billing[street][]" id="billing:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml(trim($this->getAddress()->getStreet($_i))) ?>" class="input-text <?php echo $_streetValidationClass ?>"  placeholder="<?php echo $this->__('Address') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Address') ?>';" autocomplete="<?php echo $this->__('Address') ?>" />
+                                </div>
+                            </li>
+                        <?php endfor; ?>
+                        <li class="fields">
+                            <div class="field">
+                                <label for="billing:city" class="required"><?php echo $this->__('City') ?></label>
+                                <div class="input-box">
+                                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" value="<?php echo $this->escapeHtml(($this->getAddress()->getCity())) ?>" class="input-text city <?php echo $this->helper('customer/address')->getAttributeValidationClass('city') ?>" id="billing:city" placeholder="<?php echo $this->__('City') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('City') ?>';" autocomplete="<?php echo $this->__('City') ?>" />
+                                </div>
+                            </div>
+                        </li> 
+                        <?php //if (!$this->isCustomerLoggedIn()):      ?>
+                        <li class="wide field">
+                            <label for="billing:email" class="required"><?php echo $this->__('Email Address') ?></label>
+                            <?php
+                                $email = '';
+                                if ($post):
+                                    $email = $post['login']['useremail'];
+                                elseif ($this->escapeHtml($this->getAddress()->getEmail())):
+                                    $email = $this->escapeHtml($this->getAddress()->getEmail());
+                                endif;
+                            ?>
+                            <div class="input-box email">
+                                <input type="text" name="billing[email]" id="billing:email" value="<?php echo $email; ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text singles email validate-email required-entry"  placeholder="<?php echo $this->__('jondoe@gmail.com') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('jondoe@gmail.com') ?>';" autocomplete="<?php echo $this->__('jondoe@gmail.com') ?>" />
+                            </div>
+                        </li>
+                        <?php //endif;      ?>
+                        </li>
+                        <li class="fields">
+                            <div class="field">
+                                <label for="billing:telephone" class="required"><?php echo $this->__('Telephone') ?></label>
+                                <div class="input-box telefuun">
+                                    <?php
+                                    //$telephone = explode("-", $this->escapeHtml($this->getAddress()->getTelephone())); 
+                                    $telephone = array();
+                                    if (strpos($this->getAddress()->getTelephone(), '-') !== false) {
+                                        $telephone = explode("-", ($this->getAddress()->getTelephone()));
+                                    } else {
+                                        $telephone[0] = "+31";
+                                        $telephone[1] = $this->getAddress()->getTelephone();
+                                    }
+                                    ?>
+                                    <input type="text" name="billing[telephonecode]" value="<?php //echo $this->escapeHtml($this->getAddress()->getTelephone())           ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text telephonecode" id="billing:telephonecode" placeholder="<?php echo $this->__('+31') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('+31') ?>';"  autocomplete="<?php echo $this->__('+31') ?>"/>
+                                    <?php /* ?><input type="text" name="billing[telephone]" value="<?php echo $telephone[1]; ?>"  title="<?php echo $this->__('Telephone') ?>" class="input-text telephone validate-phoneStrictCustom <?php echo $this->helper('customer/address')->getAttributeValidationClass('telephone') ?>" id="billing:telephone" placeholder="<?php echo $this->__('0224 - 212 026') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('0224 - 212 026') ?>';"  autocomplete="<?php echo $this->__('0224 - 212 026') ?>"/><?php */ ?>
+									<input type="text" name="billing[telephone]" value="<?php echo $telephone[1]; ?>"  title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="billing:telephone" placeholder="<?php echo $this->__('0224 - 212 026') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('0224 - 212 026') ?>';"  autocomplete="<?php echo $this->__('0224 - 212 026') ?>"/>
+                                </div>
+                            </div>
+                            <?php /* <div class="field">
+                              <label for="billing:fax"><?php echo $this->__('Fax') ?></label>
+                              <div class="input-box">
+                              <input type="text" name="billing[fax]" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" title="<?php echo $this->__('Fax') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('fax') ?>" id="billing:fax" />
+                              </div>
+                              </div><?php */ ?>
+                        </li>
+                        <div class="field region">
+                            <label for="shipping:region"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                            <div class="input-box diffprovice">
+                                <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>"  style="display:none;">
+                                    <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                                </select>
+                                <script type="text/javascript">
+                                    //<![CDATA[
+                                    $('billing:region_id').setAttribute('defaultValue', "<?php echo $this->getAddress()->getRegionId() ?>");
+                                    //]]>
+                                </script>
+                                <input type="text" id="billing:region" name="shipping[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('region') ?>" style="display:none;"  />
+                            </div>
+                        </div>
+
+                        <!-- remove this and added below start -->
+                        <!-- <?php if (!$this->isCustomerLoggedIn()): ?>
+
+                            <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
+                            <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
+                            <?php if ($_dob->isEnabled() || $_gender->isEnabled()): ?>
+                                <li class="fields">
+                                    <?php if ($_dob->isEnabled()): ?>
+                                        <div class="field">
+                                            <?php echo $_dob->setDate($this->getQuote()->getCustomerDob())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if ($_gender->isEnabled()): ?>
+                                        <div class="field">
+                                            <?php echo $_gender->setGender($this->getQuote()->getCustomerGender())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                                        </div>
+                                    <?php endif ?>
+                                </li>
+                            <?php endif ?>
+
+                            <?php $_taxvat = $this->getLayout()->createBlock('customer/widget_taxvat') ?>
+                            <?php if ($_taxvat->isEnabled()): ?>
+                                <li>
+                                    <?php echo $_taxvat->setTaxvat($this->getQuote()->getCustomerTaxvat())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                                </li>
+                            <?php endif ?>
+                            <?php if ($route == 'multistepcheckout' && $action == 'register'): ?>   
+
+                                <li class="fields" id="register-customer-password">
+                                    <div class="field">
+                                        <label for="billing:customer_password" class="required"><?php echo $this->__('Password') ?></label>
+                                        <div class="input-box passwrd">
+                                            <input type="password" name="billing[customer_password]" id="billing:customer_password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" placeholder="<?php echo $this->__('Password') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Password') ?>';
+                                                   "  />
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="billing:confirm_password" class="required"><?php echo $this->__('Confirm Password') ?></label>
+                                        <div class="input-box cnfpswd">
+                                            <input type="password" name="billing[confirm_password]" title="<?php echo $this->__('Confirm Password') ?>" id="billing:confirm_password" class="input-text required-entry validate-cpassword" placeholder="<?php echo $this->__('Confirm Password') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Confirm Password') ?>';
+                                                   "  />
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php endif; ?>
+                            
+                        <?php endif; ?> -->
+                        <!-- remove this and added below End -->
+                        <!-- Parth :: Onchange shipping function :: shipping.setSameAsBilling(false) removed because it was not defiend in whole file and no need of that also. -->
+                        <?php if ($this->isCustomerLoggedIn() && $this->customerHasAddresses()): ?>
+                            <li class="control">
+                            <li class="no-display"><input type="hidden" name="billing[save_in_address_book]" value="1" /></li>
+                                <!-- <input type="text" name="billing[save_in_address_book]" value="1" title="<?php //echo $this->__('Save in address book') ?>" id="billing:save_in_address_book" onchange="if (window.shipping)
+                                            shipping.setSameAsBilling(false);"<?php //if ($this->getAddress()->getSaveInAddressBook()): ?> checked="checked"<?php //endif; ?> class="checkbox" /><label for="billing:save_in_address_book"><?php //echo $this->__('Save in address book') ?></label> -->
+                            </li>
+                        <?php else: ?>
+                            <li class="no-display"><input type="hidden" name="billing[save_in_address_book]" value="1" /></li>
+                        <?php endif; ?>
+                        <?php echo $this->getChildHtml('form.additional.info'); ?>
+                    </ul>
+                </fieldset>
+            </li>
+            <?php /* Extensions placeholder */ ?>
+            <?php echo $this->getChildHtml('checkout.onepage.billing.extra') ?>
+        </ul>
+        <?php //validation error messages      ?>
+        <div class="failed-validations" id="failed-error-msg" style="display:none;">
+            <p><?php echo $this->__('Required fields') ?></p>
+        </div>
+        <ul>
+            <li class="shipping-details-options"><?php echo $this->__("Shipping Details"); //Verzendgegevens       ?></li>
+            <?php if ($this->canShip()): ?>
+                <li class="control">
+                    <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1"<?php if ($this->isUseBillingAddressForShipping()) { ?> checked="checked"<?php } ?> title="<?php echo $this->__('Ship to this address') ?>" onclick="shippingInfo(this.value)" class="radio shipsameyes" /><label for="billing:use_for_shipping_yes"><?php echo $this->__('Send to the billing address') ?></label></li>
+                <li class="control">
+                    <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0"<?php if (!$this->isUseBillingAddressForShipping()) { ?> checked="checked"<?php } ?> title="<?php echo $this->__('Ship to different address') ?>" onclick="shippingInfo(this.value)" class="radio diffship shipsameno" /><label for="billing:use_for_shipping_no"><?php echo $this->__('Send to another delivery address') ?></label>
+                </li>
+            <?php endif; ?>
+        </ul>
+        <?php if (!$this->isCustomerLoggedIn()): ?>
+            <ul class="form-list">
+            <!-- As guest / or as new customer selection box -->
+
+              <li class="fields clearfix guest-new-customer-field">
+                <div class="field clearfix">
+                    <label for="checkouttitle" class="required"><?php echo $this->__('You want discount?') ?></label>
+                    <div class="input-box radio-selection checkouttype radio">
+                        <input type="radio" name="checkoutmethod" id="billing:checkoutmethod_guest" class="setcheckout" value="guest" checked="checked" />
+                        <label for="billing:checkoutmethod_guest"><?php echo $this->__('Calculate without account'); ?></label><br>
+                        <div style="clear: both;"></div>
+                        <input type="radio" name="checkoutmethod" id="billing:checkoutmethod_register" value="register" class="setcheckout" />
+                        <label for="billing:checkoutmethod_register"><?php echo $this->__('Create a new account'); ?></label>
+                        <span class="yellow-box">Ontvang direct 75 credits</span>
+                    </div>
+                </div>
+              </li>
+            </ul>
+        <?php endif; ?>
+        <ul>
+            <li class="diffaddress">
+                <div id="shipping" style="display:none;">
+                    <ul>
+                    <!-- Parth Change -->
+                    <?php $_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping(); ?>
+                        <?php if ($this->customerHasAddresses()): ?>
+                <li class="wide address-field">
+                    <div class="field">
+                    <label ><?php echo $this->__('Choose an address') ?></label>
+                    <div class="input-box">
+                        <?php //echo $this->getAddressesHtmlSelect('billing')?>
+                        <?php $customerId = Mage::getSingleton('customer/session')->getCustomer(); ?>
+                        <?php $customer = Mage::getModel('customer/customer')->load($customerId->getId()); ?>
+                        <select name="billing[allshippingData]" id="billing-allshippingData" class="wide" style="display: block;">
+                            <option value="0"><?php echo $this->__('New Address'); ?></option>
+                            <?php foreach ($customer->getAddresses() as $address):
+                            //echo $address->getId().
+                            //echo "<pre>";
+                                //print_r($address->getData());
+                                //exit;
+                            ?>
+                                <?php //if($address->getAddressType() == 'shipping') continue; ?>
+                                <option <?php  if ($_pAddsses == $address->getId()) { echo "selected"; } ?> value="<?php echo $address->getId() ?>" rel="<?php echo $address->getAddressType() ?>">
+                                    <?php echo $address->format('oneline') ?>
+                                </option>
+                                <?php $addressArray[$address->getId()] = $address->getData(); ?>
+                                <?php endforeach; ?>
+                            
+                        </select>
+                       
+                    </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+                        <li class="fields">
+                            <div class="field">
+                                <label for="shipping:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                                <div class="input-box">
+                                    <?php //echo $this->getCountryHtmlSelect('shipping') ?>
+                                    <?php
+//                                    $_countries = Mage::getModel('directory/country')->getResourceCollection()
+//                                            ->loadByStore()
+//                                            ->toOptionArray(false)
+                                    ?>
+                                    <?php if (count($_countries) > 0): ?>
+                                        <select name="shipping[country_id]" id="shipping:country_id" class="accnt-shipping-select" style="display: block;">
+                                            <option value="">-- Please Select --</option>
+                                            <?php foreach ($_countries as $_country): ?>
+                                                <option value="<?php echo $_country['value'] ?>">
+                                                    <?php echo $_country['label'] ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    <?php endif; ?>  
+                                </div>
+                            </div>
+                        </li>
+                        <li class="fields" id="shipping-company" >
+                            <div class="field">
+                                <label for="shipping:company"><?php echo $this->__('Company name') ?></label>
+                                <div class="input-box">
+                                    <input type="text" id="shipping:company" name="shipping[company]" value="<?php if($this->getAddress()->getCompanyType() != "personal") { echo $this->escapeHtml($this->getAddress()->getCompany()); } ?>" title="<?php echo $this->__('Company') ?>" class="input-text singles company <?php echo $this->helper('customer/address')->getAttributeValidationClass('company') ?>" placeholder="<?php echo $this->__('Company name') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Company name') ?>';" autocomplete="<?php echo $this->__('Company name') ?>" />
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setTemplate('multistepcheckout/checkout/widget/name.phtml')->setObject($this->getAddress())->setFieldIdFormat('shipping:%s')->setFieldNameFormat('shipping[%s]')->toHtml() ?></li>
+                        <?php $_streetValidationClass = $this->helper('customer/address')->getAttributeValidationClass('street'); ?>
+                        <li class="fields">
+                            <div class="field other-input input-postcode">
+                                <label for="shipping:postcode" class="required"><em>*</em><?php echo $this->__('Postcode') ?></label>
+                                <div class="input-box codepost">
+                                    <input type="text" title="<?php echo $this->__('Postcode') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php if(!$this->isUseBillingAddressForShipping()) { echo $this->escapeHtml($this->getAddress()->getPostcode()); }?>" class="input-text validate-zip-international <?php echo $this->helper('customer/address')->getAttributeValidationClass('postcode') ?>"  placeholder="<?php echo $this->__('Postcode') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Postcode') ?>';" autocomplete="<?php echo $this->__('Postcode') ?>" />
+                                </div>
+                            </div>
+                            <div class="field other-housenumber input-postcode">
+                                <label for="shipping:housenumber" class="required"><?php echo $this->__('Housenumber') ?></label>
+                                <div class="input-box codepost">
+                                    <input type="text" title="<?php echo $this->__('Housenumber') ?>" name="shipping[housenumber]" id="shipping:housenumber" value="" class="input-text singles postcode validate-zip-international " placeholder="<?php echo $this->__('12') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('12') ?>';" autocomplete="<?php echo $this->__('12') ?>" />
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="wide">
+                            <label for="shipping:street1" class="required"><em>*</em><?php echo $this->__('Address') ?></label>
+                            <div class="input-box diffadres">
+                                <input type="text" title="<?php echo $this->__('Street Address') ?>" name="shipping[street][]" id="shipping:street1" value="<?php if(!$this->isUseBillingAddressForShipping()) { echo $this->escapeHtml($this->getAddress()->getStreet(1)); } ?>" class="input-text shipcost  <?php echo $_streetValidationClass ?>" placeholder="<?php echo $this->__('Address') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Address') ?>';
+                                       " autocomplete="<?php echo $this->__('Address') ?>" />
+                            </div>
+                        </li>
+                        <?php $_streetValidationClass = (str_replace('required-entry', '', $_streetValidationClass)); ?>
+                        <?php for ($_i = 2, $_n = $this->helper('customer/address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+                            <li class="wide <?php
+                            if ($_i == 2): echo "remove-addressfield";
+                            endif;
+                            ?>" >
+                                <div class="input-box diffadres2">
+                                    <input type="text" title="<?php echo $this->__('Street Address %s ', $_i) ?>" name="shipping[street][]" id="shipping:street<?php echo $_i ?>" value="<?php if(!$this->isUseBillingAddressForShipping()) { echo $this->escapeHtml($this->getAddress()->getStreet($_i)); } ?>" class="input-text <?php echo $_streetValidationClass ?>" placeholder="<?php echo $this->__('Address') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Street Address') ?>';
+                                           " autocomplete="<?php echo $this->__('Street Address') ?>" />
+                                </div>
+                            </li>
+                        <?php endfor; ?>
+                        <li class="fields">
+                            <div class="field">
+                                <label for="shipping:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                                <div class="input-box diffcity">
+                                    <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" value="<?php if(!$this->isUseBillingAddressForShipping()) { echo $this->escapeHtml($this->getAddress()->getCity()); } ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('city') ?>" id="shipping:city" placeholder="<?php echo $this->__('City') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('City') ?>';
+                                           " autocomplete="<?php echo $this->__('City') ?>" />
+                                </div>
+                            </div>
+                            <div class="field region">
+                                <label for="shipping:region"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                                <div class="input-box diffprovice">
+                                    <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State/Province') ?>"  style="display:none;">
+                                        <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                                    </select>
+                                    <script type="text/javascript">
+                                        //<![CDATA[
+                                        $('shipping:region_id').setAttribute('defaultValue', "<?php echo $this->getAddress()->getRegionId() ?>");
+                                        //]]>
+                                    </script>
+                                    <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('region') ?>" style="display:none;" />
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="fields">
+                            <div class="field">
+                                <label for="shipping:telephone" class="required"><?php echo $this->__('Telephone') ?></label>
+                                <div class="input-box telefuun">
+                                    <?php $telephone = explode("-", $this->escapeHtml($this->getAddress()->getTelephone())); ?>
+                                    <input type="text" name="shipping[telephonecode]" value="<?php //echo $this->escapeHtml($this->getAddress()->getTelephone())          ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text telephonecode" id="shipping:telephonecode" placeholder="<?php echo $this->__('+31') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('+31') ?>';
+                                           " autocomplete="<?php echo $this->__('+31') ?>" />
+                                    <?php /* ?><input type="text" name="shipping[telephone]" value="<?php if(!$this->isUseBillingAddressForShipping()) { echo $telephone[1]; } ?>"  title="<?php echo $this->__('Telephone') ?>" class="input-text telephone validate-phoneStrictCustom <?php echo $this->helper('customer/address')->getAttributeValidationClass('telephone') ?>" id="shipping:telephone" placeholder="<?php echo $this->__('0224 - 212 026') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('0224 - 212 026') ?>';"  autocomplete="<?php echo $this->__('0224 - 212 026') ?>" /><?php */ ?>
+									<input type="text" name="shipping[telephone]" value="<?php if(!$this->isUseBillingAddressForShipping()) { echo $telephone[1]; } ?>"  title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" placeholder="<?php echo $this->__('0224 - 212 026') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('0224 - 212 026') ?>';"  autocomplete="<?php echo $this->__('0224 - 212 026') ?>" />
+                                </div>
+                            </div>
+                        </li>       
+
+                    </ul>
+                </div>
+            </li> 
+
+            <!-- remove above and adde here for new chekcout design start -->
+
+            <?php if (!$this->isCustomerLoggedIn()): ?>
+
+                            <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
+                            <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
+                            <?php if ($_dob->isEnabled() || $_gender->isEnabled()): ?>
+                                <li class="fields">
+                                    <?php if ($_dob->isEnabled()): ?>
+                                        <div class="field">
+                                            <?php echo $_dob->setDate($this->getQuote()->getCustomerDob())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if ($_gender->isEnabled()): ?>
+                                        <div class="field">
+                                            <?php echo $_gender->setGender($this->getQuote()->getCustomerGender())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                                        </div>
+                                    <?php endif ?>
+                                </li>
+                            <?php endif ?>
+
+                            <?php $_taxvat = $this->getLayout()->createBlock('customer/widget_taxvat') ?>
+                            <?php if ($_taxvat->isEnabled()): ?>
+                                <li>
+                                    <?php echo $_taxvat->setTaxvat($this->getQuote()->getCustomerTaxvat())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                                </li>
+                            <?php endif ?>
+                            
+                            <?php if ($route == 'multistepcheckout'): ?>
+
+                                
+                                <li class="fields rtr-customer-password" id="register-customer-password" style="display: none">
+                                    <p class="rtr-customer-password-text"><?php echo $this->__('Next time buy still faster? Enter a password and create an account.') ?></p>
+                                    <div class="field">
+                                        <label for="billing:customer_password" class="required"><?php echo $this->__('Password') ?></label>
+                                        <div class="input-box passwrd">
+                                            <input type="password" name="billing[customer_password]" id="billing:customer_password" title="<?php echo $this->__('Password') ?>" class="input-text validate-password required-entry" placeholder="<?php echo $this->__('Password') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Password') ?>';
+                                                             "  />
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label for="billing:confirm_password" class="required"><?php echo $this->__('Confirm Password') ?></label>
+                                        <div class="input-box cnfpswd">
+                                            <input type="password" name="billing[confirm_password]" title="<?php echo $this->__('Confirm Password') ?>" id="billing:confirm_password" class="input-text validate-cpassword required-entry" placeholder="<?php echo $this->__('Confirm Password') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Confirm Password') ?>';
+                                                             "  />
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php endif; ?>
+                            
+                        <?php endif; ?>
+
+                    <!-- remove above and adde here for new chekcout design End -->
+            
+
+            
+
+
+
+
+        </ul>
+        <?php /*if (!$this->canShip()): ?>
+            <input type="hidden" name="billing[use_for_shipping]" value="1" />
+        <?php endif; */ ?>
+
+
+        <?php if($this->isCustomerLoggedIn()) { ?>
+            <p class="incompleteinfo">
+                <?php
+                echo $this->__('Is the information from your address not complete? This can change your account with ')?>
+                <a href="<?php echo $this->getUrl('customer/address/') ?>" ><?php echo $this->__('delivery addresses')?> </a>.
+            </p>
+        <?php } ?>
+    </fieldset>
+    <div class="newsletter">
+        <div class="left">
+            <p><?php echo $this->__('Up to date?'); ?></p>
+        </div>
+        <div class="right">
+            <!--<input type="checkbox" name="billing[is_subscribed]" title="<?php //echo $this->__('Sign Up for Newsletter') ?>" value="1"  checked="checked" class="checkbox" />-->            
+            <input type="checkbox" id="billing:is_subscribed" name="billing[is_subscribed]" value="1" title="<?php echo $this->__('Sign Up for Newsletter') ?>" class="checkbox" checked>
+            <label for="billing:is_subscribed">                
+                <?php echo $this->__('Yes, I would like to receive the GYZS newsletter and save for a discount.') ?>
+            </label>
+        </div>
+    </div>
+    <div class="buttons-set" id="billing-buttons-container">
+
+        
+        <?php /*if(!Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+                <div class="checkout-bottom-left-btn"> 
+                        <!-- <a href="#" title="<?php echo $this->__('Back') ?>">
+                                <span class="span-underline-none"><?php echo $this->__('Eliminate') ?></span>
+                                <span class="span-underline"><?php echo $this->__('without account') ?></span>
+                        </a> -->
+                        <button type="button" onclick="billingForm.submit(this);cssClassrmv();" title="<?php echo $this->__('Eliminate') ?> <?php echo $this->__('without account') ?>" class="button-trans" id="submitbtn_guest">
+                                <span class="span-underline-none"><?php echo $this->__('Eliminate') ?></span>
+                                <span class="span-underline"><?php echo $this->__('without account') ?></span>
+                        </button>
+                </div>
+        <?php else: */ ?>
+                <div class="backlink-btn checkout-bottom-left-btn">
+                        <a href="<?php echo $this->getUrl('checkout/cart'); ?>" title="<?php echo $this->__('Back') ?>"><i class="fa fa-angle-left" aria-hidden="true"></i><?php echo $this->__('Back') ?></a>
+                        
+                </div>
+        <?php /* endif; */ ?>
+
+
+        <?php if(!Mage::getSingleton('customer/session')->isLoggedIn()): ?>
+                <button type="button" onclick="billingForm.submit(this);" title="<?php echo $this->__('Dealing with a new account') ?>" class="button checkout-bottom-right-btn disabled-btn" id="submitbtn"><span class="checkout-bottom-right-btn-inner"><?php echo $this->__('Eliminate').' '.$this->__('without account') ?></span></button>
+        <?php else: ?>
+                <button type="button" onclick="billingForm.submit(this);" title="<?php echo $this->__('Continue') ?>" class="button checkout-bottom-right-btn" id="submitbtn"><span class="checkout-bottom-right-btn-inner"><?php echo $this->__('Continue') ?></span></button>
+        <?php endif; ?>
+        
+
+
+        <span class="please-wait" id="billing-please-wait" style="display:none;">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading next step...') ?>" title="<?php echo $this->__('Loading next step...') ?>" class="v-middle" /> <?php echo $this->__('Loading next step...') ?>
+        </span>
+    </div>
+</form>
+
+</div>
+<div class="checkoutsteps-bottom" >
+    <p><?php echo $this->__('Your data are sent through a secure connection to GYZS.nl') ?></p>
+</div>
+<div class="remodal" data-remodal-id="modal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+  <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+  <div>
+    <h2 id="modal1Title"><?php echo $this->__('Enter the correct VAT number'); ?></h2>
+    <p id="modal1Desc">
+      <table>
+          <tr>
+              <th><?php echo $this->__('Member state'); ?></th>
+              <th><?php echo $this->__('Structure'); ?></th>
+              <th><?php echo $this->__('Format'); ?></th>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Netherlands'); ?></td>
+              <td>NL999999999B99</td>
+              <td><?php echo $this->__('%s set of %s characters', 1, 12); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Belgium'); ?></td>
+              <td>BE0999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 10); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Germany'); ?></td>
+              <td>DE999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 9); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Croatia'); ?></td>
+              <td>HR99999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 11); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Hungary'); ?></td>
+              <td>HU99999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 8); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Czech Republic'); ?></td>
+              <td>CZ999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, '8, 9 of 10'); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Denmark'); ?></td>
+              <td>DK99 99 99 99</td>
+              <td><?php echo $this->__('%s sets of %s digits', 4, 2); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Spain'); ?></td>
+              <td>ESX9999999X</td>
+              <td><?php echo $this->__('%s set of %s characters', 1, 9); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Finland'); ?></td>
+              <td>FI99999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 8); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Italy'); ?></td>
+              <td>IT99999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 11); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Luxembourg'); ?></td>
+              <td>LU99999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 8); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Poland'); ?></td>
+              <td>PL9999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 10); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Portugal'); ?></td>
+              <td>PT999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 9); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Romania'); ?></td>
+              <td>RO999999999</td>
+              <td><?php echo $this->__('%s series of a minimum of %s and a maximum of %s digits', 1, 2, 10); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Sweden'); ?></td>
+              <td>SE999999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 12); ?></td>
+          </tr>
+          <tr>
+              <td><?php echo $this->__('Slovakia'); ?></td>
+              <td>SK9999999999</td>
+              <td><?php echo $this->__('%s set of %s digits', 1, 10); ?></td>
+          </tr>
+      </table>
+    </p>
+  </div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    var billingForm = new VarienForm('co-billing-form');
+    billingForm.submit = function (button, url) {
+        var bm = document.getElementById("billing_method").value;
+        // if(bm=='guest' && button.id=="submitbtn"){
+        //     alert("Enter password to continue with register.");
+        //     // document.getElementById("billing_method").value = 'guest';
+        //     return;
+        // }
+        Validation.add('validate-phoneStrictCustom', 'Please enter a valid phone number. For example 0224 - 212 026.', function(v) {
+                return Validation.get('IsEmpty').test(v) || /^[0-9 \.\-\/]+$/.test(v);
+        });
+
+        if (this.validator.validate()) {
+            var form = this.form;
+            var oldUrl = form.action;
+
+            if (url) {
+                form.action = url;
+            }
+            var e = null;
+            try {
+                this.form.submit();
+            } catch (e) {
+            }
+            this.form.action = oldUrl;
+            if (e) {
+                throw e;
+            }
+
+            if (button && button != 'undefined') {
+                button.disabled = true;
+            }
+        } else {
+            if (jQuery('#co-billing-form input').hasClass('validation-failed'))
+            {
+                jQuery('#failed-error-msg').show();
+            }
+        }
+    }.bind(billingForm);
+    var callingCodeConfig = JSON.parse(<?php echo $this->getCallingCode(); ?>);
+    var customerAddressId = '<?php echo $customerAddressId; ?>';
+    var selectedCountry = '<?php echo $selectedCountry; ?>';
+    shippingInfo('<?php echo $this->isUseBillingAddressForShipping(); ?>');
+    if (customerAddressId) {
+        //addressData.country;
+        var defaultCountry = addressJson[customerAddressId].country;
+    } else if (selectedCountry) {
+        //addressData.country;
+        var defaultCountry = selectedCountry;
+    } else  {
+        var defaultCountry = '<?php echo Mage::helper('core')->getDefaultCountry(); ?>';
+    }
+
+    var defaultCoountryValue = '<?php echo Mage::helper('core')->getDefaultCountry(); ?>';
+    for (calling in callingCodeConfig) {
+        if (callingCodeConfig[calling]['alpha2Code'] == defaultCountry) {
+            codeVal = callingCodeConfig[calling]['callingCodes']['0'];
+            $('billing:telephonecode').value = "+" + codeVal;
+            $('billing:country_id').value = defaultCountry;
+            $('shipping:telephonecode').value = "+" + codeVal;
+        }
+    }
+    function changeCallingCode(val, prefix) {
+        var codeVal;
+        for (calling in callingCodeConfig) {
+            if (callingCodeConfig[calling]['alpha2Code'] == val) {
+                codeVal = callingCodeConfig[calling]['callingCodes']['0'];
+                $(prefix + ':telephonecode').value = "+" + codeVal;
+            }
+        }
+    }
+
+    jQuery("#billing-allshipping").change(function(val) {
+
+
+        isNew = this.value;
+        jQuery("#selected_billing").val(isNew);
+        //for existing address
+        if(isNew != 0) {
+            jQuery(".accnt-country-select").addClass('disabled');
+            jQuery(".accnt-country-select").niceSelect('update');
+            newAddress(isNew);
+            changeCallingCode(isNew, 'billing');
+            // alert('call1');
+            // PCNL_START_FUNCTION();
+
+            //add class in form
+            jQuery("#co-billing-form").addClass("existing-address");
+        } else {
+            //for new address
+            jQuery(".accnt-country-select").removeClass('disabled');
+            jQuery(".accnt-country-select").css('background-color', '#f2f2f2');
+            jQuery('.accnt-country-select').val(defaultCoountryValue).change();
+            jQuery(".accnt-country-select").niceSelect('update');
+
+            jQuery("#co-billing-form").removeClass("existing-address");
+
+            newAddress(isNew);
+
+            //PCNL_START_FUNCTION();
+
+            var prefix = "billing:";
+            //remove read only
+            if($(prefix+ "postcode")) {
+                $(prefix+ "postcode").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+
+            if($(prefix+ "postcode_input")) {
+                $(prefix+ "postcode_input").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+            if($(prefix+ "postcode_inputdegit")) {
+                $(prefix+ "postcode_inputdegit").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+            if($(prefix+ "postcode_housenumber")) {
+                $(prefix+ "postcode_housenumber").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+        }
+    });
+
+    // Parth Change
+
+    jQuery("#billing-allshippingData").change(function(val) {
+
+
+        isNew = this.value;
+		//alert(isNew);
+        jQuery("#selected_shipping").val(isNew);
+
+        //for existing address
+        if(isNew != 0) {
+            jQuery(".accnt-shipping-select").addClass('disabled');
+            jQuery(".accnt-shipping-select").niceSelect('update');
+            newShippingAddress(isNew);
+            changeCallingCode(isNew, 'shipping');
+            // alert('call2');
+            // PCNL_START_FUNCTION();
+
+        //     //add class in form
+        } else {
+        //     //for new address
+            jQuery(".accnt-shipping-select").removeClass('disabled');
+            jQuery(".accnt-shipping-select").css('background-color', '#f2f2f2');
+            jQuery('.accnt-shipping-select').val(defaultCoountryValue).change();
+            jQuery(".accnt-shipping-select").niceSelect('update');
+
+            newShippingAddress(isNew);
+
+            // PCNL_START_FUNCTION();
+
+            var prefix = "shipping:";
+            //remove read only
+            if($(prefix+ "postcode")) {
+                $(prefix+ "postcode").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+
+            if($(prefix+ "postcode_input")) {
+                $(prefix+ "postcode_input").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+            if($(prefix+ "postcode_inputdegit")) {
+                $(prefix+ "postcode_inputdegit").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+            if($(prefix+ "postcode_housenumber")) {
+                $(prefix+ "postcode_housenumber").setStyle({
+                    backgroundColor: '#ffffff'
+                });
+            }
+        }
+    });
+
+    function newShippingAddress(isNew) {
+        if (isNew) {
+            var selectElement = $('shipping-address-select')
+            if (selectElement) {
+                selectElement.value = '';
+            }
+            if (isNew == 0) {
+
+                jQuery('.diffaddress').find('input,select').removeAttr('readonly', 'readonly');
+                jQuery('.diffaddress').find('input, select').attr('disabled', false);
+                jQuery('.diffaddress').find('input, select').attr('value', '');
+                jQuery('.diffaddress').find('input, select').css('background-color', 'white');
+
+                jQuery('shipping:country_id').val('NL');
+                jQuery(".accnt-shipping-select").val('NL').change();
+                jQuery(".accnt-shipping-select").niceSelect('update');
+                // jQuery(".accnt-shipping-select").addClass('disabled');
+                // jQuery(".accnt-shipping-select").niceSelect('update');
+                
+                if($("shipping:housenumber-addition")) {
+                    $("shipping:housenumber-addition").remove();
+                }
+                if ($('shipping:housenumber')) {
+                    $('shipping:housenumber').value = '';
+                }
+
+                if ($('shipping:postcode_input')) {
+                    $('shipping:postcode_input').value = '';
+                    $('shipping:postcode_inputdegit').value = '';
+                }
+
+
+            } else {
+                var addressData = addressJson[isNew];
+                if (addressData != 'undefined') {
+
+                    if(addressData.prefix=='Mevr.'){
+                        jQuery('.Mevr').prop('checked', true);
+                    } else {
+                        jQuery('.Dhr').prop('checked', true);
+                    }
+
+                    $('shipping:city').value = addressData.city;
+                    $('shipping:firstname').value = addressData.Firstname;
+                    $('shipping:middlename').value = addressData.Middlename;
+                    $('shipping:lastname').value = addressData.Lastname;
+                    $('shipping:country_id').value = addressData.country;
+                    jQuery(".accnt-shipping-select").val(addressData.country).change();
+                    jQuery(".accnt-shipping-select").niceSelect('update');
+
+                    $('shipping:street1').value = addressData.street1;
+                    $('shipping:street2').value = addressData.street2;
+                    $('shipping:postcode').value = addressData.postcode;
+                    $('shipping:postcode').setStyle({
+                        backgroundColor: '#f2f2f2',
+                    });
+                    
+                    if ($('shipping:housenumber')) {
+                           $('shipping:housenumber').setValue(addressData.street2);
+                        if(addressData.houseNumber == null) {
+                            $('shipping:housenumber').removeAttribute("readOnly");
+                        } else if($('shipping:housenumber') && $('shipping:housenumber').getValue() != '') {
+
+                            $('shipping:housenumber').setAttribute("readOnly","true");
+                        }
+
+                    }
+                    if ($('shipping:postcode_housenumber')) {
+                        $('shipping:postcode_housenumber').setValue(addressData.street2);
+                    }
+
+                    if ($('shipping:postcode_input') && addressData.country == 'NL') {
+                        $('shipping:postcode_input').value = addressData.postcode_input;
+                        $('shipping:postcode_inputdegit').value = addressData.postcode_inputdegit;
+                    }
+                    if (addressData.telephone.indexOf('-') == -1) {
+                        var countryCodeArray = {"BE": "+32", "DK": "+45", "DE": "+49", "FI": "+358", "FR": "+33", "IT": "+39", "LV": "+371", "LU": "+352", "NL": "+31", "PT": "+351", "AT": "+43", "ES": "+34", "CZ": "+420", "GB": "+44", "SE": "+46"};
+
+                        $('shipping:telephonecode').value = countryCodeArray[addressData.country];
+                        $('shipping:telephone').value = telephone = addressData.telephone;
+                    } else {
+                        var telephone = addressData.telephone.split("-");
+                        $('shipping:telephonecode').value = telephone[0];
+                        $('shipping:telephone').value = telephone[1];
+                    }
+
+                        if(addressData.company_type == "business") {
+
+                            //company type radio button setting
+                            $("shipping:company").setValue(addressData.company);
+
+                        } else {
+
+
+                            //company type radio button setting
+                            $("shipping:company").setValue("");
+                        }
+
+
+
+                    jQuery('.diffaddress').find('input, select').attr('readonly', 'readonly');
+
+                    jQuery('.diffaddress').find('input, select').attr('disabled', true);
+                    jQuery('.diffaddress').find('input, select').css('background-color', '#f2f2f2');
+
+                    jQuery(".diffaddress :input").each(function (e) {
+
+
+                    //     //house number specific setting
+                        if (jQuery(this).attr('id') == "shipping:postcode_housenumber" && jQuery(this).attr('value') == "") {
+                            jQuery(this).removeAttr("readonly");
+                            jQuery(this).css('background-color', 'white');
+                        } else if (jQuery(this).attr('id') == "shipping:housenumber" && jQuery(this).attr('value') == "") {
+                            jQuery(this).removeAttr("readonly");
+                            jQuery(this).css('background-color', 'white');
+                        }   
+                    });
+                }
+            }
+        } else {
+            // Element.show('shipping-new-address-form');
+        }
+    }
+
+
+    //billing country logic
+    jQuery(".accnt-country-select").change(function(val) {
+
+        var isNew = this.value;
+        changeCallingCode(isNew, 'billing');
+
+        if(this.value == 'NL') {
+
+            if($("billing:postcode")) {
+
+                $("billing:postcode").setValue('');
+            }
+            if($("billing:housenumber")) {
+
+                $("billing:housenumber").setValue('');
+            }
+
+        } else{
+
+            if($("billing:postcode_input")) {
+
+                $("billing:postcode_input").setValue('');
+                $("billing:postcode_inputdegit").setValue('');
+            }
+            if($("billing:postcode_housenumber")) {
+
+                $("billing:postcode_housenumber").setValue('');
+            }
+        }
+        var use_for_shipping_yes = jQuery('.shipsameyes').is(':checked');
+        if(use_for_shipping_yes){
+            PCNL_START_FUNCTION();
+        }
+    });
+
+    //shipping country id change logic
+    jQuery(".accnt-shipping-select").change(function(val) {
+
+
+        var isNew = this.value;
+        changeCallingCode(isNew, 'shipping');
+
+        if(this.value == 'NL') {
+
+            if($("shipping:postcode")) {
+
+                $("shipping:postcode").setValue('');
+            }
+            if($("shipping:housenumber")) {
+
+                $("shipping:housenumber").setValue('');
+            }
+
+        } else{
+
+            if($("shipping:postcode_input")) {
+
+                $("shipping:postcode_input").setValue('');
+                $("shipping:postcode_inputdegit").setValue('');
+            }
+            if($("shipping:postcode_housenumber")) {
+
+                $("shipping:postcode_housenumber").setValue('');
+            }
+        }
+
+        // var curid = this.value;
+        // changeCallingCode(curid, 'shipping');
+        PCNL_START_FUNCTION();
+    });
+
+    function newAddress(isNew) {
+        if (isNew) {
+            var selectElement = $('billing-address-select')
+            if (selectElement) {
+                selectElement.value = '';
+            }
+            // Element.hide('billing-new-address-form');
+            if (isNew == 0) {
+                Element.show('billing-new-address-form');
+                $('billing:city').value = '';
+                //$('billing:country_id').value = '';
+                $('billing:street1').value = '';
+                $('billing:postcode').value = '';
+
+
+                $('billing:email').value = '';
+                $('billing:telephone').value = '';
+                if ($('billing:postcode_housenumber')) {
+                    $('billing:postcode_housenumber').value = '';
+
+                }
+                if($("billing:housenumber-addition")) {
+                    $("billing:housenumber-addition").remove();
+                }
+                if ($('billing:housenumber')) {
+                    $('billing:housenumber').value = '';
+                }
+
+                if ($('billing:postcode_input')) {
+                    $('billing:postcode_input').value = '';
+                    $('billing:postcode_inputdegit').value = '';
+                }
+                $('billing:telephonecode').value = '';
+                $('billing:telephone').value = '';
+
+
+                $('billing:company_type_personal').checked=true;
+                $('billing:company_type_business').checked=false;
+
+                //company type radio button setting
+                $("billing:company").setValue("");
+                $("billing:vat_id").setValue("");
+                $("billing:referentie").setValue("");
+                displayField("personal");
+
+                jQuery("#customer-billing-address-form :input").each(function (e) {
+                    jQuery(this).removeAttr("readonly");
+                    jQuery(this).css('background-color', 'white');
+                    jQuery(this).attr('disabled', false);
+                });
+
+                changeCallingCode(jQuery(".accnt-country-select").val(), 'billing');
+
+            } else {
+                var addressData = addressJson[isNew];
+                if (addressData != 'undefined') {
+                    $('billing:city').value = addressData.city;
+                    //console.log(addressData.country);
+                    //$('billing:country_id').value = addressData.country;
+                    jQuery(".accnt-country-select").val(addressData.country).change();
+                    jQuery(".accnt-country-select").niceSelect('update');
+
+                    if(addressData.prefix=='Mevr.'){
+                        jQuery('.Mevr').prop('checked', true);
+                    } else {
+                        jQuery('.Dhr').prop('checked', true);
+                    }
+
+                    $('billing:firstname').value = addressData.Firstname;
+                    $('billing:middlename').value = addressData.Middlename;
+                    $('billing:lastname').value = addressData.Lastname;
+                    $('billing:street1').value = addressData.street1;
+                    $('billing:street2').value = addressData.street2;
+                    $('billing:email').value = addressData.email;
+                    $('billing:postcode').value = addressData.postcode;
+                    $('billing:postcode').setStyle({
+                        backgroundColor: '#f2f2f2',
+                    });
+                    if ($('billing:housenumber')) {
+                           $('billing:housenumber').setValue(addressData.street2);
+                        if(addressData.houseNumber == null) {
+                            $('billing:housenumber').removeAttribute("readOnly");
+                        } else if($('billing:housenumber') && $('billing:housenumber').getValue() != '') {
+
+                            $('billing:housenumber').setAttribute("readOnly","true");
+                        }
+
+                    }
+                    if ($('billing:postcode_housenumber')) {
+                        $('billing:postcode_housenumber').setValue(addressData.street2);
+                    }
+
+                    if ($('billing:postcode_input') && addressData.country == 'NL') {
+                        $('billing:postcode_input').value = addressData.postcode_input;
+                        $('billing:postcode_inputdegit').value = addressData.postcode_inputdegit;
+                    }
+                    if (addressData.telephone.indexOf('-') == -1) {
+                        var countryCodeArray = {"BE": "+32", "DK": "+45", "DE": "+49", "FI": "+358", "FR": "+33", "IT": "+39", "LV": "+371", "LU": "+352", "NL": "+31", "PT": "+351", "AT": "+43", "ES": "+34", "CZ": "+420", "GB": "+44", "SE": "+46"};
+
+                        $('billing:telephonecode').value = countryCodeArray[addressData.country];
+                        $('billing:telephone').value = telephone = addressData.telephone;
+                    } else {
+                        var telephone = addressData.telephone.split("-");
+                        $('billing:telephonecode').value = telephone[0];
+                        $('billing:telephone').value = telephone[1];
+                    }
+
+                    if(addressData.company_type == "business") {
+
+                        $('billing:company_type_personal').checked=false;
+                        $('billing:company_type_business').checked=true;
+
+                        //company type radio button setting
+                        $("billing:company").setValue(addressData.company);
+                        $("billing:vat_id").setValue(addressData.vat_id);
+                        $("billing:referentie").setValue(addressData.referentie);						
+						
+                        displayField(addressData.company_type);
+
+                    } else {
+
+                        $('billing:company_type_personal').checked=true;
+                        $('billing:company_type_business').checked=false;
+
+                        //company type radio button setting
+                        $("billing:company").setValue("");
+                        $("billing:vat_id").setValue("");
+                        $("billing:referentie").setValue("");
+                        displayField(addressData.company_type);
+                    }
+
+                    jQuery("#customer-billing-address-form :input").each(function (e) {
+
+                        jQuery(this).attr('readonly', 'readonly');
+                        jQuery(this).css('background-color', '#f2f2f2');
+
+                        if (jQuery(this).attr('type') == "radio") {
+                            jQuery(this).attr('disabled', true);
+                        }
+						if (jQuery(this).attr('id') == "billing:referentie" && jQuery(this).attr('value') != "") {
+							//console.log('hi');
+                            jQuery(this).removeAttr("readonly");
+                            jQuery(this).css('background-color', 'white');
+							//jQuery("billing:referentie").attr('disabled', false);
+                        }
+						
+
+                        //house number specific setting
+                        if (jQuery(this).attr('id') == "billing:postcode_housenumber" && jQuery(this).attr('value') == "") {
+                            jQuery(this).removeAttr("readonly");
+                            jQuery(this).css('background-color', 'white');
+                        } else if (jQuery(this).attr('id') == "billing:housenumber" && jQuery(this).attr('value') == "") {
+                            jQuery(this).removeAttr("readonly");
+                            jQuery(this).css('background-color', 'white');
+                        }
+                    });
+                }
+            }
+        } else {
+            Element.show('billing-new-address-form');
+        }
+    }
+
+    function shippingInfo(val)
+    {
+        if (val == 0) {
+            Element.show('shipping');
+        } else if (val == 1) {
+            Element.hide('shipping');
+        }
+    }
+    //var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'billing:postcode');
+//]]>
+    jQuery(document).ready(function () {
+        var selectedAddressId = jQuery("#billing-allshipping").val();
+        var selectedAddressIdofShipping = jQuery("#billing-allshippingData").val();
+        if (selectedAddressId != 0 && selectedAddressId != undefined)
+        {
+            //add class so that we can adjust textbox background when form is submitted
+            jQuery("#co-billing-form").addClass("existing-address");
+
+            jQuery("#customer-billing-address-form :input").each(function (e) {
+                if (jQuery(this).attr('id') != "billing:postcode_housenumber") {
+                    jQuery(this).attr('readonly', 'readonly');
+                    jQuery(this).css('background-color', '#f2f2f2');
+
+                }
+                if (jQuery(this).attr('id') == "billing:postcode_housenumber" && jQuery(this).attr('value') != "") {
+                    jQuery(this).attr('readonly', 'readonly');
+                    jQuery(this).css('background-color', '#f2f2f2');
+                }
+                if (jQuery(this).attr('type') == "radio") {
+                    jQuery(this).attr('disabled', true);
+                }
+
+            });
+
+
+            //when address id is selected by default then we need to add this
+            newAddress(selectedAddressId);
+            changeCallingCode(selectedAddressId, 'billing');
+            // alert('call4');
+            // PCNL_START_FUNCTION();
+
+            //disable country select dropdown
+            jQuery(".accnt-country-select").addClass('disabled');
+        }
+
+        jQuery('select#billing-allshipping').niceSelect();
+        jQuery('select#billing-allshippingData').niceSelect();
+        jQuery('select.accnt-country-select').niceSelect();
+        jQuery('select.accnt-shipping-select').niceSelect();
+    });
+
+
+    // jQuery(window).on('load', function () {
+
+        //var ht = jQuery('header').height() - 120;
+        //jQuery('body,html').animate({scrollTop: jQuery('.page-title').offset().top-ht}, 300);
+    // });
+
+    function displayField(val)
+    {
+        if (val == 'business') {
+            document.getElementById('business-vat').style.display = 'block';
+            document.getElementById('business-company').style.display = 'block';
+            document.getElementById('business-ref').style.display = 'block';
+        } else {
+            document.getElementById('business-vat').style.display = 'none';
+            document.getElementById('business-company').style.display = 'none';
+            document.getElementById('business-ref').style.display = 'none';
+        }
+    }
+    function displayFieldShipping(val)
+    {
+        if (val == 'business') {
+            document.getElementById('shipping-vat').style.display = 'block';
+            document.getElementById('shipping-company').style.display = 'block';
+            document.getElementById('shipping-ref').style.display = 'block';
+        } else {
+            document.getElementById('shipping-vat').style.display = 'none';
+            document.getElementById('shipping-company').style.display = 'none';
+            document.getElementById('shipping-ref').style.display = 'none';
+        }
+    }
+    Translator.add('additional', '<?php echo Mage::helper('multistepcheckout')->__('addition') ?>');
+    Translator.add('For example 2hg', '<?php echo Mage::helper('multistepcheckout')->__('For example 2hg') ?>');
+</script>
+
+<script type="text/javascript">
+
+jQuery(document).on('change', '.setcheckout', function() {
+  if(this.value=='register') {
+    var passLi = jQuery('#register-customer-password');
+    passLi.show();
+    // passLi.next().show();
+    // passLi.next().next().show();
+    jQuery("#billing_method").val('register');
+    var btntext = "<?php echo $this->__('Dealing with a new account') ?>";
+    jQuery("#submitbtn .checkout-bottom-right-btn-inner").text(btntext);
+  } else {
+    var passLi = jQuery('#register-customer-password');
+    passLi.hide();
+    // passLi.next().hide();
+    // passLi.next().next().hide();
+    jQuery("#billing_method").val('guest');
+    var btntext = "<?php echo $this->__('Eliminate').' '.$this->__('without account') ?>";
+    jQuery("#submitbtn .checkout-bottom-right-btn-inner").text(btntext);
+  }
+});
+// function setCheckoutMethod() {
+//     // var reg = document.getElementById("login:register").value;
+//     var pass = document.getElementById("billing:customer_password").value;
+
+//     if(pass==null || pass== ''){
+
+//         document.getElementById("billing:confirm_password").value = '';
+//         document.getElementById("submitbtn").disabled = true;
+//         document.getElementById("submitbtn_guest").disabled = false;
+
+//         // CSS
+//         document.getElementById("billing:middlename").className = "input-text";
+//         document.getElementById("billing:customer_password").className = "input-text";
+//         document.getElementById("billing:confirm_password").className = "input-text";
+//         document.getElementById("billing:telephonecode").className = "input-text telephonecode";
+
+//         // need to set ACTION - GUEST
+//         document.getElementById("billing_method").value = 'guest';
+
+//         // document.getElementById("billing:middlename").className = "input-text";
+//         // document.getElementById("billing:customer_password").className = "input-text";
+//         // document.getElementById("billing:confirm_password").className = "input-text";
+//         // checkout.setMethod();
+
+//     } else {
+//         document.getElementById("submitbtn_guest").disabled = true;
+//         document.getElementById("submitbtn").disabled = false;
+
+//         // CSS
+//         document.getElementById("billing:customer_password").className = "input-text validate-password";
+//         document.getElementById("billing:confirm_password").className = "input-text validate-cpassword";
+        
+//         // need to set ACTION - Register
+//         document.getElementById("billing_method").value = 'register';
+//         // document.getElementById("billing:middlename").className = "input-text";
+//         // checkout.setMethod();
+//     }
+// }
+
+// function cssClassrmv(){
+//     var pass = document.getElementById("billing_method").value;
+//     // alert(pass);
+//     if(pass=='guest'){
+
+//         document.getElementById("billing:middlename").className = "input-text";
+//         document.getElementById("billing:customer_password").className = "input-text";
+//         document.getElementById("billing:confirm_password").className = "input-text";
+//         document.getElementById("billing:telephonecode").className = "input-text telephonecode";
+
+
+//     } 
+//     else {
+//         document.getElementById("billing:customer_password").className = "input-text validate-password";
+//         document.getElementById("billing:confirm_password").className = "input-text validate-cpassword";
+//     //     document.getElementById("billing:middlename").className = "input-text";
+//     //     document.getElementById("billing:telephonecode").className = "input-text";
+//     }
+// }
+
+
+var url = "<?php echo $this->getUrl('multistepcheckout/index/updateCountryIDAjax',array('_secure'=>true)); ?>";
+//var url = "<?php echo $this->getUrl('checkout/cart/estimatePost'); ?>";
+var return_url = "<?php echo $this->getUrl('multistepcheckout/index/register'); ?>";
+var action = "<?php echo $action; ?>";
+var selectedCountry = "<?php echo $selectedCountry; ?>";
+
+jQuery(document).ready(function(){
+    jQuery('.accnt-country-select').bind("change", function(){
+         // alert(country);
+        var use_for_shipping_yes = jQuery('.shipsameyes').is(':checked');
+        if(use_for_shipping_yes){
+            country = jQuery(this).val();
+            shipsameyes = jQuery(".shipsameyes").val();
+            billing = jQuery("#selected_billing").val();
+            shipping = jQuery("#selected_shipping").val();
+            console.log("country"+country);
+            jQuery("#shopping-cart-totals-table").hide();
+            jQuery(".please-wait-loading").show();
+            new Ajax.Request(url,
+            {
+                method: 'post',
+                parameters: {country_id:country,billing:billing,shipping:shipping,shipsameyes:shipsameyes},
+                onSuccess: function (data) {
+                    jQuery(".please-wait-loading").hide();
+                    jQuery(".grand-total-checkout-sidebar").html(data.responseText);
+                    jQuery("#shopping-cart-totals-table").show();                    
+                }
+            });
+        }
+    });
+    jQuery('.accnt-shipping-select').bind("change", function(){
+
+        country = jQuery(this).val();
+        if(country){
+            console.log("shipping"+country);
+            if(jQuery(".shipsameyes").is(":checked")){
+                shipsameyes = 1;
+            } else {
+                shipsameyes = 0;                
+            }
+            billing = jQuery("#selected_billing").val();
+            shipping = jQuery("#selected_shipping").val();
+            jQuery("#shopping-cart-totals-table").hide();
+            jQuery(".please-wait-loading").show();
+            new Ajax.Request(url,
+            {
+                method: 'post',
+                parameters: {country_id:country,billing:billing,shipping:shipping,shipsameyes:shipsameyes},
+                onSuccess: function (data) {
+                    jQuery(".please-wait-loading").hide();
+                    jQuery(".grand-total-checkout-sidebar").html(data.responseText);
+                    jQuery("#shopping-cart-totals-table").show();                
+                }
+            });
+        }
+    });
+});
+jQuery(document).ready(function(){
+    jQuery('#billing-allshipping').bind("change", function(){
+        addid = jQuery(this).val();
+        jQuery(".address_id").val(addid);
+    });
+    // Parth Change
+    jQuery('#billing-allshippingData').bind("change", function(){
+        addid = jQuery(this).val();
+        if(!$('billing:use_for_shipping_yes')){
+            jQuery(".address_id").val(addid);
+        } else {
+            jQuery(".address_id").val(jQuery('#billing-allshipping').val());
+        }
+        
+    });
+});
+
+</script>
+<?php 
+    $_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping();
+    $_BillAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultBilling();
+    if($_pAddsses && $_pAddsses!=$_BillAddsses): 
+    
+    $shiaddress = Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses);
+
+    $shipAdd = array();
+    $shipAdd['city'] = trim($shiaddress->getCity());
+    $shipAdd['addid'] = $shiaddress->getId();
+    $shipAdd['country'] = $shiaddress->getCountryId();
+    $shipAdd['Firstname'] = $shiaddress->getFirstname();
+    $shipAdd['prefix'] = $shiaddress->getPrefix();
+    $shipAdd['Middlename'] = $shiaddress->getMiddlename();
+    $shipAdd['Lastname'] = $shiaddress->getLastname();
+    $shipAdd['region'] = $shiaddress->getRegion();
+    $shipAdd['street1'] = $shiaddress->getStreet(1);;
+    $shipAdd['street2'] = trim($shiaddress->getStreet(2));
+    $shipAdd['postcode'] = trim($shiaddress->getPostcode());
+    $shipAdd['email'] = $customerEmail;
+    $shipAdd['telephone'] = $shiaddress->getTelephone();
+    $telephone_array = array();
+    if (strpos($shiaddress->getTelephone(), '-') !== false) {
+        $telephone_array_explode = explode("-", ($shiaddress->getTelephone()));
+        $telephone_array[0] = $telephone_array_explode[0];
+        $telephone_array[1] = end($telephone_array_explode);
+    } else {
+        $telephone_array[0] = "+31";
+        $telephone_array[1] = $shiaddress->getTelephone();
+    }
+
+    $shipAdd['postcode_input'] = substr($shiaddress->getPostcode(), 0, 4);
+    $shipAdd['postcode_inputdegit'] = substr($shiaddress->getPostcode(),-2);
+    $shipAdd['company_type'] = $shiaddress->getCompanyType();
+    $shipAdd['company'] = $shiaddress->getCompany();
+    $shipAdd['vat_id'] = $shiaddress->getVatId();
+    $shipAdd['referentie'] = $shiaddress->getReferentie();
+    $billingStreetData = Mage::helper('postcodenl_api')->splitStreetData($shiaddress->getStreet());
+    $shipAdd['houseNumber'] = $billingStreetData['houseNumber'];
+    $shipAdd['houseNumberAddition'] = (isset($shipAdd['houseNumberAddition']) &&!empty($shipAdd['houseNumberAddition']))?$shipAdd['houseNumberAddition']:'';
+
+?>
+
+<script type="text/javascript">
+    
+// Default Shipping Populate
+jQuery(document).ready(function(){
+
+    jQuery('input,select,textarea').attr('autocomplete','false');
+    
+    jQuery('.diffship').trigger('click');
+
+    document.getElementById("shipping:country_id").value = "<?php echo $shipAdd['country']; ?>";
+    jQuery(".accnt-shipping-select").attr('disabled','true').change();
+    jQuery(".accnt-shipping-select").niceSelect('update');
+    document.getElementById("shipping:company").value = "<?php echo $shipAdd['company']; ?>";
+    // document.getElementById("shippingDhr.").value = "<?php //echo $shipAdd['']; ?>";
+    // document.getElementById("shippingMevr.").value = "<?php //echo $shipAdd['']; ?>";
+    document.getElementById("shipping:firstname").value = "<?php echo $shipAdd['Firstname']; ?>";
+    document.getElementById("shipping:middlename").value = "<?php echo $shipAdd['Middlename']; ?>";
+    document.getElementById("shipping:lastname").value = "<?php echo $shipAdd['Lastname']; ?>";
+    document.getElementById("shipping:postcode").value = "<?php echo $shipAdd['postcode']; ?>";
+    document.getElementById("shipping:postcode_input").value = "<?php echo $shipAdd['postcode_input']; ?>";
+    document.getElementById("shipping:postcode_inputdegit").value = "<?php echo $shipAdd['postcode_inputdegit']; ?>";
+    document.getElementById("shipping:postcode_housenumber").value = "<?php echo $shipAdd['houseNumber']; ?>";
+    document.getElementById("shipping:street1").value = "<?php echo $shipAdd['street1']; ?>";
+    document.getElementById("shipping:city").value = "<?php echo $shipAdd['city']; ?>";
+    document.getElementById("shipping:telephonecode").value = "<?php echo $telephone_array[0]; ?>";
+    document.getElementById("shipping:telephone").value = "<?php echo $telephone_array[1]; ?>";
+
+    jQuery('.diffaddress').find('input, select').attr('readonly', 'readonly');
+    jQuery('.diffaddress').find('input, select').attr('disabled', true);
+    jQuery('.diffaddress').find('input, select').css('background-color', '#f2f2f2');
+    
+});
+</script>
+<?php endif; ?>

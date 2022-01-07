@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+ * @package     Cueblocks_sitemapenhanced
+ * @company     Cueblocks
+ * @author      Francesco Magazzu' <francesco.magazzu at cueblocks.com>
+ -->
+
+<layout>
+    <adminhtml_sitemapenhancedplus_index>
+        <reference name="content">
+            <block type="sitemapEnhancedPlus/adminhtml_sitemapEnhancedPlus" name="sitemapenhancedplus.index" />
+        </reference>
+    </adminhtml_sitemapenhancedplus_index>
+
+    <adminhtml_sitemapenhancedplus_edit>
+<!--        <reference name="head">
+            <action method="setCanLoadExtJs"><flag>1</flag></action>
+            <action method="addJs"><script>mage/adminhtml/wysiwyg/widget.js</script></action>
+            <action method="addItem"><type>js</type><name>prototype/window.js</name></action>
+            <action method="addItem"><type>js_css</type><name>prototype/windows/themes/default.css</name></action>
+            <action method="addItem"><type>js_css</type><name>prototype/windows/themes/magento.css</name></action>
+        </reference>
+        <reference name="content">
+            <block type="widget/adminhtml_sitemapenhanced_instance_edit" name="widget_instance_edit" />
+        </reference>
+        <reference name="left">
+            <block type="widget/adminhtml_sitemapenhanced_instance_edit_tabs" name="widget_instance_edit_tabs">
+                <block type="widget/adminhtml_sitemapenhanced_instance_edit_tab_settings" name="widget_instance_edit_tab_settings" />
+                <block type="widget/adminhtml_sitemapenhanced_instance_edit_tab_main" name="widget_instance_edit_tab_main" />
+                <block type="widget/adminhtml_sitemapenhanced_instance_edit_tab_properties" name="widget_instance_edit_tab_properties" />
+                <action method="addTab"><name>settings_section</name><block>widget_instance_edit_tab_settings</block></action>
+                <action method="addTab"><name>main_section</name><block>widget_instance_edit_tab_main</block></action>
+                <action method="addTab"><name>properties_section</name><block>widget_instance_edit_tab_properties</block></action>
+            </block>
+        </reference>
+        <reference name="js">
+            <block type="adminhtml/template" template="widget/instance/js.phtml" name="widget_instance_js"></block>
+        </reference>-->
+    </adminhtml_sitemapenhancedplus_edit>
+    
+    <adminhtml_sitemapenhancedplus_grid>
+        <block type="sitemapEnhancedPlus/adminhtml_sitemapEnhanced_grid" name="sitemapenhanced.grid" output="toHtml"></block>
+    </adminhtml_sitemapenhancedplus_grid>
+    
+    <adminhtml_sitemapenhancedplus_generatepopup>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>sitemapenhancedplus/generate/iframeswitcher.phtml</template>
+            </action>
+            <block type="adminhtml/newsletter_queue_preview_form" name="preview_form" />
+        </reference>
+    </adminhtml_sitemapenhancedplus_generatepopup>
+</layout>

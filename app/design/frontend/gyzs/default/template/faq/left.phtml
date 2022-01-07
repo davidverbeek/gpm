@@ -1,0 +1,15 @@
+<?php $categories = $this->getFaqCategories();?>
+<?php if (count($categories)):?>
+<div class="static-block">
+	<div class="block-title">
+		<strong><span><?php echo $this->__('FAQ Categories') ?></span></strong>
+	</div>	
+	<div class="block-content">
+		<ul class="faq-categories">
+		<?php foreach ($categories as $category):?>
+			<li><a href="<?php echo $this->getCategoryUrl($category)?>" title="<?php echo $category->getCategoryName();?>"><?php echo $category->getCategoryName();?></a></li>
+		<?php endforeach;?>
+		</ul>
+	</div>
+</div>
+<?php endif;?>

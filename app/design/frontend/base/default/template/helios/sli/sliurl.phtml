@@ -1,0 +1,7 @@
+<?php if($this->getLoadingType()){ ?>
+	<script type="text/javascript" src="<?php echo $this->getSkinUrl($this->getGyzsWrapperJs(), array('_secure'=>true)); ?>"></script>
+	<script type="text/javascript" src="<?php echo $this->getSkinUrl($this->getGyzsRacJs(), array('_secure'=>true)); ?>"></script>
+<?php } else { ?>
+	<script type="text/javascript" src="<?php echo $this->getSliWrapperJs(); ?>"></script>
+	<script type="text/javascript" src="<?php echo $this->getSliRacJs(); ?>"></script>
+<?php } ?>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Techtwo_Gyzs>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Magemaven_OrderComment />
+            </depends>
+        </Techtwo_Gyzs>
+    </modules>
+</config> 

@@ -1,0 +1,216 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Shopping cart template
+ *
+ * @see Mage_Checkout_Block_Cart
+ */
+?>
+<?php $quote = $this->getQuote(); ?>
+
+<form action="<?php echo $this->getUrl('multistepcheckout/index/saveDelivery', array('_secure' => true)); ?>"
+      method="post" id="itemform-2">
+    <input type="hidden" name="deliveryMethod" id="deliveryMethod" value="1"/>
+    <?php // SJD++ 01052018, Get available shipping method list ?>
+    <div class="shipping_selection clearfix">
+        <?php echo $this->getChildHtml('available'); ?>
+    </div>
+    <div class="your-order-list clearfix">
+        <div class="heading clearfix">
+            <h3><?php echo $this->__('Your Order'); ?></h3>
+            <span>
+				<?php
+                if (Mage::helper('multistepcheckout')->getDeliveryDay()) {
+                    echo Mage::helper('multistepcheckout')->getDeliveryDay();
+                } else {
+                    echo $this->__('Deze artikelen worden zo snel mogelijk verzonden');
+                }
+                ?>
+            </span>
+        </div>
+        <div class="list-items clearfix">
+            <?php foreach ($this->getItems() as $_item): ?>
+                <?php echo $this->getItemHtml($_item) ?>
+            <?php endforeach; ?>
+
+            <?php
+
+            /****** Same day delivery related logic **/
+
+            $shippingAddress = $this->getQuote()->getShippingAddress();
+
+            $sddEnabled = Mage::helper('multistepcheckout')->checkSdd($this->getQuote());
+
+            if ($sddEnabled) {
+
+                $sddAmount = Mage::helper('multistepcheckout')->getSddFromConfig();
+                $fomrattedSddAmount = Mage::helper('core')->currency($sddAmount, true, false);
+
+                $sddSessionFlag = Mage::getSingleton('checkout/session')->getData('sdd_enabled');
+
+                $remainingHours = Mage::helper('multistepcheckout')->getRemainingHours();
+
+                ?>
+
+                <div class="clearfix"></div>
+                <div class="samedaydelivery-wrap standard-shipment-wrap clearfix">
+                    <b>
+                        <?php
+                        echo $this->__('Standard Shipping');
+                        $shippingAmount = $this->getQuote()->getShippingAddress()->getShippingInclTax();
+                        $formatedShippingAmount = Mage::helper('core')->currency($shippingAmount, true, false);
+
+                        ?>
+                    </b>
+                    <div class="same-day-delivery-price">
+                        <b><?php echo $formatedShippingAmount; ?></b>
+                    </div>
+                </div>
+                <div class="samedaydelivery-wrap clearfix">
+                    <input type="checkbox" class='samedaydelivery-input' name="samedaydelivery" value="1"
+                        <?php if ($sddSessionFlag == 1) {
+                            echo "checked";
+                        } ?>
+                           id="samedaydelivery"/>
+                    <label for="samedaydelivery">
+                        <?php //echo Mage::helper('multistepcheckout')->__('I choose to pay an extra %s to receive my order today',$fomrattedSddAmount); ?>
+                        <?php echo "Ik wil voor $fomrattedSddAmount extra mijn bestelling vandaag ontvangen tussen 15.00 en 22.00 uur"; ?>
+                        <?php
+                        if ($remainingHours['h'] > 0) {
+                            echo Mage::helper('multistepcheckout')->__('In <span>%s hours en %s minutes</span> this option will pass', $remainingHours['h'], $remainingHours['m']);
+
+                        } else {
+                            echo Mage::helper('multistepcheckout')->__('In <span>%s minutes</span> this option will pass', $remainingHours['m']);
+
+                        }
+
+                        ?>
+                    </label>
+
+                    <div class="same-day-delivery-price">
+                        + <?php echo $fomrattedSddAmount; ?>
+                    </div>
+                </div>
+                <?php
+            }
+
+            ?>
+            <script>
+                jQuery("#samedaydelivery").change(function () {
+                    var value = jQuery(this).is(":checked");
+                    console.log('value is' + value);
+                    jQuery(".please-wait-loading").show();
+                    jQuery("#shopping-cart-totals-table").hide();
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "<?php echo $this->getUrl('*/*/updateSdd');?>",
+                        async: true,
+                        data: {
+                            samedaydelivery: value // as you are getting in php $_POST['action1']
+                        },
+                        success: function (msg) {
+                            jQuery('.grand-total-checkout-sidebar').html(msg);
+                        },
+                        done: function (msg) {
+                            jQuery(".please-wait-loading").hide();
+                            jQuery("#shopping-cart-totals-table").show();
+                        }
+                    });
+                });
+
+            </script>
+            <?php /*** same day delivery logic end here ***/ ?>
+        </div>
+        <div class="default-deliveryaddress clearfix">
+            <div class="shipping-row clearfix">
+                <span><?php echo $this->__('Delivery Address'); ?></span>
+                <ul class="form-list">
+                    <?php if ($this->customerHasAddresses()): ?>
+                        <li class="wide test1">
+                            <div class="input-box">
+                                <?php $shippingAddress = $quote->getShippingAddress();
+                                $shippingAddress->getData('customer_address_id');
+                                ?>
+                                <?php //echo $this->getAddressesHtmlSelect('all[shipping]') ?>
+                                <?php $customerId = Mage::getSingleton('customer/session')->getCustomer(); ?>
+                                <?php $customer = Mage::getModel('customer/customer')->load($customerId->getId()); ?>
+                                <?php $selectedAddressID = Mage::getSingleton('customer/session')->getAddressId(); ?>
+                                <select disabled="disabled" style="width:204px;" name="all[shipping]" id="allshipping">
+                                    <?php foreach ($customer->getAddresses() as $address): ?>
+                                        <option value="<?php echo $address->getId() ?>" <?php if ($address->getId() == $selectedAddressID): ?> selected="selected"<?php endif; ?>><?php echo $address->format('oneline') ?></option>
+                                    <?php endforeach; ?>
+                                    <?php if (!$shippingAddress->getCustomerAddressId()): ?>
+                                        <option value="another"><?php echo $shippingAddress->format('oneline') ?>        </option>
+                                    <?php endif; ?>
+                                </select>
+                            </div>
+                        </li>
+                    <?php else: ?>
+                        <?php $address = $this->getQuote()->getShippingAddress(); ?>
+                        <li class="wide test2">
+                            <div class="input-box">
+                                <input type="hidden" name="all[shipping]" id="allshipping"
+                                       value="<?php echo $address->getId() ?>">
+                                <div class="nice-select disabled">
+                                    <span class="current">
+                                        <?php echo $address->format('oneline') ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+                <!-- <span class="emailday"><?php echo $this->__('You will receive the shippment date in your mail.') ?></span> -->
+            </div>
+        </div>
+    </div>
+    <div class="delivery-bottom-controls clearfix">
+        <div class="backlink-btn checkout-bottom-left-btn">
+            <?php
+                $url = Mage::helper('core/http')->getHttpReferer() ? Mage::helper('core/http')->getHttpReferer()  : $this->getUrl('multistepcheckout/index/register', array('_secure' => true));
+            ?>
+            <a href="<?php echo $url; ?>"
+               title="<?php echo $this->__('Back') ?>"><i class="fa fa-angle-left" aria-hidden="true"></i><?php echo $this->__('Previous step') ?></a>
+        </div>
+        <button class="button checkout-bottom-right-btn" type="submit" title="<?php echo $this->__('Continue'); ?>">
+            <span class="checkout-bottom-right-btn-inner"><?php echo $this->__('This is correct, go through'); ?></span>
+        </button>
+    </div>
+</form>
+<script>
+    <?php // SJD++ 16052018, Transsmart changes to get country full name from country_code on checkout product view step
+    $countryList = Zend_Locale::getTranslationList('Territory', Mage::app()->getLocale()->getLocaleCode()); ?>
+    <?php if($countryList): ?>
+        var territoryLocaleList = <?php echo json_encode($countryList); ?>;
+    <?php endif; ?>
+    jQuery(window).on("load", function () {
+        jQuery('select').niceSelect();
+        // var ht = jQuery('header').height() - 110;
+        // jQuery('body,html').animate({scrollTop: jQuery('.title').offset().top-ht}, 300);
+    });
+</script>

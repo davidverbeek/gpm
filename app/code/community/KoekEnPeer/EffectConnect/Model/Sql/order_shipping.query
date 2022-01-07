@@ -1,0 +1,16 @@
+SELECT
+    `order`.`entity_id`,
+    `track`.`track_number`,
+    `track`.`title`
+FROM
+    `[[sales_flat_order]]` AS `order`
+LEFT JOIN
+    `[[sales_flat_shipment_track]]` AS `track` ON
+    `track`.`order_id`=`order`.`entity_id` AND
+    `track`.`track_number`!=''
+WHERE
+    `order`.`effectconnect`>0 AND
+    `order`.`entity_id` IN ([[@order_ids]]) AND
+    `order`.`status` IN ([[@status_codes]])
+GROUP BY
+    `order`.`entity_id`

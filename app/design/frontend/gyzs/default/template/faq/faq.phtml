@@ -1,0 +1,96 @@
+<div class="page-title">
+	<h1><?php echo htmlentities($this->__('Frequently Asked Question'))?></h1>
+</div>
+<div class="faq-content">
+	<div class="box-head">	
+		<div class="search-title">
+			<h2><?php echo $this->__('Search FAQ');?></h2>
+		</div>
+		<div class="faq-search">
+			<form name="faqsearch" action="<?php echo $this->getUrl('*/*/search') ?>" method="post" id="faq-search-form">
+				<ul>
+					<li>
+						<input name="keyword" id="keyword" class="input-text required-entry" type="text" maxlength="100" size="80" />
+						<button type="submit" title="<?php echo $this->__('SEARCH') ?>" class="button"><span><span><?php echo $this->__('SEARCH') ?></span></span></button>
+					</li>
+				</ul>
+			</form>
+		</div>	
+	</div>
+	<div class="description">
+	<?php $isUseJavascript 	= Mage::helper('faq')->getUseJavascript();?>
+	<?php $allQuestion=$this->getAllQuestion()?>
+	<?php if(!empty($allQuestion)):?>
+		<?php $category = $this->getCategories()->getData(); ?>	
+		<?php if(count($category) > 0): ?>
+			<ul>
+			<?php $i=0;foreach ($category as $obj): ?>
+				<?php $questions=$this->getFaqsData($obj['category_id']) ?>
+				<?php $questions = $questions->getData();?>
+				<?php if(count($questions)): ?>
+				<?php $i=$i+1?>
+			<?php $_categroyId = $obj['category_id'];?>	
+				<li class="<?php if(($i%2)!= 0):?>left<?php else:?>right<?php endif;?>">
+					<h3><?php echo $obj['category_name']?></h3>
+					<ul class="product-faqs" id="listProductFaqs">
+						<?php foreach ($questions as $question): ?>
+						<li class="item">
+							<?php if ($isUseJavascript): ?>
+								<h5 class="faq_question">
+									<?php echo $question['question'] ?>
+								</h5>
+								
+								<div class="faq_answer" id="faq_answer_<?php echo $question['faq_id']?>" style="display:none;">
+									<?php echo $question['answer'] ?>
+									
+								</div>
+									
+							<?php else : ?>
+								<a href="<?php echo $this->getQuestionUrl(array('id' => $question['faq_id']))?>"><?php echo $question['question']; ?></a>
+								<div class="answer">
+								</div>
+							<?php endif ?>
+						</li>
+						<?php endforeach ?>						
+					</ul>	
+					<?php $_categroyId = $obj['category_id'];?>	
+					<?php if (!$isUseJavascript): ?>
+						<div class="faq-view-more">
+							<a href="<?php echo $this->getCategoryUrl(array('cid' => $_categroyId))?>"><?php echo $this->__('View more...')?></a>
+						</div>
+					<?php endif ?>	
+				<?php endif ?>
+				</li>				
+			<?php endforeach ?>
+			</ul>
+		<?php else: ?>
+			<?php echo $this->__('There are no FAQs matching the selection.') ?>
+		<?php endif?>
+	<?php else: ?>
+		<p class="note-msg"><?php echo $this->__('There are no FAQs matching the selection.') ?></p>
+	<?php endif ?>
+	</div>
+</div>
+<?php if ($isUseJavascript): ?>
+<script type="text/javascript">
+	function showanswer(faq_id) {
+		$$('div.faq_answer').each(
+			function (e) {
+				if (e.id != 'faq_answer_'+faq_id) {
+					e.hide();
+				}
+			}
+		);
+		
+		if ($('faq_answer_'+faq_id).getStyle('display') == 'none') {
+			$('faq_answer_'+faq_id).show();
+		}
+		else {
+			$('faq_answer_'+faq_id).hide();
+		}
+	}
+	//<![CDATA[
+		var dataForm = new VarienForm('faq-search-form', true);
+	//]]>
+</script>
+<?php endif;?>

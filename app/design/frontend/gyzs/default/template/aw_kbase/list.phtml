@@ -1,0 +1,214 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+$item = Mage::app()->getLayout()->createBlock('kbase/list_item')
+        ->setCategory($this->getCategory());
+$blockId = 'kbase_' . $this->getBlockType();
+?>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl(); ?>js/stars.js"></script>
+<div class="row">
+    <div class="kbase kbase-<?php echo $this->getBlockType() ?>">
+
+        <?php echo $this->getChildHtml('kbase_breadcrumbs'); ?>
+        <?php //echo $this->getChildHtml('kbase_header');  ?>
+        <div class="kbasearticledetailtop">
+            <div class="block-title light " id="overzicht">
+                <h1 class=""><?php echo htmlspecialchars($this->getTitle()) ?></h1>
+            </div>
+            <div class="backlinkandsearch clearfix">
+                <div class="kbase-backlinkcontainer">
+                    <div class="backlink">
+                        <a href="<?php echo $this->getUrl('klantenservice') ?>" title="<?php echo $this->__('Back to Customer Service') ?>"><?php echo $this->__('Back to Customer Service') ?></a>
+                    </div>
+                </div>
+                <?php echo $this->getChildHtml('kbase_main_search'); ?>
+            </div>
+        </div>
+
+
+        <?php if ($this->_collection->getSize()): ?>
+            <?php // echo $this->getChildHtml('kbase_sorter');  ?>
+
+            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('catalog-customer-service')->toHtml(); ?>
+            <div class="kbase-listing" id="<?php echo $blockId ?>">
+                <ol>
+                    <?php
+                    $even = true;
+                    $i = 1;
+                    foreach ($this->_collection->getItems() as $article):
+                        ?>
+                        <dt class="kbase-listing-term kbase-listing-short">
+                            <h2 class="kbase-listing-general">
+                                <?php echo $article->getArticleTitle() ?>
+                            </h2>
+                            <?php if ($this->getRatingEnabled()): ?>
+                                <div class="kbase-listing-rating">
+                                    <div class="rating-box">
+                                        <div style="width: <?php echo ($article->getArticleRating()) / 5 * 100; ?>%;" class="rating"></div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </dt>
+                        <dd class="kbase-listing-full" id="<?php echo $article->getArticleUrlKey() ?>" >
+                            <div class="kbase-listing-description std">
+                                <?php echo $article->getArticleText(); ?>
+                            </div>
+
+                            <div class="kbase-article-rating" >
+
+                                <?php
+                                //if($this->getRatingEnabled()): 
+                                // $ratingPercent = ($article->getArticleRating())/5*100;
+                                ?>
+                                <!--<div class="clear"></div>
+                                <?php //if(AW_Kbase_Helper_Data::isArticleVoteAllowed($article->getId())):  ?>
+                                
+                                          method="get" >
+                                        <label for="rating"><?php //echo $this->__('Your review for this answer:')            ?></label>
+                                        <input type="hidden" name="id" value="<?php //echo $article->getId()            ?>">
+                                        <select name="rating" id="rating" >
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                        <button class="button form-button" title="<?php //echo $this->__('Vote')            ?>" type="submit"><span><span><?php //echo $this->__('Vote')            ?></span></span></button>
+                                    </form>-->
+                                <?php //endif; ?>
+                                <?php //endif; ?>
+                                <?php if ($this->getRatingEnabled()): ?>
+                                    <form class="clearfix" action="<?php echo AW_Kbase_Helper_Url::secureUrl(Mage::getUrl('*/*/vote', array(AW_Kbase_Helper_Url::URL_PARAM_NAME_ARTICLE_ID => $article->getArticleId()))) ?>">
+                                        <div class="customerrating">
+                                            <h3><?php echo $this->__('Your review for this answer article') ?></h3>
+                                            <div class="ratingstars">
+                                                <span id='ratings<?php echo $i; ?>' class="ratingsive"></span>
+                                                <input type="hidden" name="rating" id="rating<?php echo $i; ?>" value="" class="radio" />
+                                                <script type="text/javascript">
+
+                                                    function rating<?php echo $i; ?>(val)
+                                                    {
+                                                        var value = val;
+                                                        $('rating<?php echo $i ?>').value = value;
+                                                        ///alert('You rated it ' + value + ' star(s)!');
+                                                    }
+
+                                                    var s<?php echo $i; ?> = new Stars({
+                                                        container: 'ratings<?php echo $i; ?>',
+                                                        maxRating: 5,
+                                                        //bindField: 'rating_<?php //echo $_rating->getId()            ?>',
+                                                        imagePath: '<?php echo $this->getSkinUrl(); ?>images/',
+                                                        callback: rating<?php echo $i; ?>
+                                                    });
+                                                </script>            
+                                            </div>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="submit" class="votebutton">
+                                                <span><?php echo $this->__('Vote') ?></span>
+                                            </button>
+                                        </div>
+                                    </form>    
+                                <?php endif; ?>
+
+                            </div>
+                        </dd>
+                        <?php $i++; ?>                            
+                    <?php endforeach; ?>
+                </ol>
+            </div>
+
+            <script type="text/javascript">
+                //<![CDATA[
+                initGrid('<?php echo $blockId ?>');
+                //]]>
+                jQuery(window).on("load", function () {
+                    var wd = jQuery(window).width();
+                    if (wd <= 1199) {
+                        if (jQuery('body').hasClass('kbase-article-category') == true) {
+                            jQuery('.kbase-backlinkcontainer .backlink a').html('<?php echo $this->__('Back') ?>');
+                        }
+                    } else {
+                        jQuery('.kbase-backlinkcontainer .backlink a').html('<?php echo $this->__('Back to Customer Service') ?>');
+                    }
+                });
+
+
+                //google map in contact article
+                if (jQuery('#googleMap').length) {
+
+                    var myCenter = new google.maps.LatLng(52.779350, 4.813080);
+
+                    function initialize()
+                    {
+                        var mapProp = {
+                            center: myCenter,
+                            zoom: 13,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
+
+                        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+                        var marker = new google.maps.Marker({
+                            position: myCenter,
+                        });
+
+                        marker.setMap(map);
+
+                        var infowindow = new google.maps.InfoWindow({
+                            content: "<strong>GYZS.nl</strong><p>1742LD Schagen<br>1742LD Schagen</p>"
+                        });
+
+                        infowindow.open(map, marker);
+
+                        setTimeout(function () {
+                            lastCenter = map.getCenter();
+                            google.maps.event.trigger(map, 'resize');
+                            map.setCenter(lastCenter);
+                        }, 300);
+                        if (jQuery('#contact_informatie')) {
+                            jQuery('#contact_informatie').prev().click(function () {
+                                var currCenter = map.getCenter();
+                                google.maps.event.trigger(map, 'resize');
+                                map.setCenter(currCenter);
+                            });
+                        }
+                        jQuery(window).resize(function () {
+
+                            var currCenter = map.getCenter();
+                            google.maps.event.trigger(map, 'resize');
+                            map.setCenter(currCenter);
+                        });
+                    }
+
+                    google.maps.event.addDomListener(window, 'load', initialize);
+
+                    
+
+                }
+                if (jQuery('form.kbaseform').length) {
+                            jQuery('form.kbaseform').attr('action', '<?php echo $this->getUrl() ?>newsletter/subscriber/new/');
+                    }
+
+            </script>
+
+            <?php echo $this->getChildHtml('kbase_pager'); ?>
+        <?php else: ?>
+            <p><?php echo $this->__('No articles found'); ?></p>
+        <?php endif; ?>
+
+    </div>
+</div>

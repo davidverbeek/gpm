@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<config>
+   <api>
+     <resources>
+     <!-- START GUSTOMER GROUP RESOURCES -->
+       <jaagers_attributes_objectmodel>
+            <model>jaagers_attributes/objectmodel_api</model>
+            <title>Custom Attributes</title>
+            <methods>
+              <!-- <editAttribute translate="title" module="jaagers_attributes">
+	          	<title>Edit attribute</title>
+	            <method>editAttribute</method>
+	       	  </editAttribute> -->
+	       	  <testMethod translate="title" module="jaagers_attributes">
+	                    <title>Test method</title>
+	                    <method>testMethod</method>
+	                </testMethod>
+	                <createSet translate="title" module="jaagers_attributes">
+	                    <title>Create attributeset</title>
+	                    <method>createSet</method>
+	                </createSet>
+	                <createAttribute translate="title" module="jaagers_attributes">
+	                    <title>Create attribute</title>
+	                    <method>createAttribute</method>
+	                </createAttribute>
+	                <editAttribute translate="title" module="jaagers_attributes">
+	                    <title>Edit attribute</title>
+	                    <method>editAttribute</method>
+	                </editAttribute>
+	                <addAttributeToSet translate="title" module="jaagers_attributes">
+	                    <title>Add Attribute to set</title>
+	                    <method>addAttributeToSet</method>
+	                </addAttributeToSet>
+            </methods>
+       </jaagers_attributes_objectmodel>
+     <!-- END CUSTOMER GROUP RESOURCES -->
+    </resources>
+    <v2>
+      <resources_function_prefix>
+           <jaagers_attributes_objectmodel>attributes</jaagers_attributes_objectmodel>
+      </resources_function_prefix>
+    </v2>
+  </api>
+</config>

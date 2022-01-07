@@ -1,0 +1,599 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+$quote = $this->getQuote(); //Mage::getSingleton('checkout/session')->getQuote();
+$items = $quote->getAllItems();
+$priceInclVat = 0;
+foreach ($items as $item) {
+	$priceInclVat += $item->getRowTotalInclTax();
+}
+// $shipcharge = $quote->getShippingAddress()->getShippingInclTax();
+?>
+<?php //$quote = Mage::getSingleton('checkout/session')->getQuote();  ?>
+<?php //echo "<pre>"; print_r($quote->getData()); ?>
+<?php //echo "<pre>"; print_r(Mage::helper('checkout/cart')->getQuote()->getData()); ?>
+<?php /** @var $this Mage_Checkout_Block_Multishipping_Overview */ ?>
+<div class="multiple-checkout col2-right-layout">
+	<div class="row main">
+		<div class="multiple-checkout-outer col-main">
+			<div class="multiple-checkout-wrap">
+				<!-- <div class="page-title">
+				<h1><?php echo $this->__('Confirmation of your order') ?></h1>
+			</div> -->
+				<!-- <div class="overviewmobile-title">
+				<h1><?php echo $this->__('Confirmation report') ?></h1>
+			</div> -->
+				<div class="page-title title-buttons">
+					<div class="checkout-multiple-top left">Samengevat.</div>
+					<div class="checkout-multiple-top right">
+						Tevreden? <a href="javascript:void(0)" onclick="formsub();">Plaats je bestelling!</a>
+					</div>
+				</div>
+
+				<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+				<div id="review-order">
+					<!--form action="<?php //echo $this->getPostActionUrl() ?>" method="post" onsubmit="return showLoader();"-->
+					<form action="<?php echo $this->getUrl('multistepcheckout/index/overviewPost', array('_secure' => true)) ?>"
+						  id="overviewform" method="post" onsubmit="return showLoader();">
+
+
+						<?php
+						/* $paymentData['method']=$payment['method'];
+						  if(array_key_exists($payment['method'].'_issuer', $payment)){
+						  $paymentData[$payment['method'].'_issuer']=$payment[$payment['method'].'_issuer'];
+						  }
+						  if(array_key_exists($payment['method'].'_paymentmethod', $payment)){
+						  $paymentData[$payment['method'].'_paymentmethod']=$payment[$payment['method'].'_paymentmethod'];
+						  } */
+
+//                        echo "paymentData";
+						$paymentData = Mage::getSingleton('checkout/session')->getSelectedPayment();
+//                        echo "<pre>"; print_r(Mage::getSingleton('checkout/session')->getSelectedPayment());print "</pre>";
+						?>
+
+
+						<input type="hidden" name="payment[method]" value="<?php echo $paymentData['method']; ?>"/>
+						<input type="hidden" name="payment[<?php echo $paymentData['method']; ?>_issuer]"
+							   value="<?php echo $paymentData[$paymentData['method'] . '_issuer']; ?>"/>
+						<input type="hidden" name="payment[<?php echo $paymentData['method']; ?>_paymentmethod]"
+							   value="<?php echo $paymentData[$paymentData['method'] . '_paymentmethod']; ?>"/>
+						<div class="totalitems clearfix">
+							<div class="heading"><?php echo $this->__('Total Item'); ?></div>
+							<div class="detail"><?php echo Mage::helper('checkout/cart')->getSummaryCount(); ?><?php echo $this->__('Items'); ?></div>
+							<div class="total-inclprice">
+								<?php echo Mage::helper('checkout')->formatPrice($priceInclVat); ?>&nbsp;<span
+										class="incl-text"> <?php echo $this->__('incl.'); ?></span>
+							</div>
+						</div>
+
+						<div class="col2-set paymentmethodinfo clearfix">
+							<div class="box clearfix">
+								<div class="box-title">
+									<h3><?php echo $this->__('Payment Method') ?> </h3>
+								</div>
+								<?php
+								//echo "<pre>"; print_r($quote->getData()); exit;
+								$paymentMethodCode = explode("_", $quote->getPayment()->getMethodInstance()->getCode());
+								if ($paymentMethodCode[0] == "cashondelivery"):
+									?>
+									<?php
+								else:
+									$issuerCode = Mage::getModel('checkout/session')->getSelectedBank();
+									$issueres = $quote->getPayment()->getMethodInstance()->getIssuers();
+									$issuerName = '';
+									if (count($issueres) > 1):
+										foreach ($issueres as $_issuer):
+											if ($_issuer['issuer_code'] == $issuerCode):
+												$issuerName = $_issuer['issuer_name'];
+											endif;
+
+										endforeach;
+									endif;
+								endif;
+								?>
+								<div class="box-content">
+									<input type="hidden" name="payment[cc_number]"
+										   value="<?php echo $this->escapeHtml($this->getPayment()->getCcNumber()) ?>"/>
+									<input type="hidden" name="payment[cc_cid]"
+										   value="<?php echo $this->escapeHtml($this->getPayment()->getCcCid()) ?>"/>
+
+									<?php if ($paymentMethodCode[0] == 'achterafbetalen') {
+
+										$issuerName = $paymentMethodCode[0];
+										?>
+
+																				<input type="hidden" name="payment[account_no]"
+																					   value="<?php echo $this->escapeHtml($this->getPayment()->getAccountNo()) ?>"/>
+																				<input type="hidden" name="payment[phone_no]"
+																					   value="<?php echo $this->escapeHtml($this->getPayment()->getPhoneNo()) ?>"/>
+																				<input type="hidden" name="payment[birthdate]"
+																					   value="<?php echo $this->escapeHtml($this->getPayment()->getBirthdate()) ?>"/>
+
+									<?php } ?>
+
+									<div class="paymentname"><?php echo $this->getPaymentHtml() ?> <?php if ($issuerName): ?>
+											<span class="bank-name"><?php echo $this->__('via de ') . $issuerName; ?></span><?php endif; ?>
+									</div>
+
+									<div class="payment-logo" style="">
+										<?php
+											if ($paymentMethodCode[0] == "cashondelivery") {
+												?>
+												<img src="<?php echo $this->getSkinUrl('images/icepay/nl/rembourslogo.png') ?>">
+												<?php
+											} elseif ($paymentMethodCode[0] == 'achterafbetalen') {
+
+											} else {
+												$results = Mage::helper('common')->getIcepayLogoResult($paymentMethodCode[1]);
+												
+												$settle = 1;
+												if ($results['pm_code'] == 'paypal' || $results['pm_code'] == 'wire') {
+													$settle = 0;
+													Mage::helper("icecore")->imageDir = "frontend/gyzs/default/images/icepay/";
+													Mage::helper("icecore")->imageExtension = "png";
+													echo $imageIcon = Mage::helper("icecore")->toIcon(Mage::helper("icecore")->cleanString($results['pm_code']));
+												}
+											}
+										?>
+									</div>
+
+									<div class="paymentlogo">
+										<?php
+
+										if ($settle) {
+											Mage::helper("icecore")->imageDir = "frontend/gyzs/default/images/icepay/";
+											Mage::helper("icecore")->imageExtension = "png";
+											echo $imageIcon = Mage::helper("icecore")->toIcon(Mage::helper("icecore")->cleanString($results['pm_code']));
+										}
+
+										?>
+										<?php if($paymentMethodCode[0] == 'achterafbetalen') {
+
+											$logoUrl = $this->getSkinUrl('images/icepay/black.png');
+											?>
+											<img src="<?php echo $logoUrl ?>">
+
+										<?php } ?>
+										<div class="paymentmultifee">
+											<?php $multiFees = Mage::getSingleton('checkout/session')->getData('multifees'); ?>
+											<?php $paymentFee = Mage::getSingleton('checkout/cart')->getQuote()->getShippingAddress()->getMultifees(); ?>
+											<?php if ($paymentFee == '0.00' || $multiFees <= 0): ?>
+												<span class="free"><?php echo $this->__('Free'); ?></span>
+											<?php else: ?>
+												<?php $formatted = Mage::helper('core')->currency($paymentFee, true, false); ?>
+												<span><?php echo $formatted; ?></span><span
+														class="incl-text"> <?php echo $this->__('incl.'); ?></span>
+											<?php endif; ?>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
+						<div class="col2-set shippinginfo">
+							<h2 class="legend"><?php echo $this->__('Shipping Information') ?></h2>
+							<?php $allAddress = $quote->getAllShippingAddresses(); ?>
+							<?php foreach ($allAddress as $_index => $_address): ?>
+
+								<div class="delivery-method-temp">
+									<div class="box clearfix">
+										<div class="box-title">
+											<h3><?php echo $this->__('Delivery Type'); ?></h3>
+										</div>
+										<div class="box-content">
+											<?php $type = $quote->getDeliveryType(); ?>
+											<?php //if ($type == '1'): ?>
+											<p> <?php echo $this->__('I want to get everything at once'); ?></p>
+											<?php /* elseif ($type == '2') : ?>
+												  <p><?php echo $this->__('send everything in immediate stock, the rest through like backorder') ?></p><span class="extra"><?php echo $this->__('+5.95'); ?></span>
+												  <?php else: ?>
+												  <p><?php echo $this->__('I want to pick up my order') ?></p><span class="free"><?php echo $this->__('Free'); ?></span>
+												  <?php endif; */ ?>
+											<div class="delivery-incl">
+												<!-- added by parth :: to show shipping charges Incl tax -->
+												<div class="total-inclprice">
+													<?php
+
+													/****** Same day delivery related logic **/
+
+													$shippingAddress = $quote->getShippingAddress();
+													$sddAmount = $shippingAddress->getSddAmount();
+													$ShippingValueInclTax = $quote->getShippingAddress()->getShippingInclTax();
+
+													if ($shippingAddress->getSddAmount() > 0) {
+														$ShippingValueInclTax = $ShippingValueInclTax + $shippingAddress->getSddAmount();
+													}
+
+													/****** Same day delivery related logic **/
+
+
+													echo Mage::helper('checkout')->formatPrice($ShippingValueInclTax);
+													?>&nbsp;<span class="incl-text"> <?php echo $this->__('incl.'); ?></span>
+												</div>
+												<?php if ($_rate = $quote->getShippingAddressRate($_address)): ?>
+													<?php /* <p>
+													  <?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?> - <?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
+													  <?php $_excl = $this->getShippingPriceExclTax($_address); ?>
+													  <?php $_incl = $this->getShippingPriceInclTax($_address); ?>
+													  <?php echo $_excl; ?>
+													  <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+													  (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+													  <?php endif; ?>
+													  </p> */ ?>
+													<?php if ($_rate->getPrice() == 0.00 && $sddAmount <= 0): ?>
+														<span class="free"><?php echo $this->__('Free Shippment Cost'); ?></span>
+													<?php else: ?>
+														<?php /* $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+														  <?php  $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+														  <?php echo $_excl; ?>
+														  <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+														  (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+														  <?php endif; */ ?>
+														<?php $quoteAddress = $quote->getShippingAddress();
+														$totalShippingCost = $sddAmount + ($quoteAddress->getShippingInclTax());
+														?>
+														<div class="shp-cost-incl">
+															<span class="price"><?php echo $this->helper('checkout')->formatPrice($totalShippingCost); ?></span>
+															<span class="incl-text">&nbsp;<?php echo $this->__('incl.'); ?></span>
+															<?php /* <span class="incl-price"><?php echo $this->helper('checkout')->formatPrice($quote->getShippingInclTax()); ?><span class="incltext"><?php echo $this->__('incl.');?></span></span> */ ?>
+														</div>
+
+													<?php endif; ?>
+												<?php endif; ?>
+
+											</div>
+										</div>
+									</div>
+
+
+									<div class="box clearfix">
+										<div class="box-title">
+											<h4><?php echo $this->__('Delivery address') ?> </h4>
+										</div>
+										<div class="box-content">
+											<address>
+												<?php
+												/**
+												 * SJD++ 16052018,
+												 * Transsmart changes to diplay pickup location instead of delivery address.
+												 */
+												$displayAddress = $_address->format('oneline');
+												$pickupAddress = Mage::helper('hs_pickuplocation/pickupaddress')
+													->getPickupAddressFromQuote($quote);
+												if($pickupAddress) {
+													$displayAddress = $pickupAddress->format('oneline');
+												}
+												echo $displayAddress;
+												?>
+											</address>
+										</div>
+									</div>
+
+
+									<?php if ($quote->getShippingAddressCount() != $_index + 1): ?>
+										<div class="divider"></div>
+									<?php endif; ?>
+								</div>
+							<?php endforeach; ?>
+							<?php if ($type == '2' || $type == 3): ?>
+								<div class="subsequent-deliveries-info clearfix"><?php // HS-J static content   ?>
+								<div class="box">
+									<div class="box-title">
+										<h3><?php echo $this->__('Subsequent deliveries') ?></h3>
+									</div>
+									<div class="box-content">
+										<p><?php echo $this->__('Dorpsstraat 32, 1923 AA Schagen') ?></p>
+										<span><?php echo $this->__('Hierover ontvang je t.z.t. bericht') ?></span>
+									</div>
+								</div>
+								</div><?php // HS-J static content   ?>
+
+							<?php endif; ?>
+							<div class="subsequent-deliveries-info clearfix">
+								<div class="box clearfix">
+									<div class="box-title">
+										<h3><?php echo $this->__('Delivery Time') ?> </h3>
+									</div>
+									<div class="box-content">
+										<!--<p><?php //echo Mage::getSingleton('checkout/session')->getDeliveryDateTime(); ?></p>-->
+										<p><?php if (Mage::helper('multistepcheckout')->getDeliveryDay()) : ?>
+												<?php echo Mage::helper('multistepcheckout')->getDeliveryDay(); ?>
+											<?php endif; ?></p>
+									</div>
+								</div>
+							</div>
+							<?php if ($quote->getCouponCode()): ?>
+
+								<?php $discount = abs($quote->getShippingAddress()->getDiscountAmount()); ?>
+								<div class="discount">
+									<div class="box clearfix">
+										<div class="box-title">
+											<h3><?php echo $this->__('Discount') ?></h3>
+										</div>
+										<div class="box-content">
+											<!-- Parth Change :: to display coupon code -->
+											<p class="discount-text"> <?php //echo $this->__('Discount code ') . " " . $quote->getCouponCode() . " " . $this->__('applied.'); ?><?php echo $this->__('Your Discount is ') ?> </p>
+											<span><?php echo $this->helper('checkout')->formatPrice($discount) ?>
+												<span class="incl-text"><?php echo $this->__('incl.'); ?></span>
+										</span>
+
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
+							<?php //if(Mage::getSingleton("customer/session")->isLoggedIn()):?>
+							<?php //$taxAmount=$quote->getTaxAmount(); ?>
+							<?php //else: ?>
+							<?php $taxAmount = $quote->getShippingAddress()->getTaxAmount(); ?>
+							<?php //endif; ?>
+							<?php $exclAmt = $quote->getShippingAddress()->getGrandTotal() - $taxAmount; ?>
+							<div id="checkout-review-submit">
+
+								<div class="place-order">
+									<div class="grand-total">
+										<div class="inner">
+											<h1><?php echo $this->__('Grand Total including VAT') ?></h1>
+											<?php echo $this->helper('checkout')->formatPrice($quote->getShippingAddress()->getGrandTotal()) ?>
+
+
+										</div>
+									</div>
+									<div class="grand-total-bottom"><?php // HS-J static price   ?>
+										<div class="price-excludin-vat">
+											<span class="grand-total-amount"><?php echo $this->__('Grand Total') ?></span>
+											<span class="excl-btw-text"><?php echo $this->__('Excl. btw') ?></span>
+											<!-- <span><?php //echo $this->__('Price excluding VAT') ?></span> -->
+										</div>
+										<div class="grand-tax-price">
+											<span> <?php echo Mage::helper('checkout')->formatPrice($exclAmt) ?></span>
+										</div>
+									</div><?php // HS-J    ?>
+									<div class="grand-total-bottom last-row"><?php // HS-J static price   ?>
+										<div class="price-excludin-vat">
+											<span><?php echo strtoupper($this->__('tax')); ?></span>
+										</div>
+										<div class="grand-tax-price">
+											<span> <?php echo Mage::helper('checkout')->formatPrice($taxAmount) ?></span>
+										</div>
+									</div><?php // HS-J    ?>
+
+								</div>
+							</div>
+
+							<div class="conditions">
+								<p>
+									<?php echo $this->__('By placing this order creates a payment and you agree to the content the ') ?>
+									<a href="<?php echo $this->getUrl('klantenservice/voorwaarden-en-privacy/#algemene_voorwaarden_gyzs.nl'); ?>"
+									   target="_blank"
+									   title="<?php echo $this->__('general conditions') ?>"><?php echo $this->__('general conditions') ?> </a>
+									<?php echo $this->__(' and the ') ?><a
+											href="<?php echo $this->getUrl('klantenservice/voorwaarden-en-privacy/#de_privacy_verklaring_van_gyzs.nl'); ?>"
+											target="_blank"
+											title="<?php echo $this->__('privacy statement') ?>"> <?php echo $this->__('privacy statement') ?></a>
+									<?php echo $this->__(' of gyzs.') ?>
+								</p>
+							</div>
+							<div class="overview-bottom-container">
+								<div class="buttons-set">
+									<div class="backlink-btn checkout-bottom-left-btn"><a
+												href="<?php echo $this->getUrl('multistepcheckout/index/payment'); ?>"><i class="fa fa-angle-left" aria-hidden="true"></i><?php echo $this->__('Previous step') ?></a>
+									</div>
+									<div id="review-buttons-container">
+										<button type="submit" title="<?php echo $this->__('Place order') ?>"
+												class="button btn-checkout" id="review-button">
+											<span><?php echo $this->__('Place order') ?></span></button>
+									</div>
+								</div>
+
+
+								<span class="please-wait" id="review-please-wait" style="display:none;">
+								<img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>"
+									 alt="<?php echo $this->__('Submitting order information...') ?>"
+									 title="<?php echo $this->__('Submitting order information...') ?>"
+									 class="v-middle"/> <?php echo $this->__('Submitting order information...') ?>
+							</span>
+							</div>
+					</form>
+
+				</div>
+
+				<script type="text/javascript">
+					function formsub() {
+						document.getElementById('overviewform').submit();
+					}
+
+					//<![CDATA[
+					var submitted = false;
+
+					function showLoader() {
+						if (submitted) {
+							return false;
+						}
+						if ($('checkout-agreements')) {
+							var checkboxes = $$('#checkout-agreements input');
+							for (var i = 0, l = checkboxes.length; i < l; i++) {
+								if (!checkboxes[i].checked) {
+									alert("<?php echo $this->__('Please agree to all Terms and Conditions before placing the orders.') ?>");
+									return false;
+								}
+							}
+						}
+
+						submitted = true;
+						var step = 'review';
+						Element.show(step + '-please-wait');
+						$(step + '-buttons-container').setStyle({opacity: .5});
+						$(step + '-buttons-container').descendants().each(function (s) {
+							s.disabled = true;
+						});
+						return true;
+					}
+
+					//]]>
+				</script>
+			</div>
+
+		</div>
+		<div class="bottom-review-block">
+			<p><?php echo $this->__('Your data are sent through a secure connection to GYZS.nl') ?></p>
+		</div>
+	</div>
+	<div class="sidebar-right">
+
+		<?php echo $this->getChildHtml('checkout_cart_sidebar') ?>
+
+		<div class="happened-next-checkout-sidebar">
+			<?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('overview_happened_next')->toHtml() ?>
+
+			<div class="overview-next-happen">
+				<h3><?php echo $this->__("What happens next?"); ?></h3>
+				<ul>
+				<li><?php echo $this->__("We will collect and pack your order"); ?></li>
+
+				<?php 
+					$custEmail = "";
+					if($quote->getCustomerEmail()) {
+						$custEmail = $quote->getCustomerEmail();
+					} else if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+						$customer = Mage::getSingleton('customer/session')->getCustomer();
+						$custEmail = $customer->getEmail();//get customer email 
+					} 
+				?>
+				<li><?php echo $this->__("You will receive a confirmation by e-mail"); ?> (<a href="mainto:<?php echo $custEmail; ?>"><?php echo $custEmail; ?></a>)</li>
+
+				<li><?php echo $this->__("We will send you a Track & Trace mail when the order is shipped"); ?></li>
+				<li><?php echo $this->__("Thank you for your order and fast!"); ?></li>
+				</ul>
+			</div>
+		</div>
+		<div class="help-text">
+			<span><?php echo $this->__('Do you have any questions or are you stuck? We love to help!') ?></span>
+			<span><?php echo $this->__('You can chat with us on') ?><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('ph_no')->toHtml(); ?></span>
+		</div>
+
+	</div>
+</div>
+
+<style type="text/css">
+	#blockPage {
+		display: none;
+		height: 100%;
+		left: 0;
+		opacity: 1;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 10001;
+		background-color: rgba(0, 0, 0, 0.5);
+		border: 0px;
+	}
+
+	#blockPage img {
+		width: 70px;
+		height: 70px;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+	/ presto ! /
+	}
+
+	header {
+		z-index: inherit;
+	}
+
+	#review-please-wait {
+		display: none;
+	}
+</style>
+<div class="blockPage" id="blockPage">
+	<img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>"
+		 alt="<?php echo $this->__('Submitting order information...') ?>"
+		 title="<?php echo $this->__('Submitting order information...') ?>" class="v-middle"/>
+
+</div>
+
+
+<?php
+
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+if(Mage::helper('gtm')->getEnabled()){ 
+	/*Ask Kaushal before making any changes in following script code */ ?>
+	<script type="text/javascript">
+		jQuery(window).on("load", function () {
+			dataLayer.push({
+				'event': 'checkoutOption',
+				'ecommerce': {
+					'currencyCode': 'EUR',
+					'checkout': {
+						'actionField': {'step': 5, 'option': 'Collect Payment', 'list': 'Product List'}
+					}
+				}
+			});
+		});
+
+
+	</script>
+<?php } ?>
+<script type="text/javascript">
+
+	jQuery('#review-button').on("click", function () {
+		jQuery('#blockPage').show();
+	});
+
+
+</script>
+<?php
+// Helios_Gtm module enable and setting enable for google ads than only script execute
+if(Mage::helper('gtm')->getGoogleAdsEnabled()){ ?>
+	<?php if($_gAdsCode = Mage::helper('gtm')->getGoogleAdsCode()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode; ?>"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', '<?php echo $_gAdsCode; ?>');
+		</script>
+	<?php endif; ?>
+	<?php if($_gAdsCode2 = Mage::helper('gtm')->getGoogleAdsCode2()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode2; ?>"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', '<?php echo $_gAdsCode2; ?>');
+		</script>
+	<?php endif; ?>
+<?php } ?>

@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+* @category   Mage
+* @package    Helios_Garantiesservice
+* @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*/
+-->
+<config>
+    <modules>
+        <Helios_Garantiesservice>
+            <version>1.4.0</version>
+        </Helios_Garantiesservice>
+    </modules>
+    <frontend>
+        <routers>
+            <garantiesservice>
+                <use>standard</use>
+                <args>
+                    <module>Helios_Garantiesservice</module>
+                    <frontName>garantiesservice</frontName>
+                </args>
+            </garantiesservice>
+        </routers>
+        <layout>
+            <updates>
+                <garantiesservice>
+                    <file>garantiesservice.xml</file>
+                </garantiesservice>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+        <routers>
+            <garantiesservice>
+                <use>admin</use>
+                <args>
+                    <module>Helios_Garantiesservice</module>
+                    <frontName>garantiesservice</frontName>
+                </args>
+            </garantiesservice>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <garantiesservice module="garantiesservice">
+                <title>Garantiesservice</title>
+                <sort_order>771</sort_order>               
+                <children>
+                    <items module="garantiesservice">
+                        <title>Manage Garantiesservice</title>
+                        <sort_order>0</sort_order>
+                        <action>garantiesservice/adminhtml_garantiesservice</action>
+                    </items>
+                </children>
+            </garantiesservice>
+        </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <garantiesservice translate="title" module="garantiesservice">
+                                            <title>Garantiesservice Section</title>
+                                            <sort_order>50</sort_order>
+                                        </garantiesservice>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <layout>
+            <updates>
+                <garantiesservice>
+                    <file>garantiesservice.xml</file>
+                </garantiesservice>
+            </updates>
+        </layout>
+    </adminhtml>   
+    <global>
+        <models>
+            <garantiesservice>
+                <class>Helios_Garantiesservice_Model</class>
+                <resourceModel>garantiesservice_mysql4</resourceModel>
+            </garantiesservice>
+            <garantiesservice_mysql4>
+                <class>Helios_Garantiesservice_Model_Mysql4</class>
+                <entities>
+                    <garantiesservice>
+                        <table>garantiesservice</table>
+                    </garantiesservice>
+                    <garantiesservice_store>
+                        <table>garantiesservice_store</table>
+                    </garantiesservice_store>
+                </entities>
+            </garantiesservice_mysql4>
+        </models>
+        <resources>
+            <garantiesservice_setup>
+                <setup>
+                    <module>Helios_Garantiesservice</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </garantiesservice_setup>
+            <garantiesservice_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </garantiesservice_write>
+            <garantiesservice_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </garantiesservice_read>
+        </resources>
+        <blocks>
+            <garantiesservice>
+                <class>Helios_Garantiesservice_Block</class>
+            </garantiesservice>
+        </blocks>
+        <helpers>
+            <garantiesservice>
+                <class>Helios_Garantiesservice_Helper</class>
+            </garantiesservice>
+        </helpers>
+    </global>
+</config>

@@ -1,0 +1,54 @@
+<?php /** @var $this IntegerNet_Autoshipping_Block_Country */ ?>
+
+<?php //echo $this->__('Shippment cost');//, $this->getShippingCostPageUrl()) ?>
+
+<?php //echo $this->getCountryHtmlSelect($this->getSelectedCountryId(), 'country_id', 'autoshipping_country')
+
+// echo $action = Mage::app()->getFrontController()->getRequest()->getActionName();
+$route = Mage::app()->getFrontController()->getRequest()->getRouteName();
+$action = Mage::app()->getFrontController()->getRequest()->getActionName();
+
+$flag = Mage::helper('multistepcheckout/data')->isCountrySelectAvailable($route,$action);
+
+$transmissionItem = Mage::helper('multistepcheckout/data')->isTransmissionItem();
+?>
+
+<form action="<?php echo $this->getUrl('checkout/cart/estimatePost') ?>" method="post" id="shipping-zip-form">
+	<ul class="form-list">
+		<li>
+			<div class="input-box">
+				<?php $_countries = Mage::helper('common')->getCountries(); ?>
+				<?php if (count($_countries) > 0): ?>
+					<?php $selectedCountry=Mage::getSingleton('checkout/cart')->getQuote()->getShippingAddress()->getCountryId();?>
+					<input type="hidden" name="country_id" id="country_id" value="<?php echo $selectedCountry; ?>" />
+                    <?php if($transmissionItem): ?>
+                        <div class="popover_wrapper">
+                            <a href="<?php echo Mage::getBaseUrl() . 'klantenservice/search/query/verzendkosten/#extra-verzendkosten'; ?>" target='_blank'><label class="dd-selected-text"><?php echo $this->__('Shippment Cost') ?></label>
+                            </a>
+                            <div class="popover_content">
+                                <p class="popover_message">Er worden verzendkosten berekend omdat u een afwijkend pakket bestelt. Afwijkende pakketten zijn groter dan 175x78x58cm of zwaarden dan 30kg en moeten via een aparte vervoerder verzonden worden. Deze pakketten bevatten vaak producten die extra lang of zwaar zijn en moeten dus beter verpakt en beschermd worden voor eventuele transportschade.<br><br>Denk hierbij aan: schuifdeurrailsen, trappen, ladders, betonmolens, bouw- en tochtprofielen, draadeinden, meerpuntsluitingen, espagnoletten, kruiwagens en grote machines.<br><br>Op onze klantenservicepagina kunt u meer lezen over de standaardpakketten en afwijkende pakketten. </p>
+                            </div>
+                        </div>
+                    <?php else : ?>
+                    	<label class="dd-selected-text"><?php echo $this->__('Shippment Cost') ?></label>
+                    <?php endif; ?>
+					<?php if (!$flag): ?>
+						<?php foreach($_countries as $_country): ?>
+							<?php if($selectedCountry==$_country['value']):?>
+								<a class="dd-selected"><img class="dd-selected-image dd-image-right" src="<?php echo $this->getSkinUrl('images/flags/flag_'.  strtolower($_country['value']).'.png') ?>"></a>
+							<?php endif;?>
+						<?php endforeach; ?>
+					<?php else: ?>
+                        <select name="country" id="demo-htmlselect-basic" class="valid-select" >
+							<?php foreach($_countries as $_country): ?>
+							<option value="<?php echo $_country['value'] ?>" data-imagesrc="<?php echo $this->getSkinUrl('images/flags/flag_'.  strtolower($_country['value']).'.png') ?>" <?php if($selectedCountry==$_country['value']):?> selected="selected"<?php endif;?>>
+									<?php echo $_country['label'] ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+					<?php endif; ?>
+				<?php endif; ?>
+			</div>
+		</li>
+	</ul>
+</form>

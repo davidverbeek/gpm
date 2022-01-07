@@ -1,0 +1,327 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var $this Mage_Sales_Block_Order_Totals
+ * @see Mage_Sales_Block_Order_Totals
+ */
+?>
+    <!-- Current code Comment by Parth  -->
+<?php /* foreach ($this->getTotals() as $_code => $_total): //echo $_code."=="; ?>
+    <?php  if ($_total->getBlockName()): ?>
+        <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
+    <?php else:?>
+    <tr style="background-color: #fff">
+        <td align="left" valign="top" style="width:425px">
+            <p style="margin:0 0 0 30px;font-size:16px;line-height:28px ;color:#000;text-shadow: 0 0 1px rgba(0,0,0,0.1);font-family:Arial;">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </p>
+        </td>
+        <td align="left" valign="top" style="width: auto">
+            <p style="margin:0 0 0 30px;font-size:16px;line-height:28px ;color:#000;text-shadow: 0 0 1px rgba(0,0,0,0.1);font-family:Arial;">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </p>
+        </td>
+    </tr>
+    <tr style="background-color: #fff">
+        <td colspan="2" style="height:5px;min-height: 5px;"></td>
+    </tr>
+    <?php endif?>
+<?php endforeach */ ?>
+
+    <!-- //Current code Comment by Parth  -->
+
+
+    <!-- new checkout block design complete  -->
+
+<?php $total_data = $this->getTotals();
+// echo "<pre>";
+// print_r($total_data);
+// exit;
+?>
+<?php
+$_code = 'subtotal_incl_tax';
+if($total_data[$_code]){
+    $_total = $total_data[$_code];
+
+    //echo $total_data[$_code];
+    //exit;
+
+    ?>
+    <tr>
+        <td colspan="4" style="height:10px;">
+        </td>
+    </tr>
+    <tr class="<?php echo $_code?>">
+        <td <?php //echo $this->getLabelProperties()?> class="a-left" style="width: 450px;">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; margin-left: 38px; font-size: 14px; line-height: 20px; color: #000;">
+                <?php //if ($_total->getStrong()):?>
+                <?php //echo $this->escapeHtml($_total->getLabel());?>
+                <?php //else:?>
+                <?php //echo $this->escapeHtml($_total->getLabel());?>
+                <?php //endif?>
+
+                <?php echo $this->helper('tax')->__('Subtotal') ?>
+                <span style="color: #828282; font-size: 13px;"><?php echo $this->helper('tax')->__('Incl. btw') ?></span>
+
+            </p>
+        </td>
+        <td <?php //echo $this->getValueProperties()?> style="width: 145px;">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; text-align: left; font-size: 14px; line-height: 20px;">
+                <?php if ($_total->getStrong()):?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php else:?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </p>
+        </td>
+    </tr>
+<?php } ?>
+<?php
+$_code = 'discount';
+if($total_data[$_code]){
+    $_total = $total_data[$_code];
+
+    ?>
+    <tr class="<?php echo $_code?>">
+        <td <?php //echo $this->getLabelProperties()?> class="a-left">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; margin-left: 38px; font-size: 14px; line-height: 20px; color: #000;">
+                <?php if ($_total->getStrong()):?>
+                    <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php else:?>
+                    <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </p>
+        </td>
+        <td <?php //echo $this->getValueProperties()?> style="width: 145px;">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; text-align: left; font-size: 14px; line-height: 20px;">
+                <?php if ($_total->getStrong()):?>
+                    <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </p>
+        </td>
+    </tr>
+<?php } ?>
+<?php
+$_code = 'shipping_incl_tax';
+if($total_data[$_code]){
+    $_total = $total_data[$_code];
+
+    ?>
+    <tr class="<?php echo $_code?>">
+        <td <?php //echo $this->getLabelProperties()?> class="a-left">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; margin-left: 38px; font-size: 14px; line-height: 20px; color: #000;">
+                <?php if ($_total->getStrong()):?>
+                    <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php else:?>
+                    <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </p>
+        </td>
+        <td <?php //echo $this->getValueProperties()?> style="width: 145px;">
+            <p style="font-family: Arial;  margin-top: 5px; margin-bottom: 5px; text-align: left; font-size: 14px; line-height: 20px;">
+                <?php if ($_total->getStrong()):?>
+                    <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </p>
+        </td>
+    </tr>
+<?php } ?>
+<?php
+$_code = 'multifees';
+if($total_data[$_code]){
+    $_total = $total_data[$_code];
+
+    ?>
+    <tr class="<?php echo $_code?>">
+        <td <?php //echo $this->getLabelProperties()?> class="a-left">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; margin-left: 38px; font-size: 14px; line-height: 20px; color: #000;">
+                <?php if ($_total->getStrong()):?>
+                    <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                    <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </p>
+        </td>
+        <td <?php //echo $this->getValueProperties()?> style="width: 145px;">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; text-align: left; font-size: 14px; line-height: 20px;">
+                <?php if ($_total->getStrong()):?>
+                    <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </p>
+        </td>
+    </tr>
+<?php } ?>
+<?php
+$_code = 'grand_total_incl';
+if($total_data[$_code]){
+    $_total = $total_data[$_code];
+
+    ?>  <tr>
+        <td class="" colspan="4" style="height:20px;">
+            <hr style="color:#ddd;display: block; height: 1px;border: 0;border-top: 1px solid #ddd;width:540px;margin:0 auto;">
+        </td>
+    </tr>
+    <tr class="<?php echo $_code?>">
+        <td <?php //echo $this->getLabelProperties()?> class="a-left" style="padding: 0px;">
+            <p style="font-family: Arial; margin-left: 38px; margin-top: 15px; margin-bottom: 15px; font-size: 20px; line-height: 20px; color: #000; font-weight: normal;">
+                <?php //if ($_total->getStrong()):?>
+                <?php //echo $this->escapeHtml($_total->getLabel());?>
+                <?php //else:?>
+                <?php //echo $this->escapeHtml($_total->getLabel());?>
+                <?php // endif?>
+                <?php echo $this->helper('tax')->__('Totaal Incl. btw')?>
+            </p>
+        </td>
+        <td <?php //echo $this->getValueProperties()?>  style="padding: 0px; width: 145px;">
+            <p style="font-family: Arial; margin-top: 15px; margin-bottom: 15px; text-align: left; font-size: 20px; font-weight: bold; line-height: 20px;">
+                <?php if ($_total->getStrong()):?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php else:?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td class="" colspan="4" style="height:20px;">
+            <hr style="color:#ddd;display: block; height: 1px;border: 0;border-top: 1px solid #ddd;width:540px;margin:0 auto;">
+        </td>
+    </tr>
+<?php } ?>
+<?php
+$_code = 'grand_total';
+if($total_data[$_code]){
+    $_total = $total_data[$_code];
+
+    ?>
+    <tr class="<?php echo $_code?>">
+        <td <?php //echo $this->getLabelProperties()?> class="a-left">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; margin-left: 38px; font-size: 14px; line-height: 20px; color: #000; ">
+                <?php //if ($_total->getStrong()):?>
+                <?php //echo $this->escapeHtml($_total->getLabel());?>
+                <?php //else:?>
+                <?php //echo $this->escapeHtml($_total->getLabel());?>
+                <?php //endif?>
+                <?php echo $this->helper('tax')->__('Grand Total')?>
+                <span style="color: #828282; font-size: 13px;"><?php echo $this->helper('tax')->__('Excl. btw') ?></span>
+            </p>
+        </td>
+        <td <?php //echo $this->getValueProperties()?> style="width: 145px;">
+            <p style="font-family: Arial; margin-top: 5px; margin-bottom: 5px; text-align: left; font-size: 14px; line-height: 20px;">
+                <?php if ($_total->getStrong()):?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php else:?>
+                    <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </p>
+        </td>
+    </tr>
+<?php } ?>
+
+<?php
+$_code = 'tax';
+if($total_data[$_code]){
+    $_total = $total_data[$_code];
+    //echo $_total->getBlockName();
+    //exit;
+    echo $this->getChildHtml($_total->getBlockName(), false);
+}
+?>
+
+    <!-- new checkout block design complete  -->
+
+
+
+
+
+
+
+
+<?php /*$_order = $this->getOrder() ?>
+<?php $taxAmount=$_order->getTaxAmount();?>
+<table style="width:600px;background-color: #fff;margin:10px 0 30px 0" cellspacing="0" cellpadding="0" border="0">
+    <?php if($_order->getShippingAmount()):?>
+    <tr>
+        <td align="left" valign="middle" style="width: 450px;">
+            <p style="margin:0 0 0 40px;font-size: 16px;line-height: 28px;color: #787878;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;width: 55px;">
+               <?php echo $this->__('Shipping') ?>
+            </p>
+        </td>
+        <td align="left" style="" valign="left">
+            <p style="margin: 0;font-size: 16px;line-height: 28px;color: #787878;text-align:left;">
+                <?php echo $this->__('Free Shippment Cost');?>
+            </p>
+        </td>
+    </tr>
+    <?php else:?>
+    <tr>
+        <td align="left" valign="middle" style="width: 450px;">
+            <p style="margin: 0 0 0 40px;font-size: 16px;line-height: 28px;color: #787878;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;width: 55px;">
+                <?php echo $this->__('Shipping') ?>
+            </p>
+        </td>
+        <td align="left" valign="middle" style="">
+            <p style="margin: 0 10px 0 0;font-size: 16px;line-height: 28px;color: #787878;">
+                <?php echo $this->helper('checkout')->formatPrice($_order->getShippingAmount()); ?>
+                <span><?php echo Mage::helper('checkout')->formatPrice($_order->getShippingInclTax()) ?></span>
+                <span><?php echo $this->__('incl.');?></span>
+            </p>
+        </td>
+    </tr>
+    <?php endif;?>
+
+    <tr>
+        <td width="" align="left" valign="top" style="width: 450px;">
+            <p style="margin: 0 0 0 40px;font-size: 16px;line-height: 28px;color: #000;text-shadow: 0 0 1px rgba(0,0,0,0.1);width: 55px;font-weight: bold;">
+                <?php echo $this->__('Grand Total') ?>
+            </p>
+        </td>
+        <td align="left" style="" valign="top">
+            <p style="margin: 0 20px 0 0;font-size: 16px;line-height: 28px;color: #000;text-shadow: 0 0 1px rgba(0,0,0,0.1);font-weight: bold;">
+                <span><?php $exclAmt=$_order->getGrandTotal()-$taxAmount;?></span>
+                <span><?php echo Mage::helper('checkout')->formatPrice($exclAmt) ?></span>&nbsp;&nbsp;&nbsp;<br>
+                <span class="incl">
+                    <?php echo Mage::helper('checkout')->formatPrice($_order->getGrandTotal()) ?>
+                    <?php echo $this->__('incl.');?>
+                </span>&nbsp;
+            </p>
+        </td>
+    </tr>
+</table><?php */?>

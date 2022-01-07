@@ -1,0 +1,173 @@
+<?php $_code = $this->getMethodCode(); ?>
+<?php $address = Mage::getSingleton('checkout/cart')->getQuote()->getShippingAddress(); ?>
+<?php //echo "<pre>"; print_r($address->getData()); exit;
+$totals = Mage::getSingleton('checkout/cart')->getQuote()->getTotals();
+$total = $totals["subtotal"]->getValue(); 
+$shippingAmount=$address->getShippingAmount()+$address->getShippingTaxAmount();
+$subtotal=$total+$shippingAmount;
+//$subtotal = Mage::getModel('checkout/cart')->getQuote()->getGrandTotal(); 
+
+	$feeCollection = Mage::getResourceModel('multifees/fee_collection')
+		->addFeeStoreFilter()
+		->addStatusFilter()
+		->addCheckoutPaymentTypeFilter()
+		->load();
+	  $price=0;
+          $sesFees=0;
+	foreach($feeCollection as $_fee) {
+		if($_fee->getCheckoutMethod()==$_code){
+			
+			$optionCollection = Mage::getResourceModel('multifees/option_collection')
+			->addFeeFilter($_fee->getId())
+			->load();
+
+			$options = $optionCollection->getItems();
+			if ($options) {
+				foreach ($options as $option) {
+					$optionId = $option->getId();
+					$price = 0; 
+					if (Mage::helper('multifees')->isTypeFixed($option->getPriceType())) {
+						$price = $option->getPrice();
+					} else { 
+						if ($subtotal > 0) {
+							//$price = ($subtotal / (100 + $option->getPrice())) * 100;
+                                                    $price = ($subtotal * $option->getPrice()) / 100;
+						}
+					} //echo $price;
+					$sesFees += $price;
+                                        $taxes=$address->getAppliedTaxes();
+                                        $priceInclTax = Mage::helper('multifees')->getMultifeesTax($taxes, $price);
+				}
+			}
+		}
+   
+		//$options = $this->_prepareFeeOptions($fees, $method);
+		//$price=$options->getFinalPrice();
+   
+}
+
+?>
+<ul class="form-list icepayadvformlist" id="payment_form_<?php echo $_code ?>" style="display:none" data-attr="da<?php echo $_code ?>">
+    <input type="hidden" name="payment[<?php echo $_code ?>_paymentmethod]" value="<?php echo $this->getPMCode() ?>">
+		<?php if($this->getTitle()): ?>
+			<li class="payment-title">
+				<label for="<?php echo $_code ?>_title"><?php echo $this->getTitle() ?></label>
+			</li>
+		<?php endif; ?>
+                        
+                <?php /*if($this->getPMCode()=='wire'):?>       
+                        <li>
+                            <label><?php echo Mage::helper('multistepcheckout')->__('approx. 3-4 days to be matched');?></label>
+                        </li>
+                <?php endif;*/?>
+		<?php if($this->getDescription()): ?>
+		<li class="payment-descr">
+			<label for="<?php echo $_code ?>_info"><?php echo $this->getDescription() ?></label>
+		</li>
+		<?php endif; ?>
+
+    <?php if($this->_issuer): ?>
+        <?php if(count($this->_issuer) > 1): ?>
+            <li>
+				<label for="<?php echo $_code ?>_icepay_issuer" class="required"><em>*</em><?php echo $this->__('Please select an issuer') ?></label>
+				<div class="input-box">
+					<select id="<?php echo $_code ?>_icepay_issuer" name="payment[<?php echo $_code ?>_issuer]" class="required-entry validate-alpha icepayissuerselect" data-attr="da<?php echo $_code ?>">
+						<option value="" selected><?php echo $this->__('--Please Select--')?></option>
+						<?php
+							foreach($this->_issuer as $issuer){
+								echo('<option value="'.$issuer['value'].'">'.$this->__($issuer['label']).'</option>');
+							};
+						?>
+					</select>
+					<?php
+						$itemsIceli = array();
+						$itemCur = '';
+						 foreach($this->_issuer as $issuer){
+							$itemsIceli[] = '<li id='.$issuer['value'].'>'. $this->__($issuer['label']) .'</li>';
+						 
+						 }
+						 if(!$itemCur){
+								if($this->getPMCode() == "creditcard"){
+							$itemCur = 'Select your card';
+							}
+							else if($this->getPMCode() == "ideal"){
+								
+							$itemCur = 'Select your bank';
+							}
+							else{
+								
+							$itemCur = 'Select an issuer';
+							}
+						 }
+					?>
+					<div class="icepayadv-dropdown-method icepayadv-dropdown_<?php echo $_code ?>">
+						<span class="current"><?php echo $this->__($itemCur) ?></span>
+						<div class="icepayadv-dropdown ">
+							<span></span>
+							<ul>
+								<?php echo implode('',$itemsIceli); ?>
+							</ul>
+						</div>
+					</div>
+				</div>
+            </li>
+        <?php else:  ?>
+            <input type="hidden" name="payment[<?php echo $_code ?>_issuer]" value="<?php echo $this->_issuer[0]['value'] ?>">
+        <?php endif; ?>
+    <?php endif; ?>
+	    
+</ul>
+<?php if($this->getPMCode()): ?>
+    <div class="payment-img-price">
+        <label for="<?php echo $_code ?>_image" class="icepayimage"><?php
+            Mage::helper("icecore")->imageDir = "frontend/gyzs/default/images/icepay/"; 
+            Mage::helper("icecore")->imageExtension = "png";
+            echo Mage::helper("icecore")->toIcon(Mage::helper("icecore")->cleanString($this->getPMCode()));
+                ?></label>
+            <div class="misctext">
+                <?php if($price==0):?>
+                    <span class="free"><?php echo $this->__('Free');?></span><?php //Hs-J keep either "free" text or the extra price?>
+                <?php else:?>
+                    <span class="extraprice"><?php echo "+".$this->helper('checkout')->formatPrice($price);?></span><span class="incl-text"><?php echo $this->__('incl.');?></span><?php //Hs-J ?>
+                <?php endif;?>    
+            </div>
+    </div>
+    <?php endif; ?>
+<script type="text/javascript">
+	 jQuery(window).on('load', function(){	
+	 
+			jQuery('.icepayadv-dropdown_<?php echo $_code ?>').click(function(){
+				if(!jQuery(this).children('.icepayadv-dropdown').is(':visible')){
+					jQuery(this).children('.icepayadv-dropdown').show();
+				}
+				else{
+					jQuery(this).children('.icepayadv-dropdown').hide();
+				}
+			});		
+			jQuery('.icepayadv-dropdown ul li').click(function(){
+				var currr = jQuery(this).html();
+				var curid = jQuery(this).attr('id');
+                                var myslect = jQuery(this).parents('.icepayadvformlist').attr('data-attr');
+                                jQuery('select.icepayissuerselect').each(function(){
+                                     
+                                   if(jQuery(this).attr('data-attr') == myslect) { 
+                                       var that = this;
+                                       jQuery(that).children().each(function(){
+                                           jQuery(this).removeAttr("selected");
+                                        if(jQuery(this).attr('value') == curid) {
+                                         jQuery(this).val(curid);                                    
+                                         jQuery(this).attr("selected","selected");
+                                    }    
+                                       });
+                                       
+                               }
+                                });
+                            
+				jQuery('.icepayadv-dropdown-method .current').html(currr);
+				//jQuery(this).parents('.icepayadv-dropdown').hide();
+				jQuery('.icepayadv-dropdown',this).slideUp();
+				jQuery(this).addClass('selected');
+				jQuery('.icepayadv-dropdown ul li').not(jQuery(this)).removeClass('selected');                                
+			});
+	}); 
+</script>

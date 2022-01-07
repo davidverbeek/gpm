@@ -1,0 +1,128 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+$config = Mage::getStoreConfig('garantiesservice', Mage::app()->getStore()->getId());
+$collection = Mage::getModel('garantiesservice/garantiesservice')->getCollection();
+?>
+
+<div id="flashcontent">
+    <div class="garantieslogo">
+        <span></span>
+    </div>
+    <h3><?php echo $this->__('onze garanties & service') ?></h3>
+    <ul>
+        <?php $i = 0; ?>
+<?php foreach ($collection as $item): ?>
+            <li class="inline openpop" id="openpop_<?php echo $i ?>"  >						
+                <div class="banner-image">
+    <?php echo $item['filethumbgrid'] ?>
+                </div>
+                <div class="details">
+                    <div class="banner-title">
+                        <a><h3><?php echo $item['title']; ?></h3></a>
+                    </div>				
+                    <div class="description">
+                        <p><?php echo $item['shortcontent'] ?></p>
+                    </div>
+                </div>			
+            </li>
+            <?php
+            $i++;
+        endforeach;
+        ?>
+    </ul>
+    <div class="anyqueries">
+        <span>
+        <?php echo $this->__('Any questions? Call us at') ?>
+        </span>
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('ph_no')->toHtml(); ?>
+    </div>
+</div>
+
+
+<?php
+$i = 0;
+foreach ($collection as $item):
+    ?>
+    <div style='display:none' id='inline_content<?php echo $i; ?>'>
+        <div  style='background:#fff;' class="garanties-inline-content">
+            <div class="overlay-container">
+                <div class="overlay-top">
+                    <h3><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('garantiestext')->toHtml(); ?></h3>
+                </div>
+                <div class="overlay-bottom">
+                    <div class="overlay-item">
+                        <div class="banner-image">
+    <?php echo $item['filethumbgrid'] ?>
+                        </div>
+                        <div class="details">
+                            <div class="banner-title openpop" id="openpop_<?php echo $i ?>">
+                                <h3><?php echo $item['title']; ?></h3>
+                            </div>				
+                            <div class="description">
+                                <p><?php echo $item['longcontent'] ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>			
+        </div>
+    </div>		
+
+
+    <?php $i++; ?>
+
+
+<?php endforeach; ?>
+<script>
+    jQuery(document).ready(function () {
+
+
+        jQuery('li.inline').click(function ($) {
+            var id = this.id.replace("openpop_", "");
+            jQuery('#inline_content' + id).show();
+            jQuery(this).colorbox({inline: true, width: "50%", open: true, href: '#inline_content' + id, close: "<?php echo $this->__('Close') ?>",
+                onClosed: function () {
+                    jQuery('#inline_content' + id).hide();
+                }
+            });
+
+            if (jQuery(window).width() <= 767) {
+                jQuery('.garanties-inline-content .overlay-top h3').html('<?php echo $this->__('Therefore GYZS') ?>');
+            } else {
+                jQuery('.garanties-inline-content .overlay-top h3').html('<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('garantiestext')->toHtml(); ?>');
+            }
+        });
+
+        jQuery('#cboxClose').click(function ($) {
+            var id = jQuery('cboxLoadedContent').children().id.replace("openpop_", "");
+            jQuery('#inline_content' + id).hide();
+        });
+    });
+
+</script>

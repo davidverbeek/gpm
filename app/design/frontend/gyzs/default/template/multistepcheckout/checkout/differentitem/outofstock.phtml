@@ -1,0 +1,183 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Shopping cart template
+ *
+ * @see Mage_Checkout_Block_Cart
+ */
+?>
+
+<?php
+$stockData=Mage::registry('cart_stock_data');
+?>
+<?php 
+$outofstock=false;
+foreach($stockData as $stock):
+    if(empty($stock->instock))
+        $outofstock= TRUE;
+endforeach;?>
+
+<?php if($outofstock):?>
+<div class="your-order-list outofstock">
+    <div class="heading">
+	<h3><?php echo $this->__('Back Order');  ?></h3>
+        <span>
+            <?php if(Mage::helper('multistepcheckout')->getDeliveryDay()) :?>
+                <?php echo Mage::helper('multistepcheckout')->getDeliveryDay();?>
+            <?php endif;?>
+            
+        </span>	
+	</div>
+    <div class="list-items">
+        <?php foreach($this->getItems() as $_item): ?>
+            <?php $stockInfo=$stockData[$_item->getSku()];?>
+            <?php if(empty($stockInfo->instock)):?>
+                <?php echo $this->getItemHtml($_item) ?>
+            <?php endif;?>
+        <?php endforeach ?>
+    </div>
+    <div class="outofstock-deliveryaddress">
+            <div class="shipping-row">
+                <span><?php echo $this->__('Delivery Address'); ?></span>
+                <ul class="form-list">
+                <?php if ($this->customerHasAddresses()): ?>
+                    <li class="wide">
+                        <div class="input-box">
+                            <?php //echo $this->getAddressesHtmlSelect('outofstock[shipping]') ?>
+                                <?php $customerId = Mage::getSingleton('customer/session')->getCustomer();?> 		
+                                    <?php $customer = Mage::getModel('customer/customer')->load($customerId->getId()); ?>	
+                                    <select name="outofstock[shipping]" id="outofstock-allshipping">
+                                                    <?php foreach($customer->getAddresses() as $address):?>
+                                                            <option value="<?php echo $address->getId() ?>"><?php echo $address->format('oneline') ?></option>
+                                                    <?php endforeach;?>
+                                    </select>
+							
+				<?php
+				$items_select = $items_li = array();
+                $item_cur = '';
+				$li_sel = '';
+				 foreach($customer->getAddresses() as $address){
+                                    if($address->getId()==$this->getAddressId()):
+                                            $item_cur = $this->__($address->format('oneline'));
+                                            $li_sel = 'class="selected"';
+                                            $option_sel = 'selected="selected"';
+                                    endif; 
+					$items_li[] = '<li '. $li_sel .' id='.$address->getId().'>'. $this->__($address->format('oneline')) .'</li>';
+				 
+				 }
+				 if(!$item_cur){
+					$item_cur = 'Select an address';
+				 }
+			?>
+                            <div class="allshpnaddress-dropdown-method3">
+                                <span class="current pls-select"><?php echo $this->__($item_cur) ?></span>
+                                <div class="address-select-dropdown3">
+                                        <span></span>
+                                        <ul>
+                                                <?php echo implode('',$items_li); ?>
+                                        </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                <?php else:?>
+                   <?php $address=$this->getQuote()->getShippingAddress(); ?>
+                    <li class="wide">
+                        <div class="input-box">
+                            <select name="all[shipping]" id="allshipping">
+                                <?php //foreach($useradresses as $address):?>
+                                        <option value="<?php echo $address->getId() ?>"><?php echo $address->format('oneline') ?></option>
+                                <?php //endforeach;?>
+                            </select>
+
+				<?php
+				$items_select = $items_li = array();
+				$item_cur = '';
+				 //foreach($useradresses as $address){
+                                    $li_sel = $option_sel = '';
+                                    //if($address->getId()==$this->getAddressId()):
+                                            $item_cur = $this->__($address->format('oneline'));
+                                            $li_sel = 'class="selected"';
+                                            $option_sel = 'selected="selected"';
+                                    //endif;
+                                    $items_li[] = '<li '. $li_sel .' id='.$address->getId().'>'. $this->__($address->format('oneline')) .'</li>';
+				 
+				 //}
+				 if(!$item_cur){
+					$item_cur = 'Select an address';
+				 }
+			?>
+                        <div class="allshpnaddress-dropdown-method">
+                                <span class="current pls-select"><?php echo $this->__($item_cur) ?></span>
+                                <div class="address-select-dropdown">
+                                        <span></span>
+                                        <ul>
+                                                <?php echo implode('',$items_li); ?>
+                                        </ul>
+                                </div>
+                        </div>
+                        </div>
+                    </li>    
+                <?php endif; ?>
+                </ul>
+				<span><?php echo $this->__('You will receive the shippment date in your mail') ?></span>
+            </div>
+            <?php $outofstockAddress=Mage::registry('outofstock_address'); ?>        
+            <?php /*<select name="outofstock[shipping-method]">
+                <?php //foreach($this->getActiveShippingMethods() as $_method):?>
+                <option value="<?php //echo $_method['value'];?>" <?php //if($outofstockAddress && $_method['value']==$outofstockAddress->getShippingMethod()):?> selected="selected"<?php //endif;?>><?php //echo $_method['label'];?></option>
+                <?php //endforeach;?>
+            </select><?php */?>
+        </div>
+</div>
+	<script type="text/javascript">
+		jQuery(window).on('load', function(){
+						jQuery('.allshpnaddress-dropdown-method3').click(function(){
+				if(!jQuery(this).children('.address-select-dropdown3').is(':visible')){
+					jQuery(this).children('.address-select-dropdown3').show();
+				}
+				else{
+					jQuery(this).children('.address-select-dropdown3').hide();
+				}
+			});
+			jQuery('.address-select-dropdown3 ul li').click(function(){
+				var currr = jQuery(this).html();
+				var curid =	jQuery(this).attr('id');
+				jQuery('.allshpnaddress-dropdown-method3 .current').html(currr);
+				jQuery('#outofstock-allshipping').val(curid);
+				jQuery('#outofstock-allshipping option').removeAttr("selected");
+				jQuery('#outofstock-allshipping option[value='+curid+']').attr("selected","selected");
+				//jQuery(this).parents('.address-select-dropdown3').hide();
+				jQuery('.address-select-dropdown3').slideUp();
+				jQuery(this).addClass('selected');
+				jQuery('.address-select-dropdown3 ul li').not(jQuery(this)).removeClass('selected');
+				console.log(currr);
+			});
+		});
+	 </script>
+<?php endif;?>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<layout>
+    <adminhtml_catalog_product_edit>
+        <reference name="head">
+            <action method="addJs"><script>metataggenerator/jquery-1.7.1.min.js</script></action>
+            <action method="addJs"><script>metataggenerator/metataggenerator.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="core/template" template="metataggenerator/metataggenerator.phtml"/>
+        </reference>
+    </adminhtml_catalog_product_edit>
+    <adminhtml_cms_page_edit>
+        <reference name="head">
+            <action method="addJs"><script>metataggenerator/jquery-1.7.1.min.js</script></action>
+            <action method="addJs"><script>metataggenerator/metataggenerator.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="core/template" template="metataggenerator/metataggenerator.phtml"/>
+        </reference>    
+    </adminhtml_cms_page_edit>
+    <metataggenerator_adminhtml_metataggenerator_index>
+        <reference name="head">
+            <action method="addJs"><script>metataggenerator/jquery-1.7.1.min.js</script></action>
+        </reference>  
+    </metataggenerator_adminhtml_metataggenerator_index>
+</layout>

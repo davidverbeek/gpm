@@ -1,0 +1,113 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_hscommon = Mage::helper('common'); ?>
+<div class="block block-account dash-menu">
+    <div class="block-title">
+        <strong><span><?php echo $this->__('ordering Information'); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <?php $url = Mage::getBaseUrl(); ?>
+        <ul>
+            <li><a href="<?php echo $url; ?>customer/account/"><?php echo $this->__('Overview'); ?></a></li>
+            <li><a href="<?php echo $url; ?>sales/order/history/"><?php echo $this->__('Order History'); ?></a><span class="li-left-count"> <?php echo $_hscommon->getOrderCount();; ?></span></li>
+            <li><a href="<?php echo $url; ?>salesquotes/quote/history/"><?php echo $this->__('Quotes'); ?></a>
+                <span class="li-left-count"> <?php echo $_hscommon->getQuoteCount();; ?></span></li>
+        </ul>
+    </div>
+
+    <div class="block-title menu-start">
+        <strong><span><?php echo $this->__('Mijn account'); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <ul>
+            <li><a href="<?php echo $url; ?>customer/account/edit"><?php echo $this->__('Account Information'); ?></a></li>
+            <li><a href="<?php echo $url; ?>customer/address/"><?php echo $this->__('Delivery addresses'); ?></a></li>
+            <li class="last gdprdeletlink"><a href="<?php echo $url; ?>customer/account/index/#gdprdeletion" ><?php echo $this->__('Delete your account'); ?></a></li>
+        </ul>
+    </div>
+
+    <div class="block-title menu-start">
+        <strong><span><?php echo $this->__('Mijn informatie'); ?></span></strong>
+    </div>
+    <div class="block-content">
+        <ul>
+            <li><a href="<?php echo $url; ?>review/customer/"><?php echo $this->__('My reviews'); ?></a><span class="li-left-count"><?php echo $_hscommon->getProductReviewCount(); ?></span></li>
+            <!-- <li><a href="<?php //echo $url; ?>zendesk/customer_tickets/index/"><?php //echo $this->__('My support tickets'); ?></a></li> -->
+            <li class="gdprexport"><a href="<?php echo $url; ?>customer/account/index/#gdprexport"><?php echo $this->__('Download your data'); ?></a></li>
+            <li class="last"><a href="<?php echo $url; ?>customer/account/logout/"><?php echo $this->__('Logout'); ?></a></li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //Get windows width for load
+    var wd = jQuery(window).width();
+    //counter for main div
+    var counter = 0;
+    //counter for col-left div
+    var countera = 1;
+    // Store menu in varible
+    var fltrrrr = jQuery(".dash-menu").html();
+
+    jQuery(window).on("load", function () {
+        wd = jQuery(window).width();
+        if (wd <= 768) {
+            if (counter === 0) {
+                //Move menu to col-main
+                jQuery(".breadcrumbs").hide();
+                jQuery(".dash-menu").insertBefore(".breadcrumbs");
+                jQuery("<h3 class='fltr-tgl'>" + Translator.translate("Show menu") + "<span></span></h3>").insertBefore(".dash-menu");
+                jQuery(".dash-menu").css("position", "inherit");
+                jQuery('.fltr-tgl').next().hide();
+                // Toggle for sidebar menu
+                jQuery('.fltr-tgl').click(function () {
+                    if (!jQuery(this).next().is(':visible')) {
+                        jQuery(this).next().slideDown();
+                    } else {
+                        jQuery(this).next().slideToggle();
+                    }
+                });
+                counter++;
+                countera = 0;
+            }
+        } else if (wd > 768) {
+            if (countera === 0) {
+                //Move menu to col-left
+                jQuery('.dash-menu').remove();
+                jQuery('.fltr-tgl').remove();
+
+                //jQuery( ".dash-menu" ).remove();
+                jQuery('<div class="block block-account dash-menu masonry-brick"> ' + fltrrrr + '</div>').insertBefore(".vnav");
+                countera++;
+                counter = 0;
+            }
+        }
+    });
+
+    Translator.add('Show menu', '<?php echo $this->__('Show menu') ?>');
+</script>
+

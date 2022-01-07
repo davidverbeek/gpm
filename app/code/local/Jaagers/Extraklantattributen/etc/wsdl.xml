@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:typens="urn:{{var wsdl.name}}" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+    name="{{var wsdl.name}}" targetNamespace="urn:{{var wsdl.name}}">
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" schemaLocation="http://schemas.xmlsoap.org/soap/encoding/" />
+            <complexType name="customerCustomerEntityToCreate">
+                <all>
+                    <element name="branchecode" type="xsd:string" minOccurs="0" />
+                    <element name="naamvertegenwoordiger" type="xsd:string" minOccurs="0" />
+                    <element name="naamverkoperbinnendienst" type="xsd:string" minOccurs="0" />
+                    <element name="telefoonvertegenwoordiger" type="xsd:string" minOccurs="0" />
+                    <element name="telefoonverkoperbinnendienst" type="xsd:string" minOccurs="0" />
+                    <element name="emailvertegenwoordiger" type="xsd:string" minOccurs="0" />
+                    <element name="emailverkoperbinnendienst" type="xsd:string" minOccurs="0" />
+                    <element name="naaminkooporganisatie" type="xsd:string" minOccurs="0" />
+                    <element name="betaaldinkooporganisatie" type="xsd:int" minOccurs="0" />
+                    <element name="factuuropnaam" type="xsd:int" minOccurs="0" />
+                    <element name="factuurtekst" type="xsd:string" minOccurs="0" />
+                    <element name="backordertoegestaan" type="xsd:int" minOccurs="0" />
+                    <element name="berekekenadministratiekosten" type="xsd:int" minOccurs="0" />
+                    <element name="bedragadministratiekosten" type="xsd:decimal" minOccurs="0" />
+                    <element name="grenswaardeadministratiekosten" type="xsd:decimal" minOccurs="0" />
+                    <element name="berekenenorderkosten" type="xsd:int" minOccurs="0" />
+                    <element name="betalingskortingbetalingscon" type="xsd:int" minOccurs="0" />
+                    <element name="codebetalingscon" type="xsd:string" minOccurs="0" />
+                    <element name="percentagebetalingscon" type="xsd:decimal" minOccurs="0" />
+                    <element name="betaaltermijnbetalingscon" type="xsd:string" minOccurs="0" />
+                    <element name="kredietbeperkingbetalingscon" type="xsd:int" minOccurs="0" />
+                    <element name="franco" type="xsd:decimal" minOccurs="0" />
+                    <element name="orderkosten" type="xsd:decimal" minOccurs="0" />
+                </all>
+            </complexType>
+            <complexType name="customerCustomerEntity">
+                <all>
+                    <element name="branchecode" type="xsd:string" minOccurs="0" />
+                    <element name="naamvertegenwoordiger" type="xsd:string" minOccurs="0" />
+                    <element name="naamverkoperbinnendienst" type="xsd:string" minOccurs="0" />
+                    <element name="telefoonvertegenwoordiger" type="xsd:string" minOccurs="0" />
+                    <element name="telefoonverkoperbinnendienst" type="xsd:string" minOccurs="0" />
+                    <element name="emailvertegenwoordiger" type="xsd:string" minOccurs="0" />
+                    <element name="emailverkoperbinnendienst" type="xsd:string" minOccurs="0" />
+                    <element name="naaminkooporganisatie" type="xsd:string" minOccurs="0" />
+                    <element name="betaaldinkooporganisatie" type="xsd:int" minOccurs="0" />
+                    <element name="factuuropnaam" type="xsd:int" minOccurs="0" />
+                    <element name="factuurtekst" type="xsd:string" minOccurs="0" />
+                    <element name="backordertoegestaan" type="xsd:int" minOccurs="0" />
+                    <element name="berekekenadministratiekosten" type="xsd:int" minOccurs="0" />
+                    <element name="bedragadministratiekosten" type="xsd:decimal" minOccurs="0" />
+                    <element name="grenswaardeadministratiekosten" type="xsd:decimal" minOccurs="0" />
+                    <element name="berekenenorderkosten" type="xsd:int" minOccurs="0" />
+                    <element name="betalingskortingbetalingscon" type="xsd:int" minOccurs="0" />
+                    <element name="codebetalingscon" type="xsd:string" minOccurs="0" />
+                    <element name="percentagebetalingscon" type="xsd:decimal" minOccurs="0" />
+                    <element name="betaaltermijnbetalingscon" type="xsd:string" minOccurs="0" />
+                    <element name="kredietbeperkingbetalingscon" type="xsd:int" minOccurs="0" />
+                    <element name="franco" type="xsd:decimal" minOccurs="0" />
+                    <element name="orderkosten" type="xsd:decimal" minOccurs="0" />
+                </all>
+            </complexType>
+        </schema>
+    </types>
+</definitions>
+

@@ -1,0 +1,26 @@
+    <div class="product-reviews-container" id="product-reviews">
+        <div class="row clearfix">
+            <div class="block-title">
+                <h2><?php echo $this->__('What customers say') ?>
+                    <span class="reviewcount"></span>
+                </h2>
+            </div>
+            <div class="block-content">
+                <div class="productreviews">
+                    <?php echo $this->getChildHtml('product_additional_data_review') ?>
+                    <?php echo $this->getChildHtml('product_review') ?>
+                </div>
+                <div class="productreview-misc">
+                    <div id="reviewform">
+                        <div class="text">
+                            <span><?php echo $this->__('Write your own review') ?></span>
+                        </div>
+                        <div class="review_form">
+                            <?php echo $this->getChildHtml('product_additional_data_review') ?>
+                            <?php echo $this->getChildHtml('review_form') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

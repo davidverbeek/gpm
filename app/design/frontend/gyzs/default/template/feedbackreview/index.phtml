@@ -1,0 +1,81 @@
+<?php
+	$reviewsXml = Mage::helper('techtwo_feedbackreview')->getReviewsXml();
+	$reviews = Mage::helper('techtwo_feedbackreview')->getReviews();
+?>
+<div id="feedbackreview-list">
+    <h3><?php printf($this->__('%u Customer reviews via The Feedback Company'), $reviewsXml->noReviews); ?></h3>
+    <div class="dash-review-customer">
+        <?php $i=0; foreach ($reviews as $reviewDetail) : ?>
+            <div class="review-panel <?php echo $i; ?>">
+                <div class="review-row">
+                    <div class="review-ratings">
+                        <span class="ratings">
+                            <span class="rating-box">
+                                <span class="rating" style="width:<?php echo ($reviewDetail['score']/$reviewDetail['scoremax'])*100; ?>%"></span>
+                            </span>
+                        </span>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+
+                <div class="review-row second">
+                    <div class="review-left">
+                        <span class="date"><?php echo $this->__('Posted on %s',Mage::helper('core')->formatDate($reviewDetail['reviewDatum']), 'medium') ?></span>
+                    </div>
+                    <div class="review-right">
+                        <span class="name"><span> <?php echo $this->__('by rating '); ?> </span><?php echo $this->escapeHtml($reviewDetail['user']); ?></span>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+
+                <div class="review-row">
+                    <div class="review-rating-left">
+                        <table class="info-table">
+                            <tbody>
+                                <tr>
+                                    <th><?php echo $this->__('Gender:') ?></th>
+                                    <td><?php echo $this->escapeHtml($reviewDetail['geslacht']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?php echo $this->__('Age:') ?></th>
+                                    <td><?php echo $this->escapeHtml($reviewDetail['leeftijd']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?php echo $this->__('Purchase frequency:') ?></th>
+                                    <td><?php echo $this->escapeHtml($reviewDetail['kooptvakeronline']); ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?php echo $this->__('Do you recommend to us:') ?></th>
+                                    <td><?php
+                                        $rec = $this->escapeHtml($reviewDetail['beveeltAan']);
+                                        if ($rec == "ja") :
+                                            echo "<span>$rec</span>";
+                                        else :
+                                            echo $rec;
+                                        endif;
+                                        ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="cus-review-info">                        
+                            <?php if ($reviewDetail['sterkepunten']) : ?>
+                                <h3><?php echo $this->__('Strengths'); ?></h3>
+                                <h5><?php echo $this->escapeHtml($reviewDetail['sterkepunten']); ?></h5>
+                            <?php endif; ?>
+                                
+                            <?php //if ($reviewDetail['verbeterpunten']) : ?>
+                                    <?php //<h3><?php echo $this->__('Improvements or tips');?><?php //</h3> ?>
+                                   <?php // <h5> ?><?php //echo $this->escapeHtml($reviewDetail['verbeterpunten']); ?>
+                            <?php //endif; ?>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+
+            </div>
+        <?php $i++; ?>
+        <?php endforeach; ?>
+        <div style="clear:both"></div>
+    </div>
+
+</div>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <gyzs_order translate="title" module="gyzs">
+                <title>Techtwo Gyzs Api</title>
+                <model>gyzs/order_api</model>
+                <methods>
+                    <updateMavisOrderId translate="title" module="gyzs">
+                        <title>updateMavisOrderId</title>
+                    </updateMavisOrderId>
+                </methods>
+            </gyzs_order>
+        </resources>
+        <!--<resources_alias>
+            <order>gyzs_order</order>
+        </resources_alias>-->
+        <v2>
+            <resources_function_prefix>
+                <gyzs_order>gyzsOrder</gyzs_order>
+            </resources_function_prefix>
+        </v2>
+    </api>
+</config>

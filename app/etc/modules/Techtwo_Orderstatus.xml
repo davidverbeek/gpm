@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Techtwo_Orderstatus>
+      <active>true</active>
+      <codePool>local</codePool>
+    </Techtwo_Orderstatus>
+  </modules>
+</config> 

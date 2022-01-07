@@ -1,0 +1,9 @@
+<?php if($this->getLoadingType()){ ?>
+
+<?php if(!Mage::getBlockSingleton('page/html_header')->getIsHomePage()) { ?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('css/' . $this->getGyzsRacCss(), array('_secure'=>true)); ?>">
+<?php } ?>
+
+<?php } else { ?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSliRacCss(); ?>">
+<?php } ?>

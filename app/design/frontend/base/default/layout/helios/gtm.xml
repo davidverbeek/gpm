@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Helios Team
+ * @copyright Copyright (c) 2017 Helios
+ * @package Helios_Gtm
+ */
+-->
+<layout version="0.1.0">
+	<default translate="label" module="page">
+		<reference name="head">
+			<block ifconfig="config/settings/enabled" type="gtm/tagmanager" name="gtm_code" template="helios/gtm/code.phtml" />
+		</reference>
+	</default>
+</layout>

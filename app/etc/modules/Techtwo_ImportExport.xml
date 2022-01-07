@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Techtwo_ImportExport>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Techtwo_ImportExport>
+	</modules>
+</config>

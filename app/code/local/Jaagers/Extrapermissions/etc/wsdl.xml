@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:typens="urn:{{var wsdl.name}}" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+    name="{{var wsdl.name}}" targetNamespace="urn:{{var wsdl.name}}">
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" schemaLocation="http://schemas.xmlsoap.org/soap/encoding/" />
+            <complexType name="customerCustomerEntityToCreate">
+                <all>
+                    <element name="mag_offertes_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_orders_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_afleveringen_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_facturen_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_nettoprijzen_zien" type="xsd:int" minOccurs="0" />
+                    <element name="alleen_eigengegevens_tonen" type="xsd:int" minOccurs="0" />
+                </all>
+            </complexType>
+            <complexType name="customerCustomerEntity">
+                <all>
+                    <element name="mag_offertes_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_orders_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_afleveringen_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_facturen_zien" type="xsd:int" minOccurs="0" />
+                    <element name="mag_nettoprijzen_zien" type="xsd:int" minOccurs="0" />
+                    <element name="alleen_eigengegevens_tonen" type="xsd:int" minOccurs="0" />
+                </all>
+            </complexType>
+        </schema>
+    </types>
+</definitions>

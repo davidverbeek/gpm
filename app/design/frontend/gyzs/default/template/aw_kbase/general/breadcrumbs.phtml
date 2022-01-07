@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+if(!$this->_items) return;
+
+?>
+<div class="breadcrumbs" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+    <?php $i = 0; $c = count($this->_items); ?>
+	<?php foreach($this->_items as $_crumbName=>$_crumbInfo): $i++; ?>
+		<?php if($_crumbInfo['url']): ?>
+			<a <?php if ($i==$c-1): ?>class="beforelast"<?php endif ?> href="<?php echo $_crumbInfo['url'] ?>" title="<?php echo $this->htmlEscape($_crumbInfo['title']) ?>" itemprop="url"><span itemprop="title"><?php echo $this->htmlEscape($_crumbInfo['name']) ?></span></a>
+		<?php else: ?>
+			<span class="last" itemprop="title"><?php echo $this->htmlEscape($_crumbInfo['name']) ?></span>
+		<?php endif; ?>
+	<?php endforeach; ?>
+</div>

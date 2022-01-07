@@ -1,0 +1,8 @@
+SELECT
+    `entity_id`,
+    `value`
+FROM
+    `[[@table]]`
+WHERE
+    `attribute_id`=? AND
+    `value`!=''

@@ -1,0 +1,752 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+-->
+<layout version="0.1.0">
+
+
+	<checkout_cart_index translate="label">
+		<label>Shopping Cart</label>
+		<reference name="checkout.cart">
+			<action method="setCartTemplate">
+				<value>multistepcheckout/cart.phtml</value>
+			</action>
+			<action method="setEmptyTemplate">
+				<value>checkout/cart/noItems.phtml</value>
+			</action>
+			<action method="chooseTemplate"/>
+			<action method="addItemRender">
+				<type>simple</type>
+				<block>checkout/cart_item_renderer</block>
+				<template>multistepcheckout/cart/item/default.phtml</template>
+			</action>
+			<action method="addItemRender">
+				<type>grouped</type>
+				<block>checkout/cart_item_renderer_grouped</block>
+				<template>multistepcheckout/cart/item/default.phtml</template>
+			</action>
+			<action method="addItemRender">
+				<type>configurable</type>
+				<block>checkout/cart_item_renderer_configurable</block>
+				<template>multistepcheckout/cart/item/default.phtml</template>
+			</action>
+			<block type="checkout/cart" name="cart.totals" template="multistepcheckout/cart/total.phtml"/>
+			<block type="core/template" name="sli_cpbought" template="sli/cart/sli_cp_boughttogether.phtml"/>
+		</reference>
+		<reference name="content">
+			<!--block type="multistepcheckout/checkout_state" name="checkout.step" before="-" template="multistepcheckout/steps.phtml" /-->
+			<!-- <action method="unsetChild">
+				<name>menu-for-mobile</name>
+			</action> -->
+			<!-- <action method="unsetChild">
+				<name>left-verticalnav</name>
+			</action> -->
+		</reference>
+		<reference name="head">
+			<action method="addItem" ifconfig="shoppersettings/ajax/cart">
+				<type>skin_js</type>
+				<name>js/ajaxcart/ajaxcart.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/ddslick.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/ddscript.js</script>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+		</reference>
+		<reference name="before_body_end">
+			 <block type="core/template" name="sli-script" as="sli-script" template="sli/wrapper.phtml" after="-" />
+		</reference>
+	</checkout_cart_index>
+
+	<multistepcheckout_index_login>
+		<remove name="left.verticalnav"/>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/checkout.phtml</template>
+			</action>
+		</reference>
+		<reference name="head">
+			<reference name="header_cart">
+				<block type="cms/block" name="checkout_header_desktop">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-desktop</block_id>
+					</action>
+				</block>
+				<block type="cms/block" name="checkout_header_ipad">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-ipad</block_id>
+					</action>
+				</block>
+				<block type="core/template" name="service" as="service" template="page/html/service.phtml"/>
+			</reference>
+			<action method="addCss" ifconfig="postcodenl_api/config/enabled">
+				<script>postcodenl/api/css/lookup.css</script>
+			</action>
+			<action method="addJs" ifconfig="postcodenl_api/config/enabled">
+				<script>postcodenl/api/lookup.js</script>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/remodal.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/remodal-default-theme.css</stylesheet>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/remodal.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/ddslick.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/ddscript.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/jquery.nice-select.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/multistepcheckout/nice-select.css</name>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="postcodenl_api/jsinit" name="postcodenl.jsinit" template="postcodenl/api/jsinit.phtml"/>
+			<block type="multistepcheckout/checkout_state" name="checkout.step"
+					 template="multistepcheckout/steps.phtml"/>
+			<block type="core/template" name="account.info" template="multistepcheckout/checkout/account.phtml">
+				<block type="multistepcheckout/checkout_login" name="checkout.login"
+						 template="multistepcheckout/checkout/login.phtml"/>
+				<block type="multistepcheckout/checkout_billing" name="checkout.billing"
+						 template="multistepcheckout/checkout/billing.phtml"/>
+				<block type="checkout/cart_sidebar" name="cart_top_mscheckout" as="checkout_cart_sidebar"
+						 template="multistepcheckout/checkout/sidebar/checkout-cart-sidebar.phtml">
+					<action method="addItemRender">
+						<type>simple</type>
+						<block>checkout/cart_item_renderer</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>grouped</type>
+						<block>checkout/cart_item_renderer_grouped</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>configurable</type>
+						<block>checkout/cart_item_renderer_configurable</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label"
+							 module="checkout">
+						<label>Shopping Cart Sidebar Extra Actions</label>
+					</block>
+				</block>
+
+				<!-- <block type="checkout/cart_shipping" name="checkout.cart.shipping" as="shipping" template="checkout/cart/shipping.phtml"/> -->
+				<block type="checkout/cart_totals" name="checkout.cart.totals" as="totals"
+						 template="checkout/cart/totals.phtml"/>
+
+			</block>
+			<!-- <action method="unsetChild">
+				<name>menu-for-mobile</name>
+			</action> -->
+			<!-- <action method="unsetChild">
+				<name>left-verticalnav</name>
+			</action> -->
+		</reference>
+	</multistepcheckout_index_login>
+
+	<multistepcheckout_index_register>
+		<remove name="left.verticalnav"/>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/checkout.phtml</template>
+			</action>
+		</reference>
+		<reference name="head">
+			<reference name="header_cart">
+				<block type="cms/block" name="checkout_header_desktop">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-desktop</block_id>
+					</action>
+				</block>
+				<block type="cms/block" name="checkout_header_ipad">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-ipad</block_id>
+					</action>
+				</block>
+				<block type="core/template" name="service" as="service" template="page/html/service.phtml"/>
+			</reference>
+			<action method="addCss" ifconfig="postcodenl_api/config/enabled">
+				<script>postcodenl/api/css/lookup.css</script>
+			</action>
+			<action method="addJs" ifconfig="postcodenl_api/config/enabled">
+				<script>postcodenl/api/lookup.js</script>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/remodal.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/remodal-default-theme.css</stylesheet>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/remodal.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/ddslick.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/ddscript.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/jquery.nice-select.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/multistepcheckout/nice-select.css</name>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="postcodenl_api/jsinit" name="postcodenl.jsinit" template="postcodenl/api/jsinit.phtml"/>
+			<block type="multistepcheckout/checkout_state" name="checkout.step"
+					 template="multistepcheckout/steps.phtml"/>
+			<block type="core/template" name="account.info" template="multistepcheckout/checkout/register.phtml">
+				<block type="multistepcheckout/checkout_billing" name="checkout.billing"
+						 template="multistepcheckout/checkout/billing.phtml"/>
+				<block type="checkout/cart_sidebar" name="cart_top_mscheckout" as="checkout_cart_sidebar"
+						 template="multistepcheckout/checkout/sidebar/checkout-cart-sidebar.phtml">
+					<action method="addItemRender">
+						<type>simple</type>
+						<block>checkout/cart_item_renderer</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>grouped</type>
+						<block>checkout/cart_item_renderer_grouped</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>configurable</type>
+						<block>checkout/cart_item_renderer_configurable</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label"
+							 module="checkout">
+						<label>Shopping Cart Sidebar Extra Actions</label>
+					</block>
+				</block>
+				<block type="core/text_list" name="checkout.cart.top_methods" as="top_methods" translate="label">
+					<label>Payment Methods Before Checkout Button</label>
+					<block type="checkout/onepage_link" name="checkout.cart.methods.onepage"
+							 template="checkout/onepage/link.phtml"/>
+				</block>
+
+				<block type="page/html_wrapper" name="checkout.cart.form.before" as="form_before" translate="label">
+					<label>Shopping Cart Form Before</label>
+				</block>
+
+				<!-- <block type="checkout/cart_shipping" name="checkout.cart.shipping" as="shipping_cart" template="checkout/cart/shipping.phtml"/> -->
+				<block type="checkout/cart_totals" name="checkout.cart.totals" as="totals"
+						 template="checkout/cart/totals.phtml"/>
+			</block>
+
+		</reference>
+	</multistepcheckout_index_register>
+	<multistepcheckout_index_guest>
+		<remove name="left.verticalnav"/>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/checkout.phtml</template>
+			</action>
+		</reference>
+		<reference name="head">
+			<reference name="header_cart">
+				<block type="cms/block" name="checkout_header_desktop">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-desktop</block_id>
+					</action>
+				</block>
+				<block type="cms/block" name="checkout_header_ipad">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-ipad</block_id>
+					</action>
+				</block>
+				<block type="core/template" name="service" as="service" template="page/html/service.phtml"/>
+			</reference>
+			<action method="addCss" ifconfig="postcodenl_api/config/enabled">
+				<script>postcodenl/api/css/lookup.css</script>
+			</action>
+			<action method="addJs" ifconfig="postcodenl_api/config/enabled">
+				<script>postcodenl/api/lookup.js</script>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/remodal.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/remodal-default-theme.css</stylesheet>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/remodal.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/jquery.nice-select.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/multistepcheckout/nice-select.css</name>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="postcodenl_api/jsinit" name="postcodenl.jsinit" template="postcodenl/api/jsinit.phtml"/>
+			<block type="multistepcheckout/checkout_state" name="checkout.step"
+					 template="multistepcheckout/steps.phtml"/>
+			<block type="core/template" name="account.info" template="multistepcheckout/checkout/register.phtml">
+				<block type="multistepcheckout/checkout_billing" name="checkout.billing"
+						 template="multistepcheckout/checkout/billing.phtml"/>
+			</block>
+		</reference>
+	</multistepcheckout_index_guest>
+
+	<multistepcheckout_index_product>
+		<remove name="left.verticalnav"/>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/checkout.phtml</template>
+			</action>
+		</reference>
+		<!--SJD++ 02052018, START block included for Transsmart pickup location-->
+		<!-- <reference name="before_body_end">
+			<block type="transsmart_shipping/location_selector"
+				   template="transsmart/shipping/location/selector.phtml"
+				   name="transsmart_shipping.location.selector" />
+		</reference> -->
+		<!--SJD++ 02052018, END block included for Transsmart pickup location-->
+		<reference name="content">
+			<block type="multistepcheckout/checkout_state" name="checkout.step"
+					 template="multistepcheckout/steps.phtml"/>
+			<block type="multistepcheckout/checkout_item" name="item.info"
+					 template="multistepcheckout/checkout/item.phtml">
+				<block type="multistepcheckout/checkout_everyitem" name="everyitem"
+					   template="multistepcheckout/checkout/everyitem.phtml">
+
+					<!--SJD++ 02052018, START block included for Transsmart shipping methods-->
+					<block type="checkout/onepage_shipping_method_available" name="checkout.onepage.shipping_method.available" as="available" template="checkout/onepage/shipping_method/available.phtml"/>
+					<!--SJD++ 02052018, END block included for Transsmart shipping methods-->
+
+					<action method="addItemRender">
+						<type>simple</type>
+						<block>checkout/cart_item_renderer</block>
+						<template>multistepcheckout/checkout/item/default.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>grouped</type>
+						<block>checkout/cart_item_renderer_grouped</block>
+						<template>multistepcheckout/checkout/item/default.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>configurable</type>
+						<block>checkout/cart_item_renderer_configurable</block>
+						<template>multistepcheckout/checkout/item/default.phtml</template>
+					</action>
+				</block>
+				<block type="core/template" name="differentitem"
+						 template="multistepcheckout/checkout/differentitem.phtml">
+					<block type="multistepcheckout/checkout_differentitem_instock" name="instock"
+							 template="multistepcheckout/checkout/differentitem/instock.phtml">
+						<action method="addItemRender">
+							<type>simple</type>
+							<block>checkout/cart_item_renderer</block>
+							<template>multistepcheckout/checkout/differentitem/instock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>grouped</type>
+							<block>checkout/cart_item_renderer_grouped</block>
+							<template>multistepcheckout/checkout/differentitem/instock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>configurable</type>
+							<block>checkout/cart_item_renderer_configurable</block>
+							<template>multistepcheckout/checkout/differentitem/instock/item/default.phtml</template>
+						</action>
+					</block>
+					<block type="multistepcheckout/checkout_differentitem_outofstock" name="outofstock"
+							 template="multistepcheckout/checkout/differentitem/outofstock.phtml">
+						<action method="addItemRender">
+							<type>simple</type>
+							<block>checkout/cart_item_renderer</block>
+							<template>multistepcheckout/checkout/differentitem/outofstock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>grouped</type>
+							<block>checkout/cart_item_renderer_grouped</block>
+							<template>multistepcheckout/checkout/differentitem/outofstock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>configurable</type>
+							<block>checkout/cart_item_renderer_configurable</block>
+							<template>multistepcheckout/checkout/differentitem/outofstock/item/default.phtml</template>
+						</action>
+					</block>
+				</block>
+				<block type="multistepcheckout/checkout_differentitem" name="storeitem"
+						 template="multistepcheckout/checkout/differentitem.phtml">
+					<block type="multistepcheckout/checkout_differentitem" name="instock"
+							 template="multistepcheckout/checkout/differentitem/instock.phtml">
+						<action method="addItemRender">
+							<type>simple</type>
+							<block>checkout/cart_item_renderer</block>
+							<template>multistepcheckout/checkout/differentitem/instock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>grouped</type>
+							<block>checkout/cart_item_renderer_grouped</block>
+							<template>multistepcheckout/checkout/differentitem/instock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>configurable</type>
+							<block>checkout/cart_item_renderer_configurable</block>
+							<template>multistepcheckout/checkout/differentitem/instock/item/default.phtml</template>
+						</action>
+					</block>
+					<block type="multistepcheckout/checkout_differentitem" name="outofstock"
+							 template="multistepcheckout/checkout/differentitem/outofstock.phtml">
+						<action method="addItemRender">
+							<type>simple</type>
+							<block>checkout/cart_item_renderer</block>
+							<template>multistepcheckout/checkout/differentitem/outofstock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>grouped</type>
+							<block>checkout/cart_item_renderer_grouped</block>
+							<template>multistepcheckout/checkout/differentitem/outofstock/item/default.phtml</template>
+						</action>
+						<action method="addItemRender">
+							<type>configurable</type>
+							<block>checkout/cart_item_renderer_configurable</block>
+							<template>multistepcheckout/checkout/differentitem/outofstock/item/default.phtml</template>
+						</action>
+					</block>
+				</block>
+				<!-- <block type="core/template" name="storeitem2" template="multistepcheckout/checkout/storeitem.phtml"/> -->
+				<block type="checkout/cart_sidebar" name="cart_top_mscheckout" as="checkout_cart_sidebar"
+						 template="multistepcheckout/checkout/sidebar/checkout-cart-sidebar.phtml">
+					<action method="addItemRender">
+						<type>simple</type>
+						<block>checkout/cart_item_renderer</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>grouped</type>
+						<block>checkout/cart_item_renderer_grouped</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>configurable</type>
+						<block>checkout/cart_item_renderer_configurable</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label"
+							 module="checkout">
+						<label>Shopping Cart Sidebar Extra Actions</label>
+					</block>
+				</block>
+				<!-- <block type="checkout/cart_shipping" name="checkout.cart.shipping" as="shipping" template="checkout/cart/shipping.phtml"/> -->
+				<block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
+			</block>
+			<!-- <action method="unsetChild">
+				<name>menu-for-mobile</name>
+			</action> -->
+			<!-- <action method="unsetChild">
+				<name>left-verticalnav</name>
+			</action> -->
+		</reference>
+		<reference name="head">
+			<reference name="header_cart">
+				<block type="cms/block" name="checkout_header_desktop">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-desktop</block_id>
+					</action>
+				</block>
+				<block type="cms/block" name="checkout_header_ipad">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-ipad</block_id>
+					</action>
+				</block>
+				<block type="core/template" name="service" as="service" template="page/html/service.phtml"/>
+			</reference>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/jquery.nice-select.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/multistepcheckout/nice-select.css</name>
+			</action>
+			<!--SJD++ 02052018, START js/css included for Transsmart pickup location-->
+			<!-- <action method="addLinkRel"><rel>stylesheet</rel><href>//fonts.googleapis.com/css?family=Dosis:500,600</href></action>
+			<action method="addJs">
+				<script>transsmart/shipping/base64.js</script>
+			</action>
+			<action method="addJs">
+				<script>transsmart/shipping/logger.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/transsmart/shipping/pickup_selector.js</name>
+			</action>
+			<action method="addCss">
+				<style>transsmart/shipping/pickup_selector.css</style>
+			</action> -->
+			<!--SJD++ 02052018, END js/css included for Transsmart pickup location-->
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/qls/pickup.css</name>
+			</action>
+		</reference>
+	</multistepcheckout_index_product>
+
+	<multistepcheckout_index_payment>
+		<remove name="left.verticalnav"/>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/checkout.phtml</template>
+			</action>
+		</reference>
+		<reference name="head">
+			<reference name="header_cart">
+				<block type="cms/block" name="checkout_header_desktop">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-desktop</block_id>
+					</action>
+				</block>
+				<block type="cms/block" name="checkout_header_ipad">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-ipad</block_id>
+					</action>
+				</block>
+				<block type="core/template" name="service" as="service" template="page/html/service.phtml"/>
+			</reference>
+			<action method="addJs">
+				<script>varien/payment.js</script>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/jquery.nice-select.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/multistepcheckout/nice-select.css</name>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="multistepcheckout/checkout_state" name="checkout.step"
+					 template="multistepcheckout/steps.phtml"/>
+			<block type="checkout/multishipping_billing" name="payment.info"
+					 template="multistepcheckout/checkout/payment.phtml">
+				<block type="checkout/cart_coupon" name="checkout.cart.coupon" as="coupon"
+						 template="multistepcheckout/checkout/coupon.phtml"/>
+				<block type="checkout/agreements" name="checkout.multishipping.agreements" as="agreements"
+						 template="checkout/multishipping/agreements.phtml"/>
+
+				<block type="checkout/cart_sidebar" name="cart_top_mscheckout" as="checkout_cart_sidebar"
+						 template="multistepcheckout/checkout/sidebar/checkout-cart-sidebar.phtml">
+					<action method="addItemRender">
+						<type>simple</type>
+						<block>checkout/cart_item_renderer</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>grouped</type>
+						<block>checkout/cart_item_renderer_grouped</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>configurable</type>
+						<block>checkout/cart_item_renderer_configurable</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label"
+							 module="checkout">
+						<label>Shopping Cart Sidebar Extra Actions</label>
+					</block>
+				</block>
+				<!-- <block type="checkout/cart_shipping" name="checkout.cart.shipping" as="shipping" template="checkout/cart/shipping.phtml"/> -->
+				<block type="checkout/cart_totals" name="checkout.cart.totals" as="totals"
+						 template="checkout/cart/totals.phtml"/>
+			</block>
+		</reference>
+	</multistepcheckout_index_payment>
+
+
+	<multistepcheckout_index_overview translate="label">
+		<remove name="left.verticalnav"/>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/checkout.phtml</template>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="multistepcheckout/checkout_state" name="checkout.step"
+					 template="multistepcheckout/steps.phtml"/>
+			<block type="checkout/multishipping_overview" name="checkout_overview"
+					 template="multistepcheckout/checkout/overview.phtml">
+				<block type="multistepcheckout/checkout_item"/>
+				<!-- <block type="checkout/multishipping_payment_info" name="payment_info">
+					<action method="setInfoTemplate">
+						<method></method>
+						<template></template>
+					</action>
+				</block> -->
+				<block type="checkout/cart_sidebar" name="cart_top_mscheckout" as="checkout_cart_sidebar"
+						 template="multistepcheckout/checkout/sidebar/checkout-cart-sidebar.phtml">
+					<action method="addItemRender">
+						<type>simple</type>
+						<block>checkout/cart_item_renderer</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>grouped</type>
+						<block>checkout/cart_item_renderer_grouped</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<action method="addItemRender">
+						<type>configurable</type>
+						<block>checkout/cart_item_renderer_configurable</block>
+						<template>multistepcheckout/checkout/sidebar/cart-items.phtml</template>
+					</action>
+					<block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label"
+							 module="checkout">
+						<label>Shopping Cart Sidebar Extra Actions</label>
+					</block>
+				</block>
+
+				<!-- <block type="checkout/cart_shipping" name="checkout.cart.shipping" as="shipping" template="checkout/cart/shipping.phtml"/> -->
+				<block type="checkout/cart_totals" name="checkout.cart.totals" as="totals"
+						 template="checkout/cart/totals.phtml"/>
+			</block>
+		</reference>
+		<reference name="head">
+			<reference name="header_cart">
+				<block type="cms/block" name="checkout_header_desktop">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-desktop</block_id>
+					</action>
+				</block>
+				<block type="cms/block" name="checkout_header_ipad">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-ipad</block_id>
+					</action>
+				</block>
+				<block type="core/template" name="service" as="service" template="page/html/service.phtml"/>
+			</reference>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+		</reference>
+	</multistepcheckout_index_overview>
+
+
+	<multistepcheckout_index_success translate="label">
+		<label>Multishipping Checkout Success</label>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/checkout.phtml</template>
+			</action>
+		</reference>
+		<reference name="head">
+			<reference name="header_cart">
+				<block type="cms/block" name="checkout_header_desktop">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-desktop</block_id>
+					</action>
+				</block>
+				<block type="cms/block" name="checkout_header_ipad">
+					<action method="setBlockId">
+						<block_id>checkout-header-payment-ipad</block_id>
+					</action>
+				</block>
+			</reference>
+			<block type="core/template" name="og_meta">
+				<action method="setTemplate" ifconfig="socialshare/general/enabled">
+					<template>socialshare/head.phtml</template>
+				</action>
+			</block>
+			<action method="addItem" ifconfig="shoppersettings/ajax/cart">
+				<type>skin_js</type>
+				<name>js/ajaxcart/ajaxcart.js</name>
+			</action>
+			<action method="addCss">
+				<stylesheet>css/multifees.css</stylesheet>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="multistepcheckout/checkout_state" name="checkout.step" template="multistepcheckout/steps.phtml"
+					 before="-"/>
+			<block type="checkout/onepage_success" name="checkout_success" template="multistepcheckout/checkout/success.phtml">
+				<!--<block type="multistepcheckout/checkout_item" />--> <!-- Due to this block cart is not getting empty for the guest customer-->
+				<block type="newsletter/subscribe" name="checkout.newsletter" template="multistepcheckout/newsletter/subscribe.phtml"/>
+				<!--block type="ewalsobought/catalog_product_list_checkoutbought" name="checkout.bought" template="extendware/ewalsobought/checkout/bought.phtml"/-->
+				<!-- <block type="socialbookmarking/bookmarks" name="bookmarks" template="bookmarks/bookmarks.phtml"/> -->
+				<!-- <block type="customerbought/list" name="checkout.bought"
+						 template="multistepcheckout/checkout/success/bought.phtml"/> -->
+				<block type="core/template" name="sli_sptopseller" template="sli/success/sli_sp_topsellers.phtml"/>
+			</block>
+		</reference>
+		<reference name="before_body_end">
+			 <block type="core/template" name="sli-script" as="sli-script" template="sli/wrapper.phtml" after="-" />
+		</reference>
+	</multistepcheckout_index_success>
+</layout>

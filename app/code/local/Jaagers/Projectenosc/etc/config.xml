@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Jaagers_Projectenosc>
+      <version>0.1.0</version>
+    </Jaagers_Projectenosc>
+  </modules>
+  <global>
+    <helpers>
+      <projectenosc>
+        <class>Jaagers_Projectenosc_Helper</class>
+      </projectenosc>
+    </helpers>
+	<blocks>
+	  <projectenosc>
+		<class>Jaagers_Projectenosc_Block</class>
+	  </projectenosc>
+			<onestepcheckout>
+				<rewrite>
+					<checkout>Jaagers_Projectenosc_Block_OneStepCheckout_Checkout</checkout>
+				</rewrite>
+			</onestepcheckout>
+	</blocks>
+	<events>
+	  <sales_order_place_before> <!-- identifier of the event we want to catch -->
+        <observers>
+          <sales_order_place_before_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>projectenosc/observer</class> <!-- observers class alias -->
+            <method>salesOrderPlaceBefore</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </sales_order_place_before_handler>
+        </observers>
+      </sales_order_place_before>
+    </events>
+	<models>
+	  <projectenosc>
+		<class>Jaagers_Projectenosc_Model</class>
+		<resourceModel>projectenosc_mysql4</resourceModel>
+	  </projectenosc>
+	</models>
+	<resources>
+	  <salesattribute1392922480_setup>
+		<setup>
+		  <module>Jaagers_Projectenosc</module>
+		  <class>Mage_Sales_Model_Mysql4_Setup</class>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </salesattribute1392922480_setup>
+	  <salesattribute1392922480_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </salesattribute1392922480_write>
+	  <salesattribute1392922480_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </salesattribute1392922480_read>
+	  <customerattribute1392922480_setup>
+		<setup>
+		  <module>Jaagers_Projectenosc</module>
+		  <class>Mage_Customer_Model_Entity_Setup</class>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </customerattribute1392922480_setup>
+	  <customerattribute1392922480_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </customerattribute1392922480_write>
+	  <customerattribute1392922480_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </customerattribute1392922480_read>
+	</resources>
+  </global>
+</config> 

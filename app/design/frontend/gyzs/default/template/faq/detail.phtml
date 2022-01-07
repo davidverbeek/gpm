@@ -1,0 +1,22 @@
+<?php $faq = $this->getFaq(); ?>
+<?php if ($faq):?>
+<div class="page-title"><h1><?php echo $faq->getQuestion()?></h1></div>
+<div class="faq-detail-answer">
+	<?php echo $faq->getAnswer();?>
+</div>		
+<?php endif ?>
+<div class="other-questions">
+	<h1><?php echo $this->__('Other questions in the same category');?></h1>
+	<?php $questions = $this->getOtherQuestions();?>
+	<?php if (count($questions)):?>
+		<ul>
+		<?php foreach ($questions as $_question):?>
+			<?php if ($_question->getId() != $faq->getId()):?>
+			<li>
+				<a href="<?php echo $this->getFaqUrl($_question)?>" title="<?php echo $_question->getQuestion()?>"><?php echo $_question->getQuestion()?></a>
+			</li>
+			<?php endif;?>
+		<?php endforeach;?>
+		</ul>
+	<?php endif;?>
+</div>

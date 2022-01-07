@@ -1,0 +1,56 @@
+<style>
+    .ajax-loader {
+    background: rgba(0, 0, 0, 0) url("<?php echo $this->getSkinUrl();?>/images/trans-img.png") repeat scroll 0 0;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.ajax-loader img {
+    left: 50%;
+    margin-left: 13px;
+    margin-top: -40px;
+    position: absolute;
+    top: 50%;
+}
+    </style>
+
+<?php /* @var $this Techtwo_SalesQuotes_Block_Quote_Summary */ ?>
+<div class="widetable2 clearfix">
+<div class="tabel-head">
+    <?php echo $this->__('Products') ?>
+</div>
+<fieldset class="group-select fieldset salesquote-summary">
+    <table cellspacing="0" class="data-table cart-table theme-cart-table" id="quote-rev-table">
+    <?php if ($this->helper('tax')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
+    <!-- <thead>
+        <tr>
+            <th colspan="5"><?php //echo $this->__('Products') ?></th>
+        </tr>
+    </thead> -->
+    <tbody>
+    <?php foreach($this->getItems() as $_item): ?>
+        <?php /* @var $_item Mage_Sales_Model_Quote_Item */ ?>
+        <?php echo $this->getItemHtml($_item)?>
+    <?php endforeach ?>
+    </tbody>
+</table>
+<div style="clear:both;"></div>
+    <div class="row clearfix squotes">
+        <div class="grid_4">
+            <?php echo $this->getChildHtml('totals');?>
+            <div style="clear:both;"></div>
+        </div><!-- /.grid_4 -->
+        <div style="clear:both;"></div>
+    </div><!-- /.row .clearfix -->
+<script type="text/javascript">
+//<![CDATA[
+    decorateTable('quote-rev-table');
+    truncateOptions();
+//]]>
+</script>
+</fieldset>
+</div>

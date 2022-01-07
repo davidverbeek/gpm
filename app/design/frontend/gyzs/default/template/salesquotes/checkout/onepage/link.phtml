@@ -1,0 +1,25 @@
+<div class="block light salesquote-block">
+    <div class="block-title">
+        <h3>Offerte aanvragen</h3>
+    </div>
+    <div class="block-content">
+        <p>U kunt hier direct een offerte aanvragen van uw totale winkelwagen<br />
+            Om een offerte aan te vragen moet u aan onderstaande zaken voldoen.</p>
+        <br />
+        <div class="big">
+            <ul>
+                <li>U moet een account aanmaken</li>
+                <li>Uw winkelwagen boven de € 500,-</li>
+                <li>U moet aangemeld zijn op de nieuwsbrief</li>
+            </ul>
+        </div>
+        <br />
+        <div class="actions">
+            <?php if ($this->isPossibleOnepageCheckout() && Mage::helper('techtwo_salesquotes')->isAllowedCheckout()):?>
+                <a class="button uiColorDark uiSizeLarge" href="<?php echo Mage::helper('techtwo_salesquotes')->getQuoteUrl(); ?>"><span><?php echo Mage::helper('checkout')->__('Direct een offerte aanvragen');?></span></a>
+            <?php endif; ?>
+        </div>
+    </div>
+    
+</div>
+

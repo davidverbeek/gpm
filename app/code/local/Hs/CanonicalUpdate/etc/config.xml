@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Hs_CanonicalUpdate>
+      <version>0.1.0</version>
+    </Hs_CanonicalUpdate>
+  </modules>
+  <global>
+      <blocks>
+      <canonicalupdate>
+      <class>Hs_CanonicalUpdate_Block</class>
+      </canonicalupdate>
+        <catalog>
+          <rewrite>
+            <category_view>Hs_CanonicalUpdate_Block_Catalog_Category_View</category_view>
+          </rewrite>
+        </catalog>
+        <catalog>
+          <rewrite>
+            <product_view>Hs_CanonicalUpdate_Block_Catalog_Product_View</product_view>
+          </rewrite>
+        </catalog>
+    </blocks>
+  </global>
+</config>

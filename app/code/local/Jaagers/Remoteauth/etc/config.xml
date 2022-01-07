@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Jaagers_Remoteauth>
+      <version>0.1.0</version>
+    </Jaagers_Remoteauth>
+  </modules>
+  <global>
+    <helpers>
+      <remoteauth>
+        <class>Jaagers_Remoteauth_Helper</class>
+      </remoteauth>
+    </helpers>
+	<models>
+	  <remoteauth>
+		<class>Jaagers_Remoteauth_Model</class>
+		<resourceModel>remoteauth_mysql4</resourceModel>
+	  </remoteauth>
+	</models>
+  </global>
+</config> 

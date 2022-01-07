@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<faq module="faq">
+			<title>Simple FAQs</title>
+			<sort_order>71</sort_order>
+			<children>
+				<manage_category module="faq">
+					<title>Manage FAQ Categories</title>
+					<sort_order>1</sort_order>
+					<action>faq/adminhtml_category</action>
+				</manage_category>
+				<manage_question module="faq">
+					<title>Manage FAQs</title>
+					<sort_order>2</sort_order>
+					<action>faq/adminhtml_faq</action>
+				</manage_question>
+				<manage_suggestion module="faq">
+					<title>Manage Suggestions</title>
+					<sort_order>4</sort_order>
+					<action>faq/adminhtml_suggest</action>
+				</manage_suggestion>
+			</children>
+		</faq>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<faq module="faq" translate="title">
+										<title>FAQ</title>
+										<sort_order>786</sort_order>									
+									</faq>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<!--<magebuzz module="faq">
+						<title>Magebuzz</title>
+						<sort_order>89</sort_order>
+						<children>-->
+							<faq module="faq">
+								<title>FAQ</title>
+								<sort_order>101</sort_order>
+								<children>
+									<manage_category module="faq">
+										<title>Manage FAQ Categories</title>
+										<sort_order>1</sort_order>
+										<!--<action>faq/adminhtml_category</action>-->
+									</manage_category>
+									<manage_question module="faq">
+										<title>Manage Questions</title>
+										<sort_order>2</sort_order>
+										<!--<action>faq/adminhtml_faq</action>-->
+									</manage_question>
+									<manage_suggestion module="faq">
+										<title>Manage Suggestion</title>
+										<sort_order>3</sort_order>
+										<!--<action>faq/adminhtml_system_config_edit_section_faq</action>-->
+									</manage_suggestion>
+								</children>
+							</faq>
+						<!--</children>
+					</magebuzz>-->
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

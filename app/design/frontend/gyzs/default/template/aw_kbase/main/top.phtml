@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+?>
+<div class="kbase-block kbase-main-top kbase-category-block block first">
+    <div class="block-title">
+        <h2 class="read-all"><?php printf(Mage::getStoreConfig('kbase/top/title')) ?></h2>
+    </div>
+    <ul class="kbase-list level-0">
+    <?php foreach($this->getArticles() as $article): ?>
+        <li>
+            <a href="<?php echo AW_Kbase_Helper_Url::getUrl(AW_Kbase_Helper_Url::URL_TYPE_ARTICLE, $article) ?>"><i class="fa fa-angle-right right-arrow"></i><?php echo htmlspecialchars($article->getArticleTitle()) ?></a>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+</div>

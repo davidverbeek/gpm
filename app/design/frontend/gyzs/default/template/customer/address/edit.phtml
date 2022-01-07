@@ -1,0 +1,291 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Edit customer address template
+ *
+ * @see Mage_Customer_Block_Address_Edit
+ */ 
+?>
+<?php 
+$_hscommon = Mage::helper('common');
+$_core = Mage::helper('core');
+
+$_countries = $_hscommon->getCountries();
+$defaultCountry = ($this->getAddress()->getCountry())?$this->getAddress()->getCountry():$_core->getDefaultCountry();
+?>
+<?php if($this->getTitle()): ?>
+	<div class="page-title">
+		<h1><?php echo $this->getTitle() ?></h1>
+	</div>
+<?php endif; ?>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="form-validate" class="cusnewaddr">
+	<div class="fieldset">
+		<?php echo $this->getBlockHtml('formkey')?>
+		<ul class="form-list">
+			<li class="fields">
+				<div class="field">
+					<label for="country_id" class="required"><?php echo $this->__('Country') ?></label>
+					<div class="input-box country">
+						<?php if (count($_countries) > 0): ?>
+							<select name="country_id" id="country" class="accnt-country-select">
+								<option value="">-- Please Select --</option>
+								<?php foreach ($_countries as $_country): ?>
+									<option value="<?php echo $_country['value'] ?>" <?php  if ($_country['value'] == $defaultCountry):?> selected="selected" <?php endif;?>>
+										<?php echo $_country['label'] ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						<?php endif; ?>    
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="field">
+					<label for="company_type" class="required"><?php echo $this->__('Order Type') ?></label>
+					<div class="input-box radio-selection company-type">
+						<input type="radio" name="company_type" id="company_type_personal" value="personal"  onclick="displayField(this.value);"<?php if ($this->getAddress()->getCompanyType() == 'personal'): ?>checked="checked"<?php endif; ?> />
+						<label for="company_type_personal"><?php echo $this->__('Personal'); ?></label>
+						<input type="radio" name="company_type" id="company_type_business" value="business" onclick="displayField(this.value);" <?php if ($this->getAddress()->getCompanyType() == 'business'): ?>checked="checked"<?php endif; ?>  />
+						<label for="company_type_business"><?php echo $this->__('Business'); ?></label>
+					</div>
+				</div>
+			</li>
+			<li class="fields" id="business-company"  style="display:none;">
+				<div class="field">
+					<label for="company"><?php echo $this->__('Company') ?></label>
+					<div class="input-box">
+						<input type="text" name="company" id="company" title="<?php echo $this->__('Company') ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('company') ?>" placeholder="<?php echo $this->__('Company') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Company') ?>';" />
+					</div>
+				</div>
+			</li>
+			<?php if ($this->helper('customer/address')->isVatAttributeVisible()) : ?>
+				<li class="wide"  id="business-vat" style="display:none;">
+					<div class="field">
+						<label for="vat_id"><?php echo $this->__('VAT Number') ?></label>
+						<div class="input-box">
+							<input type="text" name="vat_id" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()) ?>" title="<?php echo $this->__('VAT Number') ?>" id="vat_id" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('vat_id') ?>" placeholder="<?php echo $this->__('VAT Number') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('VAT Number') ?>';" />
+						</div>
+					</div>
+				</li>
+			<?php endif; ?>
+			<li class="fields" id="business-ref" style="display:none;">
+				<div class="field">
+					<label for="referentie"><?php echo $this->__('Reference') ?></label>
+					<div class="input-box">
+						<input type="text" id="referentie" name="referentie" value="<?php echo $this->escapeHtml($this->getAddress()->getReferentie()) ?>" title="<?php echo $this->__('Referentie Number') ?>" class="input-text referencenumber " placeholder="<?php echo $this->__('Reference') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Reference') ?>';" />
+					</div>
+				</div>
+			</li>
+			<li class="fields">
+				<?php echo $this->getNameBlockHtml() ?>
+			</li>
+			<li class="fields nonnetherland">
+				<div class="field">
+					<label for="zip" class="required"><em>*</em><?php echo $this->__('Postal Code') ?></label>
+					<div class="input-box">
+						<input type="text" name="postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" title="<?php echo $this->__('Postal Code') ?>" id="zip" class="input-text validate-zip-international <?php echo $this->helper('customer/address')->getAttributeValidationClass('postcode') ?>" />
+					</div>
+				</div>
+				<div class="field other-housenumber input-postcode">
+					<label for="housenumber" class="required"><?php echo $this->__('Housenumber') ?></label>
+					<div class="input-box codepost">
+						<input type="text" title="<?php echo $this->__('Housenumber') ?>" name="housenumber" id="housenumber" value="<?php if($defaultCountry != 'NL') { echo $this->getAddress()->getStreet(2);}?>" class="input-text singles postcode validate-zip-international " placeholder="<?php echo $this->__('12') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('12') ?>';"  />
+					</div>
+				</div>
+			</li>
+			<?php $_streetValidationClass = $this->helper('customer/address')->getAttributeValidationClass('street'); ?>
+
+			<li class="wide">
+				<label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
+				<div class="input-box">
+					<input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text <?php echo $_streetValidationClass ?>" placeholder="<?php echo $this->__('Street Address') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Street Address') ?>';"    />
+				</div>
+			</li>
+			<?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+
+			<?php for ($_i = 2, $_n = $this->helper('customer/address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+				<li class="wide" style="display:none;">
+					<div class="input-box">
+						<input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" title="<?php echo $this->__('Street Address %s', $_i) ?>" id="street_<?php echo $_i ?>" class="input-text <?php echo $_streetValidationClass ?>" placeholder="<?php echo $this->__('Street Address') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Street Address') ?>';"    />
+					</div>
+				</li>
+			<?php endfor; ?>
+			<li class="fields">
+				<div class="field">
+					<label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+					<div class="input-box">
+						<input type="text" name="city" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>"  title="<?php echo $this->__('City') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('city') ?>" id="city" placeholder="<?php echo $this->__('City') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('City') ?>';"    //>
+					</div>
+				</div>				
+			</li>
+			<li class="fields">
+				<div class="field">
+					<label for="telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+					<div class="input-box">
+						<?php $telephone = explode("-", $this->escapeHtml($this->getAddress()->getTelephone()));?>
+						<input type="text" name="telephonecode" value="<?php echo $telephone[0] ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text  <?php echo $this->helper('customer/address')->getAttributeValidationClass('telephone') ?>" id="telephonecode" style="width:60px;" />
+						<?php /*?><input type="text" name="telephone" value="<?php echo $this->escapeHtml($telephone[1]) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text validate-phoneStrictCustom <?php echo $this->helper('customer/address')->getAttributeValidationClass('telephone') ?>" id="telephone" placeholder="<?php echo $this->__('0224 - 212 026') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('0224 - 212 026') ?>';"   /><?php */ ?>
+						<input type="text" name="telephone" value="<?php echo $this->escapeHtml($telephone[1]) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text" id="telephone" placeholder="<?php echo $this->__('0224 - 212 026') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('0224 - 212 026') ?>';"   />
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="fieldset">
+		<ul class="form-list">
+			<li <?php if($this->canSetAsDefaultBilling()) echo ' class="control"' ?>>
+				<?php if($this->isDefaultBilling()): ?>
+					<strong><?php echo $this->__('Default Billing Address') ?></strong>
+				<?php elseif($this->canSetAsDefaultBilling()): ?>
+					<input type="checkbox" id="primary_billing" name="default_billing" value="1" title="<?php echo $this->__('Use as My Default Billing Address') ?>" class="checkbox" /><label for="primary_billing"><?php echo $this->__('Use as my default billing address') ?></label>
+				<?php else: ?>
+					<input type="hidden" name="default_billing" value="1" />
+				<?php endif; ?>
+			</li>
+			<li <?php if($this->canSetAsDefaultShipping()) echo ' class="control"' ?>>
+				<?php if($this->isDefaultShipping()): ?>
+					<strong><?php echo $this->__('Default Shipping Address') ?></strong>
+				<?php elseif($this->canSetAsDefaultShipping()): ?>
+					<input type="checkbox" id="primary_shipping" name="default_shipping" value="1" title="<?php echo $this->__('Use as My Default Shipping Address') ?>" class="checkbox" /><label for="primary_shipping"><?php echo $this->__('Use as my default shipping address') ?></label>
+				<?php else: ?>
+					<input type="hidden" name="default_shipping" value="1" />
+				<?php endif; ?>
+			</li>
+		</ul>
+	</div>
+	<div class="buttons-set">
+		<div class="failed-validations" id="failed-error-msg" style="display:none;">
+			<p class="required"><?php echo $this->__('Required Fields') ?></p>
+		</div>
+		<p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
+		<button type="submit" title="<?php echo $this->__('Save Address') ?>" class="button theme-btn"><?php echo $this->__('Save Address') ?></button>
+	</div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+
+	Validation.add('validate-phoneStrictCustom', 'Please enter a valid phone number. For example 0224 - 212 026.', function(v) {
+			return Validation.get('IsEmpty').test(v) || /^[0-9 \.\-\/]+$/.test(v);
+		});
+
+	var dataForm = new VarienForm('form-validate', true);
+	
+	dataForm.submit = function (button, url) {
+		if (this.validator.validate()) {
+			var form = this.form;
+			var oldUrl = form.action;
+
+			if (url) {
+				form.action = url;
+			}
+			var e = null;
+			try {
+				this.form.submit();
+			} catch (e) {
+			}
+			this.form.action = oldUrl;
+			if (e) {
+				throw e;
+			}
+
+			if (button && button != 'undefined') {
+				button.disabled = true;
+			}
+		}
+		else {
+			if (jQuery('#form-validate input').hasClass('validation-failed'))
+			{
+				jQuery('#failed-error-msg').show();
+			}
+		}
+	}.bind(dataForm);
+
+ var callingCodeConfig= JSON.parse(<?php echo $this->getCallingCode();?>);
+
+  for(calling in callingCodeConfig){
+		if(callingCodeConfig[calling]['alpha2Code']==$('country').value){
+			codeVal =callingCodeConfig[calling]['callingCodes']['0'];
+			$('telephonecode').value="+"+codeVal;
+		}
+	}
+	function changeCallingCode(val){
+		var codeVal;		
+		for(calling in callingCodeConfig){
+			if(callingCodeConfig[calling]['alpha2Code']==val){
+				codeVal =callingCodeConfig[calling]['callingCodes']['0'];
+				$('telephonecode').value="+"+codeVal;
+			}
+		}
+	}
+
+	jQuery(document).ready(function () {
+		jQuery(".accnt-country-select").niceSelect();
+	});
+
+	jQuery(window).on('load', function () {
+		if($("company_type_business").checked == true) {
+			displayField('business');
+		} else {
+			displayField('personal');
+		}
+
+		jQuery( "#housenumber" ).change(function() {
+			var countryId = jQuery("#country").val();
+			if(countryId != 'NL') {
+				var currentValue = this.value;
+				jQuery("#street_2").val(currentValue);
+			}
+		});
+
+		jQuery('.country-dropdown-method').click(function () {
+			if (!jQuery(this).children('.country-select-dropdown').is(':visible')) {
+				jQuery(this).children('.country-select-dropdown').show();
+			}
+			else {
+				jQuery(this).children('.country-select-dropdown').hide();
+			}
+		});
+	});
+
+	function displayField(val) {
+		if (val == 'business') {
+			document.getElementById('business-vat').style.display = 'block';
+			document.getElementById('business-company').style.display = 'block';
+			document.getElementById('business-ref').style.display = 'block';
+		}
+		else {
+			document.getElementById('business-vat').style.display = 'none';
+			document.getElementById('business-company').style.display = 'none';
+			document.getElementById('business-ref').style.display = 'none';
+		}
+	}
+//]]>
+</script>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Hs_Performance>
+            <version>0.0.1</version>					
+        </Hs_Performance>
+    </modules> 
+    <frontend>
+        <routers>
+            <hsperformance>
+                <use>standard</use>
+                <args>
+                    <module>Hs_Performance</module>
+                    <frontName>hsperformance</frontName>
+                </args>
+            </hsperformance>
+        </routers>
+    </frontend>
+</config>

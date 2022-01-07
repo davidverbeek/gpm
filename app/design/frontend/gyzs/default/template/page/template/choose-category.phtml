@@ -1,0 +1,37 @@
+<?php
+/* this template file currently not used in any xml - Parth - 12092018 */
+$cateHelper = Mage::helper('featured');
+$catlistHtml = $cateHelper->getMainCategories();
+$topcategories = $cateHelper->getTopCategoriess();
+$homePageId = Mage::getStoreConfig('web/default/cms_home_page');
+$routeName = Mage::app()->getRequest()->getRouteName();
+$identifier = Mage::getSingleton('cms/page')->getIdentifier();
+$class = 'choose-category';
+if ($routeName == 'cms' && $identifier == $homePageId) {
+    $class = '';
+}
+
+
+?>
+
+<div class="<?php echo $class; ?>">
+    <div id="verticalmenu">
+        <ul>
+            <li>
+                <p class="mst"><?php echo $this->__('Most viewed') ?><span></span></p>
+                <div id="most">
+                    <?php echo $topcategories; ?>
+                </div>
+            </li>
+            <li>
+            <li class="scrolltest">
+                <p class="main"><?php echo $this->__('All Categories...') ?><span></span></p>
+                <div id="accordian" class="scrolltest">
+                    <?php
+                    echo $catlistHtml;
+                    ?>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

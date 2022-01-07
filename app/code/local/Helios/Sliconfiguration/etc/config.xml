@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Helios_Sliconfiguration>
+			<version>1.0.0</version>
+		</Helios_Sliconfiguration>
+	</modules>
+	<global>
+		<blocks>
+			<sliconfiguration>
+				<class>Helios_Sliconfiguration_Block</class>
+			</sliconfiguration>
+		</blocks>
+		<helpers>
+			<sliconfiguration>
+				<class>Helios_Sliconfiguration_Helper</class>
+			</sliconfiguration>
+		</helpers>
+		<models>
+			<sliconfiguration>
+				<class>Helios_Sliconfiguration_Model</class>
+			</sliconfiguration>
+			<hssli>
+				<class>Helios_Sliconfiguration_Model</class>
+				<resourceModel>sliconfiguration_mysql4</resourceModel>
+			</hssli>
+		</models>
+	</global>
+	<frontend>
+		<layout>
+			<updates>
+				<sliconfiguration module="Helios_Sli">
+					<file>helios/sliconfiguration.xml</file>
+				</sliconfiguration>
+			</updates>
+		</layout>
+	</frontend>
+	<crontab>
+		<jobs>
+			<sliconfiguration_updatesliscript>
+				<schedule>
+					<cron_expr>0 6 * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>sliconfiguration/cron::updateSLIScripts</model>
+				</run>
+			</sliconfiguration_updatesliscript>
+		</jobs>
+	 </crontab>
+</config> 

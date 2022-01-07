@@ -1,0 +1,24 @@
+<div class="header-bottom header-top">
+    <div class="row clearfix">
+        <div class="grid_2 main-navigation">
+            <div class="verticalnav">
+                <span class="menu-view-btn"><a><?php echo $this->__('view menu') ?></a></span>
+                <button class="toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>               
+            </div>
+            <?php echo $this->getChildHtml('left.verticalnav'); ?>
+        </div>
+        <div class="grid_2 main-navigation-closed">
+            <button class="nav-close"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="grid_5 navigation">
+            <?php echo $this->getChildHtml('topShopperMenu'); ?>
+        </div>
+        <div class="gird_5 top-search">
+            <?php echo $this->getChildHtml('mini_search_box'); ?>
+        </div>        
+    </div>
+</div>

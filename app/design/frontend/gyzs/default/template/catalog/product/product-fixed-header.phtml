@@ -1,0 +1,40 @@
+<?php
+if (Mage::registry('current_product')) {
+	$_product = Mage::registry('current_product');
+?>
+
+	<div class="product-fixed-header">
+		<div class="row clearfix">
+			<div class="grid_9">
+				<ul id="scrollspy">
+					<li class="active">
+						<a href="#prodmain" title="<?php echo $this->__('Product') ?>"><?php echo $this->__('Product') ?></a>
+					</li>
+
+					<!-- Commented Condition due to, now block render from sli side.  -->
+					<?php /* if ($_product->getRelatedProductIds() && !$_product->isGrouped()) : */ ?>
+					<?php /* endif; */ ?>
+
+					<?php if (!$_product->isGrouped()): ?>
+						<li><a href="#productinformatie" title="<?php echo $this->__('Product Information') ?>"><?php echo $this->__('Product Information') ?></a></li>
+						<li><a href="#product-reviews" title="<?php echo $this->__('Reviews') ?>"><?php echo $this->__('Reviews') ?></a></li>				
+					<?php endif; ?>
+					<li><a href="#relatedproducts" title="<?php echo $this->__('combinations & bulkdeals') ?>"><?php echo $this->__('combinations & bulkdeals') ?></a></li>
+					
+					<li><a href="#prodpage_similar" title="<?php echo $this->__('Special Selection') ?>"><?php echo $this->__('Special Selection') ?></a></li>				
+
+				</ul>
+			</div>
+
+			<div class="grid_3">
+				<?php if (!$_product->isGrouped()): ?>
+					<div class="add-to-box">
+						<div class="add-to-cart">
+							<button type="button" title="<?php echo $this->__('Add') ?>" class="button btn-cart button-cart-<?php echo $_product->getSku(); ?> validation-passed" onclick="productAddToCartForm.submit('#product_addtocart_form')"><?php echo $this->__('Add') ?></button>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>		
+		</div>
+	</div>
+<?php } ?>

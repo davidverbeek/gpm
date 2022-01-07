@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+<modules>
+   <Jaagers_Hotlist>
+      <active>true</active>
+      <codePool>local</codePool>
+      <version>0.2.0</version>
+      <depends>
+			<Mage_Api />
+	  	</depends>
+   </Jaagers_Hotlist>
+</modules>
+</config>

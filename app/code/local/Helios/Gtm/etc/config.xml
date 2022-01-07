@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Helios_Gtm>
+			<version>0.1.0</version>
+		</Helios_Gtm>
+	</modules>
+	<global>
+		<blocks>
+			<gtm>
+				<class>Helios_Gtm_Block</class>
+			</gtm>
+		</blocks>
+		<helpers>
+			<gtm>
+				<class>Helios_Gtm_Helper</class>
+			</gtm>
+		</helpers>
+	</global>
+	<frontend>
+		<layout>
+			<updates>
+				<gtm module="Helios_Gtm">
+					<file>helios/gtm.xml</file>
+				</gtm>
+			</updates>
+		</layout>
+	</frontend>
+</config> 

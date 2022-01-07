@@ -1,0 +1,17 @@
+
+<div class="stickynav">
+<div class="clearfix">
+<span>the id of current category is <p id="currentcatid"></p></span>
+<script type="text/javascript">
+jQuery('#accordian h3').live({
+	mouseenter: function(){
+		jQuery('#currentcatid').html("ID " +jQuery(this).attr('data-id'));
+	},
+	mouseleave: function(){
+		jQuery('#currentcatid').html(" s");
+	}
+})
+
+</script>
+ </div>
+</div>

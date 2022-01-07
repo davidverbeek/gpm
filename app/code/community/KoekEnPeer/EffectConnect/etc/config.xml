@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 Koek&Peer (http://www.koekenpeer.nl/)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+-->
+<config>
+	<modules>
+		<KoekEnPeer_EffectConnect>
+			<version>3.1.1</version>
+		</KoekEnPeer_EffectConnect>
+	</modules>
+	<frontend>
+		<routers>
+			<effectconnect>
+				<use>standard</use>
+				<args>
+					<module>KoekEnPeer_EffectConnect</module>
+					<frontName>effectconnect</frontName>
+				</args>
+			</effectconnect>
+		</routers>
+        <secure_url>
+            <koekenpeer>/effectconnect</koekenpeer>
+        </secure_url>
+	</frontend>
+	<admin>
+		<routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <koekenpeer_effectconnect after="Mage_Adminhtml">KoekEnPeer_EffectConnect_Adminhtml</koekenpeer_effectconnect>
+                    </modules>
+                </args>
+            </adminhtml>
+		</routers>
+		<layout>
+			<updates>
+				<effectconnect>
+					<file>effectconnect.xml</file>
+				</effectconnect>
+			</updates>
+		</layout>
+	</admin>
+	<adminhtml>
+		<events>
+			<catalog_product_save_before>
+				<observers>
+					<effectconnect_priceupdate>
+						<class>KoekEnPeer_EffectConnect_Model_Observer</class>
+						<method>priceUpdate</method>
+					</effectconnect_priceupdate>
+				</observers>
+			</catalog_product_save_before>
+            <sales_order_save_commit_after>
+                <observers>
+                    <effectconnect_orderupdate>
+                        <class>KoekEnPeer_EffectConnect_Model_Observer</class>
+                        <method>orderUpdate</method>
+                    </effectconnect_orderupdate>
+                </observers>
+            </sales_order_save_commit_after>
+		</events>
+		<menu>
+            <system>
+                <children>
+                    <effectconnect module="effectconnect">
+                        <title>EffectConnect</title>
+                        <sort_order>1</sort_order>
+                        <children>
+                            <mapping>
+                                <title>Channel mapping</title>
+                                <sort_order>10</sort_order>
+                                <action>adminhtml/effectconnectmapping/index</action>
+                            </mapping>
+                            <settings>
+                                <title>Settings</title>
+                                <sort_order>20</sort_order>
+                                <action>adminhtml/system_config/edit/section/effectconnect_options</action>
+                            </settings>
+                        </children>
+                    </effectconnect>
+                </children>
+            </system>
+		</menu>
+	</adminhtml>
+
+	<global>
+		<blocks>
+			<effectconnect>
+				<class>KoekEnPeer_EffectConnect_Block</class>
+			</effectconnect>
+		</blocks>
+		<helpers>
+			<effectconnect>
+				<class>KoekEnPeer_EffectConnect_Helper</class>
+			</effectconnect>
+		</helpers>
+		<models>
+			<effectconnect>
+				<class>KoekEnPeer_EffectConnect_Model</class>
+				<resourceModel>effectconnect_mysql4</resourceModel>
+			</effectconnect>
+			<effectconnect_mysql4>
+				<class>KoekEnPeer_EffectConnect_Model_Mysql4</class>
+				<entities>
+					<mapping>
+						<table>effectconnect_mapping</table>
+					</mapping>
+				</entities>
+			</effectconnect_mysql4>
+		</models>
+		<resources>
+			<effectconnect_setup>
+				<setup>
+					<module>KoekEnPeer_EffectConnect</module>
+					<class>Mage_Sales_Model_Resource_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</effectconnect_setup>
+			<effectconnect_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</effectconnect_write>
+			<effectconnect_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</effectconnect_read>
+		</resources>
+		<fieldsets>
+			<sales_convert_quote>
+				<effectconnect><to_order>*</to_order></effectconnect>
+			</sales_convert_quote>
+			<sales_convert_order>
+				<effectconnect><to_quote>*</to_quote></effectconnect>
+			</sales_convert_order>
+		</fieldsets>
+		<events>
+			<cataloginventory_stock_item_save_commit_after>
+				<observers>
+					<effectconnect_stockupdate>
+						<class>KoekEnPeer_EffectConnect_Model_Observer</class>
+						<method>catalogInventorySave</method>
+					</effectconnect_stockupdate>
+				</observers>
+			</cataloginventory_stock_item_save_commit_after>
+			<sales_model_service_quote_submit_before>
+				<observers>
+                    <effectconnect_ordercreate>
+                        <class>KoekEnPeer_EffectConnect_Model_Observer</class>
+                        <method>beforeOrderCreated</method>
+                    </effectconnect_ordercreate>
+				</observers>
+			</sales_model_service_quote_submit_before>
+			<sales_model_service_quote_submit_failure>
+				<observers>
+					<effectconnect_stockupdate>
+						<class>KoekEnPeer_EffectConnect_Model_Observer</class>
+						<method>revertQuoteInventory</method>
+					</effectconnect_stockupdate>
+				</observers>
+			</sales_model_service_quote_submit_failure>
+			<sales_order_creditmemo_save_after>
+				<observers>
+					<effectconnect_stockupdate>
+						<class>KoekEnPeer_EffectConnect_Model_Observer</class>
+						<method>refundOrderInventory</method>
+					</effectconnect_stockupdate>
+				</observers>
+			</sales_order_creditmemo_save_after>
+		</events>
+	</global>
+    <default>
+        <payment>
+            <effectconnect_payment>
+                <active>1</active>
+                <model>effectconnect/payment</model>
+                <title>EffectConnect payment</title>
+            </effectconnect_payment>
+        </payment>
+        <carriers>
+            <effectconnect>
+                <active>1</active>
+                <model>effectconnect/shipment</model>
+                <title>EffectConnect shipment</title>
+            </effectconnect>
+        </carriers>
+        <effectconnect_options>
+            <order>
+                <create_customer>0</create_customer>
+                <payment>effectconnect_payment</payment>
+                <shipping>effectconnect_shipment</shipping>
+                <use_number_external>0</use_number_external>
+            </order>
+            <attributes>
+                <store_view_attributes>0</store_view_attributes>
+                <store_view_categories>0</store_view_categories>
+                <attribute_cost>cost</attribute_cost>
+                <attribute_special_price>1</attribute_special_price>
+            </attributes>
+            <custom>
+                <round_prices>1</round_prices>
+                <avoid_parent_products>0</avoid_parent_products>
+            </custom>
+            <cron>
+                <live>1</live>
+            </cron>
+        </effectconnect_options>
+    </default>
+	<crontab>
+		<jobs>
+			<check_export>
+				<schedule>
+					<cron_expr>*/5 * * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>effectconnect/export::checkExport</model>
+				</run>
+			</check_export>
+			<hourly_export>
+				<schedule>
+					<cron_expr>0 * * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>effectconnect/export::hourlyExport</model>
+				</run>
+			</hourly_export>
+		</jobs>
+	</crontab>
+</config>

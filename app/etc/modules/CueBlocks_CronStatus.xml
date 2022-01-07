@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <CueBlocks_CronStatus>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Cron/>
+
+            </depends>
+        </CueBlocks_CronStatus>
+    </modules>
+</config>

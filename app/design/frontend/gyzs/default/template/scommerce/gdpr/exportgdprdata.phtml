@@ -1,0 +1,32 @@
+<?php
+/**
+ * @var Scommerce_GDPR_Block_Confirmation $this
+ */
+?>
+<div class="deletion-ui dash-sec" id="gdprexport">
+ <div class="dash-panel">
+    <h3><?php echo $this->__('Export GDPR Data') ?></h3>
+    <p class="dash-li-left"> <?php echo $this->__($this->getExportMessage()) ?></p>
+<br>
+    <button id="js-scommerce-gdpr-export-button" type="button" title="<?php echo $this->__('Export GDPR Data') ?>" class="button">
+        <span><?php echo $this->__('Export GDPR Data') ?></span>
+    </button>
+</div>
+</div>
+
+    
+
+
+
+
+
+<script>
+    (function(window, $) {
+        $(function() {
+            $('#js-scommerce-gdpr-export-button').on('click', function(e) {
+                e.preventDefault();
+                window.location = "<?php echo $this->getExportUrl() ?>";
+            });
+        });
+    })(window, jQuery);
+</script>

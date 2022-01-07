@@ -1,0 +1,26 @@
+<?php $product = Mage::registry('current_product');?>
+<?php if ($product->getId()):?>
+	<?php  
+		$categoryIds = $product->getCategoryIds(); 
+		$faqIds = Mage::helper('faq')->getProductFaqIds($categoryIds);
+	?>
+<?php endif;?>
+<?php if(count($faqIds) > 0):?>
+<div class="list-product-faqs">
+	<div class="box-content">
+		<ul class="product-faqs" id="listProductFaqs">
+			<?php foreach($faqIds as $faq_id):?>
+			<?php $question = Mage::getModel('faq/faq')->load($faq_id);?>	
+			<li class="item">
+				<h5 id="faq_<?php echo $question->getFaqId()?>_question" class="faq_question">
+					<?php echo $question->getQuestion(); ?>
+				</h5>
+				<div class="faq_answer" id="faq_<?php echo $question->getFaqId()?>_answer" style="display:none;">
+					<?php echo $question->getAnswer(); ?>
+				</div>		
+			</li>
+			<?php endforeach;?>
+		</ul>
+	</div>
+</div>
+<?php endif;?>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<report>
+			<children>
+				<reports translate="title" module="creports">
+					<title>Hs Custom Reports</title>
+					<children>
+						<wiretransferorders translate="title" module="creports">
+							<title>Wire Transfer Orders</title>
+							<action>*/wiretransferorders</action>
+						</wiretransferorders>
+						<vatopercentage translate="title" module="creports">
+							<title>VAT 0 Percentage</title>
+							<action>*/vatopercentage</action>
+						</vatopercentage>
+					</children>
+				</reports>
+			</children>
+		</report>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<report>
+						<children>
+							<reports translate="title" module="reports">
+								<children>
+									<wiretransferorders translate="title" module="creports">
+										<title>Wire Transfer Orders</title>
+									</wiretransferorders>
+									<vatopercentage translate="title" module="creports">
+										<title>VAT 0 Percentage</title>
+									</vatopercentage>
+								</children>
+							</reports>
+						</children>
+					</report>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

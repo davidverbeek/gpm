@@ -1,0 +1,9 @@
+SELECT
+    `entity_id`,
+    `[[@price_field]]` AS `price`,
+    `tax_class_id`
+FROM
+    [[catalog_product_index_price]]
+WHERE
+    `customer_group_id`=0 AND
+    `website_id`=[[website_id]]

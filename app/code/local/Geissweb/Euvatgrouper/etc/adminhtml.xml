@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <report>
+            <children>
+                <euvatgrouper translate="title" module="euvatgrouper">
+                    <title>EU VAT Report (beta)</title>
+                    <action>euvatgrouper/adminhtml_report</action>
+                    <sort_order>100</sort_order>
+                </euvatgrouper>
+            </children>
+        </report>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <euvatgrouper translate="title" module="euvatgrouper">
+                                        <title>EU VAT Enhanced</title>
+                                        <sort_order>110</sort_order>
+                                    </euvatgrouper>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

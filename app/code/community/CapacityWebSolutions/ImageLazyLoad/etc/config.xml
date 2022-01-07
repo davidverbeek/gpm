@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <CapacityWebSolutions_ImageLazyLoad>
+            <version>1.0.0</version>
+        </CapacityWebSolutions_ImageLazyLoad>
+    </modules>
+     <global>
+        <helpers>
+            <imagelazyload>
+                <class>CapacityWebSolutions_ImageLazyLoad_Helper</class>
+            </imagelazyload>
+        </helpers>
+    </global>
+    <frontend>
+        <layout>
+            <updates>
+                <imagelazyload>
+                    <file>imagelazyload.xml</file>
+                </imagelazyload>
+            </updates>
+        </layout>
+    </frontend>
+<adminhtml>
+		<menu>
+			<cws module="imagelazyload">
+			<title>Magebees</title>
+			<sort_order>70</sort_order> 
+				<children>
+					<imagelazyload module="imagelazyload">
+						<title>Lazy Load Images</title>
+						<sort_order>120</sort_order>               
+						<children>
+							<settings>
+								<title>Settings</title>
+								<sort_order>10</sort_order>
+								<action>adminhtml/system_config/edit/section/imagelazyload</action>
+							</settings>
+						</children>
+					</imagelazyload>
+				</children>
+			</cws>
+		</menu>
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<imagelazyload>
+											<title>Lazy Load Images Section</title>
+										</imagelazyload>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+	</adminhtml>
+<default>
+    <imagelazyload>
+        <general>                
+            <module_enable_disable>0</module_enable_disable>         
+        </general>      
+    </imagelazyload>
+</default>
+</config>

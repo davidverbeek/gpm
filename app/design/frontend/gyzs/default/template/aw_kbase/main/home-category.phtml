@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Kbase
+ * @copyright  Copyright (c) 2008-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+
+?>
+<?php $i = 1; foreach($this->getCategories() as $category): $i++; ?>
+    <div class="kbase-category-block block kbase-block <?php echo htmlspecialchars($category['category_url_key']); if($i == 1): echo ' first'; elseif($i == 3): echo ' last'; $i = 0; endif; ?>">
+
+        <div class="block-title">
+            <a class="read-all" href="<?php echo AW_Kbase_Helper_Url::getUrl(AW_Kbase_Helper_Url::URL_TYPE_CATEGORY, $category) ?>"><h2><?php echo htmlspecialchars($category['category_name']) ?></h2></a>
+        </div>
+
+        <ul class="level-1">
+        <?php foreach($category['articles'] as $article): ?>
+            <li>
+                <?php // echo '<pre>' , print_r($article) , '</pre>'; ?>
+                <a href="<?php echo AW_Kbase_Helper_Url::getUrl(AW_Kbase_Helper_Url::URL_TYPE_CATEGORY, $category) ?>#<?php echo $article['article_url_key'] ?>"><i class="fa fa-angle-right right-arrow"></i> <?php echo htmlspecialchars($article['article_title']) ?></a>
+            </li>
+        <?php endforeach ?>
+        </ul>
+    </div>
+<?php endforeach; ?>

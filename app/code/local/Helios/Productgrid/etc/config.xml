@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Helios_Productgrid>
+      <version>0.1.0</version>
+    </Helios_Productgrid>
+  </modules>
+  <global>   
+	<blocks>
+	  <productgrid>
+		<class>Helios_Productgrid_Block</class>
+	  </productgrid>
+			<adminhtml>
+				<rewrite>
+					<catalog_product_grid>Helios_Productgrid_Block_Adminhtml_Catalog_Product_Grid</catalog_product_grid>
+				</rewrite>
+			</adminhtml>
+	</blocks>
+  </global>
+</config> 

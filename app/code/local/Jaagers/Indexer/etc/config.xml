@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Jaagers_Indexer>
+    		<version>0.1.0</version>
+		</Jaagers_Indexer>
+	</modules>
+	  
+	<global>
+
+		<models>
+        	<indexer>
+            	<class>Jaagers_Indexer_Model</class>
+    		</indexer>
+		</models>   
+
+	</global> 
+</config> 

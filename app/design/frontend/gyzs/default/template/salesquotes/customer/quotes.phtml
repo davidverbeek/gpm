@@ -1,0 +1,46 @@
+<?php $_quotes = $this->getQuotes(); ?>
+<div class="page-title">
+    <h2><?php echo $this->__('Quotes') ?></h2>
+</div>
+
+<fieldset class="group-select fieldset">
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php //echo $this->getPagerHtml(); ?>
+    <?php if ($_quotes->getSize()): ?>
+        <table cellspacing="0" width="100%" class="data-table" id="my-quotes-table" >
+            <thead>
+                <tr>
+                    <th><?php echo $this->__('Created') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($_quotes as $quote): ?>
+                    <tr>
+                        <td>
+                            <div class="offernumber">
+                                <?php /* if($quote->getStatus() == 'pending'): ?>
+                                  <!--<a href="<?php //echo $this->getUrl('salesquotes/quote/viewQuote', array('quote_id'=>$quote->getId()))   ?>"><?php //echo $this->__('Bekijk/Bevestig')   ?></a>&nbsp;
+                                  <?php //else: ?>
+                                  <a href="<?php //echo $this->getUrl('salesquotes/quote/viewQuote', array('quote_id'=>$quote->getId()))   ?>"><?php //echo $this->__('Bekijk')   ?></a>&nbsp;-->
+                                  <?php //endif; */ ?>						
+
+                                <a href="<?php echo $this->getUrl('salesquotes/quote/viewQuote', array('quote_id' => $quote->getId())) ?>" title="<?php echo $this->__('Bekijk') ?>"><?php echo $this->__('Quote number') . ' ' . $quote->getId() . ' - ' . $this->__('%d articles',count($quote->getAllItems())) ?></a>
+                            </div>
+                            <div class="offercreated">
+                                <?php echo $this->__('Created') . ' ' . date("j-m-Y", strtotime($quote->getUpdatedAt())) ?>
+                            </div>
+                        </td>
+                        <?php //echo $quote->getStore()->formatPrice($quote->getGrandTotal()); ?>
+                        <?php //echo $this->__($quote->getStatus()); ?>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+        <script type="text/javascript">decorateTable('my-quotes-table')</script>
+
+    </fieldset>
+
+    <?php echo $this->getPagerHtml(); ?>
+<?php else: ?>
+    <p><?php echo $this->__('U heeft nog geen offertes aangevraagd'); ?></p>
+<?php endif ?>

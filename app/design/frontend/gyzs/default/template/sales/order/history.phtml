@@ -1,0 +1,178 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php 
+	/* Hs_Common_Block_Sales_Order_History */
+	$_orders = $this->getOrders();
+	$_pendingArray = Mage::helper('common')->getPendingState();
+	$_completedArray = Mage::helper('common')->getCompletedState();
+	$_canceledArray = Mage::helper('common')->getCanceledState();
+
+?>
+<div class="page-title">
+	<h1><?php echo $this->__('Order history') ?></h1>
+</div>
+<table class="data-table pendingorders" id="my-orders-table2">
+	<thead>
+		<tr>
+			<th><?php echo $this->__('Pending Orders') ?>
+				<span><?php echo $this->__('expected shipment date')?> </span>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $_odd = ''; ?>
+		<?php $pendingFlag = 1; ?>
+		<?php foreach ($_orders as $_order): ?>
+			<?php if ( in_array($_order->getState(), $_pendingArray)  ): ?>
+				<?php $pendingFlag = 0; ?>
+				<tr>
+					<td>
+						<div class="offernumber">
+							<a href="<?php echo $this->getViewUrl($_order) ?>" title="<?php echo $this->__('View') ?>">
+								<?php echo $this->__('Ordernumber').' '. $_order->getRealOrderId() .' - '.$_order->getTotalItemCount(). " ". $this->__('Items') ?>
+							</a>
+						</div>
+						<div class="offercreated">
+							<?php echo $this->__('Expect').' '.$this->formatDate($_order->getExpectedDeliveryDate()) ?>
+						</div>
+					</td>	
+					
+				</tr>
+			<?php endif; ?>
+		<?php endforeach; ?>
+		<?php if($pendingFlag) { ?>
+			<tr>
+				<td><div class="offernumber"><?php echo $this->__('No orders available'); ?> </div> </td>
+			</tr>
+		<?php } ?>
+	<tr class="last-pending">
+			<td>
+				<div class="view-all-order-wrap">
+					<a class="button btn-view-all-order">
+						<span class="more"><?php echo $this->__('Show more')?></span>
+					</a>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="data-table competeorders" id="my-orders-table2">
+	<thead>
+		<tr>
+			<th><?php echo $this->__('Complete Orders') ?>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $_odd = ''; ?>
+		<?php $completedFlag = 1; ?>
+		<?php foreach ($_orders as $_order): ?>
+			<?php if ( in_array($_order->getState(), $_completedArray)  ): ?>
+				<?php $completedFlag = 0; ?>
+				<tr>
+					<td>
+						<div class="offernumber">
+							<a href="<?php echo $this->getViewUrl($_order) ?>" title="<?php echo $this->__('View') ?>">
+								<?php echo $this->__('Ordernumber').' '. $_order->getRealOrderId() .' - '.$_order->getTotalItemCount(). " ". $this->__('Items') ?>
+							</a>
+						</div>
+						<div class="offercreated sent-date">
+							<?php echo $this->__('Sent').' '.$this->formatDate($_order->getCreatedAtStoreDate()) ?>
+						</div>
+					</td>	
+					
+				</tr>
+			<?php endif; ?>
+		<?php endforeach; ?>
+		
+		<?php if($completedFlag) { ?>
+			<tr>
+				<td><div class="offernumber"><?php echo $this->__('No orders available'); ?> </div> </td>
+			</tr>
+		<?php } ?>
+		
+		<tr class="last-complated">
+			<td>
+				<div class="view-all-order-wrap">
+					<a class="button btn-view-all-order">
+						<span class="more"><?php echo $this->__('Show more')?></span>
+					</a>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="data-table cancelorders" id="my-orders-table2">
+	<thead>
+		<tr>
+			<th><?php echo $this->__('Canceled Orders') ?>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $_odd = ''; ?>
+		<?php $canceledFlag = 1; ?>
+		<?php foreach ($_orders as $_order): ?>
+			<?php if ( in_array($_order->getState(), $_canceledArray)  ): ?>
+				<?php $canceledFlag = 0; ?>
+				<tr>
+					<td>
+						<div class="offernumber">
+							<a href="<?php echo $this->getViewUrl($_order) ?>" title="<?php echo $this->__('View') ?>">
+								<?php echo $this->__('Ordernumber').' '. $_order->getRealOrderId() .' - '.$_order->getTotalItemCount(). " ". $this->__('Items') ?>
+							</a>
+						</div>
+						<div class="offercreated">
+							<?php echo $this->__('Created').' '.$this->formatDate($_order->getCreatedAt()) ?>
+						</div>
+					</td>	
+					
+				</tr>
+			<?php endif; ?>
+		<?php endforeach; ?>
+		
+		<?php if($canceledFlag) { ?>
+			<tr>
+				<td><div class="offernumber"><?php echo $this->__('No orders available'); ?> </div> </td>
+			</tr>
+		<?php } ?>
+		
+		<tr class="last-canceled">
+			<td>
+				<div class="view-all-order-wrap">
+					<a class="button btn-view-all-order">
+						<span class="more"><?php echo $this->__('Show more')?></span>
+					</a>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>

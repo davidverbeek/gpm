@@ -1,0 +1,25 @@
+<?php 
+    $cateHelper    = Mage::helper('featured');
+    $catlistHtml   = $cateHelper->getMainCategories();
+    $topcategories = $cateHelper->getTopCategoriess();
+?>
+<div id="verticalmenu">
+    <ul>
+        <li>
+            <p class="mst"><?php echo $this->__('Most viewed') ?><span></span></p>
+            <div id="most">
+                <?php 
+                    echo $topcategories;
+                ?>
+            </div>
+        </li>
+        <li  class="scrolltest">
+            <p class="main"><?php echo $this->__('All Categories...') ?><span></span></p>
+            <div id="accordian">
+            <?php
+                echo $catlistHtml;
+            ?>
+            </div>
+        </li>
+    </ul>
+</div>

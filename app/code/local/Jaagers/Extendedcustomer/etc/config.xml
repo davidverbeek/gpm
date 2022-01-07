@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<config>
+      <modules>
+        <Jaagers_Extendedcustomer>
+          <version>0.1.0</version>
+        </Jaagers_Extendedcustomer>
+      </modules>
+	  
+   <global>    
+      <helpers>
+       <extendedcustomer>
+           <class>Jaagers_Extendedcustomer_Helper</class>
+       </extendedcustomer>
+      </helpers>   
+
+	  
+	   <models>
+            <extendedcustomer>
+                <class>Jaagers_Extendedcustomer_Model</class>
+                <resourceModel>extendedcustomer_mysql4</resourceModel>
+            </extendedcustomer>
+        </models>
+	 <resources>
+	 
+            <customerattribute1311756137_setup>
+                <setup>
+                    <module>Jaagers_Extendedcustomer</module>
+					<class>Mage_Customer_Model_Entity_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </customerattribute1311756137_setup>
+            <customerattribute1311756137_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </customerattribute1311756137_write>
+            <customerattribute1311756137_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </customerattribute1311756137_read>
+
+	 </resources>
+	 
+   </global> 
+   
+
+</config> 

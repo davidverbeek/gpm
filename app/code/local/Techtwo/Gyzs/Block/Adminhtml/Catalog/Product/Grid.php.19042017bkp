@@ -1,0 +1,146 @@
+<?php
+class Techtwo_Gyzs_Block_Adminhtml_Catalog_Product_Grid extends Mage_Adminhtml_Block_Catalog_Product_Grid
+{
+	protected function _preparePage()
+    {
+    	$collection = $this->getCollection();		
+    	$store = $this->_getStore();
+    	if ( $store->getId() )
+    	{			
+       		$collection->joinAttribute('cost', 'catalog_product/cost', 'entity_id', null, 'left', $store->getId());
+       	}
+       	else
+       	{
+        	$collection->joinAttribute('cost', 'catalog_product/cost', 'entity_id', null, 'left');
+        	$collection->joinAttribute('price', 'catalog_product/price', 'entity_id', null, 'left');
+        }		
+        $this->setCollection($collection);
+
+        // create the gyzs sku
+        $collection->getSelect()->columns( array('gyzs_sku' => new Zend_Db_Expr("CONCAT( '".Mage::helper('gyzs')->getGyzsSkuPrefix()."',  REVERSE(`e`.`sku`) )")) );
+		
+		$collection->addAttributetoSelect('url_key');
+		$collection->addAttributetoSelect('prijsfactor');
+		$collection->addAttributetoSelect('verkoopeenheid');
+		$collection->addAttributetoSelect('afwijkenidealeverpakking');
+        
+		parent::_preparePage();
+
+        return $this;
+    }
+
+	protected function _prepareColumns()
+	{
+		$this->addColumnAfter('price_btw',
+            array(
+                'header'=> Mage::helper('catalog')->__('Price').' '.Mage::helper('tax')->getIncExcText(true),
+                'type'  => 'price',
+                'currency_code' => $this->_getStore()->getBaseCurrency()->getCode(),
+                'index' => 'price_btw',
+        ), 'price');
+
+		$this->addColumnAfter('gyzs_sku', array(
+			'header'   => Mage::helper('gyzs')->__('Gyzs sku'),
+			'align'    => 'left',
+			'index'    => 'gyzs_sku',
+			'width'    => '70',
+			'renderer' => 'Techtwo_Gyzs_Block_Adminhtml_Catalog_Product_Grid_Renderer_Sku'
+		), 'sku');
+
+		$this->addColumnAfter('cost', array(
+			'header'   => Mage::helper('gyzs')->__('Cost'),
+			'align'    => 'left',
+			'index'    => 'cost',
+			'width'    => '70',
+			'renderer' => 'Techtwo_Gyzs_Block_Adminhtml_Catalog_Product_Grid_Renderer_Cost'
+		), 'gyzs_sku');
+
+		$this->addColumnAfter('marge', array(
+			'header'   => Mage::helper('gyzs')->__('Marge'),
+			'align'    => 'left',
+			'index'    => 'marge',
+			'width'    => '70',
+			'renderer' => 'Techtwo_Gyzs_Block_Adminhtml_Catalog_Product_Grid_Renderer_Marge'
+		), 'cost');
+		$this->addColumnAfter('url_key', array(
+			'header'   => Mage::helper('gyzs')->__('URL'),
+			'align'    => 'left',
+			'index'    => 'url_key',
+			'width'    => '70',
+//			'renderer' => 'Techtwo_Gyzs_Block_Adminhtml_Catalog_Product_Grid_Renderer_Url'
+		), 'marge');
+		
+		$this->addColumnAfter('idealeverpakking', array(
+			'header'   => Mage::helper('gyzs')->__('Prijs per'),
+			'align'    => 'left',
+			'index'    => 'idealeverpakking',
+            'sortable'  => false,
+            'filter' => false,
+			'renderer' => 'Techtwo_Gyzs_Block_Adminhtml_Catalog_Product_Grid_Renderer_Prijsper'
+		), 'price_btw');
+		
+		$this->addColumnAfter('afwijkenidealeverpakking', array(
+			'header'   => Mage::helper('gyzs')->__('Afname per'),
+			'align'    => 'left',
+			'index'    => 'afwijkenidealeverpakking',
+            'sortable'  => false,
+            'filter' => false,
+			'renderer' => 'Techtwo_Gyzs_Block_Adminhtml_Catalog_Product_Grid_Renderer_Afnameper'
+		), 'idealeverpakking');
+
+		return parent::_prepareColumns();
+	}
+
+	
+	protected function _ignoreFilter()
+	{
+
+	}
+
+	protected function _addColumnFilterToCollection($column)
+	{
+		// echo "\r\n<!-- _addColumnFilterToCollection() ".$column->getIndex()." -->\r\n";
+
+		$columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
+		$dir      = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
+
+		if ('gyzs_sku' === $column->getIndex() )
+		{
+			$column->setFilterConditionCallback(array($this, '_ignoreFilter'));
+
+			$filter   = $this->getParam($this->getVarNameFilter(), null);
+
+			if ( NULL === $filter )
+			{
+				$filter = $this->_defaultFilter;
+			}
+			else
+			{
+				$filter = base64_decode($filter);
+				if ( $filter )
+					parse_str( $filter, $filter );
+				else
+					$filter  = array();
+			}
+
+			if ( array_key_exists('gyzs_sku', $filter) && '' !== $filter['gyzs_sku'] )
+			{
+				//$this->getCollection()->getSelect()->having("gyzs_sku LIKE ?", "%$filter[gyzs_sku]%" );
+				$filter_value = Mage::helper('gyzs')->getSkuFromGyzsSku($filter['gyzs_sku']);
+				$this->getCollection()->getSelect()->where("sku LIKE ?", "%$filter_value%" );
+			}
+		}
+
+		if ( 'marge' === $column->getIndex() )
+		{
+			$column->setFilterConditionCallback(array($this, '_ignoreFilter'));
+		}
+
+		if ( 'gyzs_sku' === $columnId )
+		{	// prefix is not set .. since.. a prefix is always the same and thus not relevant in ordering stuff
+			$this->getCollection()->getSelect()->order('REVERSE( sku ) ' . $dir);
+		}
+
+		return parent::_addColumnFilterToCollection( $column );
+	}
+}

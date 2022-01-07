@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+<modules>
+   <NMediaSystems_MagentoPDFInvoice>
+      <active>true</active>
+      <codePool>local</codePool>
+      <version>2.1</version>
+   </NMediaSystems_MagentoPDFInvoice>
+</modules>
+</config>

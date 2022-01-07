@@ -1,0 +1,34 @@
+<?php
+/**
+ * @var Scommerce_GDPR_Block_Confirmation $this
+ */
+?>
+
+<div class="deletion-ui dash-sec" id="gdprdeletion">
+    <div class="dash-panel">
+    <h3><?php echo $this->__('Delete Account') ?></h3>
+    <p class="dash-li-left"><?php echo $this->__('Delete your account here and anonymize your order data.'); ?></p>
+
+    <p class="scommerce-gdpr-attention-message msg-rad"><?php echo $this->getAttentionMessage() ?></p>
+    <br>
+    <button id="js-scommerce-gdpr-delete-button" type="button" title="<?php echo $this->__('Delete my account') ?>" class="button">
+        <span><?php echo $this->__('Delete my account') ?></span>
+    </button>
+</div>
+</div>
+
+
+
+<script>
+    (function(window, $) {
+        $(function() {
+            $('#js-scommerce-gdpr-delete-button').on('click', function(e) {
+                e.preventDefault();
+                var confirmation = confirm("<?php echo $this->getAttentionMessage() ?>");
+                if (confirmation == true) {
+                    window.location = "<?php echo $this->getDeleteUrl() ?>";
+                }
+            });
+        });
+    })(window, jQuery);
+</script>

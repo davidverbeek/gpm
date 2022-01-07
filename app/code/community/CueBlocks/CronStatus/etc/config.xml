@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <CueBlocks_CronStatus>
+            <version>1.0.0</version>
+        </CueBlocks_CronStatus>
+    </modules>
+    <global>
+        <models>
+            <cb_cronstatus>
+                <class>CueBlocks_CronStatus_Model</class>
+            </cb_cronstatus>
+        </models>
+        <blocks>
+            <cb_cronstatus>
+                <class>CueBlocks_CronStatus_Block</class>
+            </cb_cronstatus>
+        </blocks>
+        <helpers>
+            <cb_cronstatus>
+                <class>CueBlocks_CronStatus_Helper</class>
+            </cb_cronstatus>
+        </helpers>
+    </global>
+    <crontab>
+        <jobs>
+            <cueBlocks_cronStatusCheck>
+                <schedule>
+                    <cron_expr>0 7 10 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>cb_cronstatus/observer::cronStatusCheck</model>
+                </run>
+            </cueBlocks_cronStatusCheck>
+        </jobs>
+    </crontab>
+</config>

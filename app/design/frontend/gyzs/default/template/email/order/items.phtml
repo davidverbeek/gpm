@@ -1,0 +1,99 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_order = $this->getOrder() ?>
+<?php if ($_order): ?>
+<table cellspacing="0" cellpadding="0" border="0" width="600" style="background-color: #fff">
+    <thead>
+        <tr>
+            <th align="left" style="width:330px;">
+                <p style="font-family: Arial; margin: 0 0 0 40px;font-size: 12px;line-height: 28px;color: #787878;text-transform: uppercase;font-weight: lighter;">
+                    <?php echo $this->__('Item') ?>
+                </p>
+            </th>
+            <!-- th align="left" style="font-size:13px;text-transform: capitalize; padding:3px 9px"><?php //echo $this->__('Sku') ?></th -->
+            <th align="left" style="width: 115px;">
+                <p style="font-family: Arial; margin: 0;font-size: 12px;line-height: 28px;color: #787878;text-transform: uppercase;font-weight: lighter;">
+                    <?php echo $this->__('Aantal') ?>
+                </p>
+            </th>
+            <th align="left" style="width: 155px;">
+                <p style="font-family: Arial; font-size: 12px;line-height: 28px;color: #787878;text-transform: uppercase;font-weight:lighter;margin:0 30px 0 5px;">
+                    <?php echo $this->__('Subtotal') ?>
+                </p>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="4"  style="height:20px;">
+                <hr style="color:#ddd;display: block; height: 1px;border: 0;border-top: 1px solid #ddd;width:540px;margin:0 auto;">
+            </td>
+        </tr>
+    </thead>
+
+    <?php $i=0; foreach ($_order->getAllItems() as $_item): ?>
+    <?php if($_item->getParentItem()) continue; else $i++; ?>
+    <tbody<?php echo $i%2 ? '' : '' ?>>
+        <?php echo $this->getItemHtml($_item) ?>
+    </tbody>
+    <?php endforeach; ?>
+</table>
+<table class="tabel2" cellspacing="0" cellpadding="0" border="0" width="600" style="background-color: #fff">
+    <tr>
+        <td class="" colspan="4"  style="height:20px;">
+            <hr style="color:#ddd;display: block; height: 1px;border: 0;border-top: 1px solid #ddd; margin:0 auto;">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo $this->getChildHtml('order_totals') ?>
+        </td>
+    </tr>
+</table>
+<?php if ($this->helper('giftmessage/message')->isMessagesAvailable('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
+    <?php $_giftMessage = $this->helper('giftmessage/message')->getGiftMessage($_order->getGiftMessageId()); ?>
+    <?php if ($_giftMessage): ?>
+<br />
+<table cellspacing="0" cellpadding="0" border="0" width="600" style="background-color: #fff">
+    <thead>
+        <tr>
+            <th align="left" style="font-size:13px;text-transform: capitalize; padding:3px 9px"><strong><?php echo $this->__('Gift Message for this Order') ?></strong></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr>
+            <td colspan="4" align="left" style="padding:3px 9px">
+            <strong><?php echo $this->__('From:'); ?></strong> <?php echo $this->htmlEscape($_giftMessage->getSender()) ?>
+            <br /><strong><?php echo $this->__('To:'); ?></strong> <?php echo $this->htmlEscape($_giftMessage->getRecipient()) ?>
+            <br /><strong><?php echo $this->__('Message:'); ?></strong><br /> <?php echo $this->htmlEscape($_giftMessage->getMessage()) ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+    <?php endif; ?>
+<?php endif; ?>
+<?php endif; ?>

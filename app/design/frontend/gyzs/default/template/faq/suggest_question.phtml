@@ -1,0 +1,60 @@
+<?php $product = Mage::registry('current_product');?>
+<?php $current_url=$this->helper('core/url')->getCurrentUrl() ?>
+<div class="faq_suggest_question">
+	<h1><?php echo $this->__('Personal question leatherette submit.')?></h1>
+	<h4><?php echo $this->__('All <strong>fields</strong> in bold with an <strong>asterisk *</strong> must be filled in correctly.')?></h4>
+	<form action="<?php echo $this->getPostAction(); ?>" id="suggestQuestionForm" method="post">
+		<div class="fields">
+			<ul class="form-list">
+				<li class="field regular-font">
+						<label for="is_request_free_sample" class="sampling"><?php echo Mage::helper('faq')->__('sampling') ?></label>
+						<div class="input-box skin-minimal">
+								<input type="checkbox" name="is_request_free_sample" title="<?php echo $this->__('if a Yes, I would like to request a free sample piece.') ?>" value="1" onclick="setRequestFreeSample(this.checked)" id="is_request_free_sample" class="checkbox" />
+						</div>
+						<div class="chklabel"><?php echo $this->__('<strong>Yes,</strong> I would like to request <strong>a</strong> free sample piece.') ?><br/><?php echo $this->__('(Please specify address in the message box!)')?></div>
+				</li>
+				<li class="field">
+						<label for="name"><?php echo Mage::helper('faq')->__('Name') ?><em>*</em></label>
+						<div class="input-box">
+							<input name="name" id="name" title="<?php echo Mage::helper('faq')->__('Name') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserName()) ?>" class="input-text required-entry" type="text" />
+						</div>
+				</li>
+				<li class="field">
+						<label for="email"><?php echo Mage::helper('faq')->__('Email') ?><em>*</em></label>
+						<div class="input-box">
+								<input name="email" id="email" title="<?php echo Mage::helper('faq')->__('Email') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserEmail()) ?>" class="input-text required-entry validate-email" type="text" />
+						</div>
+				</li>
+				<li class="field regular-font">
+						<label for="telephone"><?php echo Mage::helper('faq')->__('Telephone') ?></label>
+						<div class="input-box">
+								<input name="telephone" id="telephone" title="<?php echo Mage::helper('contacts')->__('Telephone') ?>" value="" class="input-text" type="text" />
+						</div>
+				</li>
+				<li class="field">
+					<label for="message"><?php echo Mage::helper('faq')->__('Message / Question') ?><em>*</em></label>
+					<div class="input-box">
+						<textarea name="message" id="message" title="<?php echo Mage::helper('faq')->__('Mitteilung/Frage') ?>" class="input-text required-entry" cols="5" rows="3"></textarea>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="buttons-set">
+				<input type="hidden" name="current_url" value="<?php echo $current_url;?>">
+				<input type="hidden" name="request_free_sample" id="request_free_sample" value="0">
+				<button type="submit" title="<?php echo Mage::helper('faq')->__('Send') ?>" class="button"><span><span><?php echo Mage::helper('faq')->__('send') ?></span></span></button>
+		</div>
+		<script type="text/javascript">
+		//<![CDATA[
+				var suggestQuestionForm = new VarienForm('suggestQuestionForm', false);
+				function setRequestFreeSample(arg){
+					if(arg){
+							$('request_free_sample').value = 1;
+					}else{
+							$('request_free_sample').value = 0;
+					}
+				}
+		//]]>
+		</script>
+	</form>
+</div>

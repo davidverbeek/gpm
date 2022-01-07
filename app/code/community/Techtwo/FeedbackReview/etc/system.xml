@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<config>
+	<tabs>
+		<techtwo>
+			<label>Techtwo</label>
+			<sort_order>190</sort_order>
+		</techtwo>
+	</tabs>
+	<sections>
+		<feedbackreview translate="label">
+			<label>Feedback Company Review</label>
+			<!--
+			<class>mailplus-section</class>
+			<header_css>mailplus-header</header_css>
+			-->
+			<tab>techtwo</tab>
+			<sort_order>160</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<general translate="label comment">
+					<comment><![CDATA[<p>TechTwo Module <a href="http://www.techtwo.nl/" target="_blank">TechTwo Homepage</a>. Results are cached. It will refresh automatically or can be refreshed manually on flush cache or flush system cache.</p>]]></comment>
+					<label>General</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<expanded>1</expanded><!-- This must be set, so expand by default -->
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+                        <feedback_home_url translate="label">
+                            <label>Feedback Company Home URL</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-url</validate>
+                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </feedback_home_url>
+						<review_url translate="label">
+							<label>Feedback Company Review URL</label>
+							<frontend_type>text</frontend_type>
+							<!--<validate>validate-number</validate>-->
+							<!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</review_url>
+					</fields>
+				</general>
+				<vars translate="label comment">
+					<comment><![CDATA[<p>Variables appended in the url</p>]]></comment>
+					<label>Variables</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>20</sort_order>
+					<expanded>1</expanded><!-- This must be set, so expand by default -->
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<ws translate="label">
+							<label>WS</label>
+							<frontend_type>text</frontend_type>
+							<validate>validate-number</validate>
+							<!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</ws>
+						<basescore translate="label">
+							<label>Base score</label>
+							<frontend_type>text</frontend_type>
+							<validate>validate-number</validate>
+							<!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</basescore>
+						<publishdetails translate="label">
+							<label>Base score</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</publishdetails>
+						<nor translate="label">
+							<label>Normalize</label>
+							<frontend_type>text</frontend_type>
+							<validate>validate-number</validate>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</nor>
+						<sort translate="label">
+							<label>Sort by</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_ascdesc</source_model>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sort>
+					</fields>
+				</vars>
+			</groups>
+		</feedbackreview>
+	</sections>
+</config>

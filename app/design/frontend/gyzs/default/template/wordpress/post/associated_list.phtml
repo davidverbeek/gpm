@@ -1,0 +1,72 @@
+<?php
+/**
+ * @category    Fishpig
+ * @package     Fishpig_Wordpress
+ * @license     http://fishpig.co.uk/license.txt
+ * @author      Ben Tideswell <help@fishpig.co.uk>
+ */
+?>
+<?php if (($posts = $this->getPostCollection()) !== false): ?>
+<?php if (count($posts) > 0): ?>
+<div class="block-title">
+    <?php if ($title = $this->getTitle()): ?>
+    <p><?php echo $this->__('Blog along with GYZS')?></p>
+    <?php endif; ?>
+</div>
+<div class="block-content">
+    <ul>
+        <?php foreach($posts as $post): ?> 
+                <li class="clearfix">
+                    <div class="blog-item-wrap">
+                        <?php //echo $_post=Mage::getModel('wordpress/post')->load($post->getID());?>
+                        <?php //echo "<pre>"; print_r($_post->getData());?>
+                        <div class="blog-title">
+                            <div class="wrdprs-title"><?php echo Mage::getBlockSingleton('wordpress/post_meta')->getTermsAsHtml($post, 'category');//$this->escapeHtml($post->getPostTitle()) ?></div>
+                        </div>
+                        <div class="blog-content-wrap">
+                            <div class="blog-image">
+                                <?php if ($featuredImage = $post->getFeaturedImage()): ?>
+                                    <a target="_blank"  href="<?php echo $post->getPermalink() ?>" title="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"><img class="cwslazyloader" data-src="<?php echo Mage::helper('common')->convertCdnUrl($featuredImage->getMediumImage(),Mage::getBaseUrl(),Mage::getBaseUrl('skin')); ?>" alt="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"/></a>
+                                    <?php else:?>
+                                    <img src="<?php echo $this->getSkinUrl(); ?>/images/thumbnail.jpg"/>
+                                    <?php endif;?>
+                            </div>
+                            <div class="short-description">
+                                <div class="title-desc-wrap">
+                                    <a target="_blank"  href="<?php echo $post->getPermalink() ?>" title="<?php echo $this->escapeHtml($post->getPostTitle()) ?>"><h3 class="blog-title"> <?php echo $this->escapeHtml($post->getPostTitle()) ?></h3> </a>
+                                    <div class="blog-desc"><?php $content = $post->getPostExcerpt(); $content = strip_tags($content); echo substr($content, 0, 350); ?> ...</div>
+                                    
+                                </div>
+
+                                
+
+                                <div class="tag-more-link-wrap">
+                                    <div class="tags-wrap">
+                                        <?php $tags = $post->getTags() ?>
+                                        <?php if (count($tags) > 0): ?>
+                                            <?php $it = count($tags) ?>
+                                            <?php foreach($tags as $tag): ?>
+                                                <a href="<?php echo $post->getPermalink() ?>">
+                                                    <?php echo $tag->getName() ?>
+                                                </a><?php if (--$it > 0): ?>, <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif;  ?>
+                                    </div>
+                                    <a class="less-more-link" href="<?php echo $post->getPermalink() ?>" title="<?php echo $this->__('Read complete article') ?>">
+										<?php echo $this->__('Read complete article') ?>
+									</a>    
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        
+                        
+                            <?php /*<a href="<?php echo $post->getPermalink() ?>"><?php echo $this->escapeHtml($post->getPostTitle()) ?></a><?php */?>
+                    </div>
+                </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>
+<?php endif; ?>

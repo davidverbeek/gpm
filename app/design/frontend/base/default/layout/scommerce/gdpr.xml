@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>css/scommerce/gdpr/cookienotice.css</name></action>
+        </reference>
+        <reference name="after_body_start">
+            <block type="scommerce_gdpr/cookienotice" before="-" name="cookienotice" template="scommerce/gdpr/cookienotice.phtml" />
+        </reference>
+		<reference name="top.links">
+            <action method="addLink" ifconfig="scommerce_gdpr/configuration/enable_cookie" translate="label title">
+                <label>Cookie preference</label>
+                <url>scommerce_gdpr/customer/cookiereset</url>
+                <title>cookie preference</title>
+                <position>1</position>
+            </action>
+        </reference>
+    </default>
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" ifconfig="scommerce_gdpr/configuration/delete_enabled_on_frontend" translate="label title">
+                <name>delete</name>
+                <path>scommerce_gdpr/customer/deletion</path>
+                <label>Delete Account</label>
+            </action>
+        </reference>
+    </customer_account>
+
+    <scommerce_gdpr_customer_deletion>
+        <update handle="customer_account"/>
+        <reference name="content">
+            <block type="scommerce_gdpr/deletion" name="scommerce.gdpr.deletion" template="scommerce/gdpr/deletion.phtml"/>
+            <block type="customer/account_dashboard" name="customer.account.link.back" template="customer/account/link/back.phtml"/>
+        </reference>
+    </scommerce_gdpr_customer_deletion>
+</layout>

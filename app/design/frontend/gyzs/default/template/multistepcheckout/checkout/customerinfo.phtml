@@ -1,0 +1,11 @@
+<?php 
+$quote = Mage::getSingleton('checkout/session')->getQuote();
+$custEmail = "";
+if($quote->getCustomerEmail()) {
+    $custEmail = $quote->getCustomerEmail();
+} else if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $custEmail = $customer->getEmail();//get customer email	
+} 
+?>
+<a href="mainto:<?php echo $custEmail; ?>"><?php echo $custEmail; ?></a>

@@ -1,0 +1,129 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * Product additional attributes template
+ *
+ * @see Mage_Catalog_Block_Product_View_Attributes
+ */
+?>
+<?php
+$_helper = $this->helper('catalog/output');
+$_product = $this->getProduct();
+$skipAttribute = array('verpakkingsean_', 'verpakkingseanhoeveelheid_', 'merk_');
+?>
+<?php $arrayAttr = array('sku', 'merk', 'idealeverpakking', 'afwijkenidealeverpakking'); //afname  ?>
+<?php if ($_additional = $this->getAdditionalData()): ?>
+    <?php foreach ($_additional as $_data): //echo $_data['code']."-";   ?>
+        <?php if ($_data['code'] != 'verpakt_per_g' && $_data['code'] != 'verpakt_per_m' && $_data['code'] != 'verpakt_per_pr' && $_data['code'] != 'verpakt_per_set' && $_data['code'] != 'verpakt_per_st' && $_data['code'] != 'verpakkingsvorm' && $_data['code'] != 'verkoopeenheid' && $_data['code'] != 'prijsfactor' && $_data['value'] != 'Nee' && !is_null($_data['value']) && $_data['value'] != 'N/A' && $_data['value'] != 'N/B'): ?>
+            <?php if (in_array($_data['code'], $arrayAttr) && strtolower($_data['value']) != 'nvt'): ?>
+                <?php $dispData[$_data['code']] = $_data; ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+    <ul class="data-table" id="product-attribute-specs-table">
+        <?php foreach ($arrayAttr as $_arrdata): //echo $_data['code']."-";  ?>
+
+            <?php if (isset($dispData[$_arrdata])): ?>
+                <?php $_data = $dispData[$_arrdata]; //echo $_data['code']."-";?>
+                <li><?php //echo "<pre>"; print_r($_data); ?>
+                    <div class="label">
+                        <?php if ($_data['code'] == 'idealeverpakking'): ?>
+                            <span class='tooltip-up titlecolor' data-tool="<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('idealeverpakking_tooltip')->toHtml(); ?>"><?php echo $this->htmlEscape($this->__('Verpakt per')) ?>
+                            </span>
+                        </div>
+                    <?php elseif ($_data['code'] == 'afwijkenidealeverpakking'): ?>
+                            <span class='tooltip-up titlecolor' data-tool="<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('afwijkenidealeverpakking_tooltip')->toHtml(); ?>">
+                            <?php echo $this->htmlEscape($this->__('Afname per')) ?>
+                            </span>
+                        </div>
+                        <?php else: ?>
+                        <?php echo $this->htmlEscape($this->__($_data['label'])) ?></div>
+                    <?php endif; ?>
+
+                    <div class="data">
+                        <h3>
+                            <?php if ($_data['code'] == 'sku'): ?>
+                                <?php echo Mage::helper('common')->getGYZSSku($_helper->productAttribute($_product, $_data['value'], $_data['code'])) ?>
+                            <?php elseif ($_data['code'] == 'afwijkenidealeverpakking'): ?>
+                                <?php $unit = Mage::helper('featured')->getProductUnit($_product->getData('verkoopeenheid')); ?>
+                                <?php /* echo ($_helper->productAttribute($_product, $_data['value'], $_data['code'])) ?>&nbsp; <?php echo Mage::helper('featured')->getStockUnit($_data['value'], $unit); */ ?>
+                                <?php if (!(int) $_product->getData('afwijkenidealeverpakking')): ?>
+                                    <?php $stockInfo = $_product->getData('idealeverpakking'); ?>
+
+                                    <?php echo $stockInfo; ?>
+
+                                    <?php
+                                else :
+                                    echo $stockInfo = 1;
+                                    ?>
+                                <?php endif; ?>
+                                <?php echo Mage::helper('featured')->getStockUnit($stockInfo, $unit); //$_product->getData('verkoopeenheid');     ?>
+                            <?php elseif ($_data['code'] == 'idealeverpakking'): ?>
+                                <?php $unit = Mage::helper('featured')->getProductUnit($_product->getData('verkoopeenheid')); ?>
+                                <?php echo ($_helper->productAttribute($_product, $_data['value'], $_data['code'])) ?>&nbsp; <?php echo Mage::helper('featured')->getStockUnit($_data['value'], $unit); ?>
+                            <?php elseif ($_data['code'] == 'merk'): ?>
+                                <?php
+                                /* commented by parth - removed because we have removed magestore - shop by brand module  */
+                                /* commented by parth - replaced code based on Depends on Amasty Shop by Brand Module */
+                                $brandUrl = Mage::helper('common')->getBrandUrl($_data['value']);
+                                if(!empty($brandUrl)) { ?>
+                                    <a href="<?php echo Mage::getBaseUrl() . $brandUrl; ?>" target="_blank"><?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?></a>
+                               <?php } else { ?>
+                                    <?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?>
+                                <?php } ?>
+                                
+                            <?php else: ?>
+                                <?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?>
+                            <?php endif; ?>
+                        </h3>
+                    </div>
+                </li>
+            <?php endif; ?>
+            <?php //endif;?>
+            <?php //endif;?>
+        <?php endforeach; ?>
+        <?php foreach ($_additional as $_data): //echo $_data['code']."-"; ?>
+            <?php if (!in_array($_data['code'], $arrayAttr) && strtolower($_data['value']) != 'nvt'): ?>
+                <?php if ($_data['code'] != 'verpakt_per_g' && $_data['code'] != 'verpakt_per_m' && $_data['code'] != 'verpakt_per_pr' && $_data['code'] != 'verpakt_per_set' && $_data['code'] != 'verpakt_per_st' && $_data['code'] != 'verpakkingsvorm' && $_data['code'] != 'verkoopeenheid' && $_data['code'] != 'prijsfactor' && $_data['value'] != 'Nee' && !is_null($_data['value']) && $_data['value'] != 'N/A' && $_data['value'] != 'N/B'): ?>
+                    <?php if(in_array($_data['code'], $skipAttribute)) { continue; } ?>
+                    <li>
+                        <div class="label"><?php echo $this->htmlEscape($this->__($_data['label'])) ?></div>
+                        <div class="data">
+                            <h3>
+                                <?php if ($_data['code'] == 'sku'): ?>
+                                    <?php echo Mage::helper('common')->getGYZSSku($_helper->productAttribute($_product, $_data['value'], $_data['code'])) ?>
+                                <?php else: ?>
+                                    <?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?>
+                                <?php endif; ?>
+                            </h3>
+                        </div>
+                    </li>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

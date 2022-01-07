@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 Koek & Peer (http://www.koekenpeer.nl/)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+-->
+<config>
+	<tabs>
+		<partners translate="label" module="effectconnect">
+			<class>koekenpeer</class>
+			<label>EffectConnect</label>
+			<sort_order>99995</sort_order>
+		</partners>
+	</tabs>
+	<sections>
+        <payment>
+            <groups>
+                <effectconnect_payment translate="label" module="effectconnect">
+                    <label>EffectConnect payment</label>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Payment Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </title>
+                    </fields>
+                </effectconnect_payment>
+            </groups>
+        </payment>
+        <carriers>
+            <groups>
+                <effectconnect_shipment translate="label" module="effectconnect">
+                    <label>EffectConnect shipment</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <title translate="label comment">
+                            <label>Carrier title</label>
+                            <comment>Set a custom carrier title for the EffectConnect shipment method.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </title>
+                        <subtitle translate="label comment">
+                            <label>Method title</label>
+                            <comment>
+                                <![CDATA[
+                                    Set a custom method title for the EffectConnect shipment method.
+                                    <br />
+                                    <br />
+                                    <table class="form-edit" style="opacity: 0.66; font-size: 11px;">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">
+                                                    Optional replacement tags:
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>[channel]</td>
+                                                <td>Channel name</td>
+                                            </tr>
+                                            <tr>
+                                                <td>[order_number]</td>
+                                                <td>Channel order number</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                ]]>
+                            </comment>
+                            <after_element_html>Test</after_element_html>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </subtitle>
+                    </fields>
+                </effectconnect_shipment>
+            </groups>
+        </carriers>
+		<effectconnect_options translate="label" module="effectconnect">
+			<label><![CDATA[<img src="https://s3.eu-central-1.amazonaws.com/effectconnect-assets/favicon-16x16.png" alt="EffectConnect" style="vertical-align: text-bottom;" /> EffectConnect settings]]></label>
+			<tab>partners</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>100</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>0</show_in_website>
+			<show_in_store>0</show_in_store>
+			<groups>
+				<credentials translate="label" module="effectconnect">
+					<label>EffectConnect settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+                        <run translate="label">
+                            <label>Start installation</label>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>effectconnect/install</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </run>
+                        <shop_key translate="label comment">
+							<label>Shop key</label>
+							<comment>Provided by EffectConnect</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</shop_key>
+						<public_key translate="label comment">
+							<label>Public key</label>
+							<comment>Provided by EffectConnect</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</public_key>
+						<secret_key translate="label comment">
+							<label>Secret key</label>
+							<comment>Provided by EffectConnect</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</secret_key>
+                        <version translate="label">
+                            <label>Version</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>KoekEnPeer_EffectConnect_Block_Adminhtml_Version</frontend_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </version>
+					</fields>
+				</credentials>
+                <order translate="label" module="effectconnect">
+                    <label>Order settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <create_customer translate="label comment">
+                            <label>Create a customer</label>
+                            <comment>Create a new customer if the user does not exist yet. Select "No" to use a guest account.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </create_customer>
+                        <payment translate="label comment">
+                            <label>Payment method</label>
+                            <comment>Select the payment method for imported order</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_allmethods</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </payment>
+                        <shipping translate="label comment">
+                            <label>Shipping method</label>
+                            <comment>Select the shipping method for imported order</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_allmethods</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </shipping>
+                        <status translate="label comment">
+                            <label>Default order status</label>
+                            <comment>Selected the default order status for the orders when they are imported. Leave empty to use the status given by EffectConnect.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </status>
+                        <complete_status translate="label comment">
+                            <label>Completed order status(es)</label>
+                            <comment>Select the order completed statuses used in the webshop (optional, only use if you have a custom status defined for this).</comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </complete_status>
+                        <use_number_external translate="label comment">
+                            <label>Use original order number</label>
+                            <comment>BETA - Overwrite the original Magento order number with the order number from the originating channel.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </use_number_external>
+                        <convert_prefix_m>
+                            <label>Convert salutation (male)</label>
+                            <comment>Convert the salutation and use it in the order data. Source: male.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </convert_prefix_m>
+                        <convert_prefix_f>
+                            <label>Convert salutation (female)</label>
+                            <comment>Convert the salutation and use it in the order data. Source: female.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </convert_prefix_f>
+                    </fields>
+                </order>
+                <attributes translate="label" module="effectconnect">
+                    <label>Product data</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <store_view translate="label comment">
+                            <label>Store view</label>
+                            <comment>Select the default store view that is used as source.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>effectconnect/source_store</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_view>
+                        <sync_type translate="label comment">
+                            <label>Sync type</label>
+                            <comment>Filter products based on status and/or visibility.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>effectconnect/source_sync</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sync_type>
+                        <store_view_attributes translate="label comment">
+                            <label>Store view attributes</label>
+                            <comment>Load the attribute labels from the selected store view. If this is disabled the admin store view will be used.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_view_attributes>
+                        <store_view_categories translate="label comment">
+                            <label>Store view categories</label>
+                            <comment>Load the categories from the selected store view. If this is disabled the admin store view will be used.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store_view_categories>
+                        <attribute_ean translate="label comment">
+                            <label>EAN attribute</label>
+                            <comment>Select the attribute that is used for the product EAN.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>effectconnect/source_attribute</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_ean>
+                        <attribute_brand translate="label comment">
+                            <label>Brand attribute(s)</label>
+                            <comment>Select the attribute(s) that is/are used for the product brand.</comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>effectconnect/source_attribute_multiselect</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_brand>
+                        <attribute_title translate="label comment">
+                            <label>Title attribute</label>
+                            <comment>Select a custom attribute for the title (optional).</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>effectconnect/source_attribute</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_title>
+                        <attribute_description translate="label comment">
+                            <label>Description attribute</label>
+                            <comment>Select the attribute that is used for the product description.</comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>effectconnect/source_attribute_description</source_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_description>
+                        <attribute_price translate="label comment">
+                            <label>Custom price attribute</label>
+                            <comment>Select an attribute that is used for the product price (optional).</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>effectconnect/source_attribute_decimal</source_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_price>
+                        <attribute_price_use_fallback translate="label comment">
+                            <label>Fallback to normal price</label>
+                            <comment>Use a fallback to the normal price (only used when custom price attribute is set and the product does not have this field filled).</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_price_use_fallback>
+                        <attribute_price_surcharge translate="label comment">
+                            <label>Surcharge price attributes</label>
+                            <comment>Select attributes that should be interpreted as surcharge in addition to the regular price.</comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>effectconnect/source_attribute_decimal</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_price_surcharge>
+                        <attribute_cost translate="label comment">
+                            <label>Cost price attribute</label>
+                            <comment>Select the attribute that is used for the cost price.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>effectconnect/source_attribute_decimal</source_model>
+                            <sort_order>120</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_cost>
+                        <attribute_delivery translate="label comment">
+                            <label>Delivery time attribute</label>
+                            <comment>Select the attribute that is used for the delivery time.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>effectconnect/source_attribute_select</source_model>
+                            <sort_order>130</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_delivery>
+                        <attribute_special_price translate="label comment">
+                            <label>Use special price attribute</label>
+                            <comment>Use the special price if it's available for a product. If this option is disabled the special will be ignored when exporting to external channels.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>140</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_special_price>
+                        <attribute_skip translate="label comment">
+                            <label>Skip attributes</label>
+                            <comment>Select attributes you don't want to export to EffectConnect.</comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>effectconnect/source_attribute</source_model>
+                            <sort_order>150</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </attribute_skip>
+                        <only_valid_ean translate="label comment">
+                            <label>Only use products with a valid EAN</label>
+                            <comment>Skip any products that do not have a valid EAN.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>160</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </only_valid_ean>
+                        <valid_frontend_store_views translate="label comment">
+                            <label>Valid frontend store views</label>
+                            <comment>Select the store views that are valid for retrieving a frontend URL of a product. When this field is empty all store views will be used.</comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>effectconnect/source_store_detail</source_model>
+                            <sort_order>170</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </valid_frontend_store_views>
+                    </fields>
+                </attributes>
+                <stock>
+                    <label>Stock</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <stock_backorders translate="label comment">
+                            <label>Use backorders</label>
+                            <comment>Use backorders for external channels.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </stock_backorders>
+                    </fields>
+                </stock>
+                <custom>
+                    <label>Custom settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <root translate="label comment">
+                            <label>Custom root</label>
+                            <comment>Set a custom base URL if the store view base URL is invalid.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </root>
+                        <disable_attribute_type translate="label comment">
+                            <label>Disable attribute type</label>
+                            <comment>Disable check for correct attribute type for custom fields. Please do not enable this if you're not instructed to do so by EffectConnect.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </disable_attribute_type>
+                        <round_prices translate="label comment">
+                            <label>Round prices</label>
+                            <comment>Round prices to 2 decimals before exporting.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </round_prices>
+                        <avoid_parent_products translate="label comment">
+                            <label>Avoid parent products</label>
+                            <comment>Only export and use the information of simple products</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </avoid_parent_products>
+                    </fields>
+                </custom>
+                <synchronisation translate="label">
+                    <label>Synchronise data</label>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+						<run translate="label">
+							<label>Run now</label>
+							<frontend_type>button</frontend_type>
+							<frontend_model>effectconnect/button</frontend_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</run>
+                        <live translate="label comment">
+                            <label>Live synchronisation</label>
+                            <comment>Enable to synchronise stock and price updates real-time (if disabled the stock &amp; price will be updated hourly).</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </live>
+                    </fields>
+                </synchronisation>
+			</groups>
+		</effectconnect_options>
+	</sections>
+</config>

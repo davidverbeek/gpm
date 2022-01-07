@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Hs_Pickuplocation>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+				<Mage_Shipping />
+			</depends>
+		</Hs_Pickuplocation>
+	</modules>
+</config>

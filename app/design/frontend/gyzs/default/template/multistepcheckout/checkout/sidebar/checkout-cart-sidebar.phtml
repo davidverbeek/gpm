@@ -1,0 +1,118 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * Shoping cart sidebar
+ *
+ * @see Mage_Checkout_Block_Cart_Sidebar
+ */
+?>
+
+<?php 
+    /* Get all product of cart */
+    $session= Mage::getSingleton('checkout/session');
+    $_items = $session->getQuote()->getAllItems();
+    //$_items = $this->getRecentItems() 
+
+    /* Cart Optimization Starts */
+    if(count($_items)){
+        $quote_sku = array();
+        $item_actual_used_data = array();
+        foreach($_items as $_item) {
+            $item_sku = $_item->getSku();
+            $quote_sku[] = $item_sku;
+            $item_actual_used_data[$item_sku]["afwijkenidealeverpakking"] = $_item->getProduct()->getData('afwijkenidealeverpakking');
+            $item_actual_used_data[$item_sku]["idealeverpakking"] = $_item->getProduct()->getData('idealeverpakking');
+            $item_actual_used_data[$item_sku]["Qty"] = $_item->getQty();
+        }
+    }
+    /* Cart Optimization Ends */  
+?>
+
+<!-- Cart Optimization Starts -->
+<script type="text/javascript">
+    var current_domain = window.location.protocol+"//"+document.domain;
+    var skuarr = <?php echo json_encode($quote_sku); ?>;
+    var itemarr = <?php echo json_encode($item_actual_used_data); ?>;
+
+    jQuery.ajax({
+        url: current_domain+"/hsperformance/index/getAjaxVooradMore",
+        type: "POST",
+        dataType: "json",
+        data : {item: itemarr,allsku: skuarr},
+        success: function(response){
+            if(Object.keys(response).length > 0) { 
+                jQuery.each( response, function( i, val ) {
+                    var getfinalsku = val.sku;
+                    var getfinalsku = getfinalsku.toString().replace(/\./g, '\\\\.');
+                    var getfinalqty = val.qty;
+                    var gettruestock = val.truestock;
+                    var setClass = "";
+                    
+                    if(parseInt(getfinalqty) <= gettruestock) {
+                        setClass = "round-order-stock label-green";
+                    } else {
+                        setClass = "round-order-stock label-orange";
+                    }
+                    
+
+                    jQuery("#"+getfinalsku+"_instock").addClass(setClass);
+                });
+            }
+        }
+    });
+</script>
+<!-- Cart Optimization Ends -->
+
+<div class="checkout-sidebar-cart-wrap">
+    <div class="sidebar-cart-top-twarp clearfix">
+        <div class="cart-top-title-wrap left"><?php echo $this->__('This is your order:') ?></div>
+        <div class="cart-top-title-wrap right"><a href="<?php echo $this->getUrl('checkout/cart'); ?>" title="<?php echo $this->__('View Shopping Cart') ?>"><?php echo $this->__('View Basket') ?></a></div>
+    </div>
+
+    <div class="checkout-sidebar-items-wrap clearfix">
+        <?php if (count($_items)): ?>
+
+                <ol class="cart-sidebar mini-products-list-checkout">
+                    <?php foreach ($_items as $_item): ?>
+                        <?php echo $this->getItemHtml($_item) ?>
+                    <?php endforeach; ?>
+                </ol>
+                <div class="view-all-products">
+                    <a class="more"><i class="fa fa-angle-down" aria-hidden="true"></i>
+                        <span class="more-text">Bekijk alle artikelen </span>
+                        <span class="counter-text">(<?php echo Mage::helper('checkout/cart')->getItemsCount(); ?>)</span>
+                    </a>
+                </div>
+
+            <?php else: ?>
+
+            <p class="a-center emptycart"><?php echo $this->__('You have no items in your shopping cart.') ?></p>
+
+        <?php endif ?>
+
+    </div>
+   
+</div>

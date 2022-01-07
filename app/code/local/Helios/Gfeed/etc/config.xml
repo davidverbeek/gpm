@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Helios_Gfeed>
+			<version>0.1.0</version>
+		</Helios_Gfeed>
+	</modules>
+	<global>
+		<blocks>
+			<gfeed>
+				<class>Helios_Gfeed_Block</class>
+			</gfeed>
+		</blocks>
+		<helpers>
+			<gfeed>
+				<class>Helios_Gfeed_Helper</class>
+			</gfeed>
+		</helpers>
+		<models>
+			<gfeed>
+				<class>Helios_Gfeed_Model</class>
+			</gfeed>
+		</models>
+	</global>
+	
+</config> 

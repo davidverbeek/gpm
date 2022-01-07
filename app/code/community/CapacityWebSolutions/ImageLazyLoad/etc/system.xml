@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/***************************************************************************
+	@extension	: lazy Load Extension
+	@copyright	: Copyright (c) 2014 Capacity Web Solutions.
+	( http://www.capacitywebsolutions.com )
+	@author		: Capacity Web Solutions Pvt. Ltd.
+	@support	: magento@capacitywebsolutions.com
+***************************************************************************/
+: http://bsscommerce.com/media/catalog/product/cache/1/image/900x/040ec09b1e35df139433887a97daa66f/c/o/configuration-magento_2_lazy_load.png
+-->
+<config>
+    <tabs><cws><label>MageBees</label><sort_order>100</sort_order>
+        </cws>
+    </tabs>
+    <sections>
+        <imagelazyload translate="label">
+            <class>separator-top</class>
+            <label>Lazy Load Images</label>
+            <tab>cws</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>140</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+			
+                <general translate="label">
+                    <label>Lazy Load Option</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <module_enable_disable translate="label">
+							<label>Lazy Load Enabled</label>	
+							<comment>Select Yes load image using lazy load.</comment>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</module_enable_disable> 				
+						<jquery_enable_disable translate="label">
+							<label>jQuery Enabled</label>	
+							<comment>Select Yes / No For jQuery Enable Or Disabled.</comment>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							 <depends><module_enable_disable>1</module_enable_disable></depends> 
+						</jquery_enable_disable> 
+						<upload_file translate="label tooltip comment">
+							<label>Loading Iocn</label>
+							 <frontend_type>image</frontend_type>
+							 <backend_model>adminhtml/system_config_backend_image</backend_model>
+							 <upload_dir config="system/filesystem/media" scope_info="1">lazyload</upload_dir>
+							 <base_url type="media" scope_info="1">lazyload</base_url>
+							 <sort_order>2</sort_order>
+							 <show_in_default>1</show_in_default>
+							 <show_in_website>1</show_in_website>
+							 <show_in_store>1</show_in_store>
+							 <depends><module_enable_disable>1</module_enable_disable></depends> 
+						</upload_file>
+						
+						<threshold translate="label">
+							<label>Threshold</label>	
+							<comment>If you want to load your image earlier , lets say number pixcel before they appear on the screen.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<depends><module_enable_disable>1</module_enable_disable></depends> 
+			    		</threshold> 
+					</fields>
+                </general>
+            </groups>
+        </imagelazyload>
+    </sections>
+</config>

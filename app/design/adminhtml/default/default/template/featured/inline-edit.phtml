@@ -1,0 +1,53 @@
+<script type="text/javascript">
+    function updateChange(button, fieldId)
+    {
+        new Ajax.Request('<?php echo Mage::helper('adminhtml')->getUrl('*/*/updateChange') ?>', {
+            method: 'post',
+            parameters: { id: fieldId, price: $(button).previous('input').getValue() }
+        });
+    }
+    function updateSpecailPrice(button, fieldId)
+    {
+        new Ajax.Request('<?php echo Mage::helper('adminhtml')->getUrl('*/*/updateSpecialPrice') ?>', {
+            method: 'post',
+            parameters: { id: fieldId, price: $(button).previous('input').getValue() }
+        });
+    }
+    function updatefromdate(button, fieldId)
+    {
+        new Ajax.Request('<?php echo Mage::helper('adminhtml')->getUrl('*/*/updateSpecialFromDate') ?>', {
+            method: 'post',
+            parameters: { id: fieldId, fromDate: $(button).previous('input').getValue() }
+        });
+    }
+    function updatetodate(button, fieldId)
+    {
+        new Ajax.Request('<?php echo Mage::helper('adminhtml')->getUrl('*/*/updateSpecialToDate') ?>', {
+            method: 'post',
+            parameters: { id: fieldId, toDate: $(button).previous('input').getValue() }
+        });
+    }
+    function updateRow( fieldId)
+    {
+
+        var newPrice = $$(".price-"+fieldId)[0].value;
+        var newSpecialPrice = $$(".special-price-"+fieldId)[0].value;
+        var newSpecialFromDate = $$(".special-fromdate-"+fieldId)[0].value;
+        var newSpecialToDate = $$(".special-todate-"+fieldId)[0].value;
+        var newLabel = $$(".label-"+fieldId)[0].value;
+
+
+        new Ajax.Request('<?php echo Mage::helper('adminhtml')->getUrl('*/*/updateRow') ?>', {
+            method: 'post',
+            parameters: { id: fieldId, price: newPrice, sprice: newSpecialPrice , fromDate: newSpecialFromDate, toDate: newSpecialToDate, label: newLabel }
+        });
+
+    }
+
+
+
+</script>
+<style>
+    .input-text-price, .input-text-specialprice, .input-text-fromdate, .input-text-todate {width: 140px;}
+
+</style>

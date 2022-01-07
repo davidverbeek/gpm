@@ -1,0 +1,49 @@
+<?php
+/**
+ * Brands slider template
+ *
+ * @see Queldorei_ShopperSettings_Block_Brands
+ */
+$store = Mage::app()->getStore()->getId();
+$logo_width = Mage::getStoreConfig('shopbybrand/brand_list/brand_logo_width', $store);
+$logo_height = Mage::getStoreConfig('shopbybrand/brand_list/brand_logo_height', $store);
+
+$brands = ''; // Mage::getSingleton('shopbybrand/brand')->getBrandsDataHomeFeatured();
+$brandsarray = array($brands);
+$unibrands = array_unique($brandsarray);
+if (!empty($brands)) :
+    ?>
+
+    <div class="product-slider-container brands-slider-container">
+        <div class="row">
+            <div class="clearfix title-container">
+                <h2><?php echo $this->__('Popular Brands') ?></h2>
+            </div>
+            <?php
+            $shopbybrands = Mage::getSingleton('shopbybrand/brand')->getBrandsData();
+            $noImg = '';
+            if ($shopbybrands[0]) {
+                $path = 'brands/thumbnail' . DS . $shopbybrands[0]['brand_id'];
+                $noImg = Mage::helper('shopbybrand/image')
+                        ->resizeThumbnail1('', $path, $logo_width, $logo_height);
+            }
+            ?>
+            <ul id="brandslider" class="brands brandslide jcarousel-skin-tango clearfix homeproductcarousel">
+                <?php foreach ($brands as $b) : ?>
+                    <?php if ($b['thumbnail_image'] != NULL): ?>
+                        <li>
+                            <a href="<?php echo Mage::app()->getStore()->getUrl($b['url_key']); ?>" title="<?php echo $b['name'] ?>">
+                                <span></span>
+                                <?php
+                                $path = 'brands/thumbnail' . DS . $b['brand_id'];
+                                $img = ($b['thumbnail_image'] == NULL) ? $noImg : Mage::helper('shopbybrand/image')
+                                                ->resizeThumbnail1($b['thumbnail_image'], $path, $logo_width, $logo_height);
+                                ?>
+                                <img class="grayscale grayscale-fade" src="<?php echo $img; ?>" alt="<?php echo $b['name'] ?>" width="<?php echo Mage::getStoreConfig('shopperbrands/main/image_width', Mage::app()->getStore()->getId()); ?>" /></a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+<?php endif; ?>

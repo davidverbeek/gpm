@@ -1,0 +1,87 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+<?php if (Mage::getStoreConfig('shoppersettings/design/responsive')) : ?>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+<?php endif; ?>
+
+<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>"/>
+
+<meta name="referrer" content="always"/>
+<?php $pageTitleDescription = Mage::helper('common')->getPageTitleDescription($this->getDescription()); ?>
+<?php if (!empty($pageTitleDescription)) { ?>
+	<title><?php echo $pageTitleDescription['title']; ?></title>
+	<meta name="description" content="<?php echo $pageTitleDescription['metaDesc']; ?>"/>
+<?php } else { ?>
+	<title><?php echo $this->getTitle() ?></title>
+	<meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>"/>
+<?php } ?>
+
+<meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>"/>
+<meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>"/>
+<link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
+<link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
+<link rel="apple-touch-icon" href="<?php echo $this->getSkinUrl(); ?>apple-touch-icon.png"/>
+<link rel="apple-touch-icon" sizes="72x72" href="<?php echo $this->getSkinUrl(); ?>apple-touch-icon-72x72.png"/>
+<link rel="apple-touch-icon" sizes="114x114" href="<?php echo $this->getSkinUrl(); ?>apple-touch-icon-114x114.png"/>
+
+<?php
+//New Relic Browser APM script snipper.
+echo Mage::helper('gtm')->getNewRelicBrowserSnippet();
+?>
+
+<!--[if lt IE 7]>
+<script type="text/javascript">
+	//<![CDATA[
+	var BLANK_URL = '<?php //echo $this->helper('core/js')->getJsUrl('blank.html')  ?>';
+	var BLANK_IMG = '<?php //echo $this->helper('core/js')->getJsUrl('spacer.gif')  ?>';
+//]]>
+</script>
+<![endif]-->
+<?php echo $this->getCssJsHtml() ?>
+<?php
+// $options_link = '?store=' . Mage::app()->getStore()->getCode();
+// if ($cat = Mage::registry('current_category')) {
+// 	$options_link .= '&cat=' . $cat->getId();
+// } else if ($cat = Mage::app()->getRequest()->getParam('qvc')) {
+// 	$options_link .= '&cat=' . $cat;
+// }
+?>
+<?php echo $this->getChildHtml() ?>
+
+<?php echo $this->getIncludes() ?>
+<?php
+
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+if (Mage::helper('gtm')->getEnabled()) { ?>
+	<?php if (isset($_COOKIE['partner']) && $_COOKIE['partner'] != ''): ?>
+		<script>
+			dataLayer.push({'partner': '<?php echo $_COOKIE['partner'] ?>'})
+		</script>
+	<?php endif; ?>
+<?php } ?>

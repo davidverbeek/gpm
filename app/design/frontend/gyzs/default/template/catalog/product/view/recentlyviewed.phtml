@@ -1,0 +1,18 @@
+<div class="recentlyviewed">
+    <?php $html = $this->getChildHtml('main.reports.product.viewed'); ?>    
+	<?php if($html): ?>
+		<div class="block-title">
+			<h3><?php echo $this->__('Recently viewed by you') ?></h3>
+		</div>
+		<div class="block-content">
+			<?php echo $html ?>
+		</div>
+	<?php else: ?>
+		<div class="block-title">
+			<h3><?php echo $this->__('Everything in your mailbox') ?></h3>
+		</div>
+		<div class="block-content">
+			<?php echo $this->getChildHtml('everything.in.mailbox'); ?>
+		</div>							
+	<?php endif; ?>
+</div>

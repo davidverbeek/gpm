@@ -1,0 +1,5 @@
+<?php if($this->getLoadingType()){ ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl($this->getGyzsRacCss(), array('_secure'=>true)); ?>">
+<?php } else { ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->getSliRacCss(); ?>">
+<?php } ?>

@@ -1,0 +1,10 @@
+<div class="service-top-container">
+    <div class="service-top">
+		<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('header-right-service')->toHtml(); ?>
+    </div>
+    <div class="details" style="display: none; opacity: 0;">
+        <div class="details-border"></div>
+        <?php /*<div class="a-center">hear we need to put links for service file name is page/html/service.phtml</div>*/?>
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('header-clientservice')->toHtml(); ?>
+    </div>
+</div>

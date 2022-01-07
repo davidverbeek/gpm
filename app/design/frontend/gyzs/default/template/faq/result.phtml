@@ -1,0 +1,58 @@
+<?php 
+	$post= $this->getRequest()->getPost();
+	$isUseJavascript 	= Mage::helper('faq')->getUseJavascript();
+?>
+<div class="page-title">
+<h1><?php echo htmlentities($this->__("Search result for '%s'", $post['keyword']));?></h1>
+</div>
+<div class="faq-search-result">
+	<div class="faq-search">
+		<form name="faqsearch" action="<?php echo $this->getUrl('*/*/search') ?>" method="post" id="search-form">
+			<ul>
+				<li>
+					<input name="keyword" id="keyword" class="input-text required-entry" type="text" maxlength="100" size="80" />
+					<button type="submit" title="<?php echo $this->__('SEARCH') ?>" class="button"><span><span><?php echo $this->__('SEARCH') ?></span></span></button>
+				</li>
+			</ul>
+		</form>
+	</div>
+	<div class="description">
+	<?php $question_result_array = $this->getQuestionResult()?>
+		<?php if(!empty($question_result_array)): ?>
+			<?php foreach ($question_result_array as $question_result ): ?>
+				<?php foreach ($question_result as $question):?>
+					<?php $category = $this->getCategory($question) ?>
+					<?php if(!empty($category)): ?>
+					<ul>
+
+							<h3><?php echo $category[0]['category_name']?></h3>
+							<li>								
+								<h5 class="faq_question"><a href="<?php echo $this->getQuestionUrl(array('id' => $question->getData('faq_id')))?>" title="<?php echo $question['question']; ?>"><?php echo $question['question']; ?></a></h5>
+								<div class="answer">
+								</div>
+							</li>	
+
+					</ul>
+					<?php endif ?>
+				<?php endforeach ?>			
+			<?php endforeach ?>
+	<?php else:?>
+		<p class="note-msg"><?php echo $this->__('There are no FAQs matching the selection.'); ?></p>
+	<?php endif ?>
+	</div>
+</div>
+<div class="buttons-set">
+	<p class="back-link">
+		<button class="button" title="Goback" onclick="goBack()"><span><span><?php echo htmlentities($this->__('Go Back')); ?></span></span></button>
+	</p>
+</div>
+		
+<script type="text/javascript">
+	function goBack(){
+		window.history.back();
+	}
+	//<![CDATA[
+		var dataForm = new VarienForm('search-form', true);
+	//]]>
+
+</script>

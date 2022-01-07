@@ -1,0 +1,124 @@
+<?php $quote = $this->getQuote(); ?> 
+<div class="page-title">
+    <h2><?php echo $this->__('QuoteNumber %s', $quote->getId()) ?></h2>
+    <div class="button-set">
+        <button type="submit" class="button print" onClick="window.print()">
+            <span><?php echo $this->__('Print') ?></span>
+        </button>
+        <button class="button orderquote" type="button" onclick="setLocation('<?php echo Mage::getUrl('salesquotes/quote/checkoutQuote/', array('_secure' => true, 'quote_id' => $quote->getId())); ?>');">
+            <span><?php echo $this->__('Quotation order') ?></span>
+        </button>
+    </div>
+</div>
+<div class="order-specifications">
+    <h2><?php echo $this->__('Specifications') ?></h2>
+    <ul>
+        <li>
+            <div class="quote-label">
+                <span><?php echo $this->__('Quote date') ?></span>
+            </div>
+            <div class="quote-detail">
+                <span><?php echo date("m - d - Y", strtotime($quote->getUpdatedAt())) ?></span>
+            </div>
+        </li>
+        <li>
+            <div class="quote-label">
+                <span><?php echo $this->__('Quote number') ?></span>
+            </div>
+            <div class="quote-detail">
+                <span><?php echo $quote->getId() ?></span>
+            </div>
+        </li>
+        <li>
+            <div class="quote-label">
+                <span><?php echo $this->__('Status') ?></span>
+            </div>
+            <div class="quote-detail">
+                <span><?php echo $this->__($quote->getStatus()); ?></span>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<?php if ($quote->getStatus() == 'pending'): ?>
+    <form action="<?php echo Mage::helper('techtwo_salesquotes')->getCheckoutQuoteUrl($quote->getId()); ?>" method="post" id="form-checkout-quote">
+    <?php endif; ?>
+
+    <?php $_items = $quote->getAllItems() ?>
+    <div class="widetable2">
+        <table cellspacing="0" width="100%" class="data-table" id="my-quotes-table-detail">
+            <thead>
+                <tr>
+                    <th colspan="3"><?php echo $this->__('Producten') ?></th>
+                </tr>
+            </thead>
+            <?php /* <tfoot>
+              <tr>
+              <td class="a-right" colspan="4">
+              <?php echo $this->__('Totaal: %s', $quote->getStore()->formatPrice($quote->getGrandTotal())) ?>
+              </td>
+              </tr>
+              </tfoot> */ ?>
+            <tbody>
+                <?php foreach ($_items as $_item): ?>
+                    <?php $_product = Mage::getModel('catalog/product')->load($_item->getProductId()); ?>
+                    <?php $unit = Mage::helper('featured')->getProductUnit($_product->getData('verkoopeenheid')); ?>
+                    <tr>
+                        <td>
+                            <div class="offertie-image">
+                                <img src="<?php echo Mage::helper('catalog/image')->init($_product, 'thumbnail')->resize(75); ?>" width="75" height="75" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" />
+                            </div>
+                            <div class="product-name-sku">
+                                <span class="offertie-sku"><?php echo Mage::helper('common')->getGYZSSku($_product->getSku()); ?></span>
+                                <span class="offertie-name"><?php echo $this->htmlEscape($_item->getName()) ?></span>
+                            </div>
+                            <div class="stockstatus">
+                                <?php echo $_item->getQty() ?> &nbsp;<?php echo Mage::helper('featured')->getStockUnit($_item->getQty(), $unit); ?>
+                            </div>
+                            <div class="priceinfo">
+                                <span class="offertie-excl-price"><?php echo $quote->getStore()->formatPrice($_item->getRowTotal()) ?></span>
+                                <span class="offertie-incl-price"><?php echo $quote->getStore()->formatPrice($_item->getRowTotalInclTax()) ?>&nbsp;<?php echo $this->__('incl.'); ?></span>
+                            </div>
+                        </td>
+                        <?php /* <td class="a-right"><?php echo $quote->getStore()->formatPrice($_item->getPrice()) ?></td> */ ?>
+                    </tr>   
+                <?php endforeach ?> 
+            </tbody>
+        </table>
+        <div style="clear:both;"></div>
+        <div class="row clearfix squotes">
+            <div class="grid_4">
+                <?php echo $this->getChildHtml('totals'); ?>
+                <div style="clear:both;"></div>
+            </div><!-- /.grid_4 -->
+            <div style="clear:both;"></div>
+        </div><!-- /.row .clearfix -->
+
+
+
+    </div>
+
+    <script type="text/javascript">decorateTable('my-quotes-table')</script>
+    <?php //if ($quote->getStatus() == 'pending'): ?>
+        <?php //<div class="button-set">
+            //<input type="hidden" name="checkout_quote" value="1" />
+            //<button class="button form-button" type="submit"><span><span><span>?>
+                <?php //echo $this->__('Bevestig offerte') ?>
+                        <?php //</span></span></span></button> 
+        //</div>?>
+    <?php //</form>?>
+    <?php /* if ($this->getCartHasItems()): ?>
+      <script type="text/javascript">
+      // <![CDATA[
+      $('form-checkout-quote').observe('submit', function (event) {
+      if (!confirm('<?php echo $this->jsQuoteEscape($this->__('Uw huidige winkelwagen wordt leeggemaakt. Weet u het zeker?')) ?>')) {
+      Event.stop(event);
+      }
+      });
+      // ]]>
+      </script>
+      <?php endif; */ ?>
+<?php //endif; ?>
+<!--<div class="buttons-set">
+        <a href="<?php //echo $this->getUrl('salesquotes/quote/history/')    ?>" class="back-link">&laquo; <?php //echo $this->__('Terug')    ?></a>
+</div>-->

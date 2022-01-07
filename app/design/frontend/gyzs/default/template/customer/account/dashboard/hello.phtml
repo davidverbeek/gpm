@@ -1,0 +1,110 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_hscommon = Mage::helper('common'); ?>
+<div class="dash-main">
+	<h2><?php echo $this->__('Overview') ?></h2>
+	<!-- Section - 1 -->
+	<div class="dash-sec">
+		<div class="dash-panel">
+			<h3><?php echo $this->__('See all your orders'); ?></h3>
+			<ul class="dash-links">
+				<li>
+					<a href="<?php echo $this->getUrl('sales/order/history');?>" title="<?php echo $this->__('Order History');?>">
+						<span class="dash-li-left"><?php echo $this->__('Order History');?><span class="li-left-count"> (<?php echo $_hscommon->getOrderCount();?>)</span></span>
+						<span class="dash-li-right"><?php echo $this->__('What have you already ordered from us?');?></span>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo $this->getUrl('salesquotes/quote/history');?>" title="<?php echo $this->__('Quotes'); ?>">
+						<span class="dash-li-left"><?php echo $this->__('Quotes'); ?><span class="li-left-count"> (<?php echo $_hscommon->getQuoteCount();?>)</span></span>
+						<span class="dash-li-right"><?php echo $this->__('Check our proposals');?></span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Section - 2 -->
+	<div class="dash-sec">
+		<div class="dash-panel">
+			<h3><?php echo $this->__('My Account');?></h3>
+			<ul class="dash-links">
+				<li>
+					<a href="<?php echo $this->getUrl('customer/account/edit');?>" title="<?php echo $this->__('Modify your data');?>">
+						<span class="dash-li-left"><?php echo $this->__('Modify your data');?></span>
+						<span class="dash-li-right"><?php echo $this->__('Name, email, etc');?></span>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo $this->getUrl('customer/account/edit');?>" title="<?php echo $this->__('Change your password');?>">
+						<span class="dash-li-left"><?php echo $this->__('Change your password');?></span>
+						<span class="dash-li-right"><?php echo $this->__('Account Reset');?></span>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo $this->getUrl('customer/address');?>" title="<?php echo $this->__('My delivery addresses');?>">
+						<span class="dash-li-left"><?php echo $this->__('My delivery addresses');?></span>
+						<span class="dash-li-right"><?php echo $this->__('View all addresses where GYZS has been');?></span>
+					</a>
+				</li>
+				<li>
+					<?php echo $this->getChildHtml('scommerce.gdpr.deletion') ?>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Section - 3 -->
+	<div class="dash-sec">
+		<div class="dash-panel">
+			<h3><?php echo $this->__('My information');?></h3>
+			<ul class="dash-links">
+				<li>
+					<a href="<?php echo $this->getUrl('review/customer');?>" title="<?php echo $this->__('Read your reviews');?>">
+						<span class="dash-li-left"><?php echo $this->__('Read your reviews');?></span>
+						<span class="dash-li-right"><?php echo $this->__('Your opinion about our products');?></span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="dash-li-left"><?php echo $this->__('View your questions about products') ?></span>
+						<span class="dash-li-right"><?php echo $this->__('Your questions about our products');?></span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<span class="dash-li-left"><?php echo $this->__('View your questions to GYZS') ?></span>
+						<span class="dash-li-right"><?php echo $this->__('Everything what you want to know about GYZS');?></span>
+					</a>
+				</li>
+				<li>
+					<?php echo $this->getChildHtml('scommerce.gdpr.exportgdprdata') ?>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

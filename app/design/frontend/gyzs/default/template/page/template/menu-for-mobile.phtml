@@ -1,0 +1,30 @@
+<?php 
+    /* this template file currently not used in any xml - Parth - 12092018 */
+    $cateHelper    = Mage::helper('featured');
+    $catlistHtml   = $cateHelper->getMainCategories();
+    $topcategories = $cateHelper->getTopCategoriess();
+    $mobileCate    = $cateHelper->getMobileCategories();
+?>
+
+<div class="menu-for-mobile">
+    <div id="verticalmenu">					
+        <ul>
+            <li>
+                <p class="mst"><?php echo $this->__('Most viewed') ?><span></span></p>
+                <div id="most">
+                    <?php 
+                        echo $topcategories;
+                    ?>
+                </div>
+            </li>
+            <li>
+                <p class="main"><?php echo $this->__('All Categories...') ?><span></span></p>
+                <div id="accordian">
+                <?php
+                    echo $mobileCate;
+                ?>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

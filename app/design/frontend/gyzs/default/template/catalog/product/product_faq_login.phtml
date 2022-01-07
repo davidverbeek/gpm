@@ -1,0 +1,76 @@
+<?php
+if(!isset($_product))
+    $_product = Mage::registry('current_product');
+?>
+<div class="productmisc">
+    <?php
+    if (Mage::getSingleton('customer/session')->isLoggedIn()):
+        $customerData = Mage::getSingleton('customer/session')->getCustomer();
+        ?>
+        <div id="faqform">
+            <div class="block-faq">
+                <div class="block-title">
+                    <h2><?php echo $this->__('Ask Your Question') ?></h2>
+                    <span>(<?php echo $this->__('get answer within a weekday') ?>)</span>
+                </div>
+                <form action="<?php echo $this->getUrl('') ?>customerfaq/index/save" method="post" id="frequently-asked-questions">
+                    <div class="block-content">
+                        <h3><?php echo $this->__('Place below your message,question or remark :') ?></h3>
+                        <div class="comment-box">
+                            <textarea rows="30" cols="50" name="question" form="frequently-asked-questions" id="faqq" class="required-entry"></textarea>
+                        </div>
+                        <input type="hidden" name="customer_id" value="<?php echo $customerData->getId(); ?>" />
+                        <input type="hidden" name="is_from" value="1" />
+                        <input type="hidden" name="product_url" value="<?php echo $_product->getProductUrl(); ?>" />
+                        <input type="hidden" name="product_id" value="<?php echo $_product->getId(); ?>" />
+                        <input type="hidden" name="product_sku" value="<?php echo Mage::helper('common')->getGYZSSku($_product->getSku()); ?>" />
+                        <input type="hidden" name="name" value="<?php echo $customerData->getFirstname() . ' ' . $customerData->getLastname() ?>" />
+                        <div class="actions">
+                            <button type="submit" title="<?php echo $this->__('Submit my question') ?>" class="button"><span><span><?php echo $this->__('Submit my question') ?></span></span></button>
+                        </div>
+                    </div>
+                </form>
+                <script type="text/javascript">
+                    //<![CDATA[
+                    var faqFormDetail = new VarienForm('frequently-asked-questions');
+                    //]]>
+                </script>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="loginform">
+            <div class="block-login-top">
+                <h3><?php echo $this->__('Ask Your Own Question') ?></h3>
+                <span>(<?php echo $this->__('Please Login first') ?>)</span>
+            </div>
+            <div class="block-login-bottom">
+                <div class="block-title">
+                    <h3><?php echo $this->__('Login') ?></h3>
+                    <a href="<?php echo $this->getUrl('customer/account/create'); ?>" class="regascus" title="<?php echo $this->__('Register as Customer') ?>"><?php echo $this->__('Register as Customer') ?></a>
+                </div>
+				<form action="<?php echo $this->getUrl('customer/account/loginPost', array('referer' => Mage::helper('core')->urlEncode($_product->getProductUrl()))) ?>" method="post" id="product-view-login-form">
+					<?php echo $this->getBlockHtml('formkey'); ?>
+					<input type="hidden" name="referer" value="<?php echo $_product->getProductUrl() ?>" />
+					<div class="block-content">
+						<div class="input-box">
+							<input type="text" name="login[username]" class="input-text required-entry validate-email" placeholder="<?php echo $this->__('Email Address...') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Email Address...') ?>';
+							   "/>
+						</div>
+						<div class="input-box">
+							<input type="password" name="login[password]" class="input-text required-entry validate-password" placeholder="<?php echo $this->__('Password') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Password') ?>';
+							   "/>
+						</div>
+						<div class="actions">
+							<button type="submit" class="button"><?php echo $this->__('Login') ?></button>
+						</div>
+					</div>
+				</form>
+				<script type="text/javascript">
+					//<![CDATA[
+					var dataForm = new VarienForm('product-view-login-form');
+					//]]>
+				</script>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>

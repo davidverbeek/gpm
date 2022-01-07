@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout version="0.1.0">
+	<adminhtml_effectconnect_index>
+		<reference name="content">
+			<block type="effectconnect/adminhtml_effectconnect" name="effectconnect" />
+		</reference>
+	</adminhtml_effectconnect_index>
+    <sales_order_grid_update_handle>
+        <reference name="sales_order.grid">
+            <action method="addColumnAfter">
+                <columnId>ext_order</columnId>
+                <arguments>
+                    <header>External order number</header>
+                    <index>ext_order</index>
+                    <filter_index>main_table.ext_order</filter_index>
+                    <type>text</type>
+                </arguments>
+                <after>real_order_id</after>
+            </action>
+        </reference>
+    </sales_order_grid_update_handle>
+    <adminhtml_sales_order_grid>
+        <update handle="sales_order_grid_update_handle" />
+    </adminhtml_sales_order_grid>
+    <adminhtml_sales_order_index>
+        <update handle="sales_order_grid_update_handle" />
+    </adminhtml_sales_order_index>
+</layout>

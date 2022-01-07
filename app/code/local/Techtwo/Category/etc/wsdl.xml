@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:typens="urn:{{var wsdl.name}}" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/"
+    name="{{var wsdl.name}}" targetNamespace="urn:{{var wsdl.name}}">
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+            <complexType name="catalogCategoryEntity">
+                <all>
+                    <element name="image" type="xsd:string" />
+                    <element name="thumbnail" type="xsd:string" />
+                    <element name="heading_tag" type="xsd:string" />
+                    <element name="alt_tag_bestandnaam" type="xsd:string" />
+                    <element name="marge" type="xsd:string" />
+                    <element name="custom_filters" type="xsd:string" />
+                </all>
+            </complexType>
+            <complexType name="catalogCategoryEntityNoChildren">
+                <all>
+                    <element name="image" type="xsd:string" />
+                    <element name="thumbnail" type="xsd:string" />
+                    <element name="heading_tag" type="xsd:string" />
+                    <element name="alt_tag_bestandnaam" type="xsd:string" />
+                    <element name="marge" type="xsd:string" />
+                    <element name="custom_filters" type="xsd:string" />
+                </all>
+            </complexType>
+            <complexType name="catalogCategoryEntityCreate">
+                <all>
+                    <element name="image" type="xsd:string" minOccurs="0" />
+                    <element name="thumbnail" type="xsd:string" minOccurs="0" />
+                    <element name="heading_tag" type="xsd:string" minOccurs="0" />
+                    <element name="alt_tag_bestandnaam" type="xsd:string" minOccurs="0" />
+                    <element name="marge" type="xsd:string" minOccurs="0" />
+                    <element name="custom_filters" type="xsd:string" minOccurs="0" />
+                </all>
+            </complexType>
+            <complexType name="catalogCategoryInfo">
+                <all>
+                    <element name="image" type="xsd:string" minOccurs="0" />
+                    <element name="thumbnail" type="xsd:string" minOccurs="0" />
+                    <element name="heading_tag" type="xsd:string" minOccurs="0" />
+                    <element name="alt_tag_bestandnaam" type="xsd:string" minOccurs="0" />
+                    <element name="marge" type="xsd:string" minOccurs="0" />
+                    <element name="custom_filters" type="xsd:string" minOccurs="0" />
+                </all>
+            </complexType>
+        </schema>
+    </types>
+</definitions>

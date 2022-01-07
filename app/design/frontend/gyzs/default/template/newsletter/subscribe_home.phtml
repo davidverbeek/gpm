@@ -1,0 +1,85 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<div class="block block-subscribe">
+    <div class="block-title">
+        <h3><?php echo $this->__('Sale in your mailbox') ?></h3>
+    </div>
+    <form action="<?php echo $this->getUrl('newsletter/subscriber/new',array('_secure'=>true)) ?>" method="post" id="newsletter-validate-detail">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <div class="block-content">
+            <div class="input-box">
+               <input type="text" name="email" id="newsletter" title="<?php echo $this->__('Type your Emailaddress')?>" class="input-text required-entry validate-email" placeholder="<?php echo $this->__('Type your Emailaddress')?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Type your Emailaddress') ?>'; "/>
+               <?php if(Mage::helper('gtm')->getreCAPTCHAKey() != "") :?>
+                 <div class="recaptcha">
+                  <input type="checkbox" id="recaptcha-verification-1-home" name="recaptcha-verification-1-home" value="" class="hide required-entry" />
+                  <div id="recaptcha-1-home"></div>
+                  <script type="text/javascript">
+                      var onloadCallbackhome = function() {
+                          grecaptcha.render('recaptcha-1-home', {
+                             'sitekey': "<?php echo Mage::helper('gtm')->getreCAPTCHAKey();?>",
+                             'theme': "light",
+                             'callback': function(response) {
+                                 if (response.length > 0) {
+                                     $('recaptcha-verification-1-home').writeAttribute('value', 'checked');
+                                     $('recaptcha-verification-1-home').checked = true;
+                                 }
+                             }
+                          });
+                      };
+                  </script>
+                  <script>
+                    if (screen && screen.width > 480) {
+                    document.write('<script type="text/javascript" src="//www.google.com/recaptcha/api.js?onload=onloadCallbackhome&render=explicit&hl=nl" async defer><\/script>');
+                    }
+                  </script>    
+
+              </div>
+            <?php endif; ?>
+            </div>
+            <div class="actions">
+                <button type="submit" title="<?php echo $this->__('Yes, I want discount in my mail!') ?>" class="button"><?php echo $this->__('Yes, I want discount in my mail!') ?></button>
+            </div>
+        </div>
+    </form>
+	<div class="socials clearfix">
+		<p><?php echo $this->__('Follow gyzs online')?></p>
+		<ul class="socialmedia">
+			<li><a href="https://www.youtube.com/user/GYZSNL" target="_blank" title="<?php echo $this->__('Youtube') ?>" class="fa fa fa-youtube"></a></li>
+			<li><a href="https://www.facebook.com/GYZSshop" target="_blank" title="<?php echo $this->__('Facebook') ?>" class="fa fa-facebook"></a></li>
+			<li><a href="https://twitter.com/gyzs" target="_blank" title="<?php echo $this->__('Twitter') ?>" class="fa fa-twitter"></a></li>
+			<li><a href="https://www.linkedin.com/company/gyzs-nl?trk=hb_tab_compy_id_3001370" target="_blank" title="<?php echo $this->__('LinkedIn') ?>" class="fa fa-linkedin"></a></li>
+		</ul>
+	</div>
+    <script type="text/javascript">
+    //<![CDATA[
+        var newsletterSubscriberFormDetail = new VarienForm('newsletter-validate-detail');
+    //]]>
+    Translator.add('Type here you name','<?php echo $this->__('Type here you name')?>');
+    </script>
+
+</div>

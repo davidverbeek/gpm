@@ -1,0 +1,7 @@
+<?php
+// Helios_Gtm module enable and setting enable for gtm than only script execute
+if(Mage::helper('gtm')->getEnabled()){ ?>
+
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/helios/gtm/gtm.js') ?>"></script>
+
+<?php } ?>

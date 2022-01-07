@@ -1,0 +1,30 @@
+<!--@subject Nieuwe offerte aanvraag # {{var quote.getId()}} @-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+	<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+		<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+			<tr>
+				<td align="center" valign="top" style="padding:20px 0 20px 0">
+					<!-- [ header starts here] -->
+					<table bgcolor="FFFFFF" cellspacing="0" cellpadding="10" border="0" width="670" style="border:1px solid #E0E0E0;">
+						<tr>
+							<td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
+						</tr>
+						<!-- [ middle starts here] -->
+						<tr>
+							<td valign="top">                    
+								<p style="font-size:12px; line-height:16px; margin:0 0 10px 0;">Een nieuwe offerte is aangevraagd door: <b>{{htmlescape var=$quote.getCustomerFirstname()}} {{htmlescape var=$quote.getCustomerLastname()}}</b> op {{var quote.getUpdatedAt()}}.</p>
+								<p style="font-size:12px; line-height:16px; margin:0;">Details zijn te vinden in de Magento Admin panel onder Verkopen, Offertes.</p>
+							</td>
+						</tr>
+					</table>
+					{{customVar code=email_footer}}
+					{{customVar code=email_disclaimer}}
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>

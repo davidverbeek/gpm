@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Hs_Featured>
+            <version>1.0.8</version>
+        </Hs_Featured>
+    </modules>
+    <admin>
+        <routers>
+            <featured>
+                <use>admin</use>
+                <args>
+                    <module>Hs_Featured</module>
+                    <frontName>featured</frontName>
+                </args>
+            </featured>
+        </routers>
+    </admin>
+    <adminhtml>
+	<menu>
+            <catalog>
+		<children>
+                    <featured translate="title" module="featured">
+                        <title>Manage Featured Product</title>
+                        <sort_order>10</sort_order>
+                         <action>featured/adminhtml_featured</action>
+                    </featured>
+		</children>
+            </catalog>
+        </menu>
+        <layout>
+            <updates>
+                <featured>
+                    <file>featured.xml</file>
+                </featured>
+            </updates>
+        </layout>
+	</adminhtml>		
+    <global>
+        <models>
+            <featured>
+                <class>Hs_Featured_Model</class>
+                <resourceModel>featured_resource</resourceModel>
+            </featured>
+            <featured_resource>
+                <class>Hs_Featured_Model_Mysql4</class>
+                <deprecatedNode>featured_resource</deprecatedNode>
+                <entities>
+                    <featuredlabel>
+                        <table>featuredlabel</table>
+                    </featuredlabel>
+                </entities>
+            </featured_resource>
+        </models>
+        <resources>
+            <featured_setup>
+                <setup>
+                    <module>Hs_Featured</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </featured_setup>
+        </resources>
+        <blocks>
+            <featured>
+                <class>Hs_Featured_Block</class>
+            </featured>
+        </blocks>
+        <helpers>
+            <featured>
+                <class>Hs_Featured_Helper</class>
+            </featured>
+        </helpers>
+    </global>
+    <frontend>
+        <category>
+            <collection>
+                <attributes>
+                    <is_topcategory />
+                    <category_short_headline />
+                    <category_level3_banner />
+                </attributes>
+            </collection>
+        </category>
+        <product>
+            <collection>
+                <attributes>
+                    <prijsfactor />
+                    <verkoopeenheid />
+                    <final_price />
+                </attributes>
+            </collection>
+        </product>
+        <routers>
+            <featured>
+                <use>standard</use>
+                <args>
+                    <module>Hs_Featured</module>
+                    <frontName>featured</frontName>
+                </args>
+            </featured>
+        </routers>
+    	<layout>
+            <updates>
+                <featured>
+                    <file>featured.xml</file>
+                </featured>
+            </updates>
+        </layout>
+    </frontend>
+</config>

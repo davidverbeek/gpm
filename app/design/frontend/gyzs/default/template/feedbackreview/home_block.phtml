@@ -1,0 +1,50 @@
+<?php
+	$xml = Mage::helper('feedbackreview')->getXmlFeedData();
+	$reviewsXml = Mage::helper('techtwo_feedbackreview')->getReviewsXml();
+	$reviews = Mage::helper('techtwo_feedbackreview')->getReviews();
+
+	if ($reviewsXml->noReviews > 0) : ?>
+	<div class="bottom-left cstm-reviews">
+		<div class="feedback-reviews">
+			<div class="feedback-company">
+				<div class="product-slider-container feedback-slider-container">
+					<div class="row">					
+						<div class="block-content">
+							<ul id="feedbackslider" class="feedback jcarousel-skin-tango clearfix">
+								<?php
+									$i = 1;
+									foreach ($reviews as $reviewDetail) :
+								?>
+									<div>
+										<li class="ratings">
+											<div class="rating-box">
+													<span class="rating"
+														  style="width:<?php echo ($reviewDetail['score'] / $reviewDetail['scoremax']) * 100; ?>%"></span>
+												</div>
+											<div class="comments">
+												<?php echo $this->escapeHtml($reviewDetail['text']); ?>
+											</div>
+										</li>
+									</div>
+								<?php
+										if ($i == 5)
+											break;
+										$i++;
+									endforeach;
+								?>
+							</ul>
+						</div>
+						<div class="all-feedbacks clearfix">
+							<div class="gotoall">
+								<a href="<?php echo Mage::getBaseUrl() . 'beoordelingen/'; ?>" title="<?php echo $this->__('All') ?>">
+									<?php echo $this->__('All') ?> <span class="count">(<?php echo $reviewsXml->noReviews; ?>)</span>
+								</a>
+							</div>
+							<a href="" class="thecompany" title="<?php echo $this->__('The Feedback Company') ?>"></a>		
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>

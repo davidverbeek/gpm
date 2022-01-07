@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+  <customerfaq_adminhtml_customerfaq_index>
+	<reference name="content">
+	  <block type="customerfaq/adminhtml_customerfaq" name="customerfaq" />
+	</reference>
+  </customerfaq_adminhtml_customerfaq_index>
+</layout>

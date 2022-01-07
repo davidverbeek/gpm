@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<config>
+      <modules>
+        <NMediaSystems_MagentoPDFInvoice>
+          <version>0.1.0</version>
+        </NMediaSystems_MagentoPDFInvoice>
+      </modules>
+      
+   	  <global> 
+   
+         <models>
+     
+            <sales>
+  	           <rewrite>
+  	              
+  	              <order_pdf_invoice>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Invoice</order_pdf_invoice>
+  	              <order_pdf_creditmemo>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Creditmemo</order_pdf_creditmemo>   
+  	              <order_pdf_shipment>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Shipment</order_pdf_shipment>
+  	              <order_pdf_abstract>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Abstract</order_pdf_abstract>
+  	              
+  	              <order_pdf_items_invoice_default>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Default_Invoice</order_pdf_items_invoice_default>
+  	              <order_pdf_items_creditmemo_default>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Default_Creditmemo</order_pdf_items_creditmemo_default>
+  	              <order_pdf_items_shipment_default>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Default_Shipment</order_pdf_items_shipment_default>  	              
+  	              <order_pdf_items_abstract>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Abstract</order_pdf_items_abstract>
+  	              
+  	              <order_pdf_total_default>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Total_Default</order_pdf_total_default>
+  	              
+  	              <order_pdf_items_invoice_grouped>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Grouped_Invoice</order_pdf_items_invoice_grouped>
+  	              <order_pdf_items_creditmemo_grouped>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Grouped_Creditmemo</order_pdf_items_creditmemo_grouped>
+  	                    
+  	           </rewrite>
+  	        </sales>
+     
+     		<bundle>
+     		   <rewrite>
+     		   
+  	              <sales_order_pdf_items_abstract>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Bundle_Abstract</sales_order_pdf_items_abstract>
+  	              <sales_order_pdf_items_invoice>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Bundle_Invoice</sales_order_pdf_items_invoice>
+  	              <sales_order_pdf_items_creditmemo>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Bundle_Creditmemo</sales_order_pdf_items_creditmemo>
+  	              <sales_order_pdf_items_shipment>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Bundle_Shipment</sales_order_pdf_items_shipment>
+  	           
+     		   </rewrite>
+     		</bundle>
+     		
+     		<downloadable>
+     		   <rewrite>
+     		      
+  	              <sales_order_pdf_items_abstract>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Downloadable_Abstract</sales_order_pdf_items_abstract>
+  	              <sales_order_pdf_items_invoice>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Downloadable_Invoice</sales_order_pdf_items_invoice>
+  	              <sales_order_pdf_items_creditmemo>NMediaSystems_MagentoPDFInvoice_Model_Order_Pdf_Items_Downloadable_Creditmemo</sales_order_pdf_items_creditmemo>
+  	           
+     		   </rewrite>
+     		</downloadable>
+     
+         </models>
+          
+   </global>   
+</config>

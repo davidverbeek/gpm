@@ -1,0 +1,15 @@
+SELECT
+    `g`.`value`,
+    `gv`.`store_id`
+FROM
+    `[[catalog_product_entity_media_gallery_value]]` AS `gv`
+INNER JOIN
+    `[[catalog_product_entity_media_gallery]]` AS `g` ON
+    `gv`.`value_id`=`g`.`value_id`
+WHERE
+    `g`.`entity_id`=? AND
+    `gv`.`store_id` IN (0,[[store_view]]) AND
+    `gv`.`disabled`=0
+ORDER BY
+    `gv`.`store_id` DESC,
+    `gv`.`position` ASC

@@ -1,0 +1,178 @@
+.block-categories .block-title {
+    line-height: 25px;
+}
+
+.block-categories .block-title strong {
+    font-size: 16px;
+}
+
+.block-content li a,
+.block-content li span.imitate-link {
+    display: block;
+    line-height: 22px;
+    color: #202020;
+}
+
+.block-categories .block-content {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.block-categories .block-content li a,
+.block-categories .block-content li span.imitate-link {
+    padding-left: 10px;
+    text-decoration: none;
+}
+
+.block-categories.exposed .block-content li:hover > a,
+.block-categories.exposed .block-content li a:hover {
+    background-color: #fff;
+    margin-right: -6px;
+    color: #000;
+}
+
+.block-categories {
+    position: relative;
+    /*    z-index: 15;*/
+}
+
+/* IE7 doesn't see hover on padding and borders */
+.sidebar .dark.block.block-categories {
+    padding-right: 0;
+    border-right: none;
+    min-height: 481px;
+}
+
+.block-categories .background {
+    /*    background: #000;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        display: none;*/
+}
+
+.block-categories .category-submenu-panel {
+    display: none;
+    position: absolute;
+    z-index: 11;
+    top: -1px;
+    left: 219px;
+    border-left: none;
+    width: 769px;
+    background: #FFFFFF url('http://devgyzs.r.worldssl.net/skin/frontend/gyzs/default/images/background/home-nav-bg.png') no-repeat left center;
+    overflow: hidden;
+    min-height: 569px;
+}
+
+.block-categories .category-submenu-panel .block-content {
+    background-color: transparent;
+}
+
+.block-categories.expose li:hover .category-submenu-panel,
+.block-categories.expose li:hover .background {
+    display: block;
+}
+
+.block-categories .submenu-panel-block {
+    width: 380px;
+    float: left;
+}
+
+.block-categories .block-child-categories ul {
+    width: 175px;
+    float: left;
+}
+
+.block-categories .block-child-categories li a:hover,
+.block-categories .block-child-categories li span.imitate-link:hover {
+    background-color: transparent;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.block-categories .block-category-description .block-content {
+    padding: 2px 9px;
+}
+
+.block-categories .block-category-description .block-content img {
+    float: right;
+    margin: 0 0 10px 10px;
+}
+
+/*
+.block-home-featuredproducts .products-grid li.item {
+	width: 286px;
+}
+
+.block-home-featuredproducts .products-grid .product-image {
+	height: 250px;
+	width: 250px;
+}
+*/
+
+.block-home-newproducts .products-grid li.item, .block-home-featuredproducts .products-grid li.item{
+    width: 286px;
+    padding-bottom: 10px !important;
+}
+
+.block-home-newproducts .products-grid .headcell .left, .block-home-featuredproducts  .products-grid .headcell .left {
+    width: 140px;
+    float: left;
+}
+
+.block-home-newproducts .products-grid .product-image, .block-home-featuredproducts  .products-grid .product-image {
+    height: 140px;
+    width: 100%;
+}
+
+.block-home-newproducts .products-grid .actions, .block-home-featuredproducts  .products-grid .actions {
+    clear: none;
+    position: relative;
+    bottom: 0;
+    margin-left:150px;
+}
+
+.block-home-newproducts .products-grid .actions .description, .block-home-featuredproducts  .products-grid .actions .description {
+    height: 100px;
+}
+
+.block-home-newproducts .ratings .rating-box, .block-home-featuredproducts  .ratings .rating-box {
+    float: none;
+    height: 15px;
+}
+
+.block-home-newproducts h5, .block-home-featuredproducts h5 {
+    font-size: 11px;
+}
+
+.block-home-newproducts h3, .block-home-featuredproducts h3 {
+    height: 25px;
+}
+
+.block-home-newproducts h2, .block-home-featuredproducts h2 {
+    text-shadow: 0 1px 2px #999999;
+    -moz-text-shadow: 0 1px 2px #999999;
+    -webkit-text-shadow: 0 1px 2px #999999;
+    -khtml-text-shadow: 0 1px 2px #999999;
+}
+
+.block-home-newproducts .add-to-links, .block-home-featuredproducts .add-to-links {
+    display: block;
+    line-height: 10px;
+    margin-top: 5px;
+}
+
+.block-home-newproducts .add-to-links li, .block-home-featuredproducts .add-to-links li {
+    float: left;
+    border-left: 1px solid gray;
+    padding: 0 0 0 5px;
+}
+
+.block-home-newproducts .add-to-links li:first-child, .block-home-featuredproducts .add-to-links li:first-child {
+    border-left: none;
+    padding: 0 5px 0 0;
+}
+

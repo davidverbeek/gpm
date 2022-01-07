@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <WC_Attribute>
+            <version>0.1.0</version>
+        </WC_Attribute>
+    </modules>
+    <global>
+        <resources>
+            <wc_attribute_setup>
+                <setup>
+                    <module>WC_Attribute</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+            </wc_attribute_setup>
+        </resources>
+    </global>
+</config>

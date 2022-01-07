@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <orderstatus_statusmodel translate="title" module="orderstatus">
+            <title>Techtwo Orderstatus Api</title>
+            <model>orderstatus/statusmodel_api</model>
+            <methods>
+                <changeStatus translate="title" module="orderstatus">
+                    <title>changeStatus</title>
+                </changeStatus>
+            </methods>
+            </orderstatus_statusmodel>
+        </resources>
+        <resources_alias>
+            <statusmodel>orderstatus_statusmodel</statusmodel>
+        </resources_alias>
+        <v2>
+            <resources_function_prefix>
+                <statusmodel>orderstatusStatusmodel</statusmodel>
+            </resources_function_prefix>
+        </v2>
+    </api>
+</config>

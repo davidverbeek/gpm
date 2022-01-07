@@ -1,0 +1,103 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_order = $this->getOrder() ?>
+<h1 style="border-bottom: 1px solid #ddd;padding: 0 0 5px;margin: 0 0 10px;"><?php echo $this->__('Order #%s', $_order->getRealOrderId()) ?></h1>
+
+
+<table width="49%;">
+    <tr>
+        <td><strong><?php echo $this->__('Order Date') ?></strong></td>
+        <td><?php echo $this->__('%s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+<?php $_invoice = $this->getInvoice() ?>
+<?php if($_invoice): ?>
+    <?php $_invoices = array($_invoice); ?>
+<?php else: ?>
+    <?php $_invoices = $_order->getInvoiceCollection() ?>
+<?php endif; ?>
+
+
+<?php foreach ($_invoices as $_invoice): ?>
+    <h2 class="h2"><?php echo $this->__('Invoice #%s', $_invoice->getIncrementId()) ?></h2>
+    <h2><?php echo $this->__('Items Invoiced') ?></h2>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th colspan="4">
+                    <h2 style="border-bottom: 1px solid #ddd;padding: 0 0 5px;margin: 0 0 10px;">
+                        <?php echo $this->__('Product Name') ?>
+                    <h2>
+                </th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
+        </tfoot>
+        <?php $_items = $_invoice->getItemsCollection(); ?>
+        <?php $_count = $_items->count(); ?>
+        <?php foreach ($_items as $_item): ?>
+            <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+            <tbody>
+                <?php echo $this->getItemHtml($_item) ?>
+            </tbody>
+        <?php endforeach; ?>
+    </table>
+<?php endforeach; ?>
+<script type="text/javascript">window.print();</script>
+
+<div style="border-bottom: 1px solid #ddd;padding: 0 0 5px;margin: 0 0 10px;width:100%;"></div>
+<table width="100%;">
+    <tr>
+        <td width="25%">
+            <h2 style="line-height: 40px;"><?php echo $this->__('Billing Address') ?></h2>
+            <?php $_billing = $_invoice->getbillingAddress() ?>
+            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+        </td>
+        <td width="25%">
+            <?php if (!$_order->getIsVirtual()): ?>
+            <h2 style="line-height: 40px;"><?php echo $this->__('Shipping Address') ?></h2>
+            <?php $_shipping = $_invoice->getShippingAddress() ?>
+            <address><?php echo $_shipping->format('html') ?></address>
+            <?php endif; ?>
+        </td>
+        <td width="25%">
+            <h2 style="line-height: 40px;"><?php echo $this->__('Shipping Method') ?></h2>
+            <p width="60%"><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></p>
+        </td>
+        <td width="25%">
+            <h2 style="line-height: 40px;"><?php echo $this->__('Payment Method') ?></h2>
+            <p><?php echo $this->getPaymentInfoHtml() ?></p>
+        </td>
+    </tr>
+</table>

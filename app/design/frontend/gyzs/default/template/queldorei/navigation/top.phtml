@@ -1,0 +1,32 @@
+<?php
+/**
+ * Top menu for store
+ *
+ * @see Queldorei_Navigation_Block_Navigation
+ */
+?>
+<?php
+/**
+ * $this->renderCategoriesMenuHtml() supports optional arguments:
+ * int Level number for list item class to start from
+ * string Extra class of outermost list items
+ * string If specified wraps children list in div with this class
+ */
+?>
+<?php //$_menu = $this->renderCategoriesMenuHtml(0, 'level-top', 'sub-wrapper' ) ?>
+<?php $_menu = true;?>
+<?php if($_menu): ?>
+<div class="nav-container">
+    <ul id="queldoreiNav">
+        <li class="level0 level-top">
+            <a href="<?php echo rtrim($this->getUrl('acties.html'), '/')  ?>" title="<?php echo $this->__('Actions'); ?>"><span><?php echo $this->__('Actions'); ?></span></a>
+        </li>
+        <li class="level0 level-top">
+            <a href="<?php echo $this->getUrl(); ?>klantenservice/assortiment-en-voorraad/#offerte_aanvragen" title="<?php echo $this->__('Offerte'); ?>"><span><?php echo $this->__('Offerte'); ?></span></a>
+        </li>
+        <li class="level0 level-top">
+            <a href="<?php echo rtrim($this->getUrl('merk'), '/'); ?>" title="<?php echo $this->__('Merken'); ?>"><span><?php echo $this->__('Merken'); ?></span></a>
+        </li>
+    </ul>
+</div>
+<?php endif ?>

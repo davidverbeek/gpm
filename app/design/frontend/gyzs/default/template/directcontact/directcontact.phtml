@@ -1,0 +1,104 @@
+<?php if (Mage::getStoreConfig('contacts/directcontact/dc_enabled')): ?>
+	<?php $welcomTitle = Mage::getStoreConfig('contacts/directcontact/dc_welcom'); ?>
+	<div class="directcontactPopupContainer">
+		<div id="directcontactTelBox" style="display:none; width: 240px; overflow:hidden" class="directcontactBox">
+			<div id="directcontactTelSpinner"><?php echo $this->__('Processing'); ?></div>
+			<div id="directcontactTelResult"></div>
+			<form id="directcontactTelForm" method="post" action="/">
+				<?php if ($welcomTitle): ?>
+					<h2><?php echo $welcomTitle; ?></h2>
+				<?php endif; ?>
+				<div>
+					<div>
+						<label for="phoneName">
+							<span><?php echo $this->__('Name'); ?></span>
+						</label>
+						<div class="inputbx">
+							<span style="display:none;" class="directcontactError" id="phoneNameError"></span>
+							<input type="text" id="phoneName" name="phoneName" class="dcInput input-text"  placeholder="<?php echo $this->__('Fill in your name here') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Fill in your name here') ?>';" />
+						</div>
+					</div>
+					<div>
+						<label for="phoneNumber">
+							<span><?php echo $this->__('Phone'); ?></span>
+						</label>
+						<div class="inputbx">
+							<span style="display:none;" class="directcontactError" id="phoneNumberError"></span>
+							<input type="text" id="phoneNumber" name="phoneNumber" class="dcInput input-text" placeholder="<?php echo $this->__('Enter your phone number here') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Enter your phone number here') ?>';" />
+						</div>
+					</div>
+					<ul>
+						<li><input type="radio" id="phoneChoice1" name="phoneChoice" checked="checked" value="asap" />&nbsp;<label for="phoneChoice1" class="radioicon"><?php echo $this->__('As soon as possible'); ?></label></li>
+						<li><input type="radio" id="phoneChoice2" name="phoneChoice" value="today" />&nbsp;<label for="phoneChoice2" class="radioicon"><?php echo $this->__('today at'); ?>&nbsp;</label><input type="text" id="phoneTodayAt" name="phoneTodayAt" class="dcInput input-text" placeholder="<?php echo $this->__('Call me today') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Call me today') ?>';"  /></li>
+						<li><input type="radio" id="phoneChoice3" name="phoneChoice" value="tomorrow" />&nbsp;<label for="phoneChoice3" class="radioicon"><?php echo $this->__('tomorrow at'); ?>&nbsp;</label><input type="text" id="phoneTomorrowAt" name="phoneTomorrowAt" class="dcInput input-text"  placeholder="<?php echo $this->__('Call me tomorrow') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Call me tomorrow') ?>';"  /></li>
+					</ul>
+					<div>
+						<label for="phoneComment">
+							<span><?php echo $this->__('Comment'); ?></span>
+						</label>
+						<div class="inputbx">
+							<span style="display:none;" class="directcontactError" id="phoneCommentError"></span>
+							<textarea id="phoneComment" name="phoneComment" cols="15" rows="4" class="dcInput input-text"  placeholder="<?php echo $this->__('Give here briefly when it comes to') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Give here briefly when it comes to') ?>';"></textarea>
+						</div>
+					</div>
+					<div>
+						<label for="directcontactTelSubmit">
+						</label>
+						<button class="button" id="directcontactTelSubmit" name="phoneSubmit" type="submit" value="1"><span><span>Formulier verzenden</span></span></button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div id="directcontactMailBox" style="display:none;" class="directcontactBox">
+			<div id="directcontactMailSpinner"><?php echo $this->__('Processing'); ?></div>
+			<div id="directcontactMailResult"></div>
+			<form id="directcontactMailForm" method="post" action="/">
+				<?php if ($welcomTitle): ?>
+					<h2><?php echo $welcomTitle; ?></h2>
+				<?php endif; ?>
+				<div>
+					<label style="float:left;" for="mailName">
+						<span><?php echo $this->__('Name'); ?></span>
+					</label>
+					<div class="inputbx">
+						<span style="display:none;" class="directcontactError" id="mailNameError"></span>
+						<input type="text" id="mailName" name="mailName" class="dcInput input-text"  placeholder="<?php echo $this->__('Fill in your name here') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Fill in your name here') ?>';"  />
+					</div>
+				</div>
+				<div>
+					<label for="mailEmail">
+						<span><?php echo $this->__('Email'); ?></span>
+					</label>
+					<div class="inputbx">
+						<span style="display:none;" class="directcontactError" id="mailEmailError"></span>
+						<input type="text" id="mailEmail" name="mailEmail" class="dcInput input-text"  placeholder="<?php echo $this->__('Enter your email') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Enter your phone number here') ?>';"  />
+					</div>
+				</div>
+				<div>
+					<label for="mailComment">
+						<span><?php echo $this->__('Comment'); ?></span>
+					</label>
+					<div class="inputbx">
+						<span style="display:none;" class="directcontactError" id="mailCommentError"></span>
+						<textarea id="mailComment" name="mailComment" cols="15" rows="4" class="dcInput input-text" placeholder="<?php echo $this->__('Give here briefly when it comes to') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Give here briefly when it comes to') ?>';"></textarea>
+					</div>
+				</div>
+				<div>
+					<label for="directcontactMailSubmit">
+					</label>
+					<button class="button" id="directcontactMailSubmit" name="mailSubmit" type="submit" value="1"><span><span>Verzend uw vraag</span></span></button>
+				</div>
+			</form>
+		</div>
+		
+		<!-- <div id="directcontactChatBox" style="display:none;" class="directcontactBox">
+			<div id="directcontactChatSpinner"><?php //echo $this->__('Processing'); ?></div>
+			<span id="directcontactChatTarget" style="width:200px; height:100px;"></span>
+		</div> -->
+	</div>
+
+	<script type="text/javascript">
+		var zopimTitle = '<?php echo Mage::getStoreConfig('contacts/directcontact/dc_title') ?>';
+	</script>
+<?php endif; ?>

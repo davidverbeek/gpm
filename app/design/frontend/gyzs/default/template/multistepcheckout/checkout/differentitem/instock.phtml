@@ -1,0 +1,270 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Shopping cart template
+ *
+ * @see Mage_Checkout_Block_Cart
+ */
+?>
+
+<?php
+$stockData = Mage::registry('cart_stock_data');
+?>
+<?php $instock = false; ?>
+<?php
+foreach ($stockData as $stock):
+    if (!empty($stock->instock))
+        $instock = TRUE;
+endforeach;
+?>
+
+<?php if ($instock): ?>
+    <div class="your-order-list instock">
+        <div class="heading">
+            <h3><?php echo $this->__('In stock'); ?></h3>
+            <span>
+                <?php /* if(Mage::helper('multistepcheckout')->getDeliveryDay()) :?>
+                  <?php echo Mage::helper('multistepcheckout')->getDeliveryDay();?>
+                  <?php endif; */ ?>
+            </span>
+        </div>
+        <div class="list-items">
+            <?php foreach ($this->getItems() as $_item): ?>
+                <?php $stockInfo = $stockData[$_item->getSku()]; ?>
+                <?php if ($stockInfo->instock): ?>
+                    <?php echo $this->getItemHtml($_item) ?>
+                    <?php $instock = true; ?>
+                <?php endif; ?>
+            <?php endforeach ?>
+        </div>
+        <div class="instock-deliveryaddress demo">
+            <div class="shipping-row">
+                <span><?php echo $this->__('Delivery Address'); ?></span>
+                <ul class="form-list">
+                    <?php if ($this->customerHasAddresses()): ?>
+                        <li class="wide">
+                            <div class="input-box">
+                                <?php //echo $this->getAddressesHtmlSelect('instock[shipping]') ?>
+                                <?php $customerId = Mage::getSingleton('customer/session')->getCustomer(); ?> 		
+                                <?php $customer = Mage::getModel('customer/customer')->load($customerId->getId()); ?>	
+                                <select name="instock[shipping]" id="instock-allshipping">
+                                    <?php foreach ($customer->getAddresses() as $address): ?>
+                                        <option value="<?php echo $address->getId() ?>"><?php echo $address->format('oneline') ?></option>
+                                    <?php endforeach; ?>
+                                </select>							
+                                <?php
+                                $items_select = $items_li = array();
+                                $item_cur = '';
+                                foreach ($customer->getAddresses() as $address) {
+                                    $li_sel = $option_sel = $item_cur = '';
+                                    if ($address->getId() == $this->getAddressId()):
+                                        $item_cur = $this->__($address->format('oneline'));
+                                        $li_sel = 'class="selected"';
+                                        $option_sel = 'selected="selected"';
+                                    endif;
+                                    $items_li[] = '<li ' . $li_sel . ' id=' . $address->getId() . '>' . $this->__($address->format('oneline')) . '</li>';
+                                }
+                                if (!$item_cur) {
+                                    $item_cur = 'Select an address';
+                                }
+                                ?>
+                                <div class="allshpnaddress-dropdown-method2">
+                                    <span class="current pls-select"><?php echo $this->__($item_cur) ?></span>
+                                    <div class="address-select-dropdown2">
+                                        <span></span>
+                                        <ul>
+                                            <?php echo implode('', $items_li); ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+                <div class="datumtitle">
+                    <span><?php echo $this->__('Datum') ?></span>
+                </div>
+                <div class="datum-dropdown">
+                    <label class="instockdropdown"><?php echo $this->__('Datum') ?></label>
+                    <div class="toolbar-dropdown">
+                        <span></span>
+                        <ul>
+                            <li><?php echo $this->__('Datum') ?></li>
+                            <li><?php echo $this->__('Datum') ?></li>
+                            <li><?php echo $this->__('Datum') ?></li>
+                            <li><?php echo $this->__('Datum') ?></li>
+                            <li><?php echo $this->__('Datum') ?></li>
+                            <li><?php echo $this->__('Datum') ?></li>
+                        </ul>
+                    </div>
+                </div>
+                <?php $instockAddress = Mage::registry('instock_address'); ?>        		
+                <select name="instock[shipping-method]" id="instock">
+                    <?php foreach ($this->getActiveShippingMethods() as $_method): ?>
+                        <option value="<?php echo $_method['value']; ?>" <?php if ($instockAddress && $_method['value'] == $instockAddress->getShippingMethod()): ?> selected="selected"<?php endif; ?>><?php echo $_method['label']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+                <?php
+                $items_select = $items_li = array();
+                $item_cur = '';
+                foreach ($this->getActiveShippingMethods() as $_limit) {
+                    $li_sel = $option_sel = '';
+                    if ($instockAddress && $_limit['value'] == $instockAddress->getShippingMethod()) {
+                        $item_cur = $_limit['label'];
+                        $li_sel = 'class="selected"';
+                        $option_sel = 'selected="selected"';
+                    }
+                    $items_li[] = '<li' . $li_sel . ' id=' . $_limit['value'] . '>' . $this->__($_limit['label']) . '</li>';
+                    $items_select[] = '<option ' . $option_sel . ' value="' . $this->__($_limit['value']) . '">' . $this->__($_limit['label']) . '</option>';
+                }
+                if (!$item_cur) {
+                    $item_cur = 'Please Select';
+                }
+                ?>
+
+                <div class="datumtitle">
+                    <span><?php echo $this->__('Dagdeel') ?></span>
+                </div>
+                <div class="instock-shipping-method">
+                    <span class="current pls-select"><?php echo $this->__($item_cur) ?></span>
+                    <div class="instock-shipping-method-dropdown">
+                        <span></span>
+                        <ul><?php echo implode('', $items_li); ?></ul>
+                    </div>
+                </div>
+            </div>          
+        </div>
+
+    </div>
+<?php endif; ?>        
+<script type="text/javascript">
+    jQuery(window).on('load', function () {
+        //    jQuery(".demo").fancyfields();
+        var dflt = '';
+        jQuery('.address-select-dropdown ul li').each(function () {
+            if (jQuery(this).hasClass('selected')) {
+                dflt = jQuery(this).html();
+            }
+        });
+        if (dflt) {
+            jQuery('.allshpnaddress-dropdown-method .current').html(dflt);
+        }
+
+
+        jQuery('.instock-shipping-method').click(function () {
+            if (!jQuery(this).children('.instock-shipping-method-dropdown').is(':visible')) {
+                jQuery(this).children('.instock-shipping-method-dropdown').show();
+            } else {
+                jQuery(this).children('.instock-shipping-method-dropdown').hide();
+            }
+            console.log('instock-shipping-method .current clicked');
+        });
+        jQuery('.allshpnaddress-dropdown-method').click(function () {
+            if (!jQuery(this).children('.address-select-dropdown').is(':visible')) {
+                jQuery(this).children('.address-select-dropdown').show();
+            } else {
+                jQuery(this).children('.address-select-dropdown').hide();
+            }
+            console.log('allshpnaddress-dropdown-method clicked');
+
+        });
+        jQuery('.allshpnaddress-dropdown-method2').click(function () {
+            if (!jQuery(this).children('.address-select-dropdown2').is(':visible')) {
+                jQuery(this).children('.address-select-dropdown2').show();
+            } else {
+                jQuery(this).children('.address-select-dropdown2').hide();
+            }
+            console.log('allshpnaddress-dropdown-method2 .current clicked');
+        });
+
+        jQuery('.instock-shipping-method-dropdown ul li').click(function () {
+            var currr = jQuery(this).html();
+            var curid = jQuery(this).attr('id');
+            jQuery('.instock-shipping-method .current').html(currr);
+            jQuery('#instock').val(curid);
+            jQuery('#instock option').removeAttr("selected");
+            jQuery('#instock option[value=' + curid + ']').attr("selected", "selected");
+            //jQuery(this).parents('.instock-shipping-method-dropdown').hide();
+            jQuery('.instock-shipping-method-dropdown').slideUp();
+            jQuery(this).addClass('selected');
+            jQuery('.instock-shipping-method-dropdown ul li').not(jQuery(this)).removeClass('selected');
+            console.log(currr);
+        });
+
+        jQuery('.address-select-dropdown ul li').click(function () {
+            var currr = jQuery(this).html();
+            var curid = jQuery(this).attr('id');
+            jQuery('.allshpnaddress-dropdown-method .current').html(currr);
+            jQuery('#allshipping').val(curid);
+            jQuery('#allshipping option').removeAttr("selected");
+            jQuery('#allshipping option[value=' + curid + ']').attr("selected", "selected");
+            //jQuery(this).parents('.address-select-dropdown').hide();
+            jQuery('.address-select-dropdown').slideUp();
+            console.log('parent hidden');
+            jQuery(this).addClass('selected');
+            jQuery('.address-select-dropdown ul li').not(jQuery(this)).removeClass('selected');
+            console.log(currr);
+        });
+        jQuery('.address-select-dropdown2 ul li').click(function () {
+            var currr = jQuery(this).html();
+            var curid = jQuery(this).attr('id');
+            jQuery('.allshpnaddress-dropdown-method2 .current').html(currr);
+            jQuery('#instock-allshipping').val(curid);
+            jQuery('#instock-allshipping option').removeAttr("selected");
+            jQuery('#instock-allshipping option[value=' + curid + ']').attr("selected", "selected");
+            //jQuery(this).parents('.address-select-dropdown2').hide();
+            jQuery('.address-select-dropdown2').slideUp();
+            jQuery(this).addClass('selected');
+            jQuery('.address-select-dropdown2 ul li').not(jQuery(this)).removeClass('selected');
+            console.log(currr);
+        });
+
+        jQuery('.datum-dropdown').click(function () {
+            if (!jQuery(this).children('.toolbar-dropdown').is(':visible')) {
+                jQuery(this).children('.toolbar-dropdown').show();
+            } else {
+                jQuery(this).children('.toolbar-dropdown').hide();
+            }
+            console.log('datum clicked');
+        });
+
+        jQuery('.datum-dropdown .toolbar-dropdown ul li').click(function () {
+            var currr = jQuery(this).html();
+            var curid = jQuery(this).attr('id');
+            jQuery('.datum-dropdown .instockdropdown').html(currr);
+            /* jQuery('#outofstock-allshipping').val(curid);
+             jQuery('#outofstock-allshipping option').removeAttr("selected");
+             jQuery('#outofstock-allshipping option[value='+curid+']').attr("selected","selected"); */
+            jQuery('.datum-dropdown .toolbar-dropdown').slideUp();
+            jQuery(this).addClass('selected');
+            jQuery('.datum-dropdown .toolbar-dropdown ul li').not(jQuery(this)).removeClass('selected');
+            console.log(currr);
+        });
+    });
+</script>

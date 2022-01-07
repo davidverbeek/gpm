@@ -1,0 +1,537 @@
+<!--@subject Beste {{var store.getFrontendName()}} de status van je bestelling is gewijzigd naar {{var order.getStatusLabel()}} @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"var logo_url":"Email Logo Image Url",
+"var logo_alt":"Email Logo Image Alt",
+"htmlescape var=$order.getCustomerName()":"Customer Name",
+"var order.increment_id":"Order Id",
+"var order.getStatusLabel()":"Order Status",
+"store url=\"customer/account/\"":"Customer Account Url",
+"var comment":"Order Comment",
+"var store.getFrontendName()":"Store Name"}
+@-->
+<!--@styles
+ body {
+     margin: 0;
+     padding: 0;
+     font-family:Arial;
+ }
+
+ img {
+     border: 0 none;
+     height: auto;
+     line-height: 100%;
+     outline: none;
+     text-decoration: none;
+ }
+
+ a img {
+     border: 0 none;
+ }
+
+ .imageFix {
+     display: block;
+ }
+
+ p {
+     margin: 0;
+     font-family: Arial;
+ }
+
+ table,
+ td {
+     border-collapse: collapse;
+     padding: 0;
+     font-family: Arial;
+ }
+
+ #bodyTable {
+     height: 100% !important;
+     margin: 0;
+     padding: 0;
+     width: 100% !important;
+     font-family: Arial;
+ }
+
+ h2,
+ h2 a,
+ h2 a: visited,
+     h3,
+     h3 a,
+     h3 a: visited,
+     h4,
+     h5,
+     h6,
+     .t_cht {
+         color: #000 !important
+    }
+    
+    .ExternalClass p,
+    .ExternalClass span,
+    .ExternalClass font,
+    .ExternalClass td {
+        line-height: 100%;
+        font-family: Arial;
+    }
+    
+    .ExternalClass p,
+    .ExternalClass span,
+    .ExternalClass font {
+        margin: 0;
+        font-family: Arial;
+    }
+    /**This is to center your email in Outlook.com************/
+    
+    .ExternalClass {
+        width: 100%;
+        font-family: Arial;
+    }
+    
+    .ExternalClass * {
+        line-height: 100%
+    }
+    
+    *{
+        margin: 0;
+        font-family: Arial;
+    }
+    
+    .emailContent {
+        font-family: Arial;
+    }
+.myfooter a:hover{
+    text-decoration: underline !important;
+}
+span.centerImage {
+     text-align: center;
+}
+.webfont {
+   font-family: Arial;
+}
+
+@-->
+
+<body style="font-family: Arial;background-color:#f2f2f2;width:100%;margin:0 auto;">
+  <!-- Main body table -->
+
+  <!-- HEADER PART START FROM HERE  -->
+  <table style="width:100%;background-color:#f2f2f2;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <!-- center the child table  -->
+      <td align="center">
+        <!-- Main email content start here  -->
+
+        <!-- TOP BAR  -->
+        <table style="width:600px" cellpadding="0" cellspacing="0" border="0">
+
+          <!-- BALANCE HEIGHT  -->
+          <tr style="min-height: 5px;height:5px;background-color: #000;">
+            <td colspan="3">
+            </td>
+          </tr>
+
+          <!-- LEFT TEXT  -->
+          <tr style="min-height: 10px;height:10px;max-height: 10px;background-color: #000;">
+            <td style="width:81.5%;background-color: #000;mso-line-height-rule: exactly;">
+              <p style="margin:0 0 0 20px">
+                <a href="#" style="font-family: Arial;color:#eac92d;font-size: 12px;text-decoration: none;">
+                  Beste {{var store.getFrontendName()}} de status van je bestelling is gewijzigd naar {{var order.getStatusLabel()}}
+                </a>
+              </p>
+            </td>
+
+            <!-- RIGHT TEXT  -->
+            <td style="background-color: #000;">
+              <p style="margin:0">
+                <a style="font-family: Arial;color:#aaa;text-decoration: none;font-size: 12px;font-family: Arial;cursor: pointer;" href="{{config path='web/unsecure/base_url'}}">
+                  Bekijk online
+                </a>
+              </p>
+            </td>
+            <td style="width:20px;background-color:#000;">
+            </td>
+          </tr>
+
+          <!-- BALANCE HEIGHT  -->
+          <tr style="min-height: 5px;height:5px;background-color: #000;">
+            <td colspan="3">
+            </td>
+          </tr>
+        </table>
+        
+        <!-- HEADER LOGO AND CONTENT  -->
+        <table style="width:600px;background-color: #fff;" cellpadding="0" cellspacing="0" border="0">
+
+          <!-- BALANCE HEIGHT  -->
+          <tr style="min-height: 30px;height:30px;background-color: #fff;">
+            <td colspan="5">
+            </td>
+          </tr>
+
+
+          <tr>
+            <td style="width:40px">
+            </td>
+
+            <!-- LOGO  -->
+            <td style="width:52%;background-color: #fff;">
+              <a style="" href="{{config path='web/unsecure/base_url'}}">
+                <img src="{{var logo_url}}" alt="{{var logo_alt}}" style="display:block;cursor: pointer;">
+              </a>
+            </td>
+            <!-- ACCOUNT  -->
+            <td style="width:70px">
+              <a href="#" style="display:inline-block;">
+                <img alt="Image" src="{{skin _area='frontend' _package='gyzs' url='images/email_account.png'}}">
+              </a>
+            </td>
+
+            <!-- VARTICAL LINE  -->
+            <td style="width:20px">
+              <img style="margin:0 10px;height:40px;width:1px" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_vline.png'}}" style="padding:0;margin:0" align="middle">
+            </td>
+
+            <!-- CLIENT SERVICE LINK  -->
+            <td style="font-size:12px;line-height: 20px;">
+              <span style="font-family: Arial;color:#aaa;vertical-align: middle;">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice" style="color:#aaa;text-decoration:none;">
+                  Klantenservice
+                </a>
+              </span>
+              <br>
+              0224 - 212 026
+            </td>
+          </tr>
+
+          <!-- BALANCE HEIGHT  -->
+          <tr style="min-height: 30px;height:30px;background-color: #fff;">
+            <td colspan="5">
+            </td>
+          </tr>
+        </table>
+
+
+        <!-- MENU LINKS -->
+        <table style="width:600px;background-color: #f2f2f2" cellpadding="0" cellspacing="0" border="0">
+
+          <!-- BALANCE HEIGHT  -->
+          <tr style="min-height: 30px;height:30px;background-color: #f2f2f2;">
+            <td colspan="4">
+            </td>
+          </tr>
+
+          <!-- THREE LINKS  -->
+          <tr>
+
+            <!-- ORDER HISTORY LINK  -->
+            <td style="width:33.333333%" align="center" style="text-align:center;">
+              <span style="display:inline-block;">
+                <p style="margin:0 0 0 0;">
+                  <a href="{{config path='web/unsecure/base_url'}}sales/order/history/" style="font-size: 16px;line-height: 28px;color:#000;text-decoration: none;">
+                    <span style="min-width:26px;display:inline-block;font-family: Arial;">
+                      <img alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}" />
+                      Orderhistorie
+                    </span>
+                  </a>
+                </p>
+              </span>
+            </td>
+
+            <!-- MY ACCOUNT LINK  -->
+            <td style="width:33.333333%" align="center" style="text-align:center;">
+              <a href="{{config path='web/unsecure/base_url'}}customer/account/" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#000;text-decoration: none;">
+                <span style="min-width:26px;display:inline-block;">
+                  <img alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                </span>
+                Mijn account
+              </a>
+            </td>
+
+            <!-- CONTACT LINK  -->
+            <td style="width:33.333333%" align="center" style="text-align:center;">
+              <a href="{{config path='web/unsecure/base_url'}}klantenservice/contact-met-gyzs/" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#000;text-decoration: none;margin:0 0 0 0;">
+                <span style="min-width:26px;display:inline-block;">
+                  <img alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                </span>
+                Contact
+              </a>
+            </td>
+          </tr>
+
+          <!-- BALANCE HEIGHT -->
+          <tr style="min-height:30px;height:30px;background-color: #f2f2f2;">
+            <td colspan="4">
+            </td>
+          </tr>
+
+        </table>
+        <!-- HEADER PART END HERE  -->
+
+        <!-- MAIN CONTENT START HERE -->
+
+        <!-- CALLOUT TITLE START -->
+        <table style="width:600px;background-color: #fff;" cellpadding="0" cellspacing="0" border="0">
+          <tr style="min-height: 40px;height:40px;background-color: #fff;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr style="background-color: #fff">
+            <td style="width:100%;" align="center">
+              <h1 style="font-family: Arial;text-align: center;font-size: 24px;line-height: 28px;font-weight: normal;">
+                {{var store.getFrontendName()}} je bestelling heeft nu de status {{var order.getStatusLabel()}}
+              </h1>
+              <img align="center" style="margin: 20px auto 20px auto;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_underline.png'}}" />
+            </td>
+          </tr>
+          <tr style="min-height: 20px;height:20px;background-color: #fff;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="font-family: Arial;margin:0;text-align: center;font-size: 18px;line-height: 2px;color:#999;font-weight: lighter;">
+                We houden je graag op de hoogte
+              </p>
+            </td>
+          </tr>
+          <tr style="min-height: 30px;height:30px;background-color: #fff;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr style="min-height: 20px;height:20px;background-color: #fff;">
+            <td>
+              <hr style="color:#ddd;display: block; height: 1px;border: 0;border-top: 1px solid #ddd;width:100%;margin-top: 1px;">
+            </td>
+          </tr>
+        </table>
+        <!-- CALLOUT TITLE END -->
+        <!-- GREEN TITLE END -->
+
+        <!-- ORDER ITEMS START  -->
+        <!-- ORDER ITEMS END  -->
+        </td>
+        </tr>
+        </table>
+  <!-- CENTERING BUG  -->
+  <table style="width:100%;background-color:#f2f2f2;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <!-- center the child table  -->
+      <td align="center">
+
+        <!-- ADDRESS ROW  -->
+        <!-- ADDRESS ROW END -->
+
+        <!-- //MAIN CONTENT END HERE -->
+
+        <!-- FOOTER START  -->
+
+        <!-- FOOTER CALLOUT SECTION  -->
+        <table style="width:600px;background-color: #fff;margin:0 auto;" cellpadding="0" cellspacing="0">
+          <tr style="min-height: 40px;height:40px;background-color: #fff;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr style="background-color: #fff">
+            <td style="width:100%;" align="center">
+              <h1 style="font-family: Arial;text-align: center;font-size: 24px;line-height: 28px;font-weight: normal;">
+                Heb je nog vragen of onduidelijkheden?
+                <br>
+                lk help je graag.
+              </h1>
+              <img align="center" style="margin: 20px 0 20px 0;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_underline.png'}}" />
+            </td>
+          </tr>
+          <tr style="min-height: 20px;height:20px;background-color: #fff;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p style="font-family: Arial;margin:0;text-align: center;font-size: 18px;line-height: 2px;color:#999;font-weight: lighter;">
+                Hieronder heb ik handige links gezet om je te helpen!
+              </p>
+            </td>
+          </tr>
+          <tr style="min-height: 40px;height:40px;background-color: #fff;">
+            <td colspan="">
+            </td>
+          </tr>
+        </table>
+
+        <!-- FOOTER GREEN LINKS  -->
+        <table cellspacing="0" cellpadding="0" border="0" style="width:600px;background-color: #fff;">
+
+          <!-- 1ST ROW  -->
+          <tr>
+            <td style="width:50%;background-color: #39ae37;height:60px;border:1px solid #149623;margin: 0;">
+              <p style="margin:0 0 0 20px;">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#fff;text-decoration: none;">
+                  <span style="min-width:26px;display:inline-block;">
+                    <img style="margin:0 0 0 20px;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                  </span>
+                  Klantenservice
+                </a>
+              </p>
+            </td>
+            <td style="width:50%;background-color: #39ae37;height:60px;border:1px solid #149623;margin: 0;">
+              <p style="margin:0 0 0 20px;">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice/retouren/" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#fff;text-decoration: none;">
+                  <span style="min-width:26px;display:inline-block;">
+                    <img style="margin:0 0 0 20px;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                  </span>
+                  Retourneren
+                </a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="width:50%;background-color: #39ae37;height:60px;border:1px solid #149623;margin: 0;">
+              <p style="margin:0 0 0 20px;">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice/contact-met-gyzs/" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#fff;text-decoration: none;">
+                  <span style="min-width:26px;display:inline-block;">
+                    <img style="margin:0 0 0 20px;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                  </span>
+                  Contact
+                </a>
+              </p>
+            </td>
+            <td style="width:50%;background-color: #39ae37;height:60px;border:1px solid #149623;margin: 0;">
+              <p style="margin:0 0 0 20px;">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice/bezorgen-en-afhalen/" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#fff;text-decoration: none;">
+                  <span style="min-width:26px;display:inline-block;">
+                    <img style="margin:0 0 0 20px;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                  </span>
+                  Bezorgen & afhalen
+                </a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="width:50%;background-color: #39ae37;height:60px;border:1px solid #149623;margin: 0;">
+              <p style="margin:0 0 0 20px;">
+                <a href="{{config path='web/unsecure/base_url'}}blog/" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#fff;text-decoration: none;">
+                  <span style="min-width:26px;display:inline-block;">
+                    <img style="margin:0 0 0 20px;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                  </span>
+                  Blog
+                </a>
+              </td>
+            <td style="width:50%;background-color: #39ae37;height:60px;border:1px solid #149623;margin: 0;">
+              <p style="margin:0 0 0 20px;">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice/garantie-en-reparatie/" style="font-family: Arial;font-size: 16px;line-height: 28px;color:#fff;text-decoration: none;">
+                  <span style="min-width:26px;display:inline-block;">
+                    <img style="margin:0 0 0 20px;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_rightarrow.png'}}"/>
+                  </span>
+                  Garantie & reparatie
+                </a>
+              </p>
+            </td>
+          </tr>
+        </table>
+        <table style="width:600px;margin:0 auto;" cellspacing="0">
+          <tr style="min-height: 40px;height:40px;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr style="">
+            <td style="font-family: Arial;">
+              <h1 style="text-align: center;font-size: 24px;line-height: 28px;font-weight: normal;">
+              <span style="font-family: Arial;">
+                Groeten,
+                <br>
+                {{var store.getFrontendName ()}}
+                </span>
+              </h1>
+            </td>
+          </tr>
+          <tr style="min-height: 40px;height:40px;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr style="">
+            <td>
+              <p style="margin:0;text-align: center;font-size: 18px;font-weight: normal;color:#b0b0b0;">
+              <span style="font-family: Arial;">
+                PS: Volg je mij ook online voor acties en nieuws?
+                </span>
+              </p>
+            </td>
+          </tr>
+          <tr style="min-height: 40px;height:40px;">
+            <td colspan="">
+            </td>
+          </tr>
+          <tr style="">
+            <td align="center">
+              <a style="margin:0;padding:0;color: transparent;" href="#">
+                <img alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_youtube.png'}}" style="padding:0;margin:0" align="middle">
+              </a>
+              &nbsp;&nbsp;
+              <a href="#" style="margin:0;padding:0;color: transparent;">
+                <img style="margin:0" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_facebook.png'}}" style="padding:0;margin:0" align="middle">
+              </a>
+              &nbsp;&nbsp;
+              <a href="#" style="margin:0;padding:0;color: transparent;">
+                <img alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_twitter.png'}}" style="padding:0;margin:0" align="middle">
+              </a>
+            </td>
+          </tr>
+        </table>
+        <!-- Footer part-->
+        <table style="width:600px;margin:0 auto;" class="myfooter" cellspacing="0" cellpadding="0" border="0">
+
+          <tr style="min-height: 40px;height:40px;">
+            <td colspan="">
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="4">
+                <hr style="color:#ddd;height: 1px;border: 0;border-top: 1px solid #ddd;width:100%;color:#ddd;">
+            </td>
+          </tr>
+
+          <tr>
+            <td align="left" valign="middle" height="18" width="300">
+              <p style="margin:0;font-size:12px;line-height:18px;color:#000;margin:0 0 0 10px" valign="middle">
+              <span style="font-family: Arial;">
+                Copyright &copy; 2016 {{var store.getFrontendName ()}}
+                </span>
+              </p>
+            </td>
+            
+            <td align="right" style="text-align:right;" valign="middle" height="18">
+              <p style="margin:0;font-size:12px;line-height:18px;color:#999;margin:0 0 0 10px" valign="middle">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice/voorwaarden-en-privacy/#algemene_voorwaarden_gyzs.nl" style="margin:0 10px;font-size:12px;color:#999;text-transform: uppercase;text-decoration: none;" valign="middle">
+                  <span style="font-family: Arial;">algemene voorwaarden</span>
+                </a>
+              </p>
+            </td>
+            
+            <td align="right" style="text-align:right;" valign="middle" height="18">
+              <p style="margin:0;font-size:12px;line-height:18px;color:#999;margin:5px 0 0 10px" valign="middle">
+                <img style="margin:0;" alt="Image" src="{{skin _area='frontend' _package='gyzs'  url='images/email_vline.png'}}" valign="middle">
+              </p>
+            </td>
+            
+            <td align="right" style="text-align:right;" valign="middle" height="18">
+              <p style="margin:0;font-size:12px;line-height:18px;color:#999;margin:0 0 0 10px" valign="middle">
+                <a href="{{config path='web/unsecure/base_url'}}klantenservice/voorwaarden-en-privacy/#de_privacy_verklaring_van_gyzs.nl" valign="middle" style="margin:0 10px 0 10px;font-size:12px ;color:#999;text-transform: uppercase;text-decoration: none;display: inline-block;line-height: 30px;">
+                <span style="font-family: Arial;">
+                  Privacy
+                  </span>
+                </a>
+                &nbsp;&nbsp;
+              </p>
+            </td>
+          </tr>
+          <tr style="min-height: 40px;height:40px;">
+            <td colspan="4">
+            </td>
+          </tr>
+        </table>
+        <!-- //FOOTER END HERE -->
+      </td>
+    </tr>
+  </table>
+</body>

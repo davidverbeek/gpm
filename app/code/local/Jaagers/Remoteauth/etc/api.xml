@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <jaagers_remoteauth_api translate="title" module="jaagers_remoteauth">
+                <title>Remote Auth</title>
+                <!-- <acl>remoteauth/api</acl> -->
+                <model>remoteauth/api</model>
+                <methods>                    
+					<authenticate translate="title" module="jaagers_remoteauth">
+						<title>Remote Authentication</title>
+						<method>authenticate</method>
+					</authenticate>
+                </methods>
+            </jaagers_remoteauth_api>
+        </resources>
+        <!-- <acl>
+            <resources>
+                <remoteauth translate="title" module="remoteauth">
+                    <title>Remoteauth</title>
+                    <sort_order>2000</sort_order>                    
+					<remoteauth translate="title" module="remoteauth">
+                        <title>Remote Authentication</title>
+                    </remoteauth>
+                </remoteauth>
+            </resources>
+        </acl> -->
+        <v2>
+            <resources_function_prefix>
+                <jaagers_remoteauth_api>remoteauth</jaagers_remoteauth_api>
+            </resources_function_prefix>
+        </v2>
+    </api>
+</config>

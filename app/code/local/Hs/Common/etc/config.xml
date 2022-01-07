@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Hs_Common>
+			<version>0.1.0</version>
+		</Hs_Common>
+	</modules>
+	<global>
+		<helpers>
+			<common>
+				<class>Hs_Common_Helper</class>
+			</common>
+		</helpers>
+		<blocks>
+			<common>
+				<class>Hs_Common_Block</class>
+			</common>
+			<catalog>
+				<rewrite>
+					<product_view_type_grouped>Hs_Common_Block_Catalog_Product_View_Type_Grouped</product_view_type_grouped>
+				</rewrite>
+			</catalog>
+			<sales>
+				<rewrite>
+					<order_history>Hs_Common_Block_Sales_Order_History</order_history>
+				</rewrite>
+			</sales>
+			<brands>
+				<rewrite>
+					<catalog_product_list_toolbar>Hs_Common_Block_Brands_Catalog_Product_List_Toolbar</catalog_product_list_toolbar>
+				</rewrite>
+			</brands>
+		</blocks>
+		<models>
+			<common>
+				<class>Hs_Common_Model</class>
+				<resourceModel>common_mysql4</resourceModel>
+			</common>
+		</models>
+		<events>
+			<catalog_controller_product_view> <!-- identifier of the event we want to catch -->
+				<observers>
+					<catalog_controller_product_view_handler> <!-- identifier of the event handler -->
+						<type>model</type> <!-- class method call type; valid are model, object and singleton -->
+						<class>common/observer</class> <!-- observers class alias -->
+						<method>addCategoryToBreadcrumbs</method>  <!-- observer's method to be called -->
+					</catalog_controller_product_view_handler>
+				</observers>
+			</catalog_controller_product_view>
+		</events>
+	</global>
+	<crontab>
+		<jobs>
+			<common_unmatchidealverpakking>
+				<schedule><cron_expr>0 7 * * *</cron_expr></schedule>
+				<run>
+					<model>common/cron::sendEmailforUnmatchIdealverpakking</model>
+				</run>
+			</common_unmatchidealverpakking>
+		</jobs>
+	</crontab>
+</config> 

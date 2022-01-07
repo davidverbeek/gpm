@@ -1,0 +1,3977 @@
+.ui-window {
+    z-index: 999999!important
+}
+.aboutus-menu ul li a,
+.col-main .menu li a,
+.toggle1 {
+    text-shadow: 0 0 .1px rgba(000, 000, 000, .1)
+}
+#yui3-css-stamp.cssreset,
+.toggle1,
+[id^=drop] {
+    display: none
+}
+.about-us-page .block-title h2:after,
+q:after,
+q:before {
+    content: ''
+}
+.aboutus-menu ul li a,
+.col-main .menu li a,
+.dash-main .dash-sec li a {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+.sales-order-view #my-orders-table,
+table {
+    border-collapse: collapse
+}
+.about-us .table-image table tfoot p a {
+    color: #303030
+}
+.about-us .table-image table tfoot p a:hover,
+.about-us-page .block-title h2,
+.toggle1:hover,
+html,
+legend {
+    color: #000
+}
+.kbase-listing-description.std table {
+    width: 100%!important;
+    border: 1px solid #ddd
+}
+html {
+    background: #FFF
+}
+.toggle1,
+.toggle1:hover {
+    background-color: transparent
+}
+blockquote,
+body,
+code,
+dd,
+div,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+legend,
+li,
+ol,
+p,
+pre,
+td,
+textarea,
+th,
+ul {
+    margin: 0;
+    padding: 0
+}
+table {
+    border-spacing: 0
+}
+fieldset,
+img {
+    border: 0
+}
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+strong,
+th,
+var {
+    font-weight: 400;
+    font-style: normal
+}
+ol,
+ul {
+    list-style: none
+}
+caption,
+th {
+    text-align: left
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 400;
+    font-size: 100%
+}
+abbr,
+acronym {
+    border: 0;
+    font-variant: normal
+}
+sup {
+    vertical-align: text-top
+}
+sub {
+    vertical-align: text-bottom
+}
+input,
+select,
+textarea {
+    font-weight: inherit;
+    font-size: inherit;
+    font-size: 100%;
+    font-family: inherit
+}
+.aboutus-menu .about-menu-title,
+.aboutus-menu ul li a,
+.toggle1 {
+    font-size: 14px;
+    font-family: source_sans_proregular;
+    color: #000
+}
+.cms-overons .breadcrumbs .row {
+    margin-left: -4px
+}
+.cms-overons .col2-left-layout .main .col-left {
+    width: 233px
+}
+.cms-overons .blogsandforums-container {
+    border: 0!important
+}
+.menu,
+.toggle1,
+.toggle1+a {
+    display: block
+}
+.toggle1 {
+    padding: 0 20px 4px;
+    font-weight: 600;
+    line-height: 45px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased
+}
+.aboutus-menu {
+    margin-bottom: 18px
+}
+.aboutus-menu .about-menu-title {
+    letter-spacing: normal;
+    font-weight: 700;
+    line-height: 58px
+}
+.aboutus-menu ul li {
+    padding-left: 0;
+    border-bottom: 1px solid #ddd;
+    background: 0;
+    line-height: 40px
+}
+.aboutus-menu ul li:first-child {
+    border-top: 1px solid #ddd
+}
+.aboutus-menu ul li a {
+    padding-left: 40px;
+    letter-spacing: 0;
+    font-weight: 600;
+    line-height: 40px;
+    display: block;
+    position: relative
+}
+.aboutus-menu ul li a:hover {
+    background: url(../images/yellow-right-arrow.png) left 0 center no-repeat;
+    text-decoration: none
+}
+.aboutus-menu label:before {
+    display: none
+}
+.about-us {
+    overflow: hidden;
+    margin-top: 20px!important;
+    padding: 4% 4% 35px;
+    border: 1px solid #ddd;
+    border-radius: 1px
+}
+.about-us-page {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+}
+.about-us-page .contact-title {
+    padding: 40px 0 30px
+}
+.about-us-page .block-title {
+    position: relative;
+    margin: 0 auto
+}
+.about-us-page .block-title h2 {
+    margin-bottom: 18px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 400;
+    font-size: 18px;
+    font-family: 'Oswald Regular';
+    line-height: 18px
+}
+.about-us-page .block-title h2:after {
+    display: block;
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 30px;
+    min-width: 100px;
+    width: 100px;
+    border-bottom: 2px solid #b1b1b1;
+    border-bottom-color: #b1b1b1!important
+}
+.about-us-page .map {
+    overflow: hidden;
+    margin: 0 auto;
+    width: 100%
+}
+.about-us-page .map img {
+    margin-left: -30%;
+    min-width: 140%
+}
+.about-us-page .blog .row {
+    margin: 0;
+    padding: 0;
+    width: 100%
+}
+.about-us-page .blog .row .col-md-4 {
+    display: inherit;
+    float: left;
+    margin-right: 15px;
+    margin-left: 0;
+    width: 18.5%
+}
+.about-us-page .blog .row .col-md-4 .blog-card {
+    padding: 20px;
+    border: 1px solid #ddd
+}
+.about-us-page .blog .row .col-md-4 .blog-card .blog-image {
+    position: relative;
+    margin-top: -21px
+}
+.about-us-page .blog .row .col-md-4 .blog-card .blog-image img {
+    width: 100%;
+    height: auto
+}
+.about-us-page .blog .row .col-md-4 .category-tag {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    padding: 10px;
+    background-color: #f3f3f3;
+    color: #797979;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 400;
+    font-size: 13px;
+    font-family: Oswald, Arial, Helvetica, sans-serif
+}
+.about-us-page .blog .row .col-md-4 .blog-title {
+    margin-top: -12px;
+    margin-left: -10px;
+    font-weight: 400;
+    font-family: source_sans_prosemibold
+}
+.about-us-page .blog .row .col-md-4 .blog-title .title-tag {
+    display: block;
+    color: #bbb;
+    font-size: 15px
+}
+.about-us-page .blog .row .col-md-4 .blog-title .title-name {
+    font-size: 15px
+}
+.about-us-page .blog .row .col-md-4 .blog-link {
+    display: table;
+    margin-top: 1px;
+    min-width: 99%;
+    min-height: 58px;
+    border: 1px solid #ddd;
+    background-color: #f3f3f3;
+    text-align: center
+}
+.about-us-page .blog .row .col-md-4 .blog-link a {
+    position: relative;
+    display: table-cell;
+    color: #39ae37;
+    vertical-align: middle;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.about-us .about-slider {
+    position: relative;
+    overflow: hidden;
+    margin: -6.1% -8% 38px -5%;
+    width: 111%;
+    height: 366px
+}
+.about-us .table-image table td.value h3 {
+    color: #000;
+    font-size: 16px;
+    line-height: 40px;
+    font-family: source_sans_prosemibold
+}
+.about-us-page h2 {
+    font-size: 18px;
+    font-family: source_sans_prosemibold;
+    text-transform: none;
+    margin-bottom: 20px
+}
+.about-us .block-title .short-text {
+    position: absolute;
+    top: 28px;
+    right: 16.7%;
+    font-size: 11.19px;
+    padding-left: 23px;
+    background: url(../images/stock-curved-arrow.png) no-repeat;
+    vertical-align: middle;
+    font-family: 'Annie Use Your Telescope';
+    padding-top: 7px;
+    color: #000
+}
+.about-us .text-block .row {
+    margin-left: .3%;
+    width: 100%
+}
+.about-us .table-image .row .col-md-6,
+.about-us .text-block .row .col-md-6 {
+    display: inline;
+    float: left;
+    width: 44%
+}
+.about-us .text-block .row .col-md-6 p {
+    color: #000;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_prosemibold;
+    line-height: 1.8
+}
+.about-us .text-block .row .col-md-6:nth-child(2) {
+    padding-left: 52px
+}
+.about-us .table-image .row {
+    margin-left: .3%;
+    width: 100%
+}
+.about-us .table-image .row .col-md-6 {
+    width: 45%
+}
+.about-us .table-image table {
+    z-index: 999;
+    margin-top: 60px;
+    min-width: 450px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff
+}
+.about-us .table-image table th {
+    background-color: #797979;
+    color: #fff!important;
+    text-transform: uppercase;
+    letter-spacing: .5px
+}
+.about-us .table-image #aboutus-info table th {
+    font-family: 'Oswald Regular';
+    letter-spacing: 1px
+}
+.about-us .table-image table tr:nth-child(even) {
+    background-color: #f3f3f3
+}
+.about-us .table-image table td,
+.about-us .table-image table th {
+    padding-left: 20px;
+    width: 150px;
+    color: #444;
+    font-weight: 400;
+    font-size: 16px;
+    font-family: source_sans_prosemibold;
+    line-height: 40px
+}
+.about-us .table-image table td.value {
+    color: #000
+}
+.about-us .table-image table tfoot p span {
+    color: red
+}
+.about-us .table-image table tfoot p:first-child {
+    padding-top: 20px
+}
+.about-us .table-image table tfoot p:last-child {
+    padding-bottom: 20px
+}
+.about-us .table-image table tfoot p {
+    font-family: source_sans_proregular;
+    font-size: 16px;
+    padding-right: 10px;
+    color: #000;
+    line-height: 25px
+}
+.about-us .table-image table tfoot .under-line {
+    text-decoration: underline;
+    font-weight: 600
+}
+.about-us .table-image .row .col-md-6 img {
+    z-index: 0;
+    padding-left: 130px
+}
+.about-us-contact {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 1px
+}
+.about-us-contact .row {
+    margin-top: -1.7%;
+    margin-bottom: -.5%;
+    min-height: 616px;
+    width: 100%
+}
+.about-us-contact .row .col-md-8 {
+    display: inline;
+    float: left;
+    padding-top: 0;
+    padding-left: 3.3%;
+    width: 61%
+}
+.about-us-contact .about-form {
+    display: block;
+    margin-top: 40px;
+    margin-left: 10px
+}
+.about-us-contact .about-form .form-row {
+    clear: both;
+    margin-bottom: 5px;
+    width: 100%;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.about-us-contact .about-form .form-row div {
+    display: inline-block;
+    float: left;
+    position: relative
+}
+.about-us-contact .about-form .form-row input[type=text] {
+    margin-bottom: 9px;
+    padding-left: 10px;
+    min-width: 380px;
+    min-height: 40px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 0;
+    color: #000;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.about-us-contact .about-form .form-row textarea {
+    margin-bottom: 18px;
+    padding-left: 10px;
+    min-width: 377px;
+    min-height: 232px;
+    width: 98.5%;
+    border-radius: 0;
+    -webkit-box-shadow: inset 0 0 0 0 transparent;
+    box-shadow: inset 0 0 0 0 transparent;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_prosemibold;
+    resize: none;
+    padding-top: 10px
+}
+.about-us-contact .about-form .form-row label {
+    position: relative;
+    top: 10px;
+    float: left;
+    padding-top: 3px;
+    min-height: 40px;
+    width: 24.2%;
+    height: 40px;
+    vertical-align: middle;
+    line-height: 40px
+}
+.about-us-contact .about-form .form-row label:first-child {
+    top: 0
+}
+.about-us-contact .about-form .form-row label:before {
+    display: none;
+    margin: 0;
+    padding: 0;
+    border: 0
+}
+.about-us-contact .about-form .button_text {
+    margin-left: 27.5%;
+    padding-left: 40px;
+    min-width: 393px;
+    width: 50.5%;
+    height: 48px;
+    border: 1px solid #149623!important;
+    background: url(../images/cusnext.png) left 25px center no-repeat #39ae37!important;
+    color: #fff!important;
+    text-align: left;
+    font-weight: 400;
+    font-size: 16px;
+    font-family: source_sans_proregular;
+    line-height: 48px
+}
+.about-us-contact .about-form .button_text:hover {
+    border: 1px solid #000;
+    background: url(../images/hover_next.png) left 25px center no-repeat #303030;
+    color: #fff;
+    -webkit-transition: all .5s linear 0s;
+    transition: all .5s linear 0s
+}
+.about-us-contact .about-form .check-row {
+    margin-bottom: 7px;
+    padding-left: 27.8%
+}
+.about-contact-radio {
+    width: 100%
+}
+.about-contact-radio .title {
+    width: 30%
+}
+.about-us-contact .about-form input[type=radio] {
+    float: left
+}
+.about-contact-check input[type=checkbox]:not(old),
+.about-contact-radio input[type=radio]:not(old) {
+    display: inline;
+    float: left;
+    margin: 0;
+    padding: 0;
+    opacity: 0
+}
+.about-contact-check div,
+.about-contact-check label {
+    display: inline-block;
+    float: left;
+    margin-left: 0;
+    padding-left: 0;
+    width: 100%!important
+}
+.about-contact-radio input[type=radio]:checked+label::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 11.5px;
+    height: 11.5px;
+    border: 1px solid #797979;
+    border-radius: 50%;
+    background: #fff;
+    color: #39ae37;
+    content: '\2022';
+    text-align: center;
+    font-size: 30px
+}
+.fltr-tgl:after,
+.grid:after,
+.order-specifications .invoice:before,
+.radiodiv label:before,
+.tabs:after {
+    content: ''
+}
+.about-contact-check input[type=checkbox]:not(old)+label,
+.customer-account-create input[type=checkbox]:not(old)+label {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px!important;
+    background: url(../images/checkbox-uncheck.png) no-repeat;
+    vertical-align: middle;
+    line-height: 10px!important
+}
+.customer-account-create input[type=checkbox]:not(old)+label {
+    margin-left: 3px;
+    line-height: 12px!important
+}
+.about-contact-radio input[type=radio]:not(old)+label {
+    display: inline-block;
+    margin-left: -28px;
+    padding-right: 20px;
+    padding-left: 17px;
+    background: url(../images/radio-unchecked.png) no-repeat;
+    line-height: 11px!important
+}
+.about-contact-check input[type=checkbox]:not(old):checked+label,
+.customer-account-create input[type=checkbox]:not(old):checked+label {
+    background: url(../images/checkbox-check.png) no-repeat
+}
+.about-us-contact .row .col-md-4 {
+    display: inline;
+    float: left;
+    margin-right: -4%;
+    padding: 10px 40px 50px 35px;
+    width: 30%;
+    border-left: 1px solid #ddd;
+    background-color: #f3f3f3;
+    margin-bottom: 30px
+}
+.about-us-contact .row .col-md-4 address {
+    margin-top: 40px;
+    font-weight: 400;
+    font-size: 16px;
+    font-family: source_sans_proregular;
+    color: #000;
+    line-height: 26px
+}
+.about-us-contact .row .col-md-4 address::first-line {
+    font-weight: 700
+}
+.about-us-contact .row .col-md-4 .info,
+.about-us-contact .row .col-md-4 .social-links {
+    margin-top: 40px;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_prosemibold;
+    line-height: 28px
+}
+.about-us-contact .row .col-md-4 .info {
+    color: #797979
+}
+.about-us-contact .row .col-md-4 .info a {
+    text-decoration: underline
+}
+.about-us-contact .row .col-md-4 .info a:hover {
+    color: #000
+}
+.about-us-contact .row .col-md-4 .social-links {
+    color: #797979
+}
+.about-us-contact .row .col-md-4 .social-links ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd
+}
+.about-us-contact .row .col-md-4 .social-links ul li a:hover,
+.about-us-contact .row .col-md-4 .social-links ul li em:hover,
+.about-us-contact .row .col-md-4 .social-links ul li:hover {
+    color: #000
+}
+.about-us-contact .row .col-md-4 .social-links ul li em {
+    vertical-align: middle;
+    font-size: 36px
+}
+.about-us-contact .row .col-md-4 .social-links ul li a {
+    padding-left: 20px
+}
+.about-us-contact .row .col-md-4 .social-links ul li:first-child {
+    border-top: 1px solid #ddd
+}
+.faqform .content .cont input,
+.faqform .content .cont textarea {
+    padding: 0 20px;
+    color: #000;
+    font-size: 15px;
+    font-family: source_sans_proregular
+}
+.faqform .content .cont textarea {
+    padding-top: 16px;
+    width: 60%;
+    resize: none
+}
+.checkstock .yellow~.stock,
+.hover_bottom .extra-stock .stock-limit span.yellow~span.stock {
+    color: #ec9307
+}
+.checkstock .list,
+.checkstock .stock,
+.hover_bottom .extra-stock .stock-limit span.stock {
+    color: #39ae37
+}
+.checkstock.list > .green {
+    color: #39ae37!important
+}
+.checkstock .yellow~.stock,
+.product-view .checkstock.list .yellow~span span.backorder-info,
+.yellow~.backorder-info,
+.yellow~.stock {
+    color: #ec9307;
+    font-size: 14px;
+    font-family: source_sans_proregular
+}
+.green~.backorder-info,
+.green~.stock {
+    color: #39ae37
+}
+.minimal-price .price-excluding-tax {
+    float: left;
+    clear: both
+}
+.account-create .form-list label,
+.account-login .form-list label {
+    position: relative;
+    z-index: 0;
+    float: left!important;
+    margin: 0;
+    padding: 0!important;
+    width: 30%;
+    color: #000!important;
+    text-transform: none;
+    font-weight: 300!important;
+    font-size: 16px;
+    font-family: source_sans_proregular;
+    line-height: 2.4
+}
+.account-create .form-list .input-box,
+.account-login .form-list .input-box,
+.telefuun {
+    position: relative;
+    display: inline-block;
+    float: left;
+    clear: none;
+    margin: 0;
+    width: 70%;
+    text-align: left
+}
+.account-create .form-list .input-box input[type=password],
+.account-create .form-list .input-box input[type=text],
+.account-login .form-list .input-box input[type=password],
+.account-login .form-list .input-box input[type=text] {
+    padding: 0 25px 0 20px;
+    width: 254px;
+    height: 41px;
+    border: 1px solid #e0e0e0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #000;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.account-create .block-title span,
+.account-create .legend,
+.account-login .block-title span {
+    color: #000;
+    font-size: 24px;
+    font-family: source_sans_proregular;
+    text-transform: none;
+    font-weight: 400;
+    letter-spacing: 0
+}
+.account-create .block-login {
+    width: 100%;
+    border: 0
+}
+.account-create .block-login .block-content {
+    margin: 0 auto;
+    padding: 30px;
+    width: 62.5%;
+    border: 1px solid #ddd;
+    text-align: left
+}
+.account-create .block-login .block-content label {
+    text-align: left;
+    line-height: 3
+}
+.account-create .form-list .field {
+    clear: both;
+    width: 100%
+}
+.account-create .form-list .customer-name-prefix-middlename .name-firstname input.input-text {
+    width: 254px
+}
+.account-create .input-box {
+    width: 70%!important
+}
+.account-create .field,
+.account-create .input-box input {
+    width: 100%!important
+}
+.account-create .field.name-prefix .input-box>label::before {
+    top: 1px;
+    bottom: 0
+}
+.account-create .buttons-set button.button {
+    float: right!important
+}
+.account-create .buttons-set button.button span {
+    height: 47px
+}
+.account-create .buttons-set button.button span span {
+    line-height: 47px
+}
+.account-create .block-title span,
+.account-create .legend {
+    line-height: normal
+}
+.account-create .block-login .block-content ul li.newsletter label {
+    width: 35%
+}
+.account-create .block-login .block-content ul li.newsletter .input-box {
+    width: 65%!important
+}
+.customer-account-create .account-create .buttons-set {
+    margin: 25px 0 5px;
+    text-align: center
+}
+.account-create .block-title,
+.account-login .block-title {
+    text-align: left
+}
+.account-create .block-title strong {
+    display: block
+}
+.account-create em,
+.customer-account-edit .form-list label.required em {
+    display: none
+}
+.account-create .legend {
+    margin-bottom: 30px!important
+}
+.account-create .radio {
+    margin-left: 16px!important;
+    width: 30%!important
+}
+.account-create .block-login .block-content .form-list .input-box {
+    margin: 0
+}
+.account-create .block-login .block-content ul li.newsletter .input-box label {
+    margin: 17px 0 0
+}
+.account-create .block-login .block-content ul li.newsletter .input-box label:before {
+    content: "";
+    border: 0
+}
+.account-login .block-title strong {
+    border-bottom: 1px solid #ddd!important
+}
+.account-login .block-title span {
+    line-height: 3.7
+}
+.account-login .form-bottom {
+    position: relative;
+    margin: 20px 0!important;
+    min-height: 40px
+}
+.account-login .form-bottom .button:hover {
+    border: 1px solid #000
+}
+.account-login .form-bottom .button:hover>span span {
+    background: url(../images/hover_next.png) left 20px center no-repeat #303030;
+    color: #39ae37
+}
+.account-login .form-bottom .button {
+    position: absolute;
+    right: 0
+}
+.account-login .form-bottom .forgot-password {
+    position: absolute;
+    left: 0
+}
+.account-login .form-bottom .button span {
+    padding: 0;
+    height: 49px;
+    border-radius: 0;
+    line-height: 49px;
+    -webkit-transition: none;
+    transition: none
+}
+.account-login .form-bottom .button span span {
+    padding: 0 20px 0 45px;
+    height: 49px;
+    background: url(../images/cusnext.png) left 20px center no-repeat #39ae37;
+    color: #fff;
+    font-size: 18px;
+    font-family: source_sans_proregular;
+    line-height: 49px;
+    -webkit-transition: none;
+    transition: none
+}
+.account-login form {
+    display: block;
+    float: none;
+    clear: both;
+    margin: 0 auto;
+    width: 790px
+}
+.account-login .form-list {
+    padding: 30px!important;
+    border: 1px solid #ddd!important
+}
+.block-account .block-content li,
+.block-account .block-content li:last-child {
+    margin: 0;
+    padding-left: 0;
+    background: 0;
+    line-height: 40px
+}
+.block-account .block-title strong span,
+.my-account h2 {
+    line-height: 18px
+}
+.block-account .block-content ul li a,
+.block-account .block-content ul li strong {
+    color: #000;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_proregular;
+    line-height: 18px;
+    padding: 12px 15px 12px 25px;
+    display: inline-block;
+    position: relative
+}
+.block-account .block-content ul li a:hover,
+.block-account .block-content ul li strong {
+    color: #000!important;
+    text-decoration: underline!important
+}
+.block-account .block-content ul li .li-left-count {
+    float: right;
+    margin-right: 15px;
+    color: #88888e;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 14px;
+    font-family: source_sans_prosemibold;
+    cursor: pointer
+}
+.block-account .block-content ul li:hover .li-left-count {
+    color: #39ae37
+}
+.my-account .field {
+    clear: both;
+    width: 100%
+}
+.my-account .field label {
+    color: #000;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.my-account .input-box input[type=password],
+.my-account .input-box input[type=text] {
+    padding-left: 15px;
+    height: 32px;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #000;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.my-account .input-box input[type=password] {
+    width: 64%
+}
+.my-account .input-box {
+    clear: none;
+    width: 70%
+}
+.my-account .input-box input {
+    width: 91%
+}
+.my-account .email {
+    width: 100%
+}
+.my-account .email label {
+    margin: 0;
+    padding: 0;
+    width: 30%
+}
+.my-account .email label em {
+    position: initial!important;
+    float: none
+}
+.my-account .email .input-box {
+    float: left;
+    width: 63.7%
+}
+.my-account .email .input-box input[type=text] {
+    width: 100%!important
+}
+/*.my-account .page-title h1 {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-family: source_sans_proregular
+}*/
+.my-account h2 {
+    padding-left: 15px;
+    color: #000;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 14px;
+    font-family: source_sans_prosemibold
+}
+.my-account .page-title {
+    padding-left: 0!important
+}
+.col2-left-layout .my-account .page-title {
+    margin-bottom: 0
+}
+.my-account address,
+.my-account p,
+.my-account td,
+.my-account th {
+    font-size: 14px;
+    font-family: source_sans_proregular
+}
+.my-account #my-orders-table1 td.a-right.table-product-stock {
+    font-family: source_sans_proregular;
+    padding-top: 50px
+}
+.my-account .dashboard .welcome-msg {
+    margin: 15px 0
+}
+.my-account #my-orders-table1 td.a-right.table-product-price {
+    padding-top: 35px
+}
+.my-account .box-account .box-head h2 {
+    padding-left: 0;
+    color: #4c4c4c;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 20px;
+    font-family: source_sans_proregular;
+    line-height: normal
+}
+.my-account .dash-info .form-list li.control {
+    display: block;
+    float: left;
+    margin: 25px 0
+}
+.customer-account-edit .field .name-prefix .input-box>input[type=radio]:checked+label::before,
+.customer-account-edit .input-box.radio-selection.company-type>input[type=radio]:checked+label::before {
+    line-height: 0
+}
+.customer-account-edit .field,
+.customer-account-edit .form-list .customer-name-prefix-middlename .name-firstname {
+    width: 100%
+}
+.customer-account-edit .field label.required,
+.customer-address-form .field label.required {
+    margin-right: 0;
+    padding: 0;
+    width: 30%;
+    line-height: 2.5
+}
+.customer-account-edit .form-list .field .input-box.mname {
+    width: 16%!important;
+    margin: 0 10px!important
+}
+.customer-account-edit .my-account .email .input-box input[type=text],
+.customer-account-edit .my-account .input-box input[type=password] {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+}
+.customer-account-edit .my-account .input-box input[type=password] {
+    width: 100%;
+    height: 42px
+}
+.customer-account-edit .form-list .customer-name-prefix-middlename .name-firstname input.input-text {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%!important;
+    height: 42px
+}
+.customer-account-edit .form-list .field .input-box.surname {
+    margin: 0!important
+}
+.customer-account-edit .my-account .button span {
+    padding: 0!important;
+    min-width: 120px;
+    width: 100%;
+    height: 48px;
+    border: 0;
+    background-color: #39ae37;
+    position: relative;
+    color: #fff;
+    font-weight: 300!important;
+    font-size: 18px;
+    font-family: source_sans_proregular;
+    line-height: 48px;
+    -webkit-transition: background .2s ease-in-out;
+    transition: background .2s ease-in-out
+}
+.customer-address-form .input-box select,
+span.extrtext {
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.customer-account-edit .my-account .button span:hover {
+    height: 48px;
+    border: 0;
+    background-color: #303030
+}
+.customer-account-edit .my-account .button span:hover>span,
+.customer-account-edit .my-account .button span>span {
+    min-width: auto;
+    border: 0;
+    background: 0;
+    line-height: 48px!important;
+    padding-left: 10px!important
+}
+.customer-account-edit .my-account .email .input-box input[type=text] {
+    height: 42px
+}
+.customer-account-edit .my-account .input-box {
+    float: left;
+    width: 69%
+}
+.customer-account-edit .form-list .customer-name-prefix-middlename .input-box input {
+    width: 100%
+}
+.customer-account-edit .form-list .field {
+    margin: 0 0 8px
+}
+.customer-address-form .form-list .field .input-box {
+    margin: 0
+}
+.customer-account-edit .form-list .field .input-box.mname,
+.customer-address-form .form-list .field .input-box.mname {
+    position: relative;
+    float: left;
+    margin-left: 22px;
+    width: 12%
+}
+.customer-address-form .form-list .field .input-box.mname {
+    margin: 0 10px;
+    width: 32%
+}
+.customer-account-edit .form-list .field .input-box.surname,
+.customer-address-form .form-list .field .input-box.surname {
+    position: relative;
+    float: left;
+    margin-left: 28px;
+    width: 22.5%
+}
+.customer-address-form .form-list .field .input-box.surname {
+    margin-left: 0
+}
+.customer-account-edit .form-list label.required em,
+.customer-address-form .form-list label.required em {
+    position: inherit;
+    left: 0;
+    float: left;
+    line-height: 2.8
+}
+.customer-account-edit .my-account .button span,
+.customer-address-form .my-account .button span,
+.customer-address-index .my-account .button span,
+.newsletter-manage-index .my-account .button span {
+    padding: 15px 20px
+}
+.customer-account-edit .my-account .button span>span,
+.customer-address-form .my-account .button span>span,
+.customer-address-index .my-account .button span>span,
+.newsletter-manage-index .my-account .button span>span {
+    padding: 0;
+    line-height: 1.5
+}
+.customer-address-index p.back-link {
+    display: block
+}
+.customer-address-form .my-account .input-box {
+    clear: none;
+    width: 100%
+}
+.customer-account-edit .my-account .radio,
+.customer-address-form .my-account .radio {
+    padding-top: 14px;
+    padding-left: 18px;
+    width: auto
+}
+.customer-account-edit .my-account .radio label,
+.customer-address-form .my-account .radio label {
+    padding-right: 20px;
+    width: auto;
+    line-height: 1
+}
+.customer-account-edit input[type=checkbox]:not(old),
+.customer-account-edit input[type=radio]:not(old),
+.customer-address-form input[type=checkbox]:not(old),
+.customer-address-form input[type=radio]:not(old) {
+    display: inline;
+    float: left;
+    margin: 0;
+    padding: 0;
+    opacity: 0
+}
+.customer-account-edit input[type=checkbox]:not(old):checked+label,
+.customer-address-form input[type=checkbox]:not(old):checked+label {
+    background: url(../images/checkbox-check.png) 0 3px no-repeat
+}
+.customer-account-edit input[type=checkbox]:not(old)+label,
+.customer-address-form input[type=checkbox]:not(old)+label {
+    padding-left: 20px!important;
+    background: url(../images/checkbox-uncheck.png) 0 3px no-repeat;
+    color: #000;
+    font-family: source_sans_proregular
+}
+.customer-address-form .input-box {
+    width: 70%
+}
+.customer-address-form .form-list .input-box input[type=text] {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+    width: 100%;
+    height: 46px
+}
+.customer-address-form .input-box input#telephonecode {
+    margin-right: 5px
+}
+.customer-address-form .form-list .field .input-box.radio-selection.company-type {
+    margin-bottom: 8px
+}
+.customer-address-form .input-box select {
+    padding: 0 0 0 15px;
+    height: 46px;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #000;
+    line-height: 1.5
+}
+.customer-address-form .input-box #fax {
+    width: 25%!important
+}
+.customer-address-form .form-list .field {
+    width: 100%
+}
+.customer-address-form .form-list .field .input-box {
+    display: block;
+    float: left;
+    padding: 0;
+    width: 70%
+}
+.customer-address-form .form-list li.fields.nonnetherland .field .input-box {
+    width: auto
+}
+.customer-address-form .form-list li.fields.nonnetherland .field .input-box input {
+    padding: 0 10px;
+    width: 70px
+}
+.customer-address-form .form-list li.fields.nonnetherland .field label {
+    width: 75%
+}
+.customer-address-form .form-list li.fields.nonnetherland .field.other-housenumber.input-postcode {
+    clear: none;
+    width: 60%
+}
+.customer-address-form .form-list li.fields.nonnetherland .field {
+    float: left;
+    width: 40%
+}
+.customer-address-form .form-list li.fields.nonnetherland .field.other-housenumber.input-postcode label {
+    padding: 0 10px;
+    width: auto
+}
+.customer-address-form .field.name-prefix .input-box>label::before {
+    position: relative;
+    top: 2px;
+    left: 0
+}
+.customer-address-form .form-list .field.name-firstname .namebox {
+    float: left;
+    width: 70%
+}
+.customer-address-form .form-list .field.input-postcode.pcnl-input-housenumber label {
+    display: block;
+    margin-right: 10px;
+    width: auto
+}
+.customer-address-form .form-list .wide.control.pcnl-manual-checkbox,
+.customer-address-form .form-list li em,
+.customer-address-form h2.legend,
+.customer-address-form li.wide.postcodenl-output {
+    display: none
+}
+.customer-address-form .form-list select.pcnl-input-text-half {
+    width: auto
+}
+.customer-address-form .form-list .field.input-postcode label {
+    width: 66.9%
+}
+.customer-address-form .form-list .input-postcode .input-box {
+    width: auto
+}
+.customer-address-form .form-list .field .input-box #city,
+.customer-address-form .form-list .field .input-box #region {
+    width: 100%
+}
+.customer-address-form .form-list .field .input-box.fname,
+.customer-address-form .form-list .field .input-box.surname {
+    width: 32.15%
+}
+.customer-address-form .field.name-prefix .input-box>input[type=radio]:checked+label::before,
+.customer-address-form .input-box.radio-selection.company-type>input[type=radio]:checked+label::before {
+    position: relative;
+    top: 2px;
+    left: 0;
+    line-height: 0
+}
+.customer-address-form .input-box.radio-selection.company-type>input[type=radio]:checked+label::before {
+    left: -1px
+}
+.customer-account-edit input.checkbox[type=checkbox] {
+    position: relative;
+    display: none;
+    margin: 0
+}
+.customer-address-form .form-list .wide {
+    margin-bottom: 8px
+}
+.customer-address-form .form-list .input-postcode {
+    float: left;
+    margin: 0;
+    width: 45%
+}
+.customer-address-form .field.input-postcode.pcnl-input-housenumber {
+    float: left;
+    clear: none;
+    width: 55%
+}
+.customer-address-form .form-list .input-box label {
+    margin: 0;
+    padding: 0;
+    width: 27%;
+    line-height: 2.5
+}
+.customer-address-form .form-list .field label {
+    margin: 0;
+    padding: 0;
+    width: 30%;
+    line-height: 2.9
+}
+.customer-address-form .form-list li.wide input.input-text {
+    margin: 0;
+    width: 100%
+}
+.customer-address-form .form-list li {
+    float: left;
+    margin: 0;
+    width: 100%;
+    background-color: #fff
+}
+.customer-address-form #street_2 {
+    margin-left: 30%
+}
+.customer-address-form #postcode_input {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0 0 8px;
+    padding: 0 10px;
+    width: 55px;
+    height: 46px;
+    border-right: 0!important;
+    border-radius: 0
+}
+.customer-address-form #postcode_inputdegit {
+    float: left;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0 10px;
+    width: 45px;
+    height: 46px;
+    border-radius: 0
+}
+.customer-address-form .pcnl-input-housenumber .input-box input#postcode_housenumber {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 10px;
+    width: 46px;
+    height: 46px;
+    border-radius: 0
+}
+.customer-address-form .housenumber-addition {
+    float: left
+}
+.customer-address-form #addition-house,
+.customer-address-form #billing-addition-house {
+    position: relative;
+    right: 0;
+    float: right;
+    width: auto
+}
+.customer-address-form .form-list .wide label {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 30%;
+    line-height: 2.9
+}
+.customer-address-form .form-list .wide .input-box {
+    float: left;
+    width: 70%
+}
+.customer-address-form .fieldset {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 100%
+}
+.customer-address-form .form-list li.control {
+    margin: 25px 0 0
+}
+.customer-address-form .cusnewaddr .buttons-set {
+    float: right;
+    clear: both;
+    margin: 20px
+}
+.my-account form.cusnewaddr {
+    float: left;
+    width: 790px
+}
+.customer-address-form #telephone {
+    width: 50%
+}
+.customer-address-form .footer_newsletter .input-box {
+    width: 100%
+}
+.customer-address-form .input-postcode .input-box input[type=text] {
+    margin-right: 5px;
+    width: 10%
+}
+.customer-address-form .pcnl-input-housenumber .input-box input[type=text] {
+    width: 25%
+}
+.customer-account-edit .my-account .dash-password .input-box {
+    width: 35%
+}
+.customer-address-form .validation-advice {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    margin: 0;
+    padding: 0 1px;
+    min-height: 44px;
+    height: 44px;
+    border: 1px solid #aa2329;
+    background: #e30d17!important;
+    font-size: 0;
+    line-height: 44px
+}
+.multistepcheckout-index-success .block.block-bestsellers {
+    margin-top: 50px
+}
+.multistepcheckout-index-success .product-slider-container .title-container {
+    margin-bottom: 50px;
+    text-align: center
+}
+.product-slider-container.special-slider.thanks-slider.block.block-bestsellers .block-content .brands li {
+    width: 239px;
+    margin: 8px 5px 0 6px
+}
+.multistepcheckout-index-success .products-grid li.item {
+    margin-right: 10px;
+    width: 233px
+}
+.multistepcheckout-index-success .products-grid .price-box .price-excluding-tax .price {
+    float: left
+}
+.multistepcheckout-index-success .products-grid .hover .button-container {
+    min-width: 38px
+}
+.multistepcheckout-index-success .products-grid .hover .button-container p {
+    float: none;
+    line-height: 46px
+}
+.dash-address h1,
+.dash-main h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-left: 0;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: source_sans_proregular;
+    line-height: normal
+}
+/*.dash-main h2,
+.my-account .page-title h1 {
+    font-size: 24px;
+    line-height: 30px
+}*/
+.dash-main .dash-sec li a {
+    display: block;
+    padding: 5px 10px 5px 40px;
+    color: #000;
+    text-shadow: 0 0 .1px rgba(000, 000, 000, .4);
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_proregular;
+    line-height: 18px;
+    cursor: pointer;
+    position: relative
+}
+.dash-main .dash-sec li a:hover {
+    text-decoration: none
+}
+.dash-main .dash-sec {
+    margin: 0 auto 20px;
+    width: 100%
+}
+.dash-main .dash-sec .dash-panel {
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    box-sizing: border-box
+}
+.dash-main .dash-sec .dash-panel h3 {
+    padding: 25px 15px 10px;
+    color: #000;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 12.5pt;
+    font-family: source_sans_prosemibold
+}
+.dash-main .dash-sec .dash-panel li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd
+}
+.dash-main .dash-sec .dash-panel li:last-child {
+    border-bottom: 0
+}
+.dash-main .dash-sec .dash-li-left {
+    clear: left;
+    text-align: left
+}
+.dash-main .dash-sec .dash-li-left .name {
+    min-width: 55%;
+    padding: 0;
+    font-weight: 400;
+    font-size: 15px
+}
+.dash-main .dash-sec .dash-li-right {
+    float: right;
+    padding-right: 10px;
+    color: #b1b1b1;
+    font-size: 13px;
+    font-family: source_sans_proregular
+}
+.dash-myreview .review-panel .review-row .ratings-table,
+.dash-myreview .review-panel .review-row .review-left,
+.dash-myreview .review-panel .review-row .review-rating-left {
+    float: left
+}
+.dash-address address {
+    color: #88888e;
+    text-transform: capitalize;
+    font-family: source_sans_proregular
+}
+.dash-address .item h3 {
+    color: #000;
+    letter-spacing: 0;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.customer-address-form .my-account .button span {
+    padding: 0;
+    background-color: transparent
+}
+.customer-address-form .my-account .button span>span {
+    text-transform: none;
+    line-height: 1.2
+}
+div#advice-required-entry-postcode_housenumber {
+    right: auto;
+    left: 42px
+}
+.customer-address-form .buttons-set button span:hover,
+.dash-address .btn-newaddress:hover span,
+.dash-address .btn-newaddress:hover span:hover {
+    color: #39ae37
+}
+.buttons-set.dash-address {
+    display: block;
+    margin: 30px 0
+}
+.customer-address-form .infopart {
+    margin-bottom: 0;
+    padding-bottom: 0
+}
+.customer-address-form .addresspart {
+    margin-top: 0;
+    padding-top: 0
+}
+.dash-address h2 {
+    padding: 0 0 10px 15px;
+    border-bottom: 1px solid #ddd;
+    background: 0;
+    color: #000;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_prosemibold;
+    line-height: 18px
+}
+.dash-address .btn-newaddress span {
+    margin: 0;
+    padding: 0!important;
+    background: 0
+}
+.dash-address li.item {
+    padding-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+    font-family: source_sans_proregular;
+    font-size: 14px
+}
+.dash-address .buttons-set {
+    margin: 0;
+    padding: 40px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd
+}
+.dash-address button.button:hover span {
+    background-color: transparent;
+    color: #39ae37
+}
+.dash-address button.btn-newaddress:hover {
+    background-color: #000;
+    color: #39ae37;
+    -webkit-transition: all .5s linear 0s;
+    transition: all .5s linear 0s
+}
+.my-account form .buttons-set button.button:hover span {
+    color: #39ae37
+}
+.dash-myreview .review-panel {
+    margin: 40px 0;
+    border: 1px solid #ddd
+}
+.dash-myreview .review-panel .review-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd
+}
+.dash-myreview .review-panel .review-row:last-child {
+    border-bottom: 0
+}
+.dash-myreview .review-panel .review-row .review-rating-left table tr {
+    border-bottom: 1px solid #ddd
+}
+.dash-myreview .review-panel .review-row .review-rating-left table tr th {
+    padding-left: 20px;
+    line-height: 2
+}
+.dash-myreview .review-panel .review-row .review-rating-left {
+    margin-right: 20px
+}
+.dash-myreview .review-panel .review-row .review-rating-left .rating-box {
+    float: right
+}
+.dash-myreview .review-panel .review-row .ratings-table {
+    float: none;
+    width: 100%
+}
+.dash-myreview .review-panel .review-row .review-summery {
+    padding: 20px 0;
+    min-height: 130px;
+    -webkit-column-count: 1;
+    -moz-column-count: 2;
+    column-count: 1
+}
+.dash-myreview .review-panel .review-row .review-summery h5,
+.dash-myreview .review-panel .review-row .review-summery p {
+    width: 95%;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.dash-myreview .review-panel .review-row .review-summery h5 br,
+.dash-myreview .review-panel .review-row .review-summery p br {
+    display: none
+}
+.dash-myreview .review-panel .review-row .review-right {
+    float: right;
+    padding-right: 20px
+}
+.dash-myreview .review-panel .review-row .review-left .date {
+    padding: 0 20px;
+    color: #88888e;
+    text-transform: capitalize;
+    font-family: source_sans_proregular
+}
+.dash-review-customer .review-panel .review-row table tr th,
+.dash-review-customer .review-panel .review-row:first-child,
+.dash-review-customer .review-panel .second {
+    padding-left: 20px
+}
+.dash-myreview .review-panel .review-row .review-right .name {
+    color: #88888e;
+    text-transform: lowercase;
+    font-family: source_sans_proregular
+}
+.dash-myreview .review-panel .review-row .review-right .name span {
+    color: #000;
+    font-family: source_sans_prosemibold
+}
+.dash-myreview .review-panel .review-row .review-style {
+    padding-left: 20px;
+    font-weight: 900;
+    font-size: 18px;
+    font-family: source_sans_prosemibold;
+    color: #000
+}
+.dash-myreview .rating-box .rating,
+.dash-review .rating-box .rating {
+    background-image: url(../images/greenrating.png)
+}
+.dash-review-customer .review-panel {
+    margin: 0 auto;
+    margin-bottom: 40px!important;
+    max-width: 820px;
+    width: 100%;
+    border: 1px solid #ddd
+}
+.dash-review-customer .review-panel:first-child {
+    margin-top: 40px
+}
+.dash-review-customer .review-panel .review-row {
+    padding-right: 20px;
+    width: auto;
+    border-bottom: 1px solid #ddd;
+    line-height: 50px
+}
+.dash-review-customer .review-panel .review-row table tr:last-child,
+.dash-review-customer .review-panel .review-row:last-child {
+    border-bottom: 0
+}
+.dash-review-customer .review-panel .review-row .review-ratings {
+    position: inherit!important;
+    float: none!important;
+    clear: both
+}
+.dash-review-customer .review-panel .review-row .review-ratings .ratings {
+    display: block
+}
+.dash-review-customer .review-panel .review-row .review-ratings .ratings .rating-box {
+    float: left!important;
+    margin-left: 0!important
+}
+.dash-review-customer .review-panel .review-row .review-left {
+    float: left
+}
+.dash-review-customer .review-panel .review-row .review-right {
+    float: right
+}
+.dash-review-customer .review-panel .review-row table {
+    float: left;
+    margin: 0 35px 10px 0
+}
+.dash-review-customer .review-panel .review-row table tr {
+    border-bottom: 1px solid #ddd
+}
+.dash-review-customer .review-panel .review-row table tr td,
+.dash-review-customer .review-panel .review-row table tr th {
+    color: #000;
+    font-weight: 700;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.dash-review-customer .review-panel .review-row table tr td {
+    padding-right: 20px;
+    padding-left: 30px;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.dash-review-customer .review-panel .review-row .cus-review-info {
+    padding: 20px 0;
+    min-height: 130px;
+    width: 63%;
+    float: left
+}
+.review-rating-left {
+    float: left;
+    min-width: 37%
+}
+.dash-review-customer .review-panel .review-row .date {
+    color: #88888e!important;
+    text-transform: capitalize;
+    font-size: 15px;
+    font-family: source_sans_proregular
+}
+.dash-review-customer .review-panel .review-row .name {
+    color: #000!important;
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+.dash-review-customer .review-panel .review-row .cus-review-info h3,
+.dash-review-customer .review-panel .review-row .cus-review-info h5,
+.dash-review-customer .review-panel .review-row .cus-review-info p {
+    padding: 0;
+    color: #000!important;
+    font-weight: 400;
+    font-size: 15px;
+    font-family: source_sans_proregular;
+    line-height: 28px;
+    letter-spacing: 0;
+    text-transform: none
+}
+.dash-review-customer .review-panel .review-row .name span {
+    color: #88888e!important
+}
+.orderquote-button,
+.print-button,
+.tabs .tab {
+    -webkit-transition: background .2s ease-in-out
+}
+.catalog-product-view .product-view .product-shop .advice-price .price-box .price-including-tax {
+    left: -64%
+}
+.catalog-product-view .product-view .product-shop .advice-price .price-box .price-including-tax .price {
+    margin-left: 15px;
+    font-weight: 700;
+    font-size: 30px;
+    font-family: source_sans_proregular
+}
+.catalog-product-view .product-view .product-shop .advice-price .price-box .old-price .price {
+    position: relative;
+    z-index: 0;
+    color: #bbb;
+    font-size: 14px;
+    cursor: pointer
+}
+.catalog-product-view .product-view .product-shop .advice-price .price-box .old-price .price:hover {
+    z-index: 8
+}
+.catalog-product-view .product-view .product-shop .advice-price+.price-per-attr {
+    position: relative;
+    left: -20px
+}
+.catalog-product-view .product-view .product-shop .advice-price .discount-adviceprice {
+    color: #000;
+    font-size: 15px;
+    font-family: source_sans_prosemibold;
+    position: relative;
+    top: -4px
+}
+.catalog-category-view .minimal-price {
+    position: relative
+}
+.catalog-category-view .products-grid .stock-label+.price-box .price-including-tax {
+    position: absolute;
+    top: 20px;
+    margin-top: 0;
+    padding-top: 0
+}
+.messages li li span {
+    color: #888;
+    font-size: 18px;
+    font-family: source_sans_prosemibold;
+    line-height: 140%;
+    display: block
+}
+.header-container .error-msg,
+.header-container .note-msg,
+.header-container .notice-msg,
+.header-container .success-msg {
+    margin: 0;
+    padding: 0!important;
+    min-height: 50px!important;
+    border-width: 0!important;
+    border-style: solid!important;
+    background-image: none;
+    background-position: 96% 0!important;
+    background-repeat: no-repeat!important;
+    font-weight: initial!important;
+    font-style: initial!important;
+    font-size: initial!important;
+    line-height: 26px
+}
+.header-container .messages li li {
+    padding: 10px 0;
+    line-height: normal
+}
+.header-container .messages li li span {
+    line-height: normal;
+    color: #FFF!important
+}
+.header-container .error-msg {
+    background-color: #e30d17
+}
+.header-container .success-msg {
+    background-color: #39ae37
+}
+.header-container .note-msg,
+.header-container .notice-msg {
+    background-color: #eac92d
+}
+.messages ul {
+    margin: 0 auto!important
+}
+.dashboard-items-table th {
+    padding-left: 22px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 2px;
+    background: #797979;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 14px;
+    font-family: 'Oswald Regular'
+}
+.bestellingen .address address,
+.bestellingen .address h2,
+.dashboard-items-table .table-product-name .product-name,
+.mydata-row .col1,
+.mydata-row .col2,
+.tabs .tab,
+.tabs .tab a,
+.telephone,
+.telephonecode {
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.dashboard-items-table .sku {
+    color: #999
+}
+.dashboard-items-table img {
+    padding: 2px;
+    border: 1px solid #ddd
+}
+.dashboard-items-table .nobr {
+    color: #000
+}
+.dashboard-items-table,
+.dashboard-items-table tr {
+    width: 100%
+}
+.dashboard-items-table tr td {
+    border-top: 0;
+    border-right: 0!important;
+    border-left: 0!important
+}
+.dashboard-items-table .table-product-image {
+    margin: 0!important;
+    padding: 20px!important;
+    width: .1%
+}
+.dashboard-items-table .table-product-name .product-name {
+    color: #000!important;
+    letter-spacing: normal;
+    font-weight: 400!important
+}
+.mydata-row {
+    clear: both;
+    width: 100%
+}
+.mydata-row .col1,
+.mydata-row .col2 {
+    float: left;
+    width: 50%;
+    color: #000
+}
+.bestellingen {
+    margin-top: 40px
+}
+.bestellingen .address address,
+.bestellingen .address h2 {
+    word-wrap: break-word;
+    line-height: normal
+}
+.bestellingen .address h2 {
+    border: 0;
+    text-shadow: 0 0 #000
+}
+.bestellingen .address address {
+    padding-right: 10px;
+    color: #999;
+    text-transform: capitalize;
+    text-shadow: 0 0 .1px rgba(153, 153, 153, .3);
+    line-height: 25px
+}
+.bestellingen .box-title {
+    border: 0
+}
+.order-specifications .invoice:before {
+    background: url(../images/sprite.png);
+    height: 12px;
+    width: 6px;
+    float: left;
+    position: relative;
+    left: 21px;
+    top: 13px;
+    margin-right: 10px;
+    background-position: -49px -23px
+}
+.order-specifications .invoice:hover:before {
+    background-position: -25px -24px
+}
+.tabs {
+    clear: both;
+    margin: 10px 0;
+    padding: 0;
+    width: 100%;
+    border-bottom: 1px solid #ddd
+}
+.tabs .tab {
+    display: inline;
+    float: left;
+    margin-right: 1px;
+    min-width: 90;
+    border-right: 1px solid #ddd;
+    border-bottom: 0;
+    background-color: #797979;
+    text-align: center;
+    transition: background .2s ease-in-out
+}
+.tabs .tab:hover {
+    background-color: #303030
+}
+.tabs .tab,
+.tabs .tab a {
+    padding: 0 10px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    line-height: 40px
+}
+.tabs .tab a {
+    padding: 0
+}
+.facebook,
+.twitter {
+    padding-right: 10px
+}
+.tabs:after {
+    display: table;
+    clear: both
+}
+.grid:after,
+table#my-orders-table td .offernumber a {
+    display: block
+}
+.sales-order-history .my-account .page-title h1 {
+    margin: 30px 0
+}
+.namebox .mname .validation-passed {
+    background: 0 0!important
+}
+.customer-account-create .field.name-prefix .input-box>input[type=radio]:checked+label::before {
+    top: 13px!important
+}
+.sales-order-creditmemo .order-specifications p,
+.sales-order-invoice .order-specifications p,
+.sales-order-shipment .order-specifications p,
+.sales-order-view .order-specifications p {
+    padding-left: 20px;
+    color: #000;
+    text-transform: capitalize;
+    font-size: 16px;
+    font-family: source_sans_proregular;
+    line-height: 49px
+}
+.telephone,
+.telephonecode {
+    padding-left: 15px;
+    height: 36px;
+    border: 1px solid #ddd;
+    color: #000;
+    position: relative
+}
+.menu-start {
+    padding-top: 40px!important
+}
+.catalog-product-view #faq-accordian .nofaq-title:hover h3 {
+    text-decoration: underline
+}
+table#my-orders-table td {
+    vertical-align: middle
+}
+.telephonecode {
+    margin-right: 6px;
+    width: 10%;
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+.telephone {
+    width: 274px;
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+.telefuun {
+    position: relative;
+    float: right;
+    clear: none;
+    width: 76.5%;
+    line-height: 2.5
+}
+.grid:after {
+    clear: both
+}
+#accordian ul ul+a {
+    display: block;
+    margin-top: 10px
+}
+.products-grid.two_columns_3 .price-box .price-including-tax .price {
+    line-height: 1.5
+}
+.products-grid .stock-label+.price-box .price-including-tax {
+    position: relative;
+    left: -30px
+}
+.facebook,
+.google,
+.twitter {
+    display: inline
+}
+.page-print .price-excl-tax,
+.page-print .price-incl-tax {
+    text-align: right
+}
+.social-icon {
+    float: left;
+    width: auto
+}
+.facebook {
+    float: left;
+    clear: none;
+    width: 120px
+}
+.google {
+    float: left;
+    padding-right: 0;
+    width: 65px;
+    vertical-align: super
+}
+.pinterestContainer {
+    display: inline;
+    padding-right: 10px;
+    vertical-align: super
+}
+.form-list label {
+    font-size: 15px;
+    font-family: source_sans_prosemibold
+}
+#googleMap {
+    width: 100vw;
+    height: 45vw
+}
+[id^=drop]:checked+ul {
+    display: block
+}
+.google-maps {
+    position: relative;
+    overflow: hidden
+}
+.google-maps iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%!important;
+    height: 100%
+}
+.product-view .product-shop .price-box .price-excluding-tax .price {
+    line-height: .8999
+}
+.product-view .product-shop .price-per-attr span {
+    line-height: 1.7
+}
+.product-view .product-shop .advice-price .price-box .special-price {
+    clear: left
+}
+.product-view .product-shop .advice-price .price-per-attr span {
+    padding: 0!important;
+    margin-top: -3px
+}
+.product-view .product-shop .advice-price .price-box {
+    margin-right: 40px
+}
+.customer-account-create .namebox {
+    display: block;
+    float: right;
+    width: 70%
+}
+.customer-account-create .account-create .fname,
+.customer-account-create .account-create .surname {
+    margin: 0!important
+}
+.customer-account-create .account-create .mname {
+    margin: 0 10px!important
+}
+.customer-account-edit .input-box {
+    position: relative
+}
+.customer-account-create .account-create .fname input,
+.customer-account-create .account-create .mname input,
+.customer-account-create .account-create .surname input,
+.customer-account-edit .account-create .fname input,
+.customer-account-edit .account-create .mname input,
+.customer-account-edit .account-create .surname input {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 0 0 20px!important;
+    min-height: 39px;
+    width: 100%!important;
+    height: 41px!important;
+    -moz-box-sizing: border-box
+}
+.customer-account-create .account-create p.required {
+    color: #dd2f2f!important;
+    font-weight: 300!important;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.account-create .validation-advice,
+.customer-account-edit .validation-advice {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: auto;
+    margin: 0;
+    padding: 1px;
+    min-height: 34px;
+    height: 37px;
+    border: 1px solid #aa2329;
+    background: #e30d17;
+    font-size: 0
+}
+.customer-account-edit .validation-advice {
+    height: 38px
+}
+.account-create .validation-failed {
+    color: #dd2f2f!important
+}
+.customer-account-create .account-create .namebox .fname,
+.customer-account-create .account-create .namebox .surname {
+    width: 34.95%!important
+}
+.customer-account-create .account-create .mname {
+    width: 26%!important
+}
+span.tooltip-up {
+    position: relative;
+    display: inline;
+    cursor: pointer
+}
+span.tooltip-up:hover:before {
+    visibility: visible;
+    opacity: 1
+}
+span.tooltip-up:before {
+    position: absolute;
+    bottom: 15px;
+    left: 75%;
+    z-index: 999999;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    content: url(../images/toolbartop.png);
+    opacity: 0;
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+span.tooltip-up:hover:after {
+    visibility: visible;
+    opacity: 1
+}
+span.tooltip-up:after {
+    position: absolute;
+    bottom: 28px;
+    left: -140px;
+    z-index: 99999;
+    display: block;
+    visibility: hidden;
+    padding: 15px 18px;
+    min-width: 280px;
+    height: auto;
+    border-radius: 2px;
+    background: #fff;
+    -webkit-box-shadow: 0 0 2px 2px #ccc;
+    box-shadow: 0 0 2px 2px #ccc;
+    color: #444;
+    content: attr(data-tool);
+    text-align: center;
+    text-align: left;
+    text-decoration: none;
+    white-space: normal;
+    font-size: 15px;
+    font-family: source_sans_proregular;
+    line-height: 1.5;
+    opacity: 0
+}
+.new-total-design {
+    margin: 0 auto;
+    padding: 20px 30px;
+    max-width: 430px;
+    width: 100%;
+    border: 1px solid #ddd;
+    background: #f3f3f3;
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+.new-total-design .mygrid .box {
+    margin: 0 20px
+}
+.new-total-design label {
+    display: block;
+    float: left;
+    min-width: 1%;
+    min-height: 50px
+}
+.new-total-design label::before {
+    display: none
+}
+.new-total-design .grandtotal,
+.new-total-design .shipping-cost {
+    padding: 20px 0;
+    min-height: 30px;
+    border-bottom: 1px solid #ddd
+}
+.new-total-design .grandtotal {
+    border-bottom: 0
+}
+.quote-index .shipping-checkout,
+.squotes .shipping-inclprice {
+    border-bottom: 1px solid #ddd
+}
+.new-total-design .grandtotal .total {
+    text-align: right
+}
+.new-total-design .grandtotal span.incl,
+.new-total-design .grandtotal span.incl span.price,
+.new-total-design .shipping-cost label {
+    margin-right: 0;
+    font-size: 16px;
+    font-family: source_sans_proregular;
+    line-height: 1.4!important
+}
+.new-total-design .shipping-cost .green-value {
+    float: right;
+    color: #39ae37;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: source_sans_prosemibold;
+    line-height: 1.4!important
+}
+.new-total-design .grandtotal label,
+.new-total-design .grandtotal span.price,
+.sales-order-creditmemo .price-excl-tax .price,
+.sales-order-invoice .price-excl-tax .price,
+.sales-order-view .price-excl-tax .price {
+    color: #000;
+    text-align: right;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 20px;
+    font-family: "Source Sans Pro Black"
+}
+.new-total-design .grandtotal label {
+    text-align: left
+}
+.new-total-design .grandtotal span.incl {
+    display: block
+}
+.new-total-design .grandtotal span.incl,
+.new-total-design .grandtotal span.incl span.price {
+    margin-right: 2px;
+    color: #999
+}
+.my-account .price-incl-tax {
+    display: block;
+    color: #999;
+    font-family: source_sans_proregular;
+    font-size: 15px
+}
+.sales-order-view .price-incl-tax .label {
+    display: inherit
+}
+.sales-order-view .price-incl-tax .price {
+    display: inline-block;
+    font-weight: 400
+}
+.breadcrumbs ul li.Home {
+    color: #b1b1b1
+}
+.quote-index {
+    float: right;
+    margin-top: 50px
+}
+.quote-index .shipping .price {
+    float: right;
+    color: #000;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 20px;
+    font-family: 'Source Sans Pro Black'
+}
+.quote-index .checkout {
+    position: relative;
+    top: -25px;
+    color: #999;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.quote-index .checkout span {
+    float: right
+}
+.quote-index .shipping label {
+    padding: 10px 0;
+    font-size: 16px;
+    font-family: source_sans_prosemibold
+}
+.squotes .shipping-label {
+    color: #000;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.squotes {
+    margin: 0!important;
+    width: 100%!important
+}
+.squotes .grid_4 {
+    float: right;
+    margin: 40px 0!important;
+    padding: 30px;
+    border: 1px solid #ddd;
+    background: #f3f3f3;
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+.squotes table,
+.squotes table tr {
+    width: 100%
+}
+.squotes table tr td {
+    width: 50%
+}
+.squotes .shipping-price,
+.squotes .total-price {
+    color: #000;
+    text-align: right;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 20px;
+    font-family: 'Source Sans Pro Black'
+}
+.squotes .shipping-inclprice,
+.squotes .total-inclprice {
+    margin-right: 2px;
+    padding-bottom: 12px;
+    color: #999;
+    text-align: right;
+    text-transform: lowercase;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.squotes .total-label {
+    color: #000;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 20px;
+    font-family: 'Source Sans Pro Black'
+}
+.squotes .total-label label:before {
+    display: none
+}
+.squotes .total-label,
+.squotes .total-price {
+    padding-top: 12px
+}
+.multistepcheckout-index-overview .multiple-checkout .grand-total .price,
+.multistepcheckout-index-overview .total-inclprice .price {
+    float: none!important
+}
+.customer-account-resetpassword .buttons-set p.required,
+.fltr-tgl,
+.multistepcheckout-index-overview .delivery-method-temp .box-title h3,
+.multistepcheckout-index-overview .shp-cost-incl .incl-text,
+.multistepcheckout-index-overview .total-inclprice .incl-text {
+    font-family: source_sans_prosemibold
+}
+.multistepcheckout-index-overview .total-inclprice .incl-text {
+    float: right;
+    color: #999;
+    font-size: 13px;
+    line-height: 1.9
+}
+.multistepcheckout-index-overview .delivery-method-temp .box-title h3 {
+    color: #000;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.25
+}
+.multistepcheckout-index-overview .shp-cost-incl .incl-text {
+    float: right;
+    color: #999;
+    font-size: 13px;
+    line-height: 1.9
+}
+.orderquote-button,
+.print-button {
+    display: inline-block;
+    height: 50px;
+    border-radius: 2px;
+    background-repeat: no-repeat;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 18px;
+    font-family: source_sans_proregular;
+    line-height: 49px;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+    position: relative
+}
+.col-main .menu li a,
+.fltr-tgl {
+    font-size: 14px;
+    letter-spacing: 0
+}
+.orderquote-button:hover,
+.print-button:hover {
+    border: 1px solid #303030;
+    background-color: #303030;
+    background-repeat: no-repeat;
+    color: #fff;
+    text-decoration: none
+}
+.print-button {
+    margin-right: 20px;
+    padding-right: 39px;
+    padding-left: 56px;
+    border: 1px solid #797979;
+    background-color: #797979;
+    height: 47px;
+    line-height: 2.5
+}
+.orderquote-button {
+    padding-right: 35px;
+    padding-left: 57px;
+    border: 1px solid #149623;
+    background-color: #39ae37
+}
+.sales-order-invoice .page-title h2 {
+    line-height: 60px
+}
+.sales-order-creditmemo .invoice .col2,
+.sales-order-invoice .invoice .col2 {
+    float: right
+}
+.sales-order-shipment .data-table tbody.odd tr.border td {
+    width: 25%
+}
+.sales-order-creditmemo .incl-label,
+.sales-order-invoice .incl-label {
+    display: inline;
+    float: right;
+    margin-left: 2px
+}
+.sales-order-creditmemo .cart-price .price,
+.sales-order-invoice .cart-price .price {
+    display: inline
+}
+.fltr-tgl,
+.hidden-menu {
+    display: block
+}
+.fltr-tgl {
+    float: left;
+    margin: 0 auto;
+    padding: 20px 16px;
+    color: #444;
+    font-weight: 400;
+    line-height: 1.5;
+    cursor: pointer
+}
+.fltr-tgl span {
+    float: right;
+    margin: 0 0 0 30px;
+    padding: 9px 7px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url(../images/dwn-toggle-arrow.png);
+    background-position: center center;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto auto;
+    background-repeat: no-repeat
+}
+.dashboard,
+.hidden-menu {
+    float: none;
+    width: 100%;
+    clear: both
+}
+.fltr-tgl:after {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    display: block;
+    padding-top: 10px;
+    width: 100%;
+    border-bottom: 1px solid #ddd
+}
+.salesquotes-quote-history .col2-left-layout .page-title {
+    clear: both
+}
+.col-main .menu {
+    clear: both;
+    margin: 0 auto;
+    width: 95%
+}
+.col-main .menu li {
+    padding-left: 0;
+    border-bottom: 1px solid #ddd;
+    background: 0;
+    line-height: 40px
+}
+.col-main .menu li a {
+    padding-left: 18px;
+    background: url(../images/cusnext.png) left 0 center no-repeat;
+    color: #000;
+    font-weight: 600;
+    font-family: source_sans_proregular;
+    line-height: 40px
+}
+.col-main .menu li:first-child {
+    border-top: 0
+}
+.customer-account-resetpassword .page-title h1 {
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: 24px;
+    font-family: source_sans_proregular;
+    line-height: normal
+}
+.customer-account-resetpassword .col-main {
+    margin: 0 auto;
+    max-width: 1260px
+}
+.customer-account-resetpassword .main-content {
+    margin: 0 auto;
+    padding: 30px;
+    width: 62.5%;
+    border: 1px solid #ddd;
+    text-align: left
+}
+.customer-account-resetpassword .field {
+    margin: 5px 0;
+    width: 100%
+}
+.customer-account-resetpassword .forgot-password input {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 0 0 20px!important;
+    min-height: 39px;
+    height: 39px!important;
+    border: 1px solid #e0e0e0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #000;
+    font-size: 16px;
+    font-family: source_sans_proregular
+}
+.customer-account-resetpassword .input-box,
+.customer-account-resetpassword label {
+    display: inline-block
+}
+.customer-account-resetpassword label {
+    width: 40%;
+    vertical-align: middle
+}
+.customer-account-resetpassword .fieldset {
+    margin-top: 10px!important
+}
+.customer-account-resetpassword .input-box {
+    position: relative
+}
+.customer-account-resetpassword .form-list .input-box {
+    width: auto
+}
+.customer-account-resetpassword .validation-advice {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: auto;
+    margin: 0;
+    padding: 0 1px;
+    min-height: 34px;
+    height: 37px;
+    border: 1px solid #aa2329;
+    background: #e30d17;
+    vertical-align: middle;
+    font-size: 0
+}
+.customer-address-form .form-list li.control,
+.customer-address-form .input-box {
+    position: relative
+}
+.customer-account-create .buttons-set button,
+.customer-account-resetpassword .buttons-set button {
+    border: 1px solid #149632;
+    background: rgba(0, 0, 0, 0)!important
+}
+.customer-account-create .buttons-set button {
+    float: right
+}
+.customer-account-create .buttons-set .button>span,
+.customer-account-resetpassword .buttons-set .button>span {
+    padding: 0;
+    height: 49px;
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0);
+    line-height: 49px;
+    -webkit-transition: none;
+    transition: none
+}
+.customer-account-create .buttons-set .button>span span,
+.customer-account-resetpassword .buttons-set .button>span span {
+    padding: 0 20px 0 45px;
+    height: 49px;
+    background: url(../images/cusnext.png) left 20px center no-repeat #39ae37;
+    color: #fff;
+    font-size: 18px;
+    font-family: source_sans_proregular;
+    line-height: 49px;
+    -webkit-transition: none;
+    transition: none;
+    text-transform: none
+}
+.customer-account-create .buttons-set button.button:hover,
+.customer-account-resetpassword .buttons-set button.button:hover {
+    border: 1px solid #000
+}
+.customer-account-create .buttons-set .button:hover>span span,
+.customer-account-resetpassword .buttons-set .button:hover>span span {
+    background: url(../images/hover_next.png) left 20px center no-repeat #303030;
+    color: #39ae37
+}
+.customer-account-resetpassword em {
+    display: none
+}
+.customer-account-resetpassword .buttons-set p.required {
+    display: block;
+    clear: both;
+    width: 100%;
+    font-size: 15px
+}
+.customer-account-resetpassword .buttons-set {
+    width: 74%
+}
+.customer-account-resetpassword .buttons-set button {
+    display: inline-block;
+    float: right
+}
+.dash-password {
+    display: block;
+    float: none;
+    clear: both;
+    margin-top: 0
+}
+.dash-info {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+div#advice-required-entry-telephone {
+    right: 37.5%
+}
+.groupedproduct .favourite-product-container,
+.groupedproduct .mobile-product-name-top .ratings,
+.header-container .error-msg,
+.header-container .note-msg,
+.header-container .notice-msg,
+.header-container .success-msg,
+.messages {
+    display: none
+}
+.flex-active {
+    cursor: pointer
+}
+.salesquotes-quote-viewquote .widetable2 {
+    border: 0!important
+}
+.customer-account-edit .form-list .field .input-box.fname,
+.customer-account-edit .form-list .field .input-box.surname {
+    width: 18.4%!important
+}
+@media all {
+    .print-border {
+        margin: 0 0 10px;
+        padding: 0 0 5px;
+        border-bottom: 1px solid #ddd
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .catalog-product-view .other-customers .block-title {
+        margin-top: 30px
+    }
+}
+@media screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    .catalog-product-view .checkstock .list .now-order {
+        clear: both
+    }
+    .catalog-product-view #recentlyviewed .recently-stock-limit .action-container,
+    .catalog-product-view #recentlyviewed .stock-limit {
+        min-width: 50%;
+        max-width: 50%
+    }
+    .catalog-product-view #recentlyviewed .stock-limit {
+        margin-top: 4%
+    }
+    .catalog-product-view #recentlyviewed .recently-stock-limit .action-container {
+        margin-top: 8%
+    }
+}
+@media screen and (max-width: 1024px) {
+    .about-us,
+    .about-us-contact .row {
+        margin: 0 auto
+    }
+    .about-us {
+        clear: both;
+        padding: 0
+    }
+    .about-us .block-title .short-text {
+        display: none
+    }
+    .about-us .text-block .row .col-md-6,
+    .about-us-contact .row .col-md-4,
+    .about-us-contact .row .col-md-8 {
+        width: 100%
+    }
+    .about-us .text-block .row .col-md-6:nth-child(2) {
+        padding-left: 0
+    }
+    .about-us .table-image,
+    .about-us .text-block {
+        padding: 0 3%
+    }
+    .about-us-contact {
+        clear: both;
+        margin: 0 auto;
+        padding: 0
+    }
+    .about-us-contact .row .col-md-4 {
+        display: table-header-group;
+        float: none;
+        clear: both
+    }
+    .about-us-contact .row .col-md-8 {
+        display: table-footer-group;
+        float: none;
+        clear: both
+    }
+    .about-us-contact .row .col-md-4 .arrange {
+        position: relative;
+        display: table;
+        padding: 0 4% 4%
+    }
+    .about-us-contact .row .col-md-4 .arrange .address {
+        display: table-header-group;
+        width: 50%
+    }
+    .about-us-contact .row .col-md-4 .arrange .info {
+        margin-top: 10%
+    }
+    .about-us-contact .row .col-md-4 .arrange .social-links {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: table-header-group;
+        margin-right: 10%
+    }
+    .about-us-contact .about-form {
+        display: block;
+        padding: 4%
+    }
+    .gyzsalong {
+        margin-top: 4%;
+        margin-bottom: 10%;
+        padding-bottom: 3%
+    }
+    .dash-myreview .review-panel .review-row .review-rating-left {
+        width: 35%
+    }
+    .customer-address-form #street_2 {
+        margin-left: 30.5%
+    }
+    .customer-address-form .my-account .radio label,
+    .customer-address-form .my-account .radio-selection label {
+        margin-right: 20px;
+        width: auto!important
+    }
+    .sales-order-view .order-specifications ul,
+    .sales-order-view table#my-orders-table {
+        margin-bottom: 20px
+    }
+    .salesquotes-quote-history table#my-quotes-table {
+        margin-bottom: 20px;
+        width: 100%
+    }
+    .salesquotes-quote-history table#my-quotes-table thead {
+        display: table;
+        width: 100%
+    }
+    .salesquotes-quote-history table#my-quotes-table thead tr.first th {
+        display: block;
+        width: 100%
+    }
+    .dash-myreview .review-panel {
+        margin: 0 auto;
+        width: 100%
+    }
+}
+@media screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    .catalog-category-view .catalog-bottom-block {
+        width: 98.5%
+    }
+}
+@media screen and (max-width: 768px) {
+    .new-total-design {
+        padding: 0;
+        width: auto
+    }
+    .sales-order-view .order-items {
+        margin: 0;
+        width: auto;
+        float: none;
+        clear: both
+    }
+    .sales-order-view .page-title h2 {
+        display: block!important;
+        float: none;
+        text-align: center!important;
+        text-transform: uppercase!important;
+        letter-spacing: 2px!important;
+        font-weight: 400!important;
+        font-size: 24px!important;
+        font-family: 'Oswald Regular'!important;
+        line-height: 10px!important
+    }
+    .sales-order-view .order-specifications {
+        margin-top: 20px
+    }
+    .form-list .customer-name-prefix-middlename-suffix .name-firstname input.input-text {
+        width: 83%!important
+    }
+    .cms-overons .aboutus-menu label,
+    .cms-overons .breadcrumbs {
+        display: none
+    }
+    .sales-order-view .dashboard-items-table {
+        width: 100%
+    }
+    .cms-overons .main {
+        display: table;
+        table-layout: fixed
+    }
+    .cms-overons .main .col-main {
+        display: table-footer-group
+    }
+    .cms-overons .main .sidebar {
+        display: table-header-group
+    }
+    .cms-overons .aboutus-menu {
+        margin-bottom: 0;
+        padding-left: 2%;
+        width: 100%;
+        border-bottom: 1px solid #ddd
+    }
+    .cms-overons .aboutus-menu .about-menu-title {
+        padding-right: 30px;
+        padding-bottom: 3px;
+        background: url(../images/down_arrow.png) right center no-repeat
+    }
+    .cms-overons .blogmee,
+    .cms-overons .forums {
+        width: 49%
+    }
+    .cms-overons #toTop {
+        display: block
+    }
+    .aboutus-menu ul li:last-child {
+        border-bottom: 0
+    }
+    .account-create .block-login .block-title:after {
+        width: 100px;
+        content: '';
+        display: block;
+        position: absolute;
+        background: #ddd;
+        height: 2px;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: 80px
+    }
+    .customer-account-create .main {
+        padding: 0 20px
+    }
+    .customer-account-create .col1-layout .col-main .row {
+        width: auto;
+        margin: 0 auto
+    }
+    .customer-account-index .col2-left-layout .main .col-main,
+    .sales-order-history .col2-left-layout .main .col-main,
+    .review-customer-index .col2-left-layout .main .col-main,
+    .salesquotes-quote-history .col2-left-layout .main .col-main,
+    .customer-account-edit .col2-left-layout .main .col-main,
+    .customer-address-form .col2-left-layout .main .col-main,
+    .zendesk-customer-tickets-index .col2-left-layout .main .col-main,
+    .sales-order-view .col2-left-layout .main .col-main,
+    .customer-address-index .col2-left-layout .main .col-main {
+        width: inherit;
+        padding: 0;
+        float: none
+    }
+    .account-create .block-login .block-content {
+        width: 100%;
+        padding: 0;
+        box-sizing: border-box;
+        border: 0
+    }
+    .my-account th {
+        font-size: 13px
+    }
+    .fltr-tgl {
+        padding: 20px 0
+    }
+    .dash-main {
+        width: 100%;
+        margin: 0 auto
+    }
+    .dash-address h1,
+    .dash-main h2,
+    .my-account .page-title h1,
+    .my-account .page-title h2,
+    .sales-order-history .my-account .page-title h1,
+    .sales-order-view .page-title h2 {
+        clear: both;
+        margin-bottom: 40px;
+        padding-top: 20px;
+        color: #000;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0;
+        font-weight: 400;
+        font-size: 24px;
+        font-family: 'Oswald Regular'
+    }
+    .my-account .page-title h1 {
+        float: none
+    }
+    .dash-address h1:after,
+    .dash-main h2:after,
+    .my-account .page-title h1:after,
+    .sales-order-history .my-account .page-title h1:after,
+    .sales-order-view .page-title h2:after {
+        position: absolute;
+        right: 0;
+        left: 0;
+        margin-right: auto;
+        margin-left: auto;
+        padding-bottom: 47px;
+        min-width: 100px;
+        width: 100px;
+        border-bottom: 2px solid #b1b1b1;
+        border-bottom-color: #b1b1b1!important;
+        content: ''
+    }
+    .menu,
+    .toggle1+a {
+        display: none
+    }
+    .sales-order-history .my-account .page-title h1 {
+        display: block;
+        float: none;
+        margin: 0 0 70px;
+        padding-top: 40px
+    }
+    .customer-account-create .account-create .namebox .fname,
+    .customer-account-create .account-create .namebox .surname {
+        width: 30%!important
+    }
+    .customer-account-index .breadcrumbs {
+        display: none!important
+    }
+    .my-account .page-title h2:after {
+        position: absolute;
+        right: 0;
+        left: 0;
+        margin-right: auto;
+        margin-left: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        min-width: 100px;
+        width: 100px;
+        border-bottom: 2px solid #b1b1b1;
+        border-bottom-color: #b1b1b1!important;
+        content: ''
+    }
+    .dashboard-items-table .price-incl-tax .cart-price {
+        display: block;
+        float: right;
+        width: 100px;
+        text-align: right
+    }
+    .dashboard-items-table .price-incl-tax .label {
+        display: inline-block!important
+    }
+    .dash-menu {
+        float: none;
+        clear: both;
+        margin: 0 auto!important;
+        width: 100%!important;
+        text-align: left
+    }
+    .addresses-list {
+        margin: 0 10px;
+        width: auto
+    }
+    .dashboard-items-table,
+    .sales-order-history table#my-orders-table {
+        margin: 0 auto;
+        width: auto
+    }
+    .mydata-row {
+        margin: 0 13px;
+        width: auto
+    }
+    .sales-order-history table#my-orders-table {
+        margin-top: 40px;
+        width: 95%
+    }
+    .sales-order-invoice .button-set {
+        float: right;
+        clear: both;
+        margin-top: 40px
+    }
+    .sales-order-invoice .page-title h2 {
+        position: relative
+    }
+    .sales-order-invoice .my-account .page-title h2:after {
+        top: 100%
+    }
+    .sales-order-invoice .cart-price .price {
+        float: right
+    }
+    .salesquotes-quote-viewquote .col2-left-layout .page-title {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 0 auto;
+        width: 100%
+    }
+    .salesquotes-quote-viewquote .page-title h2 {
+        display: block!important;
+        clear: both
+    }
+    .sales-order-view .bestellingen {
+        margin: 20px 0
+    }
+    .salesquotes-quote-history .pager {
+        margin: 20px auto 0!important;
+        width: 90%
+    }
+    .salesquotes-quote-history .pager .pages li.page-controls {
+        padding-right: 0!important
+    }
+    .salesquotes-quote-history table#my-quotes-table tr.last td.last {
+        border-bottom: 1px solid #ebebeb
+    }
+    .salesquotes-quote-history .pager .pages {
+        width: 100%
+    }
+    .form-list .customer-name-prefix-middlename .name-firstname input.input-text,
+    .form-list .customer-name-prefix-middlename-suffix .name-firstname input.input-text {
+        width: 84%
+    }
+}
+@media only screen and (max-width: 768px) and (min-width: 480px) {
+    .multistepcheckout-index-success .col1-layout .col-main,
+    .multistepcheckout-index-success .news_form_detail .left,
+    .multistepcheckout-index-success .thanks .bestselling .right1 {
+        margin: 0 auto;
+        width: 100%
+    }
+    .multistepcheckout-index-success .news_form_detail .right {
+        padding: 0;
+        float: left!important
+    }
+    .multistepcheckout-index-success .news_form_detail .right button {
+        margin: 20px 0
+    }
+    .social-icon {
+        margin-top: 1%
+    }
+}
+@media(min-width:768px){.customer-account-edit .my-account .dash-password .input-box {
+                            width: 69%
+                        }
+                        .customer-account-edit .form-list .field .input-box.fname,
+                        .customer-account-edit .form-list .field .input-box.surname {
+                            width: 23%!important
+                        }
+                        .customer-account-edit .form-list .field .input-box.mname {
+                            width: 19.6%!important
+                        }
+}
+@media only screen and (max-width: 736px) {
+    .salesquotes-quote-viewquote .squotes .grid_4 {
+        display: block;
+        float: none;
+        clear: both;
+        margin-top: 20px!important;
+        margin-right: auto!important;
+        margin-left: auto!important
+    }
+}
+@media(max-width:736px){.customer-account-resetpassword .col1-layout .col-main {
+                            margin: 0 auto;
+                            width: 100%
+                        }
+                        .customer-account-resetpassword .col1-layout .col-main,
+                        .customer-account-resetpassword .row {
+                            width: 100%
+                        }
+                        .customer-account-resetpassword .forgotpassword {
+                            margin: 0 auto;
+                            width: 95%
+                        }
+                        .customer-account-resetpassword .main-content {
+                            padding: 20px 0;
+                            width: 100%
+                        }
+                        .customer-account-resetpassword .fieldset {
+                            margin-top: 10px
+                        }
+                        .order-specifications .quote-label span {
+                            color: #000;
+                            font-weight: 400;
+                            font-size: 15px;
+                            font-family: source_sans_prosemibold
+                        }
+                        .order-specifications .quote-detail span {
+                            font-size: 15px
+                        }
+                        .customer-account-edit .my-account .input-box,
+                        .customer-account-edit .my-account .dash-password .input-box {
+                            width: 100%
+                        }
+}
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation: landscape) {
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname {
+        width:20%!important
+    }
+    .customer-account-edit .my-account .dash-password .input-box {
+        width: 68%
+    }
+    .customer-account-edit .form-list .field .input-box.mname {
+        width: 24.3%!important
+    }
+}
+@media only screen and (max-width: 640px) {
+    .dash-myreview .review-panel .review-row .review-left {
+        float:none;
+        width:100%
+    }
+    .dash-myreview .review-panel .review-row .review-right {
+        float: none;
+        padding-left: 20px;
+        width: auto
+    }
+    .dash-myreview .review-panel .review-row .review-rating-left,
+    .dash-myreview .review-panel .review-row .review-summery {
+        float: none;
+        clear: both;
+        height: auto
+    }
+    .dash-myreview .review-panel .review-row .review-summery {
+        padding: 20px
+    }
+    .dash-review-customer .review-panel .review-row .review-ratings {
+        display: block!important
+    }
+    .cms-overons .main .sidebar,
+    .dash-review-customer .review-panel .review-row .date {
+        display: none
+    }
+    .dash-review-customer .review-panel .review-row .cus-review-info,
+    .dash-review-customer .review-panel .review-row .review-rating-left {
+        float: none;
+        clear: both;
+        width: 100%
+    }
+    .about-us .blogsandforums .forums,
+    .cms-overons .about-us .blogsandforums .blogmee,
+    .dash-review-customer .review-panel .review-row table,
+    .dash-review-customer .review-panel .review-row table tr {
+        width: 100%!important
+    }
+    .dash-review-customer .review-panel .review-row .cus-review-info h3,
+    .dash-review-customer .review-panel .review-row .cus-review-info h5,
+    .dash-review-customer .review-panel .review-row .cus-review-info p {
+        padding: 0 20px!important;
+        text-align: left!important
+    }
+    .dash-review-customer .review-panel .review-row .cus-review-info {
+        padding: 10px 0;
+        min-height: auto
+    }
+    .dash-review-customer .review-panel .review-row {
+        padding-right: 0!important
+    }
+    .dash-review-customer .review-panel .review-row .name {
+        padding-right: 20px
+    }
+    .dash-review-customer .review-panel .review-row table tr th {
+        max-width: 80px
+    }
+    .dash-review-customer .review-panel .review-row table tr:last-child {
+        border-bottom: 1px solid #ddd!important
+    }
+    .cms-overons .about-us-contact .row {
+        display: table;
+        table-layout: fixed
+    }
+    .about-us-contact .about-form .button_text {
+        min-width: 100%!important
+    }
+    .about-us-contact .row .col-md-4 .arrange .social-links {
+        padding-bottom: 30px
+    }
+    .about-us-contact .about-form {
+        margin-top: 30px;
+        padding-top: 0
+    }
+    .faqform .content .cont input {
+        width: 60%
+    }
+    .faqform .content .cont button.btn {
+        width: 100%!important
+    }
+    .catalog-product-view .view-all-specs>span {
+        padding: 0 15px;
+        font-weight: 700
+    }
+    .customer-account-create .account-create .customer-name-prefix-middlename .namebox .fname,
+    .customer-account-create .account-create .customer-name-prefix-middlename .namebox .surname {
+        width: 37.7%!important
+    }
+    .bestellingen .col1 .col2-set .col-1 {
+        float: left;
+        width: 50%;
+        margin: 0 auto
+    }
+    .sales-order-view .my-account .page-title h2:after {
+        top: initial
+    }
+    .my-account .page-title h2:after {
+        top: 8%
+    }
+    .salesquotes-quote-viewquote .col2-left-layout .page-title {
+        clear: both
+    }
+}
+@media only screen and (max-width: 568px) {
+    .salesquotes-quote-history fieldset.group-select.fieldset {
+        width:90%
+    }
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+    #charaters-list ul {
+        max-width:396px;
+        width:auto!important
+    }
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname {
+        width: 17.2%!important
+    }
+    .customer-account-edit .form-list .field .input-box.mname {
+        width: 30%!important
+    }
+    .customer-account-edit .field label.required {
+        width: 30%
+    }
+    .customer-account-edit .my-account .dash-password .input-box {
+        width: 100%
+    }
+}
+@media screen and (max-width: 480px) {
+    .overlay-item .description>p,
+    .product-view .product-shop .product-transmission {
+        font-weight:400;
+        font-family:source_sans_proregular
+    }
+    .about-us {
+        margin: 0 auto;
+        width: 100%;
+        border: 0
+    }
+    .about-us-page {
+        margin-right: 0
+    }
+    .about-us .text-block .row .col-md-6 {
+        min-width: auto;
+        width: 90%
+    }
+    .about-us .text-block .row .col-md-6:nth-child(2) {
+        padding-left: 0
+    }
+    .about-us .about-slider {
+        height: auto
+    }
+    .about-us .block-title .short-text {
+        display: none
+    }
+    .about-us .table-image table td {
+        line-height: 0;
+        padding: 10px!important
+    }
+    .about-us .table-image .row {
+        margin-left: 0
+    }
+    .about-us-contact .row .col-md-4 .arrange {
+        display: block;
+        width: 90%
+    }
+    .about-us-contact .row .col-md-4 .arrange .address,
+    .about-us-contact .row .col-md-4 .arrange .info,
+    .about-us-contact .row .col-md-4 .arrange .social-links {
+        position: initial;
+        display: block
+    }
+    .about-us .table-image table,
+    .col-md-6 {
+        min-width: 100%;
+        width: 100%
+    }
+    .about-us .table-image table td,
+    .about-us .table-image table th {
+        width: auto;
+        display: block
+    }
+    .about-us .table-image table tfoot p:first-child {
+        padding-top: 0
+    }
+    .about-us .table-image .row .col-md-6 img {
+        padding-top: 80px;
+        padding-left: 20%;
+        width: 70%
+    }
+    .about-us-contact,
+    .about-us-contact .row .col-md-4 {
+        width: 100%
+    }
+    .about-us-contact .row .col-md-8 {
+        width: 80%
+    }
+    .about-us-contact .row {
+        margin: 0
+    }
+    .about-us-contact .row .col-md-4 .address {
+        padding-bottom: 40px;
+        width: auto
+    }
+    .about-us-contact .row .col-md-4 .social-links {
+        position: initial;
+        display: table-footer-group;
+        float: left;
+        margin-left: 0;
+        width: 80%
+    }
+    .about-us-contact .row .col-md-4 .info {
+        position: initial;
+        display: table-row-group
+    }
+    .about-us-contact .about-form .form-row {
+        margin: 0 auto;
+        width: auto
+    }
+    .about-us-contact .about-form .form-row label {
+        display: none
+    }
+    .about-us-contact .about-form .form-row input[type=text] {
+        min-width: 92%;
+        min-height: 40px;
+        max-width: 90%;
+        width: 92%;
+        border-radius: 2px
+    }
+    .about-us-contact .about-form .form-row textarea {
+        min-width: 100%;
+        max-width: 100%;
+        width: 91%;
+        box-sizing: border-box
+    }
+    .about-us-contact .about-form .button_text {
+        margin-left: 0;
+        width: 95%
+    }
+    .about-us-contact .about-form .about-contact-check div label,
+    .about-us-contact .about-form .about-contact-radio div label {
+        display: block
+    }
+    .about-us-contact .about-form .check-row {
+        padding-left: 0
+    }
+    .about-us-contact .about-form .form-row .about-contact-radio {
+        padding-left: 20px
+    }
+    .about-us-contact .about-form .form-row .about-contact-radio div {
+        display: inline-block;
+        width: auto
+    }
+    .about-us-contact .about-form .form-row .about-contact-radio .title label,
+    .dash-main .dash-sec .dash-li-right {
+        display: none
+    }
+    .about-us-contact .about-form .form-row div {
+        margin: 2px 0;
+        width: 100%
+    }
+    .block-articles li {
+        float: none;
+        margin: 0 auto;
+        width: 90%
+    }
+    .bottom-content {
+        width: 99.1%
+    }
+    .about-us .blogsandforums .blogmee,
+    .about-us .blogsandforums .forums {
+        margin: 0 0 20px;
+        padding: 0;
+        width: auto;
+        height: auto
+    }
+    .about-us .blogsandforums .bloglink {
+        position: inherit
+    }
+    .gyzsalong {
+        margin: 0 auto;
+        width: 100%
+    }
+    .product-view .product-shop .product-transmission {
+        color: #999;
+        font-size: 14px
+    }
+    .product-view .product-shop .product-transmission a {
+        color: #000;
+        text-decoration: underline
+    }
+    .overlay-item {
+        width: auto!important
+    }
+    .customer-account-edit .field label.required,
+    .field.name-prefix>label,
+    .my-account .email .input-box,
+    .my-account .input-box input[type=password] {
+        width: 100%
+    }
+    .my-account .email .input-box input[type=text],
+    .my-account .input-box input[type=password] {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding-right: 0;
+        height: 40px
+    }
+    .customer-account-create .account-create .customer-name-prefix-middlename .namebox .fname,
+    .customer-account-create .account-create .customer-name-prefix-middlename .namebox .mname,
+    .customer-account-create .account-create .customer-name-prefix-middlename .namebox .surname,
+    .customer-account-create .account-create .customer-name-prefix-middlename label,
+    .customer-account-create .block-login .block-content .form-list .input-box,
+    .customer-account-create .namebox {
+        width: 100%!important
+    }
+    .customer-account-create .account-create .customer-name-prefix-middlename .namebox .mname {
+        margin: 10px 0!important
+    }
+    .salesquotes-quote-history table#my-quotes-table tr.last td.last {
+        border-bottom: 1px solid #ebebeb
+    }
+    .customer-account-create .account-create .customer-name-prefix-middlename .input-box label {
+        width: auto!important;
+        padding-right: 10px!important;
+        display: block;
+        min-width: 20%
+    }
+    .account-create .input-box input {
+        width: 100%!important
+    }
+    .account-create .block-login .block-content .form-list .field label,
+    .account-create .block-login .block-content ul li.newsletter label {
+        width: auto
+    }
+    .account-create .block-login .block-content ul li.newsletter .input-box label {
+        margin: 0
+    }
+    .customer-account-create .account-create p.required {
+        text-align: left;
+        line-height: 1.5
+    }
+    .customer-account-resetpassword .input-box,
+    .customer-account-resetpassword label {
+        width: 100%
+    }
+    .salesquotes-quote-viewquote .squotes {
+        margin-top: 20px!important
+    }
+    .salesquotes-quote-viewquote .squotes .grid_4 {
+        display: block;
+        float: none;
+        margin: 0 auto!important;
+        width: 100%;
+        box-sizing: border-box
+    }
+    .login-checkout .col-2 {
+        padding-top: 20px
+    }
+}
+@media screen and (max-width: 374px) {
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname {
+        width:100%!important
+    }
+}
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px)and (device-width: 414px)and (device-height: 736px)and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 3) and (-webkit-device-pixel-ratio: 3) {
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname {
+        width:29.5%!important
+    }
+    .customer-account-edit .form-list .field .input-box.mname {
+        width: 35%!important
+    }
+    .customer-account-edit .my-account .dash-password .input-box {
+        width: 100%
+    }
+    .sales-order-view .order-specifications ul li {
+        width: 99.5%
+    }
+}
+.customer-address-form .form-list .customer-name-prefix-middlename .name-firstname input.input-text {
+    -webkit-box-sizing:border-box!important;
+    box-sizing:border-box!important;
+    margin:0;
+    width:100%!important;
+    height:46px!important
+}
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 3) {
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname {
+        width:23%!important
+    }
+    .customer-account-edit .form-list .field .input-box.mname {
+        width: 20%!important
+    }
+    .customer-account-edit .my-account .dash-password .input-box {
+        width: 68%
+    }
+    .sales-order-view .order-specifications ul li {
+        width: 99.8%
+    }
+    .sales-order-view .bestellingen {
+        margin-right: 0;
+        margin-left: 0;
+        width: 100%
+    }
+    .sales-order-view .mydata-row .col1 {
+        width: 55%
+    }
+    .sales-order-view .mydata-row .col2 {
+        width: 45%
+    }
+    .sales-order-view .col2-set .col-1,
+    .sales-order-view .col2-set .col-2 {
+        float: left;
+        width: 50%
+    }
+}
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation: portrait) {
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname {
+        width:26.8%!important
+    }
+    .customer-account-edit .my-account .dash-password .input-box {
+        width: 100%
+    }
+    .customer-account-edit .form-list .field .input-box.mname {
+        width: 40%!important
+    }
+    .customer-address-form .input-box #fax,
+    .form-list .customer-name-prefix-middlename .name-firstname input.input-text,
+    .form-list .customer-name-prefix-middlename-suffix .name-firstname input.input-text {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%!important;
+        height: 42px
+    }
+}
+@media screen and (max-width: 320px) {
+    .salesquotes-quote-viewquote .squotes .grid_4 {
+        float:left
+    }
+    .new-total-design label {
+        min-width: 20%
+    }
+    .sales-order-view .button-set .link-print {
+        margin: 0 auto 20px
+    }
+    .customer-account-edit .form-list .field .input-box.mname {
+        margin: 10px 0!important;
+        width: 100%!important
+    }
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname,
+    .customer-account-edit .my-account .dash-password .input-box {
+        width: 100%!important
+    }
+    .customer-account-edit .my-account .button span>span {
+        padding-left: 10px!important
+    }
+    .form-list .customer-name-prefix-middlename .name-firstname input.input-text {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%!important;
+        height: 42px
+    }
+    .new-total-design .shipping-cost label {
+        font-size: 15px
+    }
+    .customer-account-edit .my-account .input-box input[type=password] {
+        padding-left: 8px
+    }
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+    .customer-account-edit .form-list .field .input-box .fname,
+    .customer-account-edit .form-list .field .input-box .surname {
+        width:30%!important
+    }
+    .customer-account-edit .form-list .field .input-box .mname {
+        width: 35%!important
+    }
+}
+.customer-address-form #country {
+    display:none
+}
+.customer-address-form .input-box .radio-selection .company-type>label::before {
+    top:0;
+    left:0
+}
+@media only screen and (max-width: 767px) {
+    .my-account form.cusnewaddr {
+        display:block;
+        float:none;
+        clear:both;
+        width:auto
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+    .customer-account-login .login-checkout .buttons-set>a {
+        line-height:3.5
+    }
+}
+@media(max-width:480px) and (min-width:320px) and (orientation:landscape) {
+    .groupedproduct .mobileprevnext {
+        display: block;
+        margin: 0
+    }
+    .groupedproduct .mobileprevnext .thcategory {
+        width: 39%
+    }
+}
+.block-login .input-box,
+.loginform .input-box {
+    position:relative
+}
+.block-login .input-box {
+    clear:both
+}
+.block-login .input-box .validation-advice,
+.loginform .input-box .validation-advice {
+    position:absolute;
+    top:0;
+    right:0;
+    font-size:0
+}
+.block-login .actions button.validation-passed,
+.loginform .actions button.validation-passed {
+    background:url(../images/login.png) right 26px center no-repeat #f3f3f3!important
+}
+.block-login .actions button.validation-passed:hover,
+.loginform .actions button.validation-passed:hover {
+    background:url(../images/login-hover.png) right 26px center no-repeat #303030!important
+}
+.ratings .rating-box {
+    float:left;
+    margin:0!important
+}
+.rating-box {
+    width:100px
+}
+.rating-box,
+.rating-box .rating {
+    background-size:auto auto
+}
+.rating-box {
+    background-image:url("../images/rating.png");
+    height:17px
+}
+.rating-box .rating {
+    background-image:url("../images/rating.png");
+    height:15px
+}
+.product-essential .ratings {
+    margin:8px 0 32px 9px;
+    float:left;
+    min-width:320px
+}
+.product-essential .ratings .rating-links {
+    margin-left:5px
+}
+.product-essential .ratings ~ .product-shop .featured-label {
+    position:relative;
+    top:-38px
+}
+.ratings .rating-links .no-review,
+.ratings .rating-links a,
+.ratings .rating-links span {
+    color:#444;
+    font-family:source_sans_proregular;
+    font-size:14px;
+    border-bottom:2px solid #fff;
+    margin:0 8px 0 12px
+}
+.ratings .rating-links span {
+    cursor:pointer
+}
+.favouriteproduct a:hover,
+.ratings .rating-links span:hover,
+.ratings .rating-links a:hover {
+    color:#444;
+    text-decoration:none;
+    border-bottom:2px solid #a1a1a1;
+    transition:none
+}
+.ratings .rating-links .separator {
+    border-left:1px solid #ddd;
+    font-size:0;
+    margin:0 2px;
+    padding:10px 0;
+    position:relative;
+    top:-4px
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .ratings ~ .product-shop .featured-label {
+        top:0
+    }
+    .product-essential .ratings {
+        margin: 22px 0 0 9px;
+        width: 100%
+    }
+    .rating-box .rating {
+        background-image: url("../images/greyrating.png")
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: 26px
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .product-essential .ratings {
+        margin:22px 0 8px 0;
+        width:100%
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: 25px
+    }
+}
+@media(min-width:414px) and (max-width:736px) and (orientation:landscape) {
+    .product-essential .ratings {
+        margin: 33px 0 0 10px
+    }
+    .product-essential .ratings .rating-box {
+        margin: 0;
+        float: left
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: 1px
+    }
+}
+@media screen and (min-width: 375px) and (max-width: 667px) and (orientation: portrait) {
+    .product-essential .ratings {
+        margin:33px 0 8px 10px
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: -2px
+    }
+}
+@media(min-width:375px) and (max-width:667px)and (orientation:landscape) {
+    .product-essential .ratings {
+        margin: 33px 0 0 10px
+    }
+    .product-essential .ratings .rating-box {
+        margin: 0;
+        float: left
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: 1px
+    }
+}
+@media screen and (min-width: 320px) and (max-width: 568px) and (orientation: portrait) {
+    .product-essential .ratings {
+        margin:33px 0 10px 10px
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: -2px
+    }
+    .product-essential .ratings .rating-box {
+        margin: 0;
+        float: left
+    }
+}
+@media screen and (min-width: 320px) and (max-width: 568px) and (orientation: landscape) {
+    .product-essential .ratings {
+        margin:7px 0 10px 10px
+    }
+    .product-essential .ratings .rating-box {
+        margin: 0;
+        float: left
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: 1px
+    }
+}
+@media screen and (min-width: 320px) and (max-width: 480px) and (orientation: landscape) {
+    .product-essential .ratings {
+        margin:7px 0 10px 10px
+    }
+    .product-essential .ratings .rating-box {
+        margin: 0;
+        float: left
+    }
+    .product-essential .ratings .rating-links {
+        margin-left: 1px
+    }
+}
+@media(min-width:321px) and (max-width:374px) {
+    .customer-account-edit .form-list .field .input-box.mname {
+        margin: 10px 0!important
+    }
+    .customer-account-edit .form-list .field .input-box.fname,
+    .customer-account-edit .form-list .field .input-box.surname,
+    .customer-account-edit .form-list .field .input-box.mname {
+        width: 100%!important
+    }
+}

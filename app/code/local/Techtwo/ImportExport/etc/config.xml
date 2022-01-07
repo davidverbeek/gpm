@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Techtwo_ImportExport>
+            <version>1.0.0</version>
+        </Techtwo_ImportExport>
+    </modules>
+	<global>
+
+		<models>
+
+            <techtwo_ie>
+                <class>Techtwo_ImportExport_Model</class>
+            </techtwo_ie>
+
+            <eav>
+                <rewrite>
+                    <entity_attribute_source_table>Techtwo_ImportExport_Model_Entity_Attribute_Source_Table</entity_attribute_source_table>
+                </rewrite>
+            </eav>
+            <catalog>
+                <rewrite>
+                    <product_api>Techtwo_ImportExport_Model_Product_Api</product_api>
+                    <product_api_v2>Techtwo_ImportExport_Model_Product_Api_V2</product_api_v2>
+                </rewrite>
+            </catalog>
+
+        </models>
+
+        <resources>
+            <import_export_setup>
+                <setup>
+                    <module>Techtwo_ImportExport</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </import_export_setup>
+            <import_export_setup>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </import_export_setup>
+            <import_export_setup>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </import_export_setup>
+        </resources>
+
+
+  </global>
+</config>

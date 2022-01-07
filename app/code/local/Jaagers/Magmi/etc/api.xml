@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <jaagers_magmi_api translate="title" module="jaagers_magmi">
+                <title>Magmi API</title>
+                <!-- <acl>magmi/api</acl> -->
+                <model>magmi/api</model>
+                <methods>                    
+					<magmiupdate translate="title" module="jaagers_magmi">
+						<title>Magmi Bulk update</title>
+						<method>magmiupdate</method>
+					</magmiupdate>
+                    <callindex translate="title" module="jaagers_magmi">
+                        <title>Call Indexes</title>
+                        <method>callindex</method>
+                    </callindex>
+                </methods>
+            </jaagers_magmi_api>
+        </resources>
+        <!-- <acl>
+            <resources>
+                <magmi translate="title" module="magmi">
+                    <title>Magmi</title>
+                    <sort_order>2000</sort_order>                    
+					<magmiupdate translate="title" module="magmi">
+                        <title>Magmi Bulk update</title>
+                    </magmiupdate>
+                </magmi>
+            </resources>
+        </acl> -->
+        <v2>
+            <resources_function_prefix>
+                <jaagers_magmi_api>magmi</jaagers_magmi_api>
+            </resources_function_prefix>
+        </v2>
+    </api>
+</config>

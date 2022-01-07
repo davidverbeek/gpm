@@ -1,0 +1,141 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @see Mage_Catalog_Block_Layer_View
+ */
+?>
+<?php
+if ($this->canShowBlock()):
+	$customFilters = explode(',', $this->getLayer()->getCurrentCategory()->getCustomFilters());
+	$array_keys = array_keys($customFilters);
+	$stateHtml = $this->getStateHtml();
+	$filtersHtml = '';
+	$filtersHtml1 = '';
+	$filtersHtml2 = '';
+	$filterCategoy = '';
+	$_filters = $this->getFilters();
+	$_categories = Mage::registry('current_category');
+
+	// Filter sort by name
+	$store_filters = array();
+	foreach ($_filters as $_filter):
+		$store_filters[strtolower($_filter->getName())] = $_filter;
+	endforeach;
+	// ksort($store_filters);
+
+	foreach ($store_filters as $_filter) {
+		if ($_filter->getItemsCount()) {
+			if (strtolower($_filter->getName()) == 'category') {
+				$catfltr = 'categoryfilter';
+			} else {
+				$catfltr = 'noncategory';
+			}
+			if (strtolower($_filter->getName()) == 'category') {
+				$filterCategoy = $this->getChildHtml('mana.catagory.layernav');
+			} else {
+				$skipAttribute = array('verpakkingsean_', 'verpakkingseanhoeveelheid_');
+				if(in_array($_filter->getFilter()->getRequestVar(), $skipAttribute)) { continue; } 
+				
+				if (in_array($_filter->getFilter()->getRequestVar(), $customFilters)) {
+					$filtersHtml1 .= '<dt class="' . $catfltr . 'dt custom"><span class="bfrfltr ' . $catfltr . '"></span><span class="fltrs ' . $catfltr . '"><span>' . $this->__($_filter->getName()) . '</span></span><span class="fltrarw ' . $catfltr . '"></span></dt><dd class="' . $catfltr . ' custom">' . $_filter->getHtml() . '<a href="#" class="shopby_more"><span>' . $this->__('more...') . '</span></a></dd>';
+				} else {
+					if ($_categories) {
+						if (strtolower($_filter->getName()) == 'price' || strtolower($_filter->getName()) == 'merk' || strtolower($_filter->getName()) == '_merk') {
+							$filtersHtml2 .= '<dt class="' . $catfltr . 'dt"><span class="bfrfltr ' . $catfltr . '"></span><span class="fltrs ' . $catfltr . '"><span>' . $this->__($_filter->getName()) . '</span></span><span class="fltrarw ' . $catfltr . '"></span></dt><dd class="' . $catfltr . '">' . $_filter->getHtml() . '<a href="#" class="shopby_more"><span>' . $this->__('more...') . '</span></a></dd>';
+						} else {
+							continue;
+						}
+					} else {
+						$filtersHtml2 .= '<dt class="' . $catfltr . 'dt searchpage"><span class="bfrfltr ' . $catfltr . '"></span><span class="fltrs ' . $catfltr . '"><span>' . $this->__($_filter->getName()) . '</span></span><span class="fltrarw ' . $catfltr . '"></span></dt><dd class="' . $catfltr . ' searchpage">' . $_filter->getHtml() . '<a href="#" class="shopby_more"><span>' . $this->__('more...') . '</span></a></dd>';
+					}
+				}
+			}
+		}
+	}
+	
+	$filtersHtml = $filterCategoy . $filtersHtml1 . $filtersHtml2;
+	?>
+
+	<?php if (!empty($filtersHtml) || !empty($stateHtml)): ?>
+		<div class="block block-layered-nav topfilter">
+			<a href="#" class="filterclose fa fa-close"></a>
+			<div class="block-title">
+				<h2><?php echo $this->__('Preferences') ?></h2>
+			</div>
+			<div class="block-content layernav">
+				<?php echo $this->getStateHtml() ?>
+				<?php if ($this->canShowOptions()): ?>
+					<p class="block-subtitle"><?php echo $this->__('Shopping Options') ?></p>
+					<dl id="narrow-by-list">
+						<?php echo $filtersHtml; ?>
+					</dl>
+				<?php endif; ?>
+			</div>
+		</div>
+	<?php endif; ?>
+
+	<!-- New Added for left banner start -->
+	<div class="clearfix"></div>
+	<div class="categories-static-block">
+		<?php
+			$banner_data = "";
+			if($_categories) {
+				$helper_data = Mage::helper('banner')->getCategoryBanner($_categories->getEntityId());
+				$banner_data = $helper_data->getData();
+			}
+		?>
+		<?php if(isset($banner_data) && !empty($banner_data)) : ?>
+			<?php foreach($banner_data as $val) : ?>
+			<div class="cate-left-banner"><a href="<?php if($val['link']) echo $val['link']; else "#";  ?>"> <img src="<?php echo Mage::getBaseUrl('media').$val['image']; ?>" alt=""> </a></div>
+			<?php endforeach; ?>
+		<?php endif; ?>
+	</div>
+	<div class="same-day-delivery-block">
+		<?php echo $this->getChildHtml('same_day_delivery_sblock'); ?>
+	</div>
+	
+	<!-- New Added for left banner end -->
+	<?php
+	echo $this->getLayout()->createBlock('cms/block')->setBlockId('whatsapp-cont')->toHtml();
+	echo $this->getChildHtml('gyzs_by_twisted');
+	echo $this->getChildHtml('catalog_customer_service');
+	?>
+	
+	<!-- New added for append block in js Start -->
+	<script>
+		jQuery(document).ready(function() {
+			if (jQuery('.cate-left-banner').length){
+				jQuery('.gyzs-by-twisted').hide();
+			}
+		})
+	</script>
+	<!-- New added for append block in js End -->
+
+<?php endif; ?>

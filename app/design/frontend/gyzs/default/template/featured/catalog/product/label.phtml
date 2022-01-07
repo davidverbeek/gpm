@@ -1,0 +1,34 @@
+<?php $_product = $this->getProduct(); ?>
+
+<?php $labelId=$_product->getFeaturedlabel();?>
+<?php $labelValue=$_product->getResource()->getAttribute('featuredlabel')->getFrontend()->getValue($_product);?>
+<?php
+//echo get_class($_product->getResource()->getAttribute('featuredlabel')->getFrontend()); exit;  
+$attributeId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_product','featuredlabel');
+ $collection =Mage::getResourceModel('eav/entity_attribute_option_collection')
+                ->setPositionOrder('asc')
+                ->setAttributeFilter($attributeId)
+                ->setStoreFilter(0)
+                ->load();
+                $collection = $collection->toOptionArray();
+
+foreach ($collection as $option) :
+    if ($option['value'] == $labelId) :
+        $labelTitle = $option["label"];
+        break;
+    endif;
+endforeach;  
+;?>
+<?php if(isset($labelValue) && isset($labelTitle)):?>
+<?php $labelData=Mage::getModel('featured/featuredlabel')->getCollection()
+                            ->addFieldToFilter('option_id',$_product->getFeaturedlabel())
+                            ->getFirstItem();
+    //echo "<pre>"; print_r($labelData->getData());
+    ?>
+<div class="featuredproducts product-detail">
+    <span id="label-<?php echo $labelData->getId();?>"  style="background-color:#<?php echo trim($labelData->getBgcolor());?>;color:#<?php echo trim($labelData->getTextcolor());?>;border:2px solid #<?php echo trim($labelData->getBghovercolor());?>">
+        <?php echo $this->__($labelTitle);//echo $labelValue; ?>
+    </span>
+</div>
+<?php endif;?>
+ 

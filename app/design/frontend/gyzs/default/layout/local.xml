@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<layout>
+    <default>
+        <reference name="root">
+            <!--<block type="core/template" name="left.verticalnav" as="left.verticalnav" template="page/template/left-verticalnav.phtml" />-->
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+                <action method="setIsHandle">
+                    <applied>1</applied>
+                </action>
+            </action>
+            <block type="page/html_notices" name="global_notices" as="global_notices" template="page/html/notices.phtml" />            
+            <block type="page/html_header" name="header_cart" as="header_cart" template="page/html/header_cart.phtml">
+                <block type="cms/block" name="header_left_top" as="header_left_top">
+                    <action method="setBlockId">
+                        <block_id>header_left_top</block_id>
+                    </action>
+                </block>
+                
+                <action method="insert">
+                    <blockName>global_messages</blockName>
+                </action>
+                
+                <block type="cms/block" name="fixed_header_left_top" as="fixed_header_left_top">
+                    <action method="setBlockId">
+                        <block_id>fixed_header_left_top</block_id>
+                    </action>
+                </block>
+                <!--block type="page/template_links" name="top.links" as="topLinks"/-->
+                <block type="page/switch" name="store_language" as="store_language" template="page/switch/languages.phtml"/>
+                <block type="page/switch" name="store_switcher" as="store_switcher" template="page/switch/stores.phtml"/>
+                
+                        
+                <!-- <block type="cms/block" name="theme_logo" as="theme_logo">
+                    <action method="setBlockId">
+                        <block_id>shopper_logo</block_id>
+                    </action>
+                </block>	 -->		
+                <!-- <block type="cms/block" name="fixed_theme_logo" as="fixed_theme_logo">
+                    <action method="setBlockId">
+                        <block_id>fixed_theme_logo</block_id>
+                    </action>
+                </block> -->
+                <!-- <block type="cms/block" name="mobile_theme_logo" as="mobile_theme_logo">
+                    <action method="setBlockId">
+                        <block_id>mobile_shopper_logo</block_id>
+                    </action>
+                </block>	 -->		
+                <!-- <block type="cms/block" name="tablet_theme_logo" as="tablet_theme_logo">
+                    <action method="setBlockId">
+                        <block_id>tablet_shopper_logo</block_id>
+                    </action>
+                </block> -->
+            </block>
+			
+        </reference>
+        <!-- Remove callouts and rarely used stuff -->
+        <remove name="right.poll"/>
+        <remove name="right.permanent.callout"/>
+        <remove name="left.permanent.callout"/>
+        <remove name="paypal.partner.right.logo"/>
+        <remove name="right.reports.product.compared"/>
+        <remove name="cart_sidebar"/>
+        <!-- add the local stylesheet & js -->
+        <reference name="head">
+            <action ifconfig="shoppersettings/navigation/use_navigation" method="removeItem">
+                <type>js</type>
+                <name>varien/menu.js</name>
+                <params />
+            </action>
+            <action method="addCss">
+                <stylesheet>css/local.css</stylesheet>
+            </action>
+            <action ifconfig="shoppersettings/navigation/use_wide_navigation" method="addItem" >
+                <type>skin_css</type>
+                <name>css/wide_navigation.css</name>
+                <params/>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/animation.css</stylesheet>
+            </action>
+			<!--<action method="addCss">
+                <stylesheet>css/mobile.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/settings.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/captions.css</stylesheet>
+            </action-->
+            <action method="addCss">
+                <stylesheet>css/fonts.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/font-awesome.min.css</stylesheet>
+            </action>
+            <!--action method="addCss">
+                <stylesheet>css/jquery-ui.css</stylesheet>
+            </action-->
+            <action method="addCss">
+                <stylesheet>css/frontend.css</stylesheet>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/shopper.css</name>
+            </action>
+            <action ifconfig="shoppersettings/design/override_css" method="addItem">
+                <type>skin_css</type>
+                <name>css/override.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/navigation.css</name>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/carousel.css</stylesheet>
+            </action>
+			<action method="addCss">
+                <stylesheet>css/custom.css</stylesheet>
+            </action>
+			<action ifconfig="shoppersettings/design/responsive" method="addItem">
+                <type>skin_css</type>
+                <name>css/responsive.css</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>queldorei/html5shiv.js</name>
+                <params/>
+                <if>lt IE 9</if>
+            </action>
+            <!-- <action method="addItem">
+                <type>skin_js</type>
+                <script>js/jquery-ui.js</script>
+            </action> -->
+            <action method="addJs">
+                <script>queldorei/jquery-1.8.2.min.js</script>
+            </action>
+            <action method="addJs">
+                <script>queldorei/jquery.noconflict.js</script>
+            </action>
+            <action method="addJs">
+                <script>queldorei/jquery.masonry.min.js</script>
+            </action>
+            <action ifconfig="shoppersettings/ajax/totop" method="addJs">
+                <script>queldorei/jquery.ui.totop.js</script>
+            </action>
+            <!-- <action method="addJs">
+                <script>queldorei/jquery.anystretch.min.js</script>
+            </action>-->
+            <!--action method="addJs"><script>queldorei/jquery.mousewheel.js</script></action-->
+            <!--<action method="addJs">
+                <script>queldorei/jquery.easing.js</script>
+            </action>-->
+			
+            <action method="addJs">
+                <script>queldorei/jquery.hoverIntent.min.js</script>
+            </action>
+			
+            <action method="addJs">
+                <script>queldorei/jquery.easing-1.3.js</script>
+            </action>
+            <!--
+            <action method="addJs">
+                <script>queldorei/jquery.mousewheel-3.1.12.js</script>
+            </action>-->
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/script.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/navigation.js</script>
+            </action>
+			<action method="addItem">
+                <type>skin_js</type>
+                <script>js/slick.min.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/core.js</script>
+            </action>
+        </reference>
+        <!-- add currency and cart block in header -->
+        <reference name="header">
+            <block type="cms/block" name="header_left_top" as="header_left_top">
+                <action method="setBlockId">
+                    <block_id>header_left_top</block_id>
+                </action>
+            </block>
+            <block type="cms/block" name="fixed_header_left_top" as="fixed_header_left_top">
+                <action method="setBlockId">
+                    <block_id>fixed_header_left_top</block_id>
+                </action>
+            </block>
+            <block type="core/template" name="top.search1" as="topSearch1" template="catalogsearch/form.mini.fixed.phtml"/>
+           <!--  <block type="cms/block" name="theme_logo" as="theme_logo">
+                <action method="setBlockId">
+                    <block_id>shopper_logo</block_id>
+                </action>
+            </block>		 -->	
+            <!-- <block type="cms/block" name="fixed_theme_logo" as="fixed_theme_logo">
+                <action method="setBlockId">
+                    <block_id>fixed_theme_logo</block_id>
+                </action>
+            </block> -->
+            <!-- <block type="cms/block" name="mobile_theme_logo" as="mobile_theme_logo">
+                <action method="setBlockId">
+                    <block_id>mobile_shopper_logo</block_id>
+                </action>
+            </block>	 -->		
+            <!-- <block type="cms/block" name="tablet_theme_logo" as="tablet_theme_logo">
+                <action method="setBlockId">
+                    <block_id>tablet_shopper_logo</block_id>
+                </action>
+            </block> -->
+			
+            <block type="cms/block" name="fixed_header_service" as="fixedHeaderService">
+                <action method="setBlockId">
+                    <block_id>fixed-header-service</block_id>
+                </action>
+            </block>
+			
+            <block type="cms/block" name="header_store_closed" as="headerStoreClosed">
+                <action method="setBlockId">
+                    <block_id>header_store_closed</block_id>
+                </action>
+            </block>
+			
+            <block type="cms/block" name="header_store_open" as="headerStoreOpen">
+                <action method="setBlockId">
+                    <block_id>header_store_open</block_id>
+                </action>
+            </block>
+
+            <!-- <block type="core/template" name="externalheader" template="page/template/externalheader.phtml" >
+                <block name="mini_search_box" template="catalogsearch/form.mini.phtml" as="mini_search_box" type="core/template"/>
+                <block type="page/html_topmenu" name="left.verticalnav" as="left.verticalnav" template="page/html/topmenu.phtml" >
+                    <block type="page/html_topmenu_renderer" name="catalog.topnav.renderer" template="page/html/topmenu/renderer.phtml"/>
+                </block>
+                <block name="queldorei.topnav" template="queldorei/navigation/top.phtml" as="topShopperMenu" type="shoppersettings/navigation"/>
+            </block> -->
+
+            <block type="directory/currency" name="currency_top" as="currencyTop"
+                   template="directory/currency-top.phtml"/>
+            <block type="checkout/cart_sidebar" name="cart_top" as="cartTop" template="checkout/cart/cart-top.phtml">
+                <action method="addItemRender">
+                    <type>simple</type>
+                    <block>checkout/cart_item_renderer</block>
+                    <template>checkout/cart/sidebar/default.phtml</template>
+                </action>
+                <action method="addItemRender">
+                    <type>grouped</type>
+                    <block>checkout/cart_item_renderer_grouped</block>
+                    <template>checkout/cart/sidebar/default.phtml</template>
+                </action>
+                <action method="addItemRender">
+                    <type>configurable</type>
+                    <block>checkout/cart_item_renderer_configurable</block>
+                    <template>checkout/cart/sidebar/default.phtml</template>
+                </action>
+                <block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label" module="checkout">
+                    <label>Shopping Cart Sidebar Extra Actions</label>
+                </block>
+            </block>
+            
+            <!-- <block type="checkout/cart_sidebar" name="cart_top_fixed" as="cartTopFixed" template="checkout/cart/cart-top.phtml">
+                <action method="addItemRender">
+                    <type>simple</type>
+                    <block>checkout/cart_item_renderer</block>
+                    <template>checkout/cart/sidebar/default.phtml</template>
+                </action>
+                <action method="addItemRender">
+                    <type>grouped</type>
+                    <block>checkout/cart_item_renderer_grouped</block>
+                    <template>checkout/cart/sidebar/default.phtml</template>
+                </action>
+                <block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label" module="checkout">
+                    <label>Shopping Cart Sidebar Extra Actions</label>
+                </block>
+            </block> -->
+            <!--block type="catalog/product_compare_sidebar" name="catalog.compare.top" as="compareTop" template="catalog/product/compare/top.phtml"/-->            
+            <block type="page/switch" name="store_switcher" as="store_switcher" template="page/switch/stores.phtml"/>
+			<!--block type="loyaltylion/sdk" name="loyaltylion_sdk" template="loyaltylion/core/sdk.phtml" /-->
+			
+			<block type="core/template" name="loyaltylion_header_block" as="loyaltylion_header_block" template="page/template/points.phtml" />
+			
+        </reference>
+        <!--<reference name="externalheader">-->
+            <!--<block name="queldorei.topnav" template="queldorei/navigation/top.phtml" as="topShopperMenu" type="shoppersettings/navigation"/>-->
+            <!--<block name="mini_search_box" template="catalogsearch/form.mini.phtml" as="mini_search_box" type="core/template"/>-->
+            <!--<block type="core/template" name="left.verticalnav" as="left.verticalnav" template="page/template/left-verticalnav.phtml" />-->
+        <!--</reference>-->
+        <reference name="top.links">
+            <!--<action method="addLink" translate="label title">
+                <label>My current orders</label>
+                <url>sales/order/history/</url>
+                <title>My current orders</title>
+                <prepare>true</prepare>
+                <position>1</position>
+            </action>-->
+            <!--block type="hs_sales/linkpending" name="pendingorder_link" >
+                <action method="addPendingOrderLink" ></action>
+            </block>
+            <block type="amlist/links" name="amlist_link" >
+                <action method="addListLink" ></action>
+            </block-->
+            <block type="techtwo_salesquotes/links" name="quotes_link" >
+                <action method="addQuotesLink" ></action>
+            </block>
+            <block type="hs_sales/links" name="order_link" >
+                <action method="addOrderLink" ></action>
+            </block>
+            <!--<action method="addLink" translate="label title">
+                <label>My offers</label>
+                <url></url>
+                <title>My offers</title>
+                <prepare>true</prepare>
+                <position>120</position>
+            </action>
+            <action method="addLink" translate="label title">
+                <label>My order history</label>
+                <url></url>
+                <title>My order history</title>
+                <prepare>true</prepare>
+                <position>110</position>
+            </action>-->
+            <remove name="checkout_cart_link"/>
+            <!--block type="checkout/links" name="checkout_cart_link_custom">
+                    <action method="addCheckoutLink"></action>
+            </block-->
+            <block type="core/template" name="customer_form_mini_login" as="customer_form_mini_login" before="-" template="customer/form/mini.login.phtml"/>
+        </reference>
+        <reference name="right">
+            <remove name="right.poll" />
+            <action method="unsetChild">
+                <name>catalog.compare.sidebar</name>
+            </action>
+            <action method="unsetChild">
+                <name>right.reports.product.viewed</name>
+            </action>
+            <action method="unsetChild">
+                <name>right.reports.product.compared</name>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="shopperslideshow/slideshow" name="slideshow" as="slideshow" 
+                   template="queldorei/slideshow.phtml"/>
+            <!--<block type="core/template" name="menu-for-mobile" template="page/template/menu-for-mobile.phtml" before="-"/>-->
+        </reference>
+        
+        <catalog-category-view>
+            <reference name="left">
+                <action method="unsetChild">
+                    <name>catalog.compare.sidebar</name>
+                </action>
+            </reference>
+        </catalog-category-view>
+		
+        <reference name="left">		
+            <remove name="queldorei.left.bestsellers"/>
+            <remove name="currency"/>
+            <action method="unsetChild">
+                <alias>left.newsletter</alias>
+            </action>
+			
+            <!-- <block type="poll/activePoll" name="left.poll">
+                <action method="setPollTemplate">
+                    <template>poll/active.phtml</template>
+                    <type>poll</type>
+                </action>
+                <action method="setPollTemplate">
+                    <template>poll/result.phtml</template>
+                    <type>results</type>
+                </action>
+            </block> -->
+            <!-- <action method="insert">
+                <blockName>catalog.compare.sidebar</blockName>
+                <sublingName>left.poll</sublingName>
+                <after>0</after>
+            </action> -->
+            <!-- <action method="insert">
+                <blockName>right.reports.product.compared</blockName>
+                <sublingName>tags_popular</sublingName>
+                <after>0</after>
+            </action>
+            <action method="insert">
+                <blockName>right.reports.product.viewed</blockName>
+                <sublingName>tags_popular</sublingName>
+                <after>0</after>
+            </action> -->
+
+           <!--  <action method="unsetChild" ifconfig="shoppersettings/design/hide_compare">
+                <name>catalog.compare.sidebar</name>
+            </action>
+            <action method="unsetChild" ifconfig="shoppersettings/design/hide_compare">
+                <name>right.reports.product.compared</name>
+            </action> -->
+        </reference>
+        <reference name="footer">
+            <!-- <action method="setCacheLifetime"></action> -->
+            <remove name="cms_footer_links"/>
+            <block type="cms/block" name="shopper_footer_links" as="shopper_footer_links">
+                <action method="setBlockId">
+                    <block_id>shopper_footer_links</block_id>
+                </action>
+            </block>
+           <!--  <block type="cms/block" name="special_slider" as="specialSlider">
+                <action method="setBlockId">
+                    <block_id>special_slider</block_id>
+                </action>
+            </block> -->
+
+            <!--<block type="core/template" name="special_slider" output="toHtml" template="sli/home/special_slider.phtml" />-->
+            <!-- <block type="cms/block" name="meet_with_gyzs" as="meetWithGyzs">
+                <action method="setBlockId">
+                    <block_id>meet-with-gyzs</block_id>
+                </action>
+            </block> -->
+			
+            <block type="cms/block" name="shopper_footer_banners" as="shopper_footer_banners">
+                <action method="setBlockId">
+                    <block_id>shopper_footer_banners</block_id>
+                </action>
+            </block>
+			
+            <block type="cms/block" name="footer_block1" as="footer_block1">
+                <action method="setBlockId">
+                    <block_id>footer_block1</block_id>
+                </action>
+            </block>
+            <block type="cms/block" name="footer_block2" as="footer_block2">
+                <action method="setBlockId">
+                    <block_id>footer_block2</block_id>
+                </action>
+            </block>
+            <block type="cms/block" name="footer_block3" as="footer_block3">
+                <action method="setBlockId">
+                    <block_id>footer_block3</block_id>
+                </action>
+            </block>
+			
+            <!-- <block type="shoppersettings/brands" name="shoppersettings.brands" as="shopper_brands" template="queldorei/brands_slider.phtml" /> -->
+            <block type="core/template" name="footer.newsletter" as="footer.newsletter" template="newsletter/subscribe_home.phtml" />
+        </reference>
+    </default>
+    <kbase_article_category>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/helios/gdpr-cookie.js</script>
+            </action>
+        </reference>
+    </kbase_article_category>
+    <cms_index_index>
+        <!-- <remove name="left.verticalnav" /> -->
+        <!-- <reference name="root" >
+            <block type="page/html_topmenu" name="left.verticalnav.home" as="left.verticalnav.home" template="page/html/topmenu.phtml" >
+                <block type="page/html_topmenu_renderer" name="catalog.topnav.renderer" template="page/html/topmenu/renderer.phtml"/>
+            </block>
+        </reference> -->
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/readmore.js</script>
+            </action>	
+            <action method="addJs">
+                <script>queldorei/jquery.flexslider-min.js</script>
+            </action>	
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/grayscale.js</script>
+            </action> 
+            <!--action method="addItem">
+                <type>skin_js</type>
+                <script>js/functions.js</script>
+            </action--> 
+            <!-- <action method="addItem">
+                <type>skin_js</type>
+                <script>js/homescript.js</script>
+            </action> -->
+        </reference>
+       <!--  <reference name="left">
+            <block type="core/template" name="the-feedback-company" as="the-feedback-company" template="feedbackreview/left.phtml" after="-">
+            </block>
+        </reference> -->
+        <reference name="header">
+            <action method="unsetChild">
+                <name>categories-on-hover</name>
+            </action>
+        </reference>
+        <!-- <reference name="footer">
+            <block name="associated.home" template="wordpress/post/associated_home.phtml" type="wordpress/post_associated">
+                <action method="setCount">
+                    <columns>3</columns>
+                </action>
+                <action method="setTitle">
+                    <title>The Gyzs Blog</title>
+                </action>
+                <action method="setEntity">cms_page</action>
+            </block>
+        </reference> -->
+
+    </cms_index_index>	
+	
+    <catalog_category_default translate="label">	
+        <reference name="left">		
+            <!--<block type="shoppersettings/navigation" name="queldorei.left.category" before="-" template="queldorei/navigation/left.phtml"/>-->
+            <block type="shoppersettings/bestsellers" name="queldorei.left.bestsellers" after="queldorei.left.category" template="queldorei/bestsellers.phtml"/>
+            <!--<action method="unsetChild"><alias>catalog.leftnav</alias></action>-->		
+            <action method="unsetChild">
+                <alias>the-feedback-company</alias>
+            </action>
+        </reference>
+    </catalog_category_default>
+
+    <catalog_category_layered translate="label">
+        <reference name="left">			
+            <!--<block type="shoppersettings/navigation" name="queldorei.left.category" before="-" template="queldorei/navigation/left.phtml"/>-->
+            <block type="shoppersettings/bestsellers" name="queldorei.left.bestsellers" after="queldorei.left.category" template="queldorei/bestsellers.phtml"/>			
+        </reference>
+        <reference name="head">
+            <action method="setRobots">
+                <value helper="module/getRobots" />
+            </action>
+        </reference>
+    </catalog_category_layered>
+
+    <catalogsearch_result_index translate="label">
+        <reference name="head">            
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/catalogscript.js</script>
+            </action>
+            <action method="setRobots">
+                <value>NOINDEX,FOLLOW</value>
+            </action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+        <reference name="left">
+            <block type="shoppersettings/bestsellers" name="queldorei.left.bestsellers" template="queldorei/bestsellers.phtml" before="-"/>
+        </reference>
+        <!--<reference name="externalheader">-->
+            <!--&lt;!&ndash;<block type="core/template" name="categories-on-hover" as="categories-on-hover" before="-" template="page/template/choose-category.phtml" />&ndash;&gt;-->
+            <!--<block type="core/template" name="left.verticalnav" as="left.verticalnav" template="page/template/left-verticalnav.phtml" />-->
+        <!--</reference>-->
+    </catalogsearch_result_index>
+
+    <!--<bestseller_index_index>        -->
+        <!--<reference name="externalheader">-->
+            <!--&lt;!&ndash;<block type="core/template" name="categories-on-hover" as="categories-on-hover" before="-" template="page/template/choose-category.phtml" />&ndash;&gt;-->
+            <!--<block type="core/template" name="left.verticalnav" as="left.verticalnav" template="page/template/left-verticalnav.phtml" />-->
+        <!--</reference>-->
+    <!--</bestseller_index_index>-->
+    
+    <catalogsearch_advanced_index translate="label">
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+    </catalogsearch_advanced_index>
+
+    <catalogsearch_advanced_result translate="label">
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+        <reference name="left">
+            <block type="shoppersettings/bestsellers" name="queldorei.left.bestsellers" before="-" template="queldorei/bestsellers.phtml"/>
+        </reference>
+    </catalogsearch_advanced_result>
+
+    <!-- <catalog_product_view translate="label"> -->
+        <!-- <reference name="root"> -->
+            <!--<block type="core/template" name="menu-for-mobile" template="page/template/menu-for-mobile.phtml" before="-"/>-->
+            <!-- <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action> -->
+            <!--
+            <action method="unsetChild">
+                <name>global_messages</name>
+            </action>
+            -->
+        <!-- </reference> -->
+        <!-- <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/readmore.js</script>
+            </action> 
+        </reference> -->
+        <!-- <reference name="content">
+            <action method="unsetChild">
+                <name>menu-for-mobile</name>
+            </action>
+        </reference> -->
+
+        <!--  <reference name="right">
+            <action method="unsetChild" >
+                <name>catalog.product.related</name>
+            </action>
+        </reference> -->
+
+        <!-- <reference name="product.info"> -->
+            <!--
+            <action method="insert">
+                <blockName>global_messages</blockName>
+            </action>
+            -->
+            <!-- <action method="unsetChild">
+                <name>additional</name>
+            </action> -->
+            <!-- <block type="cms/block" name="queldorei_product_additional">
+                <action method="setBlockId">
+                    <block_id>shopper_product_additional</block_id>
+                </action>
+            </block> -->
+            <!-- <block name="transmission_content" type="cms/block">
+                <action method="setBlockId">
+                    <block_id>transmission_content</block_id>
+                </action>
+            </block> -->
+            <!-- <block type="cms/block" name="shopper_product_addthis">
+                <action method="setBlockId">
+                    <block_id>shopper_product_addthis</block_id>
+                </action>
+            </block> -->
+            <!-- <block type="catalog/product_list_upsell" name="product.info.upsell2" as="upsell_products2" template="catalog/product/list/upsell2.phtml">
+                <action method="setColumnCount">
+                    <columns>4</columns>
+                </action>
+                <action method="setItemLimit">
+                    <type>upsell</type>
+                    <limit>44</limit>
+                </action>
+            </block> -->
+            <!-- <block type="catalog/product_view" name="favourite.link" template="amasty/amlist/link.phtml"/>	 -->
+            <!-- <block type="catalog/product_list_related" name="content.product.related" as="content_related" template="catalog/product/list/related_content.phtml"/> -->
+
+            <!--SJD++ 280316 Custom Blocks on product view START-->
+            <!-- <block name="view.attributes" template="catalog/product/view/attributes.phtml" type="catalog/product_view_attributes"/> -->
+            <!-- <block name="garanties.service" template="garantiesservice/garantiesservice.phtml" type="core/template"/> -->
+            <!--<block name="product.special.selections" template="catalog/product/product-special-selections.phtml" type="catalog/product_new"/>-->
+            <!-- <block name="product.special.selections" template="sli/catalog/product/sli-product-special-selection.phtml" type="core/template"/> -->
+            <!-- <block name="associated.list" template="wordpress/post/associated_list.phtml" type="wordpress/post_associated">
+                <action method="setCount">
+                    <columns>3</columns>
+                </action>
+                <action method="setTitle">
+                    <title>Blog along with GYZS</title>
+                </action>
+                <action method="setEntity">product</action>
+            
+    </block> -->
+    <!-- <block type="cms/block" name="shopper_after_tabs">
+        <action method="setBlockId">
+            <block_id>shopper_after_tabs</block_id>
+        </action>
+    </block> -->
+    <!--SJD++ 280316 Custom Blocks on product view END-->
+    <!-- </reference> -->
+
+    <!-- <reference name="before_body_end">
+        <block type="core/template" name="sli-script" as="sli-script" template="sli/wrapper.phtml" after="-" />
+    </reference> -->
+
+    <!-- <reference name="product.info.additional">
+        <action method="unsetChild" >
+            <name>product_tag_list</name>
+        </action>
+        <block type="catalog/product_view_tabs" name="product.info.tabs" as="info_tabs">
+            <action method="setTemplate" >
+                <template>catalog/product/view/tabs.phtml</template>
+            </action>
+            <action method="addTab" translate="title" module="catalog" >
+                <alias>description_tabbed</alias>
+                <title>Description</title>
+                <block>catalog/product_view_description</block>
+                <template>catalog/product/view/description.phtml</template>
+            </action>
+            <action method="addTab" translate="title" module="catalog" >
+                <alias>additional_tabbed</alias>
+                <title>Additional</title>
+                <block>catalog/product_view_attributes</block>
+                <template>catalog/product/view/attributes.phtml</template>
+            </action>
+            <action method="addTab" translate="title" module="tag" >
+                <alias>tags_tabbed</alias>
+                <title>Tags</title>
+                <block>tag/product_list</block>
+                <template>tag/list.phtml</template>
+            </action>
+            <action method="addTab" translate="title" module="review" >
+                <alias>review_tabbed</alias>
+                <title>Reviews</title>
+                <block>review/product_view_list</block>
+                <template>review/product_info_review.phtml</template>
+            </action>
+        </block>
+    </reference> -->
+
+    <!-- <reference name="product.info.options.wrapper.bottom">
+        <action method="unsetChild">
+            <name>product.info.addto</name>
+        </action>
+        <action ifconfig="shoppersettings/labels/clone_price" method="unsetChild">
+            <name>prices</name>
+        </action>
+    </reference> -->
+
+    <!-- <reference name="product.info.upsell">
+        <action method="setItemLimit">
+            <type>upsell</type>
+            <limit>44</limit>
+        </action>
+    </reference> -->
+		
+    <!-- <reference name="header">
+        <block type="core/template" name="product-fixed-header" as="product-fixed-header" after="-" template="catalog/product/product-fixed-header.phtml"/>
+    </reference> -->
+
+    <!-- </catalog_product_view> -->
+    <PRODUCT_TYPE_grouped>
+        <reference name="product.info">
+            <block type="catalog/product_view_type_grouped" name="product.info.grouped" as="product_type_data" template="catalog/product/view/type/grouped.phtml">
+                <block type="cms/block" name="grouplinks">
+                    <action method="setBlockId">
+                        <block_id>grouplinks</block_id>
+                    </action>
+                </block>
+            </block>
+        </reference>
+    </PRODUCT_TYPE_grouped>
+
+    <reviews>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+    </reviews>
+
+    <review_product_list>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+    </review_product_list>
+
+    <contacts_index_index translate="label">
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+    </contacts_index_index>
+
+    <customer_account>
+        <reference name="left">
+            <action method="unsetChild">
+                <name>catalog.compare.sidebar</name>
+            </action>
+        </reference>
+    </customer_account>
+
+    <catalog_product_compare_index>
+        <reference name="head">
+            <action method="removeItem">
+                <type>skin_css</type>
+                <name>css/responsive.css</name>
+            </action>
+        </reference>
+    </catalog_product_compare_index>
+
+    <wishlist_index_configure translate="label">
+        <reference name="head">
+            <action method="removeItem">
+                <type>skin_js</type>
+                <name>js/ajaxwishlist/ajaxwishlist.js</name>
+            </action>
+        </reference>
+        <reference name="product.info.options.wrapper.bottom">
+            <action method="unsetChild">
+                <name>product.info.addto</name>
+            </action>
+        </reference>
+    </wishlist_index_configure>
+
+    <!-- to make ajax popup compatible with Brim FPC -->
+    <ajax_index_options>
+        <update handle="brim_pagecache_default" />
+    </ajax_index_options>
+    <customer_logged_in>
+        <!-- Removes 'Log Out' link - Default position: 60 -->
+        <reference name="top.links">
+            <action method="removeLinkByUrl">
+                <url helper="customer/getLogoutUrl"></url>
+            </action>
+        </reference>
+    </customer_logged_in>
+	
+    <!-- remove footer from the cart page -->
+    <checkout_cart_index>
+        <remove name="footer_links" />
+        <remove name="footer" />
+    </checkout_cart_index>
+</layout>

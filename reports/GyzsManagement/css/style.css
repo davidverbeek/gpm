@@ -1,0 +1,145 @@
+/* Datatable */
+table.custom-override-table .hr-line{
+  position: relative;
+  top: -89px;
+}
+table.custom-override-table .hr-line .hr-rule-search {
+  width: 100%;
+  height: 6px;
+  background: #c2c3e0a9;
+  top: 67px;
+  z-index: -1;
+  border: none;
+  padding: 0;
+}
+table.custom-override-table thead th {
+  font-size: 10px;
+  text-align: center;
+  padding: 10px 30px 10px 10px;
+  white-space: break-spaces;
+  width: 170px;
+}
+table tbody tr {
+  border-bottom: 0.2px solid #1b1d4631 !important;
+  font-size: 10px;
+}
+table.custom-override-table tbody td {
+  padding: 2px 0;
+  text-align: center;
+  color: #000000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+table.custom-override-table {
+  margin: 0 auto;
+  width: 100%;
+  clear: both;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+table.custom-override-table>thead{
+  position: sticky;
+  top: 0px;
+  background-color: #ffffff;
+}
+table.custom-override-table thead tr,
+table.custom-override-table thead th,
+table.custom-override-table tfoot tr,
+table.custom-override-table tfoot th,
+table.custom-override-table tbody tr,
+table.custom-override-table tbody th,
+table.custom-override-table tbody td {
+  white-space: nowrap;
+  border: none;
+}
+table.custom-override-table thead tr:nth-child(1) {
+  background: #c2c3e0a9;
+}
+table.custom-override-table thead tr:nth-child(1) th {
+  border-right: 2px solid #ffffff;
+  height: 50px;
+}
+table.custom-override-table thead tr:nth-child(2),
+table.custom-override-table thead tr:nth-child(2) th {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+table.custom-override-table thead tr:nth-child(2) th input {
+  background: #dddeee;
+  text-align: center;
+  padding: 5px 0;
+  margin: 10px;
+  font-family: poppins-medium;
+  font-weight: 600;
+  font-size: 9px;
+  height: 20px;
+  outline: none;
+  border: none;
+  border-radius: 1px;
+  caret-color: var(--lightdark-purple);
+  transition: box-shadow 0.1s, background 0.4s;
+  width: 70%;
+}
+table.custom-override-table thead tr:nth-child(2) th input:focus {
+  background: #e9e9f198;
+  box-shadow: 0 0 0 2px #3235856c;
+}
+table.custom-override-table thead tr:nth-child(2) th input::placeholder {
+  color: #000000;
+  opacity: 0.7;
+}
+table.custom-override-table thead tr:nth-child(2) th input[type="text"]:focus::placeholder {
+  opacity: 0.7;
+}
+
+#pricelogsdt tr th {
+    vertical-align: middle;
+}
+#pricelogsdt tr td {
+    vertical-align: middle;
+}
+
+thead.custom-override-table-head:nth-child(4) tr:first-child, thead.custom-override-table-head:nth-child(4) tr:last-child {
+  display: none;
+}
+.tfootsum {
+  background: #dddeee90 !important;
+  position: sticky;
+  box-shadow: 0px -2px 5px 0px #06093830;
+  bottom: 0px;
+  backdrop-filter: blur(8px);
+}
+
+.tfootsum th {
+  text-align: center;
+}
+
+.tfootsum th input {
+  background: #dddeee;
+  text-align: center;
+  padding: 5px;
+  font-family: poppins-medium;
+  font-weight: 600;
+  font-size: 9px;
+  outline: none;
+  border: none;
+  caret-color: var(--lightdark-purple);
+  transition: box-shadow 0.1s, background 0.4s;
+  width: 77%;
+  margin: 0px 10px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 1px;
+  display: block;
+}
+
+.tfootsum th input:placeholder {
+  color: #000000;
+}
+
+.tfootsum th input:focus {
+  background: #e9e9f198;
+  box-shadow: 0 0 0 2px #3235856c;
+}

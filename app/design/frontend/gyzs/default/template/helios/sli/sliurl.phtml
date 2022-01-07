@@ -1,0 +1,13 @@
+<?php if($this->getLoadingType()){ ?>
+	
+	<?php if(!Mage::getBlockSingleton('page/html_header')->getIsHomePage()) { ?>
+	
+		<script type="text/javascript" async defer src="<?php echo $this->getSkinUrl('js/' . $this->getGyzsWrapperJs(), array('_secure'=>true)); ?>"></script>
+		<script type="text/javascript" async defer src="<?php echo $this->getSkinUrl('js/' . $this->getGyzsRacJs(), array('_secure'=>true)); ?>"></script>
+	<?php } ?>
+	
+	
+	<?php } else { ?>
+		<script type="text/javascript" async defer src="<?php echo $this->getSliWrapperJs(); ?>"></script>
+		<script type="text/javascript" async defer src="<?php echo $this->getSliRacJs(); ?>"></script>
+<?php } ?>

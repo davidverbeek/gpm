@@ -1,0 +1,49 @@
+<?php
+class Helios_Cart_Model_Observer
+{
+
+			public function checkoutCartProductAddAfter(Varien_Event_Observer $observer)
+			{
+				//Mage::dispatchEvent('admin_session_user_login_success', array('user'=>$user));
+				//$user = $observer->getEvent()->getUser();
+				//$user->doSomething();
+				$item = $observer->getQuoteItem();
+                Mage::log(print_r(get_class_methods($item),true),null,"cart.log");
+				if ($item->getParentItem()) {
+					$item = $item->getParentItem();
+				}
+
+				$product = Mage::getModel('catalog/product')->load($item->getProductId());
+
+				$mandatory = (int) ! (int)$product->getData('afwijkenidealeverpakking');
+
+				/**
+				 * helios
+				
+				$prodCollection = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*')->addAttributeToFilter('entity_id',$product->getId());
+				$priceFactor=(int) $prodCollection->getFirstItem()->getData('idealeverpakking');
+ */
+			    $priceFactor =  str_replace(',','.',$product->getData('idealeverpakking'));
+				if ($priceFactor <= 0) $priceFactor = (int) $product->getData('prijsfactor');
+				if ($priceFactor <= 0) $priceFactor = 1;
+
+				$actualPrice = Mage::helper('tax')->getPrice($product, $product->getFinalPrice() * $priceFactor);
+				if ($actualPrice > 0) {
+					$salesUnit = $product->getData('verkoopeenheid');
+					if ('' != $salesUnit) {
+                        $salesUnit[0] = strtolower($salesUnit[0]);
+					} else {
+                        $salesUnit = 'stuk';
+					}
+					$item->setUnitQty(1);
+					if ( $mandatory != 0 ) {
+						$item->setCustomPrice($actualPrice);
+						//$item->setOriginalCustomPrice($actualPrice);
+						$item->getProduct()->setIsSuperMode(true);
+						$item->setUnitQty($priceFactor);
+					}
+					$item->setSalesUnit($salesUnit);
+				}
+			}
+		
+}

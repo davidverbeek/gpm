@@ -1,0 +1,257 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var $this Mage_Sales_Block_Order_Totals
+ * @see Mage_Sales_Block_Order_Totals
+ */
+?>
+
+<?php 
+
+$total_data = $this->getTotals();
+// unset($total_data['grand_total']);
+// unset($total_data['multifees']);
+// echo "<pre>"; print_r($total_data); 
+?>
+<!-- Current Commented -->
+<?php /* foreach ($total_data as $_code => $_total): ?>
+    <?php  if ($_total->getBlockName()): ?>
+        <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
+    <?php else:?>
+    <tr class="<?php echo $_code?>">
+        <td <?php echo $this->getLabelProperties()?> class="a-left">
+            <?php if ($_total->getStrong()):?>
+            <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+            <?php else:?>
+            <?php echo $this->escapeHtml($_total->getLabel());?>
+            <?php endif?>
+        </td>
+        <td <?php echo $this->getValueProperties()?>>
+            <?php if ($_total->getStrong()):?>
+            <strong><?php echo $this->formatValue($_total) ?></strong>
+            <?php else:?>
+            <?php echo $this->formatValue($_total) ?>
+            <?php endif?>
+        </td>
+    </tr>
+    <?php endif?>
+<?php endforeach; */ ?>
+
+   <!--  <tr>
+        <tdTESTtd>
+        <tdTESTtd>
+    </tr> -->
+
+<!-- As per new Checkout -->
+    <?php 
+        $_code = 'subtotal_incl_tax';
+        if(isset($total_data[$_code]) && !empty($total_data[$_code])){ 
+            $_total = $total_data[$_code];
+
+    ?>    
+        <tr class="<?php echo $_code?>">
+            <td <?php echo $this->getLabelProperties()?> class="a-left">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </td>
+            <td <?php echo $this->getValueProperties()?>>
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </td>
+        </tr>
+    <?php } ?>
+    <?php 
+        $_code = 'discount';
+        if(isset($total_data[$_code]) && !empty($total_data[$_code])){ 
+            $_total = $total_data[$_code];
+
+    ?>    
+        <tr class="<?php echo $_code?>">
+            <td <?php echo $this->getLabelProperties()?> class="a-left">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </td>
+            <td <?php echo $this->getValueProperties()?>>
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </td>
+        </tr>
+    <?php } ?>    
+    <?php 
+        $_code = 'shipping_incl_tax';
+        if(isset($total_data[$_code]) && !empty($total_data[$_code])){ 
+            $_total = $total_data[$_code];
+
+    ?>    
+        <tr class="<?php echo $_code?>">
+            <td <?php echo $this->getLabelProperties()?> class="a-left">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </td>
+            <td <?php echo $this->getValueProperties()?>>
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </td>
+        </tr>
+    <?php } ?>
+    <?php 
+        $_code = 'multifees';
+        if(isset($total_data[$_code]) && !empty($total_data[$_code])){ 
+            $_total = $total_data[$_code];
+
+    ?>    
+        <tr class="<?php echo $_code?>">
+            <td <?php echo $this->getLabelProperties()?> class="a-left">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </td>
+            <td <?php echo $this->getValueProperties()?>>
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </td>
+        </tr>
+    <?php } ?>
+    <?php 
+        $_code = 'grand_total_incl';
+        if(isset($total_data[$_code]) && !empty($total_data[$_code])){ 
+            $_total = $total_data[$_code];
+
+    ?>    
+        <tr class="<?php echo $_code?>">
+            <td <?php echo $this->getLabelProperties()?> class="a-left">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </td>
+            <td <?php echo $this->getValueProperties()?>>
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </td>
+        </tr>
+    <?php } ?>
+    <?php 
+        $_code = 'subtotal_excl';
+        if(isset($total_data[$_code]) && !empty($total_data[$_code])){ 
+            $_total = $total_data[$_code];
+
+    ?>    
+        <tr class="<?php echo $_code?>">
+            <td <?php echo $this->getLabelProperties()?> class="a-left">
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
+                <?php else:?>
+                <?php echo $this->escapeHtml($_total->getLabel());?>
+                <?php endif?>
+            </td>
+            <td <?php echo $this->getValueProperties()?>>
+                <?php if ($_total->getStrong()):?>
+                <strong><?php echo $this->formatValue($_total) ?></strong>
+                <?php else:?>
+                <?php echo $this->formatValue($_total) ?>
+                <?php endif?>
+            </td>
+        </tr>
+    <?php } ?>
+    
+    <?php 
+        $_code = 'tax';
+        if($total_data[$_code]){ 
+            $_total = $total_data[$_code];
+            echo $this->getChildHtml($_total->getBlockName(), false);
+        }
+    ?>    
+
+
+    <!-- new checkout block design complete  -->
+
+<?php /*$_order = $this->getOrder() ?>
+<?php $taxAmount=$_order->getTaxAmount();?>
+
+<div class="new-total-design">
+    <div class="mygrid">
+        <div class="box">
+            <?php if($_order->getShippingAmount()):?>
+                <div class="shipping-cost">
+                    <label><?php echo $this->__('Shipping') ?></label>
+                    <span class="green-value"><?php echo $this->__('Free Shippment Cost');?></span>
+                </div><!-- /.shipping-cost -->
+            <?php else:?>
+                <div class="shipping-checkout">
+                    <div class="shipping">
+                        <label><?php echo $this->__('Shipping') ?></label>
+                        <span ><?php echo $this->helper('checkout')->formatPrice($_order->getShippingAmount()); ?>    </span>
+                    </div><!-- /.shipping -->
+                    <div class="checkout">
+                        <span><?php echo Mage::helper('checkout')->formatPrice($_order->getShippingInclTax()) ?></span> 
+                        <span><?php echo $this->__('incl.');?></span>
+                    </div><!-- /.checkout -->
+                </div><!-- /.shipping-checkout -->
+            <?php endif;?>
+
+            <div class="grandtotal">
+                <label><?php echo $this->__('Grand Total') ?></label>
+                <div class="total">
+                    <span><?php $exclAmt=$_order->getGrandTotal()-$taxAmount;?></span>
+                    <span><?php echo Mage::helper('checkout')->formatPrice($exclAmt) ?></span>
+                    <span class="incl">
+                        <?php echo Mage::helper('checkout')->formatPrice($_order->getGrandTotal()) ?>
+                        <?php echo $this->__('incl.');?>    
+                    </span>
+                </div>
+            </div><!-- /.grandtotal -->
+        </div><!-- /.box -->
+    </div><!-- /.grid_4 -->
+    <div class="clearfix"></div>
+</div><!-- /.new-total-design --> */?>

@@ -1,0 +1,42 @@
+<?php
+$_product = $this->getProduct();
+
+$outputHelper = $this->helper('catalog/output');
+$helper = $this->helper('shoppersettings/image');
+$config = Mage::getStoreConfig('shoppersettings');
+?>
+
+<?php if (count($_product->getMediaGalleryImages()) > 0): ?>
+    <div class="product-slider-container mobile-special-slider  block block-bestsellers">
+        <div class="row">
+
+            <div class="block-content">		
+                <ul id="mobile_prod_slider" class="brands clearfix products-grid <?php
+                if (count($_product->getMediaGalleryImages()) > 1) {
+                    echo ' mobileprod homeproductcarousel';
+                }
+                ?>">
+                        <?php foreach ($_product->getMediaGalleryImages() as $_image): ?>
+                            <?php
+                            //Skip, if no image
+                            if ($_image->getFile() == NULL)
+                                continue;
+                            ?>
+                        <li>
+                            <img class="cwslazyloader" data-src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(300); ?>" width="300" height="300" alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>"/>
+
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <div class="clear"></div>
+            <?php if (count($_product->getMediaGalleryImages()) > 1): ?>
+                <div class="clearfix producttitle-container"></div>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php else: ?>
+    <p class="product-image noslider">
+        <img class="cwslazyloader" data-src="<?php echo Mage::helper('catalog/image')->init($_product, 'thumbnail')->resize(300); ?>" alt="<?php echo $this->htmlEscape($_product->getProductName()) ?>" />
+    </p>
+<?php endif; ?>

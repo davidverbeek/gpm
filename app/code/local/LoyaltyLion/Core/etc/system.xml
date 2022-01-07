@@ -1,0 +1,58 @@
+<?xml version='1.0'?>
+<config>
+  <tabs>
+    <loyaltylion_tab translate='label' module='loyaltylion'>
+      <label>LoyaltyLion</label>
+      <sort_order>20000</sort_order>
+    </loyaltylion_tab>
+  </tabs>
+  <sections>
+    <loyaltylion translate='label content' module='loyaltylion'>
+      <tab>customer</tab>
+      <label>LoyaltyLion</label>
+      <frontend_type>text</frontend_type>
+      <sort_order>9999</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+      <groups>
+        <configuration translate='label comment' module='loyaltylion'>
+          <label>LoyaltyLion configuration</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>10</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <loyaltylion_token translate='label'>
+              <label>Token</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+	      <comment><![CDATA["Don't have a LoyaltyLion accont? <a href="https://loyaltylion.com/signup/magento" target="_blank">Sign up here.</a>]]></comment>
+            </loyaltylion_token>
+            <loyaltylion_secret translate='label'>
+              <label>Secret</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </loyaltylion_secret>
+            <initapi translate='label'>
+              <label>Quick-Setup API access</label>
+              <frontend_type>button</frontend_type>
+	      <frontend_model>couponimport/adminhtml_button</frontend_model>
+              <sort_order>30</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </initapi>
+          </fields>
+        </configuration>
+      </groups>
+    </loyaltylion>
+  </sections>
+</config>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout>
+  <adminhtml_wiretransferorders_index>
+    <reference name="content">
+      <block type="creports/adminhtml_wiretransfer" name="wiretransferorders" />
+    </reference>
+  </adminhtml_wiretransferorders_index>
+  <adminhtml_vatopercentage_index>
+    <reference name="content">
+      <block type="creports/adminhtml_vatopercentage" name="vatopercentage" />
+    </reference>
+  </adminhtml_vatopercentage_index>
+</layout>

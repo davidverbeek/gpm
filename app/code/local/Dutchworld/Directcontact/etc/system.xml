@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : system.xml
+    Created on : April 7, 2010, 2:34 PM
+    Author     : didierpeereboomvoller
+    Description:
+        Configuration for DC module with zipcom chat
+-->
+<config>
+    <sections>
+        <contacts>
+            <groups>
+                <directcontact translate="label">
+                    <label>Directcontact</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <dc_enabled translate="label">
+                            <label>Direct Contact</label>
+                            <comment>Enable/disable direct contact module</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_enabled>
+
+                        <dc_title translate="label">
+                            <label>Title</label>
+                            <comment>The title that goes above the direct contact modules</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_title>
+
+                        <dc_target_email translate="label">
+                            <label>Email</label>
+                            <comment>The email address phone and email requests are send to.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>31</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_target_email>
+
+                        <dc_target_name translate="label">
+                            <label>Name</label>
+                            <comment>The name of the person phone and email requests are send to, this is also used as the contact name.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>32</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_target_name>
+                        <dc_sender_identity translate="label">
+                            <label>Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>34</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_sender_identity>
+
+                        <dc_email_template translate="label">
+                            <label>Email template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_email_template>
+
+                        <dc_welcom translate="label">
+                            <label>Welcome label</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_welcom>
+
+                        <dc_id translate="label">
+                            <label>ID</label>
+                            <comment>The ID of the zopim chat account</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </dc_id>
+
+                    </fields>
+                </directcontact>
+            </groups>
+        </contacts>
+    </sections>
+</config>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Hs_Mbreadcrumb>
+      <version>0.1.0</version>
+    </Hs_Mbreadcrumb>
+  </modules>
+  <global>
+    <blocks>
+      <page>
+        <rewrite>
+          <html_breadcrumbs>Hs_Mbreadcrumb_Block_Html_Breadcrumbs</html_breadcrumbs>
+        </rewrite>
+      </page>
+    </blocks>
+    <helpers>
+      <mbreadcrumb>
+        <class>Hs_Mbreadcrumb_Helper</class>
+      </mbreadcrumb>
+    </helpers>
+  </global>
+</config>

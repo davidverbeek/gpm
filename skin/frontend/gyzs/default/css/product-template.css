@@ -1,0 +1,30 @@
+.product-static-description strong{
+    font-size: 18px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+}
+.product-static-description ul{
+    margin: 20px 0;
+    list-style: none;
+}
+.product-static-description ul li{
+    display: block;
+    padding: 5px 10px 5px 30px;
+    font-size: 16px;
+    position: relative;
+    background: none;
+    margin-bottom: 0;
+}
+.product-static-description ul li:before{
+    content: "\f00c";
+    left: 0;
+    position: absolute;
+    color: #39ae37;
+    line-height: normal;
+    font-family: fontAwesome;
+    top: 9px;
+}
+.product-static-description p{
+    margin-bottom: 20px; 
+}

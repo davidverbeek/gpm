@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<config>
+    <rules>
+        <rule rates="standard" customers="incl_vat" products="full_vat,shipping">
+            <title>EU Consumers buy physical products</title>
+        </rule>
+    </rules>
+    <countries>
+    <AT>
+        <vat_number>UID-Nr.</vat_number>
+        <rates>
+            <standart>20</standart>
+            <reduced>10</reduced>
+        </rates>
+    </AT>
+    <BE>
+        <vat_number>No.TVA / BTW-Nr.</vat_number>
+        <rates>
+            <standart>21</standart>
+            <reduced>6</reduced>
+        </rates>
+    </BE>
+    <BG>
+        <vat_number>DDS</vat_number>
+        <rates>
+            <standart>20</standart>
+            <reduced>9</reduced>
+        </rates>
+    </BG>
+    <DK>
+        <vat_number>SE-Nr.</vat_number>
+        <rates>
+            <standart>25</standart>
+            <reduced>-1</reduced>
+        </rates>
+    </DK>
+    <DE>
+        <vat_number>USt-IdNr.</vat_number>
+        <rates>
+            <standart>19</standart>
+            <reduced>7</reduced>
+        </rates>
+    </DE>
+    <EE>
+        <vat_number>KMKR-number</vat_number>
+        <rates>
+            <standart>20</standart>
+            <reduced>9</reduced>
+        </rates>
+    </EE>
+    <FI>
+        <vat_number>ALV-NRO</vat_number>
+        <rates>
+            <standart>24</standart>
+            <reduced>10</reduced>
+        </rates>
+    </FI>
+    <FR>
+        <vat_number>Numéro d'identification à la taxe</vat_number>
+        <rates>
+            <standart>20</standart>
+            <reduced>10</reduced>
+        </rates>
+    </FR>
+    <EL>
+        <vat_number>A.o.M.</vat_number>
+        <rates>
+            <standart>23</standart>
+            <reduced>13</reduced>
+            <additional_reduced>6.5</additional_reduced>
+        </rates>
+    </EL>
+    <IE>
+        <vat_number>VAT No</vat_number>
+        <rates>
+            <standart>23</standart>
+            <reduced>13.5</reduced>
+            <reduced_1>9</reduced_1>
+            <reduced_2>4.8</reduced_2>
+            <reduced_3>0</reduced_3>
+        </rates>
+    </IE>
+    </countries>
+</config>

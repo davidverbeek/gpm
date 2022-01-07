@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Jaagers_Mavisorderupdate>
+    		<version>0.1.1</version>
+		</Jaagers_Mavisorderupdate>
+	</modules>
+	  
+	<global>
+
+		<models>
+        	<jaagers_mavisorderupdate>
+            	<class>Jaagers_Mavisorderupdate_Model</class>
+    		</jaagers_mavisorderupdate>
+		</models>   
+
+		<resources>
+		  <salesattribute1375106291_setup>
+			<setup>
+			  <module>Jaagers_Mavisorderupdate</module>
+			  <class>Mage_Sales_Model_Mysql4_Setup</class>
+			</setup>
+			<connection>
+			  <use>core_setup</use>
+			</connection>
+		  </salesattribute1375106291_setup>
+		  <salesattribute1375106291_write>
+			<connection>
+			  <use>core_write</use>
+			</connection>
+		  </salesattribute1375106291_write>
+		  <salesattribute1375106291_read>
+			<connection>
+			  <use>core_read</use>
+			</connection>
+		  </salesattribute1375106291_read>
+		</resources>
+
+	</global> 
+</config>

@@ -1,0 +1,48 @@
+<?php
+/* @var $quote Mage_Sales_Model_Quote */
+$quote = $this->getQuote();
+$items = $quote->getItemsCollection();
+
+//echo "<pre>"; print_r($quote->getData()); 
+
+//echo "<pre>"; print_r($items->getData()); die;
+
+/* @var $coreHelper Mage_Core_Helper_Data */
+$coreHelper = Mage::helper('core');
+?>
+
+<?php foreach ( $items as $item ): ?>
+
+	
+<!--<tr>
+	<td align="left"><?php //echo $item->getData('name'); ?></td>
+	<td align="right"><?php // echo $coreHelper->currency($item->getData('price'),true,false); ?></td>
+	<td align="right"><?php //echo $item->getData('qty'); ?></td>
+	<td align="right"><?php //echo $coreHelper->currency($item->getData('row_total'),true,false); ?></td>
+</tr>-->
+
+
+<tr style="background-color: #fff">
+    <td align="left" valign="top" style="padding:3px 9px;width:330px;">
+        <p style="margin:0 40px 0 30px;font-size:12px;line-height:20px ;color:#000;text-shadow: 0 0 1px rgba(0,0,0,0.1);padding-left:0px;">
+            <?php echo $item->getData('name'); ?></p>
+
+                                                        </td>
+    <!-- td align="left" valign="top" style="font-size:11px; padding:3px 9px;"></td-->
+    <td align="left" valign="top" style="font-size:11px; padding:3px 9px;width: 115px;">
+        <p style="font-size:12px;line-height:20px ;color:#000;text-shadow: 0 0 1px rgba(0,0,0,0.1);">
+           <?php echo $item->getData('qty'); ?>  <?php if($item->getData('qty') > 1) echo $this->__('stuks'); else echo $this->__('stuk'); ?>                                     
+        </p>
+    </td>
+    <td align="left" valign="top" style="font-size:11px; padding:3px 9px;width: 155px;">
+		<p style="font-size:12px;line-height:28px ;color:#000;text-shadow: 0 0 1px rgba(0,0,0,0.1);font-weight: bold;margin:0 30px 0 0;">
+			<span class="price"><?php echo $coreHelper->currency($item->getData('price'),true,false); ?></span>            
+			<span class="label"><br></span>
+			<span class="price"><?php echo $coreHelper->currency($item->getData('price_incl_tax'),true,false); ?></span><span style="font-size:12px;" class="label">incl.</span>
+		</p>
+    </td>
+</tr>
+
+
+
+<?php endforeach; ?>

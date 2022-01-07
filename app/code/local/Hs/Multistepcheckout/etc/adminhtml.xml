@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+	<config>
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<config>
+									<children>
+										<samedaydelivery translate="title" module="multistepcheckout">
+											<title>Same Day Delivery Section</title>
+											<sort_order>0</sort_order>
+										</samedaydelivery>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+	</config>

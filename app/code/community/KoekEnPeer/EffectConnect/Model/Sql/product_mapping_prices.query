@@ -1,0 +1,20 @@
+SELECT
+    `ce`.`entity_id`,
+    `ce_d`.`value`,
+    `ce_d`.`store_id`
+FROM
+    `[[catalog_product_entity]]` AS `ce`
+INNER JOIN
+    `[[eav_attribute]]` AS `ea` ON
+    `ce`.`entity_type_id`=`ea`.`entity_type_id`
+INNER JOIN
+    `[[catalog_product_entity_decimal]]` AS `ce_d` ON
+    `ce`.`entity_id`=`ce_d`.`entity_id` AND
+    `ea`.`attribute_id`=`ce_d`.`attribute_id` AND
+    `ea`.`backend_type`='decimal'
+WHERE
+    `ea`.`attribute_code`=? AND
+    `ce_d`.`value`>0 AND
+    `ce_d`.`store_id` IN (0,[[store_view]])
+ORDER BY
+    `ce_d`.`store_id` DESC

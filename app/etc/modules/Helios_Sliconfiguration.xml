@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Helios_Sliconfiguration>
+      <active>true</active>
+      <codePool>local</codePool>
+    </Helios_Sliconfiguration>
+  </modules>
+</config>

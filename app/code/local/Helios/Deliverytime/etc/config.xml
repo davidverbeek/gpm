@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Helios_Deliverytime>
+			<version>0.4.0</version>
+		</Helios_Deliverytime>
+	</modules>
+	<global>
+		<helpers>
+			<deliverytime>
+				<class>Helios_Deliverytime_Helper</class>
+			</deliverytime>
+		</helpers>
+		<models>
+			<deliverytime>
+				<class>Helios_Deliverytime_Model</class>
+				<resourceModel>deliverytime_mysql4</resourceModel>
+			</deliverytime>
+			<delivery>
+				<class>Helios_Deliverytime_Model</class>
+				<resourceModel>deliverytime_mysql4</resourceModel>
+			</delivery>
+			<stock>
+				<class>Helios_Deliverytime_Model</class>
+				<resourceModel>stock_resource</resourceModel>
+			</stock>
+			<stock_resource>
+        <class>Helios_Deliverytime_Model_Resource</class>
+        <entities>
+          <stock>
+            <table>cataloginventory_stock_mavis</table>
+          </stock>
+        </entities>
+      </stock_resource>
+		</models>
+		<resources>
+			<deliverytime_setup>
+				<setup>
+					<module>Helios_Deliverytime</module>
+					<class>Mage_Eav_Model_Entity_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</deliverytime_setup>
+			<deliverytime_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</deliverytime_write>
+			<deliverytime_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</deliverytime_read>
+		</resources>
+	</global>    
+	<crontab>
+		<jobs>
+			<deliverytime_getdeliverytime>
+				<schedule><cron_expr>0 6 1 * *</cron_expr></schedule>
+				<run><model>deliverytime/cron::getDeliverytime</model></run>
+			</deliverytime_getdeliverytime>
+			
+			<deliverytime_getdeliverytimefornewsku>
+				<schedule><cron_expr>0 7 * * *</cron_expr></schedule>
+				<run><model>deliverytime/cron::getDeliverytimeForNewSku</model></run>
+			</deliverytime_getdeliverytimefornewsku>
+			
+			<deliverytime_getstock>
+				<schedule><cron_expr>0 * * * *</cron_expr></schedule>
+				<run><model>deliverytime/cron::getStock</model></run>
+			</deliverytime_getstock>
+
+
+			
+			<deliverytime_getdeliverytime>
+				<schedule><cron_expr>0 6 1 * *</cron_expr></schedule>
+				<run><model>deliverytime/cron::getRestDeliverytime</model></run>
+			</deliverytime_getdeliverytime>
+
+			<deliverytime_getstock>
+				<schedule><cron_expr>0 4 * * *</cron_expr></schedule>
+				<run><model>deliverytime/cron::getRestStock</model></run>
+			</deliverytime_getstock>
+
+			<deliverytime_getupdatedreststocks>
+				<schedule><cron_expr>0/15 * * * *</cron_expr></schedule>
+				<run><model>deliverytime/cron::getUpdatedRestStocks</model></run>
+			</deliverytime_getupdatedreststocks>
+
+		</jobs>
+	</crontab>
+</config> 

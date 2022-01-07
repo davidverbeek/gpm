@@ -1,0 +1,220 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /* Extensions placeholder */ ?>
+<?php echo $this->getChildHtml('checkout.onepage.login.extra') ?>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="col2-set login-checkout">
+	<?php echo $this->getChildHtml('login_before') ?>
+	<div class="login-checkout-first-row clearfix">
+		
+			<div class="checkout-login-top left">
+				<?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('checkout_login_top')->toHtml(); ?>
+				Login bij GYZS
+			</div>
+			<div class="checkout-login-top right">
+				Nog geen account? <a onclick="setLocation('<?php echo $this->getUrl('multistepcheckout/index/register', array('_secure' => true)); ?>')">Maak een nieuw account</a>
+			</div>
+	   
+	</div>
+	<div class="login-checkout-second-row clearfix">
+		<!-- <div class="col-2-1">
+			<?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('checkout_login_bottom')->toHtml(); ?>
+		</div> -->
+		
+			<form id="login-form" action="<?php echo $this->getPostAction() ?>" method="post" autocomplete="off">
+				<?php echo $this->getBlockHtml('formkey'); ?>
+				<div class="form-row clearfix">
+					<div class="form-row-left"> <span>E-mailadres</span></div>
+					<div class="usrname form-row-right">
+						<span>
+						<input type="text" class="input-text required-customeemail-entry" id="login-email" name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" placeholder="<?php echo $this->__('Email Address....') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Email Address....') ?>';
+							   " autocomplete="off" />
+						</span>
+					</div>
+				</div>
+
+				<div class="form-row clearfix">
+				
+					<div class="form-row-left"> <span>Wachtwoord</span></div>
+					<div class="password form-row-right">
+						<span>
+							<input type="password" class="input-text required-password-entry" id="login-password" name="login[password]" placeholder="<?php echo $this->__('Password...') ?>" onfocus="this.placeholder = '';" onblur="this.placeholder = '<?php echo $this->__('Password...') ?>';
+							   " autocomplete="off" />
+						</span>
+					</div>
+				</div>
+
+				<?php echo $this->getChildHtml('form.additional.info'); ?>
+
+			</form>
+			<div class="buttons-set">
+				<div class="forget-btn-wrap">
+					<a href="<?php echo $this->getUrl('customer/account/forgotpassword',array('_secure'=>true)) ?>" class="f-left"><span><?php echo $this->__('I lost my') ?></span><span>&nbsp</span><?php echo $this->__('Forgot your password') ?></a>
+				</div>
+				<button type="submit" class="button loginwiththisaccount theme-btn" onclick="onepageLogin(this)">
+					<?php echo $this->__('Login my account') ?>
+				</button>
+			</div>
+		</div>
+		
+	</div>
+	<div class="col-2-3 sslsecure-wrap">
+		<div class="sslsecure">
+			<img src="<?php echo $this->getSkinUrl() ?>images/login_lock.png" alt=""/><p><?php echo $this->__('Your details will be sent with a secure connection to GYZS.nl') ?></p>
+		</div>
+	</div>
+
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+	var loginForm = new VarienForm('login-form', true);
+	var registerForm = new VarienForm('retister-form', true);
+	$('login-email').observe('keypress', bindLoginPost);
+	$('login-password').observe('keypress', bindLoginPost);
+
+	Validation.add('validate-customemail', '<?php echo $this->__('Please enter a valid Login address.');?>', function (v) {
+		//return Validation.get('IsEmpty').test(v) || /\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/.test(v)
+		//return Validation.get('IsEmpty').test(v) || /^[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9][\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9\.]{1,30}[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9]@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i.test(v)
+		return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
+	});
+	Validation.add('validate-customemail-address', 'Email Id already exists', function (v) {
+		//return Validation.get('IsEmpty').test(v) || /\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/.test(v)
+		//return Validation.get('IsEmpty').test(v) || /^[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9][\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9\.]{1,30}[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9]@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i.test(v)
+		// return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
+
+		var url = '<?php echo $this->getUrl('multistepcheckout/index/checkEmail',array('_secure'=>true)); ?>?email=' + encodeURIComponent(v);//$('register-email').value;
+		var ok = false;
+		new Ajax.Request(url, {
+			method: 'get',
+			asynchronous: false,
+			onSuccess: function (transport) {
+				//alert(transport.responseText);
+				var obj = response = eval('(' + transport.responseText + ')');
+				validateTrueEmailMsg = obj.status_desc;
+				/*if (obj.status === true) {
+				 //Validation.get('validate-email').error = validateTrueEmailMsg;
+				 ok = true;
+				 } else {
+				 ok = false; /* return true or false */
+				// }*/
+				ok = !obj.status;
+			},
+			onFailure: function () {
+				alert('something wrong')
+			},
+			onComplete: function () {
+				if ($('advice-validate-email-email')) {
+					$('advice-validate-email-email').remove();
+				}
+				if ($('advice-validate-email-email_address')) {
+					$('advice-validate-email-email_address').remove();
+				}
+				if ($('advice-validate-email-billing:email')) {
+					$('advice-validate-email-billing:email').remove();
+				}
+				if ($('advice-validate-email-shipping:email')) {
+					$('advice-validate-email-shipping:email').remove();
+				}
+				if ($('advice-validate-email-_accountemail')) {
+					$('advice-validate-email-_accountemail').remove();
+				}
+			}
+		});
+		return ok;
+
+
+	});
+
+	Validation.add('required-customeemail-entry', '<?php echo Mage::helper('multistepcheckout')->__('This is a required field for Login.') ?>', function (v) {
+		return !Validation.get('IsEmpty').test(v);
+	});
+	
+	 Validation.add('required-password-entry', '<?php echo Mage::helper('multistepcheckout')->__('Enter your password to login') ?>', function (v) {
+		return !Validation.get('IsEmpty').test(v);
+	});
+
+	registerForm.submit = function (button, url) {
+
+		$('register-email').removeClassName('validate-customemail-address');
+
+		if (this.validator.validate()) {
+			this.form.action = '<?php echo $this->getUrl('multistepcheckout/index/guest',array('_secure'=>true)); ?>';
+			try {
+				this.form.submit();
+			} catch (e) {
+			}
+		}
+	}.bind(registerForm);
+	Translator.add('This is a required field for Login.', '<?php echo Mage::helper('multistepcheckout')->__('This is a required field for Login.') ?>');
+	Translator.add('Email Id already exists', '<?php echo Mage::helper('multistepcheckout')->__('Email Id already exists') ?>');
+	Translator.add('Please enter a valid Login address.', '<?php echo Mage::helper('multistepcheckout')->__('Please enter a valid Login address.') ?>');
+
+	function bindLoginPost(evt) {
+		if (evt.keyCode == Event.KEY_RETURN) {
+			loginForm.submit();
+		}
+	}
+	function onepageLogin(button)
+	{
+		if (loginForm.validator && loginForm.validator.validate()) {
+			button.disabled = true;
+			loginForm.submit();
+		}
+	}
+	
+	jQuery('.login-checkout input').blur();
+//]]>
+</script>
+<?php
+// Helios_Gtm module enable and setting enable for google ads than only script execute
+if(Mage::helper('gtm')->getGoogleAdsEnabled()){ ?>
+	<?php if($_gAdsCode = Mage::helper('gtm')->getGoogleAdsCode()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode; ?>"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', '<?php echo $_gAdsCode; ?>');
+		</script>
+	<?php endif; ?>
+	<?php if($_gAdsCode2 = Mage::helper('gtm')->getGoogleAdsCode2()) : ?>
+		<!-- Global site tag (gtag.js) - Google Ads:  -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $_gAdsCode2; ?>"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', '<?php echo $_gAdsCode2; ?>');
+		</script>
+	<?php endif; ?>
+<?php } ?>
