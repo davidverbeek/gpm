@@ -4,8 +4,8 @@
 !/var/.resource_config.json
 
 #server-config
-/app/etc/local.xml
-/app/etc/config.xml
+reports/GyzsManagement/getquery.txt
+reports/GyzsManagement/getquery.txt
 
 #development
 /nbproject/
