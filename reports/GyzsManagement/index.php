@@ -7,7 +7,7 @@
    $message="";
 
    //echo md5("admin@123");
-   //exit; testing the changes
+   //exit; testing the changes changed from master
    
    if(count($_POST)>0) {
      $resource = Mage::getSingleton('core/resource');
