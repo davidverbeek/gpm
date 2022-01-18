@@ -2,7 +2,7 @@
 
   include "../config/config.php";
   include "../define/constants.php";
-  include "../libraries/SimpleXLSX.php";
+  include "../lib/SimpleXLSX.php";
   require_once("../../../app/Mage.php");
   umask(0);
   Mage::app();
