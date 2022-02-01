@@ -244,6 +244,10 @@ if(strpos($_SERVER['REQUEST_URI'], 'feedroas') > 0) {
   $header_txt = "Webshop Prices";
   $page_type = "webhop_prices";
   $top_image = '<i class="fas fa-euro-sign" style="font-size:22px; color:#3a3d99; font-weight:bold;"></i>';
+} else if(strpos($_SERVER['REQUEST_URI'], 'debter_rules') > 0) {
+  $header_txt = "Debter Rules";
+  $page_type  = "debter_rules";
+  $top_image  = '<i style="font-size:22px; color:#3a3d99; font-weight:bold;"></i>';
 }
 
 ?>

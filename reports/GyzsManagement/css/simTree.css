@@ -86,8 +86,14 @@
   display: none;
 }
 
-.sim-tree li.disabled>a {
+/* .sim-tree li.disabled>a {
   color: #aaa;
+  cursor: not-allowed;
+} */
+
+.sim-tree li.disabled>a {
+ /* color: #c07171; */
+ color: #ffffcc;
   cursor: not-allowed;
 }
 
