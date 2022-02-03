@@ -18,8 +18,8 @@
 
 .list-group {
   list-style: none;
-  padding: 60px 0px 0px 15px;
-  height: 100%;
+  padding: 0px 0px 20px 15px;
+  height: calc(100% - 88px);
   transition: all 0.3s;
 }
 

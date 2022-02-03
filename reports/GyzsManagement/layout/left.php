@@ -37,6 +37,14 @@
                         <img alt="GYZS" src="css/svg/catagory.svg">
                         <span>Category</span>
                     </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" class="chkallcategories" >
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Check All Categories
+                        </label>
+                    </div>
+
                     <!-- Catalog-tree Links -->
                     <ul class="list-group position-relative w-100">
                         <li id="sim-tree">
