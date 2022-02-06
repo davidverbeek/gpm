@@ -59,6 +59,13 @@
         </a>
     </li>
 
+    <li class="nav-item <?php if (strpos($_SERVER['REQUEST_URI'], 'competitor-analysis') > 0) { ?> active  <?php } ?> ">
+        <a class="nav-link setting" href="competitor-analysis.php">
+            <i class="fas fa-balance-scale"></i>
+            <span>Competitor Analysis</span>
+        </a>
+    </li>
+
     <li class="nav-item <?php if (strpos($_SERVER['REQUEST_URI'], 'settings') > 0) { ?> active  <?php } ?> ">
         <a class="nav-link setting" href="settings.php" style="transition: 0.3s;">
             <img alt="GYZS" src="css/svg/settings-purple.svg" style="transition: 0.3s;">
