@@ -59,7 +59,17 @@ FROM
         AND mcped.attribute_id = '79'
         LEFT JOIN
     mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id
-        AND mcped_selling_price.attribute_id = '75' limit 4000,500";
+        AND mcped_selling_price.attribute_id = '75' ";
+		
+$offset = $_GET["offset"];
+$limit = $_GET["limit"];
+
+if($offset!="" && $limit!=""){
+	$sql .= " limit $offset, $limit";
+}
+
+echo $sql;
+exit;
 
 $result = $conn->query($sql);
 $records = $result->fetch_all(MYSQLI_ASSOC);
