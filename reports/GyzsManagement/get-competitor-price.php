@@ -68,9 +68,6 @@ if($offset!="" && $limit!=""){
 	$sql .= " limit $offset, $limit";
 }
 
-echo $sql;
-exit;
-
 $result = $conn->query($sql);
 $records = $result->fetch_all(MYSQLI_ASSOC);
 
