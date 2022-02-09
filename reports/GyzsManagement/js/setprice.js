@@ -3707,10 +3707,13 @@ $(document).ready(function () {
         });
         toggleCheckbox('none');
       } else {
+        $("i.sim-tree-checkbox").addClass('checked');
         $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
+        $("#flexCheckDefault").prop('checked', true);
       }
       table.draw();
-    });
+    }
+    );
 
     request.fail(function (jqXHR, textStatus) {
       alert("Request failed: " + textStatus);
@@ -3734,6 +3737,11 @@ $(document).ready(function () {
           $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
         });
         toggleCheckbox('');
+
+        // reset to show no records found
+        $("#hdn_selectedcategories").val('-1');
+        $('.show_cols_dsp').prop('checked', false);
+
       }
 
     } else if (current_status) {

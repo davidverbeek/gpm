@@ -166,8 +166,6 @@ foreach($allUpdatedRecords as $updated_rec) {
         <!-- Sidebar -->
           <?php include "layout/left.php"; ?>
         <!-- End of Sidebar -->
-
-       
        
         <!-- Datatable and header  -->
         <section class="content-toggle" id="main-content">
@@ -177,20 +175,16 @@ foreach($allUpdatedRecords as $updated_rec) {
             <!-- Topbar -->
               <?php include "layout/top.php"; ?>
             <!-- End of Topbar --> 
-
-                
                 <div class="table-filter d-flex align-items-center" id="data_filters">
 
-                    <div><input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update</div>
-
-                    
-                    <div style="margin-left:25px;">
-                    <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
-
-                       <!-- <button class="btn btn-purple btn-sm no-modal refresh" type="button" ></button>-->
-
-                           
+                    <div>
+                        <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
                     </div>
+
+                  
                     <!-- Data Length Filter -->
                     <!--
                     <div class="select-opt">
@@ -214,8 +208,6 @@ foreach($allUpdatedRecords as $updated_rec) {
                         </label>
                     </div>
                 </div>
-
-
 
                 <!-- Price Management Table -->
                 <div class="data-toggle overflow-hidden position-fixed" id="data-content">
