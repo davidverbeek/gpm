@@ -55,24 +55,15 @@ case "category_brands":
   $response_data['msg'] = $brands;
   break;
   case "save_rule":
-    //$catId = $_POST['cat_id'];//print_r($catId);
     $customerGroup = $_POST['customer_group'];
     $catIdNew = $_POST['cat_id_new'];
-
-    //$catId_arr = explode(',', $catId);
     $catId_new_arr = explode(',', $catIdNew);
 
-//$new_categories = implode(',', array_filter(array_merge($catId_arr, $catId_new_arr)));//print_r($new_categories);exit;
-
     $sql = "INSERT INTO price_management_debter_categories(category_ids,customer_group,created_at,updated_at) VALUES ";
-   // $all_col_data = "('".$new_categories."', '".$customerGroup."',  '".NOW()."', '".NOW()."')";
     $all_col_data = "('".$catIdNew."', '".$customerGroup."',  '".NOW()."', '".NOW()."')";
-
     $sql .= $all_col_data;
     $updated_at = date('Y-m-d h:i:s');
     $sql .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), customer_group = VALUES(customer_group),updated_at = VALUES(updated_at)";
-
-   // print_r($sql);exit;
   
     if($conn->query($sql)) {
       $response_data['msg'] = "Data is saved successfully!";
@@ -90,36 +81,50 @@ case "category_brands":
         $response_data['msg'] = "Error in debter rule selection:- ".mysqli_error($conn);
       }
     break;
+    case "copy_categories":
+      //read request
+      $from_group_id = $_POST['source_group_id'];
+      $to_group_id = $_POST['destination_group_id'];
 
-    case "get_categories_setprice":
-      $by_group = $_POST['customer_group'];
-      if ($by_group == 'all') {
-         $sql = "select * from price_management_customer_groups join price_management_debter_categories on price_management_debter_categories.customer_group = price_management_customer_groups.magento_id";
+      $sql = "SELECT category_ids FROM price_management_debter_categories WHERE customer_group={$from_group_id}";
+      if ($result = $conn->query($sql)) { 
+        $row = $result->fetch_assoc();
+        $copied = $row['category_ids'];
+
+         $sql_2 = "INSERT INTO price_management_debter_categories(category_ids,customer_group,created_at,updated_at) VALUES ";
+         $all_col_data = "('".$copied."', '".$to_group_id."',  '".NOW()."', '".NOW()."')";
+     
+         $sql_2 .= $all_col_data;
+         $updated_at = date('Y-m-d h:i:s');
+         $sql_2 .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), customer_group = VALUES(customer_group),updated_at = VALUES(updated_at)";
         
-         if ($result = $conn->query($sql)){
-           $merge_categories = "";
+        if ($result_2 = $conn->query($sql_2)) {
+          $response_data['msg'] = "Data is copied successfully.";
+        }
+      } else {
+        $response_data['msg'] = "Error in debter copy-rule selection:- ".mysqli_error($conn);
+
+      }
+    break;
+    case "multiple_group_query":
+      if ($_POST['customer_group']) {
+        $multiple_groups = $_POST['customer_group'];
+        $sql = "SELECT * FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id WHERE price_management_customer_groups.customer_group_name IN ($multiple_groups)";
+        
+        if ($result = $conn->query($sql)) {
+          $join_categories = '';
           while($row = $result->fetch_assoc()) {
-            $merge_categories .=  ','.$row['category_ids'];
+            $join_categories .= ','.$row['category_ids'];
           }
-        //  print_r($merge_categories);
-        $all_cats_arr = array_filter(explode(',', $merge_categories));
+
+          $all_cats_arr = array_filter(explode(',', $join_categories));
           $response_data['msg'] = implode(',', $all_cats_arr);
         } else {
-          $response_data['msg'] = "Error in multiple debter rule selection:- ".mysqli_error($conn);
-        }
-      
-        } else {
-        $sql = "select * from price_management_customer_groups join price_management_debter_categories on price_management_debter_categories.customer_group = price_management_customer_groups.magento_id where price_management_customer_groups.customer_group_name={$by_group} limit 1";
-        if ($result = $conn->query($sql)){
-          $row = $result->fetch_assoc();
-          $response_data['msg'] = $row['category_ids'];
-        } else {
-          $response_data['msg'] = "Error in debter rule selection:- ".mysqli_error($conn);
-        }
+          $response_data['msg'] = "Error in debter rule join:- ".mysqli_error($conn);
+        } 
+      } else {
+        $response_data['msg'] =  '';
       }
-     
-
-
       break;
 }
 

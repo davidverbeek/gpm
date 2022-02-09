@@ -1,15 +1,28 @@
 $(document).ready(function () {
 
+  /**
+   * This function is toggling disabled feature of checkboxes
+   * @param {
+   * } new_status 
+   */
   function toggleCheckbox(new_status) {
     $('a>i.sim-tree-checkbox').each(function (index) {
       if (!$(this).hasClass('checked')) {
         if (new_status == 'none') {
           $(this).parent('a').parent('li').addClass('disabled');
+         // $('a#linkCategories').css('display', 'block');
         } else {
           $(this).parent('a').parent('li').removeClass('disabled');
         }
       }
     });
+
+    //check if any disabled
+    if($("i.sim-tree-checkbox").parent('a').parent('li').hasClass('disabled')) {
+      $('a#linkCategories').css('display', 'block');
+    } else {
+      $('a#linkCategories').css('display', 'none');
+    }
   }
 
   var tree = simTree({
@@ -59,6 +72,16 @@ $(document).ready(function () {
 
   }, 3000);
 
+  function showDivMessage(msg) {
+    $('<div class="alert alert-success" role="alert">' + msg + '</div>').insertBefore("#data_filters1");
+
+    window.setTimeout(function () {
+      $(".alert").fadeTo(500, 0).slideUp(500, function () {
+        $(this).remove();
+      });
+    }, 4000);
+  }
+
 
   $("#btnsave").click(function () {
     var selected_group = $("#sel_debt_group").val();
@@ -97,6 +120,8 @@ $(document).ready(function () {
             $('.ddfields').val("");
             $(".sim-tree-checkbox").removeClass('checked');
             $('a#linkCategories').css('display', 'none');
+            $("#flexCheckDefault").prop('checked', false);
+
             toggleCheckbox('');
           }
         }
@@ -109,9 +134,7 @@ $(document).ready(function () {
     //get selected customer group
     var selected_group = $(this).val();
     $(".sim-tree-checkbox").removeClass('checked');
-
     toggleCheckbox('');
-
     $("#hdn_existingcategories").val('');
     $("#hdn_selectedcategories").val('');
 
@@ -131,11 +154,14 @@ $(document).ready(function () {
           });
           $("#hdn_existingcategories").val(resp_obj["msg"]);
           toggleCheckbox('none');
-          $('a#linkCategories').css('display', 'block');
+          //$('a#linkCategories').css('display', 'block');
+          
         } else {
           $(".sim-tree-checkbox").removeClass('checked');
           toggleCheckbox('');
         }
+
+        $("#flexCheckDefault").prop('checked', false);
       }
     });
 
@@ -144,4 +170,69 @@ $(document).ready(function () {
   $('a#linkCategories').click(function () {
     toggleCheckbox('');
   });
+
+  $('#btncopy').click(function() { 
+
+   var  source_group_id =  $('#parent_debt_group').val();
+   var  child_group_id =  $('#child_debt_group').val();
+
+   if(source_group_id == '') {
+     alert('Please select Group to copy FROM.');
+     $('#parent_debt_group').focus();
+     return false;
+   }else if(child_group_id == '') {
+    alert('Please select Group to copy TO.');
+    $('#child_debt_group').focus();
+    return false;
+   } else {
+    $.post(document_root_url + '/scripts/get_category_brands.php', { source_group_id: source_group_id, destination_group_id: child_group_id, type: "copy_categories" }, function( data ) {
+      var res = jQuery.parseJSON(data);
+      showDivMessage(res["msg"]);
+     $('.copyfields').val('');
+    });
+  }
+  });
+
+  $("#flexCheckDefault").change(function() { 
+    var status = $(this).prop('checked');
+    var any_disabled = false;
+    //check all and set hidden field
+    $('a>i.sim-tree-checkbox').each(function (index) {
+      if ($(this).parent('a').parent('li').hasClass('disabled')) {
+        // means dont work on full list
+        any_disabled = true;
+      } 
+
+      if(any_disabled)
+      return false;
+    });
+
+    if (!any_disabled) {
+      if (status) {
+        // $(this).addClass('checked');
+        $("i.sim-tree-checkbox").addClass('checked');
+          
+        } else {
+          //$(this).removeClass('checked');
+          $("i.sim-tree-checkbox").removeClass('checked');
+        }
+    } 
+
+    var cat_all_str = $("#hdn_existingcategories").val();
+    var cat_all_arr = cat_all_str.split(',');
+
+    if (status) { // check all hiddencategories
+      $.each(cat_all_arr, function(key,value ) {
+        $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+      });
+    } else {
+      $.each(cat_all_arr, function(key,value ) {
+        $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
+      });
+    }
+      
+    // check if any disabled?
+
+  });
+ 
 });

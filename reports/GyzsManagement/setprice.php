@@ -150,6 +150,14 @@ foreach($allUpdatedRecords as $updated_rec) {
   font-style: italic;
 }
 
+
+.refreshicon {
+    color: #323584;
+    font-size: 16px;
+   /* width: 27%; */
+    padding: 40px,40px;
+    cursor: pointer;
+    }
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -176,7 +184,13 @@ foreach($allUpdatedRecords as $updated_rec) {
                     <div><input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update</div>
 
                     
+                    <div style="margin-left:25px;">
+                    <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
 
+                       <!-- <button class="btn btn-purple btn-sm no-modal refresh" type="button" ></button>-->
+
+                           
+                    </div>
                     <!-- Data Length Filter -->
                     <!--
                     <div class="select-opt">
@@ -315,7 +329,7 @@ foreach($allUpdatedRecords as $updated_rec) {
         </section>
         <!-- Filter Datatable settings -->
         <section class="filter-wrapper" id="filter-content">
-            <a class="cog" id="cog-content" onclick="toggleFilter()"><img src="<?php echo $document_root_url; ?>/css/svg/filter.svg"
+            <a class="cog" id="cog-content" ><img src="<?php echo $document_root_url; ?>/css/svg/filter.svg"
                         alt="filter-icon"></a>
             <div class="content-wrapper d-flex flex-column">
 

@@ -37,6 +37,7 @@ if ($result = $conn->query($sql)) {
    }
  }
 ?>
+<!--<link href="<?php echo $document_root_url; ?>/css/sb-admin.min.css" rel="stylesheet">-->
 <style>
 .loader
 {
@@ -65,9 +66,19 @@ if ($result = $conn->query($sql)) {
   float: left;
   /* Optional */
  /* max-width: 100%;*/
-  
 }
 
+.form-control {
+      font-size: 10px;
+    }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.bg-primary {
+    background-color: #3a3d99!important;
+}
 
 </style>
 
@@ -86,29 +97,75 @@ if ($result = $conn->query($sql)) {
                 <?php include "layout/top.php"; ?>
                 <!-- End of Topbar --> 
 
-                <div class="table-filter" id="data_filters1" style=" align-items-center">
-                  
-                    <div style="margin-bottom:10px;" >
-                        
+                <div class="" id="data_filters1" style=" align-items-center">
+                  <div class="form-group">
+                    <div class="card">
+                      <div class="card-header bg-primary text-white">Add and Update Customer Group</div>
+                      <div class="card-body">
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label">Customer Group</label>
+                          <div class="col-sm-10">
+                            <div style="margin-bottom:10px;" >
+                                  <div style="margin-bottom:10px;">
+                                    <select id="sel_debt_group" name="sel_debt_group" class="custom-select custom-select-sm form-control form-control-sm ddfields" style="font-size: 12px;width:30%;" class="required">
+                                      <option value="">Select customer group</option>
+                                      <?php foreach($all_customer_groups as $g_id=>$g_value) { ?>
+                                        <option value="<?php echo $g_id; ?>"><?php echo $g_value; ?></option>
+                                      <?php } ?>  
+                                    </select>
+                                  </div>
+                                  <div style="">
+                                  <span style=""><a href="#" id="linkCategories" style="display:none;">Add More Categories</a></span>
+                                  </div>
+                            </div>
+                            <div class="row" style="margin-bottom:10px;">
+                              <div class="col-lg-6">
+                                <button type="button" class="btn btn-primary" id="btnsave">Save changes</button>
+                              </div>
+                            </div>
+                          </div><!--col-sm-10-->
+                        </div><!--row-->
+                      </div><!--card-body-->
+                  </div><!--card-->
+                </div><!--form-group-->
+
+                <div class="form-group">
+                    <div class="card">
+                      <div class="card-header bg-primary text-white">Copy Categories</div>
+                      <div class="card-body">
+                        <div class="form-group row">
+                          <!--From dropdown-->
                           <div style="margin-bottom:10px;">
-                            <select id="sel_debt_group" name="sel_debt_group" class="form-select ddfields" style="font-size: 12px;width:30%;" class="required">
-                              <option value="">Select customer group</option>
+                            <select id="parent_debt_group" name="parent_debt_group" class="custom-select custom-select-sm form-control form-control-sm copyfields" style="font-size: 12px;width:30%;" class="required">
+                              <option value="">Copy from customer group</option>
                               <?php foreach($all_customer_groups as $g_id=>$g_value) { ?>
                                 <option value="<?php echo $g_id; ?>"><?php echo $g_value; ?></option>
                               <?php } ?>  
                             </select>
-                           
                           </div>
-                          <div style="">
-                          <span style=""><a href="#" id="linkCategories" style="display:none;">Add More Categories</a></span>
+                        </div>
+
+                        <div class="form-group row">
+                          <!--To dropdown -->
+                          <div style="margin-bottom:10px;">
+                            <select id="child_debt_group" name="child_debt_group" class="custom-select custom-select-sm form-control form-control-sm copyfields" style="font-size: 12px;width:30%;" class="required">
+                              <option value="">Copy to customer group</option>
+                              <?php foreach($all_customer_groups as $g_id=>$g_value) { ?>
+                                <option value="<?php echo $g_id; ?>"><?php echo $g_value; ?></option>
+                              <?php } ?>  
+                            </select>
                           </div>
-                        
-                       
+                        </div>
+
+                        <div class="row">
+                    <div class="col-lg-6">
+                       <input type="button" name="btncopy" id="btncopy" class="btn btn-primary"  value="Copy Categories" />
                     </div>
-                    <div class="" style="margin-bottom:10px;">
-                      <button type="button" class="btn btn-primary" id="btnsave">Save changes</button>
+                  </div>
+                     </div>
                     </div>
-                </div>
+                  </div>
+              </div>
         </section>
     </main>
 
@@ -116,7 +173,6 @@ if ($result = $conn->query($sql)) {
         <div>
           <input type="hidden" name="hdn_selectedcategories" id="hdn_selectedcategories" />
           <input type="hidden" name="hdn_existingcategories" id="hdn_existingcategories" />
-          <input type="hidden" name="hdn_processfilename_n" id="hdn_processfilename_n" value="" />
         </div>
         <!-- End of Hiddens -->
 
