@@ -197,6 +197,29 @@ aside .navbar-brand {
 .category {
     padding: 20px 20px 18px 25px;
     white-space: nowrap;
+    position: relative !important;
+}
+
+.category ~ .form-check {
+    color: #fff;
+    font-family: 'poppins-light';
+    padding: 5px 25px;
+    display: flex;
+    align-items: center;
+    padding-left: 39px;
+}
+
+.form-check .form-check-input {
+    flex: none;
+    display: flex;
+    margin: 0;
+    margin-right: 7px;
+    cursor: pointer;
+}
+
+.form-check .form-check-label {
+    font-size: 11px;
+    cursor: pointer;
 }
 
 .category span {

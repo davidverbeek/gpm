@@ -1,0 +1,132 @@
+<?php
+
+include "../config/config.php";
+include "../define/constants.php";
+include "../lib/SimpleXLSX.php";
+require_once("../../../app/Mage.php");
+umask(0);
+Mage::app();
+
+Mage::app("default")->setCurrentStore(Mage_Core_Model_App :: ADMIN_STORE_ID);
+
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+ini_set('max_execution_time', 0);
+ini_set('memory_limit','3G');
+
+$response_data = array();
+
+$brands = array(); 
+$selected_cats = $_POST['selected_cats'];
+$type = $_POST['type'];
+
+switch ($type) {
+case "category_brands":
+  $cat_que = "";
+  if($selected_cats != "") {
+    $cat_que = " WHERE mccp.category_id IN (".$selected_cats.")";
+  }
+  $sql = "SELECT DISTINCT
+  mcpe.entity_id AS product_id,
+  meaov.value AS brand
+  FROM
+  mage_catalog_product_entity AS mcpe
+  INNER JOIN
+  mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
+  INNER JOIN
+  price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
+  LEFT JOIN
+  mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id
+  AND mcpei.attribute_id = '".MERK."'
+  LEFT JOIN
+  mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
+  ".$cat_que."
+  ORDER BY meaov.value ASC";
+
+  if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_assoc()) {
+      $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
+      if($brand !== NULL && $brand != "") {
+      $brands[$brand] = $brand;
+    }
+  }
+  }
+  $response_data['msg'] = $brands;
+  break;
+  case "save_rule":
+    $customerGroup = $_POST['customer_group'];
+    $catIdNew = $_POST['cat_id_new'];
+    $catId_new_arr = explode(',', $catIdNew);
+
+    $sql = "INSERT INTO price_management_debter_categories(category_ids,customer_group,created_at,updated_at) VALUES ";
+    $all_col_data = "('".$catIdNew."', '".$customerGroup."',  '".NOW()."', '".NOW()."')";
+    $sql .= $all_col_data;
+    $updated_at = date('Y-m-d h:i:s');
+    $sql .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), customer_group = VALUES(customer_group),updated_at = VALUES(updated_at)";
+  
+    if($conn->query($sql)) {
+      $response_data['msg'] = "Data is saved successfully!";
+    } else {
+      $response_data['msg'] = "Error in debter rule insertion:- ".mysqli_error($conn);   
+    }
+    break;
+    case "get_categories":
+      $by_group = $_POST['customer_group'];
+      $sql = "select * from price_management_debter_categories where customer_group={$by_group} limit 1";
+      if ($result = $conn->query($sql)){
+        $row = $result->fetch_assoc();
+        $response_data['msg'] = $row['category_ids'];
+      } else {
+        $response_data['msg'] = "Error in debter rule selection:- ".mysqli_error($conn);
+      }
+    break;
+    case "copy_categories":
+      //read request
+      $from_group_id = $_POST['source_group_id'];
+      $to_group_id = $_POST['destination_group_id'];
+
+      $sql = "SELECT category_ids FROM price_management_debter_categories WHERE customer_group={$from_group_id}";
+      if ($result = $conn->query($sql)) { 
+        $row = $result->fetch_assoc();
+        $copied = $row['category_ids'];
+
+         $sql_2 = "INSERT INTO price_management_debter_categories(category_ids,customer_group,created_at,updated_at) VALUES ";
+         $all_col_data = "('".$copied."', '".$to_group_id."',  '".NOW()."', '".NOW()."')";
+     
+         $sql_2 .= $all_col_data;
+         $updated_at = date('Y-m-d h:i:s');
+         $sql_2 .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), customer_group = VALUES(customer_group),updated_at = VALUES(updated_at)";
+        
+        if ($result_2 = $conn->query($sql_2)) {
+          $response_data['msg'] = "Data is copied successfully.";
+        }
+      } else {
+        $response_data['msg'] = "Error in debter copy-rule selection:- ".mysqli_error($conn);
+
+      }
+    break;
+    case "multiple_group_query":
+      if ($_POST['customer_group']) {
+        $multiple_groups = $_POST['customer_group'];
+        $sql = "SELECT * FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id WHERE price_management_customer_groups.customer_group_name IN ($multiple_groups)";
+        
+        if ($result = $conn->query($sql)) {
+          $join_categories = '';
+          while($row = $result->fetch_assoc()) {
+            $join_categories .= ','.$row['category_ids'];
+          }
+
+          $all_cats_arr = array_filter(explode(',', $join_categories));
+          $response_data['msg'] = implode(',', $all_cats_arr);
+        } else {
+          $response_data['msg'] = "Error in debter rule join:- ".mysqli_error($conn);
+        } 
+      } else {
+        $response_data['msg'] =  '';
+      }
+      break;
+}
+
+echo json_encode($response_data); 
+?>

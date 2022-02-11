@@ -1,113 +1,18 @@
-
 <?php
-
-  
-// Get the image and convert into string
-//$img = file_get_contents('https://cdn.gyzs.nl/media/catalog/product/cache/3/image/700x700/9df78eab33525d08d6e5fb8d27136e95/1/0/1091125.png');
-  
-// Encode the image string data into base64
-//$data = base64_encode($img);
-  
-// Display the output
-//echo $data;
-//exit;
-/*
-$categories = array();
-$categories["categories"][0]["name"] = "ParentCat";
-$categories["categories"][0]["is_active"] = true;
-$categories["categories"][0]["id"] = 156;
-$categories["categories"][0]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][0]["custom_attributes"][0]["value"] = "heyparent";
-
-
-$categories["categories"][0]["child"][0]["name"] = "child One";
-$categories["categories"][0]["child"][0]["is_active"] = true;
-$categories["categories"][0]["child"][0]["id"] = 157;
-$categories["categories"][0]["child"][0]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][0]["child"][0]["custom_attributes"][0]["value"] = "heychildone";
-
-
-$categories["categories"][0]["child"][1]["name"] = "child One One";
-$categories["categories"][0]["child"][1]["is_active"] = true;
-$categories["categories"][0]["child"][1]["id"] = 161;
-$categories["categories"][0]["child"][1]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][0]["child"][1]["custom_attributes"][0]["value"] = "heychildoneone";
-
-
-$categories["categories"][0]["child"][0]["child"][0]["name"] = "child Two";
-$categories["categories"][0]["child"][0]["child"][0]["is_active"] = true;
-$categories["categories"][0]["child"][0]["child"][0]["id"] = 158;
-$categories["categories"][0]["child"][0]["child"][0]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][0]["child"][0]["child"][0]["custom_attributes"][0]["value"] = "heychildtwo";
-
-
-$categories["categories"][0]["child"][0]["child"][0]["name"] = "last child for two";
-$categories["categories"][0]["child"][0]["child"][0]["is_active"] = true;
-$categories["categories"][0]["child"][0]["child"][0]["id"] = 163;
-$categories["categories"][0]["child"][0]["child"][0]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][0]["child"][0]["child"][0]["custom_attributes"][0]["value"] = "heylastchildfortwo";
-
-
-$categories["categories"][0]["child"][1]["child"][0]["name"] = "child Two Two";
-$categories["categories"][0]["child"][1]["child"][0]["is_active"] = true;
-$categories["categories"][0]["child"][1]["child"][0]["id"] = 162;
-$categories["categories"][0]["child"][1]["child"][0]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][0]["child"][1]["child"][0]["custom_attributes"][0]["value"] = "heychildtwotwo";
-
-
-//$categories["categories"][0]["child"][1]["child"][0]["name"] = "last child for Two Two";
-//$categories["categories"][0]["child"][1]["child"][0]["is_active"] = true;
-//$categories["categories"][0]["child"][1]["child"][0]["id"] = 164;
-//$categories["categories"][0]["child"][1]["child"][0]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-//$categories["categories"][0]["child"][1]["child"][0]["custom_attributes"][0]["value"] = "heylastchildfortwotwo";
-
-
-$categories["categories"][1]["name"] = "New Parent";
-$categories["categories"][1]["is_active"] = true;
-$categories["categories"][1]["id"] = 160;
-$categories["categories"][1]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][1]["custom_attributes"][0]["value"] = "heynewparent";
-
-$categories["categories"][1]["child"][0]["name"] = "last child for Two Two";
-$categories["categories"][1]["child"][0]["is_active"] = true;
-$categories["categories"][1]["child"][0]["id"] = 164;
-$categories["categories"][1]["child"][0]["custom_attributes"][0]["attribute_code"] = "custom_filter";
-$categories["categories"][1]["child"][0]["custom_attributes"][0]["value"] = "heylastchildfortwotwo";
-
-
-
-$category_data = json_encode($categories);
-echo $category_data;
-
-$array_category_data = json_decode($category_data,true);
-
-getAllCategories($array_category_data,0);
-
-function getAllCategories($array_category_data,$parent_id) {
-    foreach($array_category_data as $category) {
-        echo "<pre>";
-        print_r($category);
-        $new_parent_id = 1;
-        if(isset($category["child"])) {
-            getAllCategories($category["child"],$new_parent_id);
-        }
-
-    }
-}
-
-exit;
-
-*/
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+ini_set('memory_limit', '-1');
+ini_set('max_execution_time', '-1');
 
 session_start();
 
 require_once("../../app/Mage.php");
+require_once("./scrap/competitors.php");
+require_once("./scrap/scrap.php");
+
 umask(0);
 Mage::app();
 
-if(!isset($_SESSION["price_id"])) {
-  header("Location:index.php");
-}
 ?>
 
 <!DOCTYPE html>
@@ -118,14 +23,106 @@ include "define/constants.php";
 include "layout/header.php";
 
 // Get Updated records categories
-$sql_updated_recs = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, price_management_data AS pmd WHERE mccp.product_id = pmd.product_id AND pmd.is_updated = '1'";
-$result_updated_recs = $conn->query($sql_updated_recs);
-$allUpdatedRecords = $result_updated_recs->fetch_all(MYSQLI_ASSOC);
-$all_updated_categories = array();
-foreach($allUpdatedRecords as $updated_rec) {
-    $all_updated_categories[] = $updated_rec["category_id"];
+$sql = "SELECT DISTINCT
+    mcpe.entity_id AS product_id,
+    mcpe.sku AS sku,
+    mcpev.value AS ean,
+    mcpev_productname.value AS product_name,
+    pmd.idealeverpakking AS idealeverpakking,
+    pmd.afwijkenidealeverpakking AS afwijkenidealeverpakking,
+    CAST(pmd.buying_price AS DECIMAL (10 , 4 )) AS buying_price,
+    pmd.selling_price AS selling_price
+FROM
+    mage_catalog_product_entity AS mcpe
+        INNER JOIN
+    price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
+        LEFT JOIN
+    mage_catalog_product_entity_varchar AS mcpev ON mcpev.entity_id = pmd.product_id
+        AND mcpev.attribute_id = '191'
+        LEFT JOIN
+    mage_catalog_product_entity_varchar AS mcpev_productname ON mcpev_productname.entity_id = pmd.product_id
+        AND mcpev_productname.attribute_id = '71'
+        LEFT JOIN
+    mage_catalog_product_entity_text AS mcpet_af ON mcpet_af.entity_id = pmd.product_id
+        AND mcpet_af.attribute_id = '1511'
+        LEFT JOIN
+    mage_catalog_product_entity_text AS mcpet ON mcpet.entity_id = pmd.product_id
+        AND mcpet.attribute_id = '1495'
+        LEFT JOIN
+    mage_catalog_product_entity_varchar AS mcpev_afw ON mcpev_afw.entity_id = pmd.product_id
+        AND mcpev_afw.attribute_id = '1511'
+        LEFT JOIN
+    mage_catalog_product_entity_varchar AS mcpev_ideal ON mcpev_ideal.entity_id = pmd.product_id
+        AND mcpev_ideal.attribute_id = '1495'
+        LEFT JOIN
+    mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id
+        AND mcped.attribute_id = '79'
+        LEFT JOIN
+    mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id
+        AND mcped_selling_price.attribute_id = '75' ";
+		
+$offset = $_GET["offset"];
+$limit = $_GET["limit"];
+
+if($offset!="" && $limit!=""){
+	$sql .= " limit $offset, $limit";
 }
-// Get Updated records categories
+
+$result = $conn->query($sql);
+$records = $result->fetch_all(MYSQLI_ASSOC);
+
+$all_records = array();
+foreach($records as $record) {
+    $all_records[] = $record;
+}
+
+foreach($all_records as $data) {
+	foreach($competitors as $competitor){
+		if($competitor['active']==1) {
+			if($competitor['url']!=''){
+				$p = "";
+				$p = scrapData($competitor, $data);
+				$cname = $competitor['name'];
+				if($competitor['identifier']==='EAN'){
+					$id = $data['ean'];
+				}
+				if($competitor['identifier']==='ARTICLE'){
+					$id = $data['sku'];
+				}
+				$scraped_data[$id]['price'][$cname] = trim($p);
+				$scraped_data[$id]['product_id'] = $data['product_id'];
+			}
+		}
+	}
+}
+
+/*
+file_put_contents('file.json', json_encode($scraped_data)); // Saving the scraped data in a .json file
+ 
+// Saving the scraped data as a csv
+$csv_file = fopen('file.csv', 'w');
+fputcsv($csv_file, array_keys($scraped_data[0]));
+ 
+foreach ($scraped_data as $row) {
+    fputcsv($csv_file, array_values($row));
+}
+ 
+fclose($csv_file);
+*/
+
+$sql = "INSERT INTO gyzscompetitors_data (product_id,product_data) VALUES ";
+
+$sqldatasqldata = "";
+foreach($scraped_data as $data) {
+	$price_data = json_encode($data['price']);
+	$sqldata = $sqldata."('".$data['product_id']."','".$price_data."'),";	
+}
+
+echo $sql.rtrim($sqldata,",").";";
+exit;
+
+
+
 ?>
 <style>
 .loader
@@ -150,14 +147,6 @@ foreach($allUpdatedRecords as $updated_rec) {
   font-style: italic;
 }
 
-
-.refreshicon {
-    color: #323584;
-    font-size: 16px;
-   /* width: 27%; */
-    padding: 40px,40px;
-    cursor: pointer;
-    }
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -166,6 +155,8 @@ foreach($allUpdatedRecords as $updated_rec) {
         <!-- Sidebar -->
           <?php include "layout/left.php"; ?>
         <!-- End of Sidebar -->
+
+       
        
         <!-- Datatable and header  -->
         <section class="content-toggle" id="main-content">
@@ -175,16 +166,14 @@ foreach($allUpdatedRecords as $updated_rec) {
             <!-- Topbar -->
               <?php include "layout/top.php"; ?>
             <!-- End of Topbar --> 
+
+                
                 <div class="table-filter d-flex align-items-center" id="data_filters">
 
-                    <div>
-                        <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
-                    </div>
+                    <div><input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update</div>
 
-                  
+                    
+
                     <!-- Data Length Filter -->
                     <!--
                     <div class="select-opt">
@@ -208,6 +197,8 @@ foreach($allUpdatedRecords as $updated_rec) {
                         </label>
                     </div>
                 </div>
+
+
 
                 <!-- Price Management Table -->
                 <div class="data-toggle overflow-hidden position-fixed" id="data-content">
@@ -321,12 +312,12 @@ foreach($allUpdatedRecords as $updated_rec) {
         </section>
         <!-- Filter Datatable settings -->
         <section class="filter-wrapper" id="filter-content">
-            <a class="cog" id="cog-content" ><img src="<?php echo $document_root_url; ?>/css/svg/filter.svg"
+            <a class="cog" id="cog-content" onclick="toggleFilter()"><img src="<?php echo $document_root_url; ?>/css/svg/filter.svg"
                         alt="filter-icon"></a>
             <div class="content-wrapper d-flex flex-column">
 
                 <!-- set-price-card-details -->
-                <div class=" set-price-card card">
+                <!-- <div class=" set-price-card card">
                     <div class="hl-title tital-c3">
                         <span class="border-hl"></span>
                         <span class="colum-title title">Set Prices</span>
@@ -353,7 +344,7 @@ foreach($allUpdatedRecords as $updated_rec) {
 
                             
                     </div>
-                </div>
+                </div> -->
 
                 <div class=" set-price-card card">
                     <div class="hl-title tital-c3">
@@ -362,9 +353,9 @@ foreach($allUpdatedRecords as $updated_rec) {
                     </div>
                     <div>
                         <div class="data data-price d-flex row">
-                            <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnactivate">
+                            <!-- <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnactivate">
                                 <i class="fa fa-check-circle" aria-hidden="true"></i>Activate Updated
-                            </button>
+                            </button> -->
 
                            <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnexport">
                                 <i class="fas fa-file-export"></i>Export Data
@@ -372,9 +363,9 @@ foreach($allUpdatedRecords as $updated_rec) {
                             </button>
 
                              <div>&nbsp;</div>
-                             <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnimport" data-bs-toggle="modal" data-bs-target="#ImportModal">
+                             <!-- <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnimport" data-bs-toggle="modal" data-bs-target="#ImportModal">
                                 <i class="fas fa-file-import"></i></i>Import Data 
-                             </button>
+                             </button> -->
 
                              <!-- <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnundo" data-bs-toggle="modal" data-bs-target="#UndoModal">
                                 <i class="fas fa-undo"></i></i>Undo Selling Price 
