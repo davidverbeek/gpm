@@ -59,11 +59,19 @@ case "category_brands":
     $catIdNew = $_POST['cat_id_new'];
     $catId_new_arr = explode(',', $catIdNew);
 
-    $sql = "INSERT INTO price_management_debter_categories(category_ids,customer_group,created_at,updated_at) VALUES ";
-    $all_col_data = "('".$catIdNew."', '".$customerGroup."',  '".NOW()."', '".NOW()."')";
+    $sql_product = "SELECT product_id FROM mage_catalog_category_product WHERE category_id IN ($catIdNew)";
+    $result = $conn->query($sql_product);
+    $product_ids = "";
+    while($row = $result->fetch_assoc()) {
+      $product_ids .= ','.$row['product_id'];
+    }
+    $product_ids = ltrim($product_ids, ',');
+
+    $sql = "INSERT INTO price_management_debter_categories(category_ids,product_ids,customer_group,created_at,updated_at) VALUES ";
+    $all_col_data = "('".$catIdNew."', '".$product_ids."','".$customerGroup."',  '".NOW()."', '".NOW()."')";
     $sql .= $all_col_data;
     $updated_at = date('Y-m-d h:i:s');
-    $sql .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), customer_group = VALUES(customer_group),updated_at = VALUES(updated_at)";
+    $sql .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), customer_group = VALUES(customer_group), product_ids = VALUES(product_ids), updated_at = VALUES(updated_at)";
   
     if($conn->query($sql)) {
       $response_data['msg'] = "Data is saved successfully!";
@@ -112,13 +120,15 @@ case "category_brands":
         $sql = "SELECT * FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id WHERE price_management_customer_groups.customer_group_name IN ($multiple_groups)";
         
         if ($result = $conn->query($sql)) {
-          $join_categories = '';
+          $join_categories = '';$to_send = array();
           while($row = $result->fetch_assoc()) {
             $join_categories .= ','.$row['category_ids'];
+            $group_number = substr($row['customer_group_name'], -3);
+            $to_send['groups'][][$group_number] = $row['product_ids'];
           }
-
           $all_cats_arr = array_filter(explode(',', $join_categories));
-          $response_data['msg'] = implode(',', $all_cats_arr);
+          $to_send['categories'] = implode(',', $all_cats_arr);
+          $response_data['msg'] = $to_send;
         } else {
           $response_data['msg'] = "Error in debter rule join:- ".mysqli_error($conn);
         } 
@@ -127,6 +137,5 @@ case "category_brands":
       }
       break;
 }
-
 echo json_encode($response_data); 
 ?>

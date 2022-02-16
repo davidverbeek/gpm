@@ -1,5 +1,5 @@
-
 $(document).ready(function () {
+  var ajax_groups;
 
   function toggleCheckbox(new_status) {
 
@@ -30,11 +30,10 @@ $(document).ready(function () {
 
 
   function toggleAllCategories(status) {
-    //$("#flexCheckDefault").prop('checked', status);
+    
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
       if ($(this).parent('a').parent('li').hasClass('disabled')) {
-        // means dont work on full list
         any_disabled = true;
       }
 
@@ -43,16 +42,11 @@ $(document).ready(function () {
     });
 
     if (!any_disabled) {
-      // means
-      //$('a>i.sim-tree-checkbox').each(function (index) {
       if (status) {
         $("i.sim-tree-checkbox").addClass('checked');
-        //$('#hdn_selectedcategories').val('');
       } else {
         $("i.sim-tree-checkbox").removeClass('checked');
-        //$('#hdn_selectedcategories').val('-1');
       }
-      //});
     }
     return true;
   }
@@ -649,7 +643,7 @@ $(document).ready(function () {
       if (data[column_index["percentage_increase"]] > 0) {
         $(row).find('td:eq(' + hdn_percentage_increase_column + ')').css('color', 'green');
       } else if (data[column_index["percentage_increase"]] < 0) {
-        $(row).find('td:eq(' + hdn_percentage_increase_column + ')').css('color', 'red');
+        $(row).find('td:eq(' + hdn_debter_4027100_product_column + ')').css('color', 'red');
       }
 
       var ischecked = $("#chkall").is(':checked');
@@ -659,8 +653,20 @@ $(document).ready(function () {
         $(row).removeClass("selected");
       }
     },
-
-
+    "createdRow": function( row, data, dataIndex ) {
+        if($('.show_cols_dsp').is(":checked")) {
+          var product_list = ajax_groups;
+          $.each(product_list, function( index, product_list ) {
+            $.each(product_list, function(group, product_ids) {
+              var product_list_arr = product_ids.split(',');
+              if(product_list_arr.indexOf(data[column_index['product_id']]) == -1) {
+                $('td.db_sp_editable_column_'+group, row).addClass('db_sp_editable_column_new_'+group).removeClass('db_sp_editable_column_'+group);
+                $('input.db_sp_'+group, row).attr('disabled', 'disabled');
+              }
+            });
+          });
+        }
+    },
     "ajax": {
       "url": document_root_url + "/scripts/create_query.php",
       "type": "POST",
@@ -916,7 +922,6 @@ $(document).ready(function () {
 
       var index = $(this).closest('tr').index();
       var product_id = table.cells({ row: index, column: column_index["product_id"] }).data()[0];
-
 
       if (getclassclicked[0] == "selling_price") {
         $(".sp_editable_column").css("cssText", "background-color: #ffffcc !important;");
@@ -1652,12 +1657,7 @@ $(document).ready(function () {
 
 
   // For Debter Individual
-
-
   // For Debter
-
-  
-
   $(".show_cols_all_dsp").change(function () {
     var ischecked = $(this).is(':checked');
     if (ischecked) {
@@ -1666,23 +1666,18 @@ $(document).ready(function () {
         var checkedval = $(this).val();
         table.column(checkedval).visible(true);
       });
-     // showGroupCategories('all', 'checked');
     } else {
       $(".show_cols_dsp").each(function () {
         $(this).prop('checked', false);
         var checkedval = $(this).val();
         table.column(checkedval).visible(false);
       });
-      // check all is also checked
-//$('#flexCheckDefault').prop('checked', false);
-     // showGroupCategories('all', '');
     }
     $("table tr th").css({
       "width": "100px"
     });
     $("#example").width("100%");
     enableBulkFunc();
-
   });
 
 
@@ -3683,8 +3678,6 @@ $(document).ready(function () {
     });
 
     var selected_group_str = selected_group.toString();
-
-
     // ajax it
     var request = $.ajax({
       url: document_root_url + '/scripts/get_category_brands.php',
@@ -3697,11 +3690,12 @@ $(document).ready(function () {
       var resp_obj = response_data;
       $('i.sim-tree-checkbox').removeClass('checked');
       $('#flexCheckDefault').prop('checked', false);
-      $("#hdn_selectedcategories").val(resp_obj["msg"]);
+      $("#hdn_selectedcategories").val(resp_obj["msg"]["categories"]);
+      ajax_groups = resp_obj["msg"]["groups"];
 
-      if (resp_obj["msg"]) { // means status = checked
+      if (resp_obj["msg"]['categories']) { // means status = checked
         $('#flexCheckDefault').prop('checked', true);
-        var cat_id_arr = resp_obj["msg"].split(',');
+        var cat_id_arr = resp_obj["msg"]['categories'].split(',');
         $.each(cat_id_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
         });
@@ -3751,14 +3745,13 @@ $(document).ready(function () {
       $("#hdn_selectedcategories").val('-1');
       toggleAllCategories(current_status);
     }
-
     table.draw();
   });
-
   
   $('#reset_btn_id').on('click', function () {
     $('.txtsearch').val('');
     $('#brand').val('');
+    $('#hdn_selectedbrand').val('');
     $('#supplier_type').val('');
     $('#dtSearch').val('');
     $('#filter_with').val('');
