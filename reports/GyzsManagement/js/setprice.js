@@ -643,7 +643,7 @@ $(document).ready(function () {
       if (data[column_index["percentage_increase"]] > 0) {
         $(row).find('td:eq(' + hdn_percentage_increase_column + ')').css('color', 'green');
       } else if (data[column_index["percentage_increase"]] < 0) {
-        $(row).find('td:eq(' + hdn_debter_4027100_product_column + ')').css('color', 'red');
+        $(row).find('td:eq(' + hdn_percentage_increase_column + ')').css('color', 'red');
       }
 
       var ischecked = $("#chkall").is(':checked');
@@ -660,7 +660,9 @@ $(document).ready(function () {
             $.each(product_list, function(group, product_ids) {
               var product_list_arr = product_ids.split(',');
               if(product_list_arr.indexOf(data[column_index['product_id']]) == -1) {
+                //$('td.db_sp_editable_column_'+group, row).addClass('db_sp_editable_column_new_'+group).removeClass('db_sp_editable_column_'+group);
                 $('td.db_sp_editable_column_'+group, row).addClass('db_sp_editable_column_new_'+group).removeClass('db_sp_editable_column_'+group);
+
                 $('input.db_sp_'+group, row).attr('disabled', 'disabled');
               }
             });
