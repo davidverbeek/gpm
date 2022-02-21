@@ -104,77 +104,143 @@ $(document).ready(function() {
             {
               "targets": [column_index["group_4027100_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_100" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_100_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('100', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_100" id="db_sp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_100" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_100_'+product_id+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_100"
             },
             {
               "targets": [column_index["group_4027101_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_101" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('101', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_101" id="db_sp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_101" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_101"
             },
             {
               "targets": [column_index["group_4027102_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_102" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('102', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_102" id="db_sp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_102" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_102"
             },
             {
               "targets": [column_index["group_4027103_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_103" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('103', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_103" id="db_sp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_103" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_103"
             },
             {
               "targets": [column_index["group_4027104_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_104" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('104', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_104" id="db_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_104" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_104"
             },
             {
               "targets": [column_index["group_4027105_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_105" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('105', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_105" id="db_sp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_105" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_105"
             },
             {
               "targets": [column_index["group_4027106_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_106" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('106', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_106" id="db_sp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_106" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_106"
             },
             {
               "targets": [column_index["group_4027107_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_107" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('107', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_107" id="db_sp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_107" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_107"
             },
             {
               "targets": [column_index["group_4027108_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_108" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('108', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_108" id="db_sp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_108" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_108"
             },
             {
               "targets": [column_index["group_4027109_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_109" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('109', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_109" id="db_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_109" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_109"
             },
             {
               "targets": [column_index["group_4027110_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_sp input_validate db_sp_110" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                  product_id = row[column_index['product_id']];
+                var product_status= generateSpan('110', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_sp_span striped_span db_sp_span_110" id="db_sp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_sp input_validate db_sp_110" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_110"
             },             
@@ -204,77 +270,143 @@ $(document).ready(function() {
             {
               "targets": [column_index["group_4027100_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_100" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_100_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('100', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_100" id="db_m_bp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_100" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_100_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_100"
             },
             {
               "targets": [column_index["group_4027101_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_101" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('101', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_101" id="db_m_bp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_101" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_101"
             },
             {
               "targets": [column_index["group_4027102_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_102" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('102', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_102" id="db_m_bp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_102" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_102"
             },
             {
               "targets": [column_index["group_4027103_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_103" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('103', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_103" id="db_m_bp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_103" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_103"
             },
             {
               "targets": [column_index["group_4027104_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_104" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('104', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_104" id="db_m_bp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_104" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_104"
             },
             {
               "targets": [column_index["group_4027105_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_105" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('105', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_105" id="db_m_bp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_105" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_105"
             },
             {
               "targets": [column_index["group_4027106_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_106" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('106', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_106" id="db_m_bp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_106" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_106"
             },
             {
               "targets": [column_index["group_4027107_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_107" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('107', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_107" id="db_m_bp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_107" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_107"
             },
             {
               "targets": [column_index["group_4027108_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_108" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('108', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_108" id="db_m_bp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_108" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_108"
             },
             {
               "targets": [column_index["group_4027109_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_109" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('109', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_109" id="db_m_bp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_109" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_109"
             },
             {
               "targets": [column_index["group_4027110_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_bp input_validate db_m_bp_110" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('110', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_bp_span striped_span db_m_bp_span_110" id="db_m_bp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_bp input_validate db_m_bp_110" default-value="'+data+'" value="'+data+'" id="db_m_bp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_bp_editable_column db_m_bp_editable_column_110"
             },
@@ -293,7 +425,13 @@ $(document).ready(function() {
             {
               "targets": [column_index["group_4027100_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('100', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_100" id="db_m_sp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
+                } else {
                 return '<input type="text" class="db_m_sp input_validate db_m_sp_100" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_100_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_100"
             },
@@ -301,7 +439,13 @@ $(document).ready(function() {
             {
               "targets": [column_index["group_4027101_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_101" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('101', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_101" id="db_m_sp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_101" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_101"
             },
@@ -309,63 +453,117 @@ $(document).ready(function() {
             {
               "targets": [column_index["group_4027102_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_102" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('102', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_102" id="db_m_sp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_102" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_102"
             },
             {
               "targets": [column_index["group_4027103_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_103" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('103', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_103" id="db_m_sp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_103" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_103"
             },
             {
               "targets": [column_index["group_4027104_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_104" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('104', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_104" id="db_m_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_104" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_104"
             },
             {
               "targets": [column_index["group_4027105_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_105" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('104', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_104" id="db_m_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_105" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_105"
             },
             {
               "targets": [column_index["group_4027106_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_106" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('106', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_106" id="db_m_sp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_106" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_106"
             },
             {
               "targets": [column_index["group_4027107_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_107" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('107', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_107" id="db_m_sp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_107" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_107"
             },
             {
               "targets": [column_index["group_4027108_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_108" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('108', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_108" id="db_m_sp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_108" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_108"
             },
             {
               "targets": [column_index["group_4027109_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_109" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('109', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_109" id="db_m_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_109" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_109"
             },
             {
               "targets": [column_index["group_4027110_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_m_sp input_validate db_m_sp_110" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('110', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_110" id="db_m_sp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_m_sp input_validate db_m_sp_110" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_110"
             },
@@ -397,77 +595,144 @@ $(document).ready(function() {
             {
               "targets": [column_index["group_4027100_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_100" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_100_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('100', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_100" id="db_d_gp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_100" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_100_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_100"
             },
             {
               "targets": [column_index["group_4027101_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_101" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('101', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_101" id="db_d_gp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_101" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_101_'+row[column_index["product_id"]]+'" />';
+                }
+
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_101"
             },
             {
               "targets": [column_index["group_4027102_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_102" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('102', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_102" id="db_d_gp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_102" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_102"
             },
             {
               "targets": [column_index["group_4027103_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_103" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('103', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_103" id="db_d_gp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_103" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_103_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_103"
             },
             {
               "targets": [column_index["group_4027104_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_104" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('104', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_104" id="db_d_gp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_104" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_104_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_104"
             },
             {
               "targets": [column_index["group_4027105_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_105" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('105', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_105" id="db_d_gp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_105" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_105_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_105"
             },
             {
               "targets": [column_index["group_4027106_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_106" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                 product_id = row[column_index['product_id']];
+                var product_status= generateSpan('106', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_106" id="db_d_gp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_106" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_106_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_106"
             },
             {
               "targets": [column_index["group_4027107_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_107" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('107', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_107" id="db_d_gp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_107" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_107_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_107"
             },
             {
               "targets": [column_index["group_4027108_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_108" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('108', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_108" id="db_d_gp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_108" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_108_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_108"
             },
             {
               "targets": [column_index["group_4027109_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_109" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('109', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_109" id="db_d_gp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_109" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_109"
             },
             {
               "targets": [column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                return '<input type="text" class="db_d_gp input_validate db_d_gp_110" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                product_id = row[column_index['product_id']];
+                var product_status= generateSpan('110', product_id, data);
+                if (product_status == 'no') {
+                  return '<span class="db_d_gp_span striped_span db_d_gp_span_110" id="db_d_gp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
+                } else {
+                  return '<input type="text" class="db_d_gp input_validate db_d_gp_110" default-value="'+data+'" value="'+data+'" id="db_d_gp_editable_column_110_'+row[column_index["product_id"]]+'" />';
+                }
               },
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_110"
             },
@@ -478,7 +743,7 @@ $(document).ready(function() {
               "targets": [column_index["discount_on_gross_price"]],
               "render": function ( data, type, row ) {
                   return '<input type="text" class="discount_on_gross input_validate" default-value="'+data+'" value="'+data+'" id="discount_on_gross_editable_column_'+row[column_index["product_id"]]+'"/>';  
-              },
+                },
               "className": "editable_column discount_on_gross_editable_column"
             },
             {
@@ -3412,6 +3677,18 @@ $("#chkavges").change(function() {
         } */ 
       }
     })
+  }
+
+  function generateSpan(group_number, product_id, data) {
+    var group_4027100_product = 'yes';
+    if(debter_product_data[group_number]) {
+        var debter_4027100_product_ids = debter_product_data[group_number] ;
+        var product_list_arr = debter_4027100_product_ids.split(',');
+        if(product_list_arr.indexOf(product_id) == -1) { 
+          group_4027100_product = 'no';
+        }
+    }
+    return group_4027100_product;
   }
     /* File Upload Ends */
 
