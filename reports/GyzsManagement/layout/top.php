@@ -5,6 +5,11 @@
             <span>Manage Prices</span>
         </a>
     </li>
+    <li class="nav-item <?php if (strpos($_SERVER['REQUEST_URI'], 'debter_rules') > 0) { ?> active  <?php } ?> ">
+        <a class="nav-link setting" href="debter_rules.php">
+            <span>Debter Rules</span>
+        </a>
+    </li>
     <li class="nav-item parent overflow-none <?php if (strpos($_SERVER['REQUEST_URI'], 'bol_commission') > 0 || strpos($_SERVER['REQUEST_URI'], 'bol_minimum') > 0) { ?> active  <?php } ?> ">
         <a class="nav-link feed w-100" href="#">
             <img alt="GYZS" src="<?php echo $document_root_url; ?>/images/bol.png" width="20" height="20">
@@ -56,6 +61,13 @@
         <a class="nav-link setting" href="revenue_report.php">
             <i class="fas fa-euro-sign"></i>
             <span>Revenue Report</span>
+        </a>
+    </li>
+
+    <li class="nav-item <?php if (strpos($_SERVER['REQUEST_URI'], 'competitor-analysis') > 0) { ?> active  <?php } ?> ">
+        <a class="nav-link setting" href="competitor-analysis.php">
+            <i class="fas fa-balance-scale"></i>
+            <span>Competitor Analysis</span>
         </a>
     </li>
 
