@@ -22,10 +22,6 @@ include "layout/header.php";
 $sql_updated_recs = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, price_management_data AS pmd WHERE mccp.product_id = pmd.product_id AND pmd.is_updated = '1'";
 $result_updated_recs = $conn->query($sql_updated_recs);
 $allUpdatedRecords = $result_updated_recs->fetch_all(MYSQLI_ASSOC);
-$all_updated_categories = array();
-foreach($allUpdatedRecords as $updated_rec) {
-    $all_updated_categories[] = $updated_rec["category_id"];
-}
 // Get Updated records categories
 
 $sql = "SELECT * FROM price_management_customer_groups ORDER BY magento_id";
@@ -80,6 +76,10 @@ if ($result = $conn->query($sql)) {
     background-color: #3a3d99!important;
 }
 
+body {
+    font-size: 10px;
+    font-family: 'poppins-regular' !important;
+}
 </style>
 
 <body>
@@ -120,7 +120,7 @@ if ($result = $conn->query($sql)) {
                             </div>
                             <div class="row" style="margin-bottom:10px;">
                               <div class="col-lg-6">
-                                <button type="button" class="btn btn-primary" id="btnsave">Save changes</button>
+                                <button type="button" class="btn btn-purple btn-sm col-5" id="btnsave">Save changes</button>
                               </div>
                             </div>
                           </div><!--col-sm-10-->
@@ -159,7 +159,7 @@ if ($result = $conn->query($sql)) {
 
                         <div class="row">
                     <div class="col-lg-6">
-                       <input type="button" name="btncopy" id="btncopy" class="btn btn-primary"  value="Copy Categories" />
+                       <input type="button" name="btncopy" id="btncopy" class="btn btn-purple btn-sm col-5"  value="Copy Categories" />
                     </div>
                   </div>
                      </div>
@@ -181,7 +181,6 @@ if ($result = $conn->query($sql)) {
     var document_root_path = "<?php echo $document_root_path ?>";
     var document_root_url = "<?php echo $document_root_url; ?>";
     var list = <?php echo json_encode($categories) ?>;
-    var all_updated_categories = <?php echo json_encode($all_updated_categories) ?>;
   </script>
   <script src="<?php echo $document_root_url; ?>/js/debter_rules.js"></script>
   <!-- Load Custom price Js Ends -->  
