@@ -1,8 +1,25 @@
-  
-$(document).ready(function() {
 
-  $("#p_s_p").click(function() {
-    if($(this).html() == "+") {
+$(document).ready(function () {
+  var ajax_groups;
+
+  function toggleCheckbox(new_status) {
+
+    $('a>i.sim-tree-checkbox').each(function (index) {
+      $(this).parent('a').parent('li').removeClass('disabled');
+      if (!$(this).hasClass('checked')) {
+        if (new_status == 'none') {
+          $(this).parent('a').parent('li').addClass('disabled');
+        } else {
+          $(this).parent('a').parent('li').removeClass('disabled');
+        }
+      }
+    });
+  }
+
+
+  $("#p_s_p").click(function () {
+    if ($(this).html() == "+") {
+
       $(this).html("-");
       $(this).removeClass("p_s_p_pos");
       $(this).addClass("p_s_p_neg");
@@ -12,6 +29,30 @@ $(document).ready(function() {
       $(this).addClass("p_s_p_pos");
     }
   });
+
+
+
+  function toggleAllCategories(status) {
+    
+    var any_disabled = false;
+    $('a>i.sim-tree-checkbox').each(function (index) {
+      if ($(this).parent('a').parent('li').hasClass('disabled')) {
+        any_disabled = true;
+      }
+
+      if (any_disabled)
+        return false;
+    });
+
+    if (!any_disabled) {
+      if (status) {
+        $("i.sim-tree-checkbox").addClass('checked');
+      } else {
+        $("i.sim-tree-checkbox").removeClass('checked');
+      }
+    }
+    return true;
+  }
 
   var table = $('#example').DataTable({
       "processing": true,
@@ -567,9 +608,7 @@ $(document).ready(function() {
               },
               "className": "editable_column db_m_sp_editable_column db_m_sp_editable_column_110"
             },
-
             // Debter Margin on SP
-
             /*
             {
               "targets": [column_index["group_4027100_discount_on_grossprice_b_on_deb_selling_price"], 
@@ -1150,6 +1189,7 @@ $(document).ready(function() {
         $(this).closest('.discount_on_gross_editable_column').find('input')[0].select();
 
 
+
         $(this).closest('tr').addClass("selected");
 
         $.each(debter_groups, function( debindex, debvalue ){
@@ -1182,7 +1222,6 @@ $(document).ready(function() {
 
         $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
         $(this).closest('tr').addClass("selected");
-
         $("."+grouptdinput+"").removeAttr("disabled");
         $(".sp_editable_column input").attr("disabled","disabled");
         $(".pm_bp_editable_column input").attr("disabled","disabled");
@@ -3772,7 +3811,6 @@ $("#chkavges").change(function() {
             $("#loading-img-undo").css({"display": "none"});
             $('#confirmundo').attr('disabled',false);
             $('#UndoModal').modal('toggle');
-
             $('<div class="alert alert-success" role="alert">'+resp_obj["msg"]+'</div>').insertBefore("#data_filters");
 
                       window.setTimeout(function() {
@@ -3788,11 +3826,9 @@ $("#chkavges").change(function() {
             
           } 
         }      
+
       }
     });
   });
-
-
-
 
 });
