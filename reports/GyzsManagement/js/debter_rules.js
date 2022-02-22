@@ -62,14 +62,7 @@ $(document).ready(function () {
       }
       simtreehidetexttmp++;
     });
-    $.each(all_updated_categories, function (key, val) {
-      //console.log(key+"==="+val);
-      if (val != 2) {
-        $("[data-id=" + val + "]").children('i').first().css({ "top": "7px" });
-        $("[data-id=" + val + "]").children('a').first().css({ "background-color": "#a2a3b7", "border-radius": "3px", "padding": "2px 0px 2px 16px" });
-      }
-    });
-
+    
   }, 3000);
 
   function showDivMessage(msg) {

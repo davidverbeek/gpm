@@ -120,15 +120,12 @@ case "category_brands":
         $sql = "SELECT * FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id WHERE price_management_customer_groups.customer_group_name IN ($multiple_groups)";
         
         if ($result = $conn->query($sql)) {
-          $join_categories = '';$to_send = array();
+          $join_categories = '';
           while($row = $result->fetch_assoc()) {
             $join_categories .= ','.$row['category_ids'];
-            $group_number = substr($row['customer_group_name'], -3);
-            $to_send['groups'][][$group_number] = $row['product_ids'];
           }
           $all_cats_arr = array_filter(explode(',', $join_categories));
-          $to_send['categories'] = implode(',', $all_cats_arr);
-          $response_data['msg'] = $to_send;
+          $response_data['msg'] = implode(',', $all_cats_arr);
         } else {
           $response_data['msg'] = "Error in debter rule join:- ".mysqli_error($conn);
         } 

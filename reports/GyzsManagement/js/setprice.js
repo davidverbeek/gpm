@@ -1,21 +1,4 @@
-
 $(document).ready(function () {
-  var ajax_groups;
-
-  function toggleCheckbox(new_status) {
-
-    $('a>i.sim-tree-checkbox').each(function (index) {
-      $(this).parent('a').parent('li').removeClass('disabled');
-      if (!$(this).hasClass('checked')) {
-        if (new_status == 'none') {
-          $(this).parent('a').parent('li').addClass('disabled');
-        } else {
-          $(this).parent('a').parent('li').removeClass('disabled');
-        }
-      }
-    });
-  }
-
 
   $("#p_s_p").click(function () {
     if ($(this).html() == "+") {
@@ -145,7 +128,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027100_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('100', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_100" id="db_sp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
@@ -158,7 +141,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027101_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('101', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_101" id="db_sp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
@@ -171,7 +154,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027102_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('102', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_102" id="db_sp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
@@ -184,7 +167,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027103_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('103', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_103" id="db_sp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
@@ -197,7 +180,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027104_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('104', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_104" id="db_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
@@ -210,7 +193,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027105_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('105', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_105" id="db_sp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
@@ -223,7 +206,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027106_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('106', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_106" id="db_sp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
@@ -236,7 +219,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027107_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('107', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_107" id="db_sp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
@@ -249,7 +232,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027108_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('108', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_108" id="db_sp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
@@ -262,7 +245,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027109_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('109', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_109" id="db_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
@@ -275,7 +258,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027110_debter_selling_price"]],
               "render": function ( data, type, row ) {
-                  product_id = row[column_index['product_id']];
+                  var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('110', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_110" id="db_sp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
@@ -311,7 +294,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027100_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('100', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_100" id="db_m_bp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
@@ -324,7 +307,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027101_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('101', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_101" id="db_m_bp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
@@ -337,7 +320,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027102_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('102', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_102" id="db_m_bp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
@@ -350,7 +333,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027103_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('103', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_103" id="db_m_bp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
@@ -363,7 +346,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027104_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('104', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_104" id="db_m_bp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
@@ -376,7 +359,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027105_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('105', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_105" id="db_m_bp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
@@ -389,7 +372,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027106_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('106', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_106" id="db_m_bp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
@@ -402,7 +385,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027107_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('107', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_107" id="db_m_bp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
@@ -415,7 +398,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027108_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('108', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_108" id="db_m_bp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
@@ -428,7 +411,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027109_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('109', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_109" id="db_m_bp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
@@ -441,7 +424,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027110_margin_on_buying_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('110', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_bp_span striped_span db_m_bp_span_110" id="db_m_bp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
@@ -466,7 +449,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027100_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('100', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_100" id="db_m_sp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
@@ -480,7 +463,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027101_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('101', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_101" id="db_m_sp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
@@ -494,7 +477,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027102_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('102', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_102" id="db_m_sp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
@@ -507,7 +490,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027103_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('103', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_103" id="db_m_sp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
@@ -520,7 +503,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027104_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('104', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_104" id="db_m_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
@@ -533,7 +516,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027105_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('104', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_104" id="db_m_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
@@ -546,7 +529,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027106_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('106', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_106" id="db_m_sp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
@@ -559,7 +542,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027107_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('107', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_107" id="db_m_sp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
@@ -572,7 +555,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027108_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('108', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_108" id="db_m_sp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
@@ -585,7 +568,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027109_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('109', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_109" id="db_m_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
@@ -598,7 +581,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027110_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('110', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_110" id="db_m_sp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
@@ -634,7 +617,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027100_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('100', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_100" id="db_d_gp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
@@ -647,7 +630,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027101_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('101', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_101" id="db_d_gp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
@@ -661,7 +644,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027102_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('102', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_102" id="db_d_gp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
@@ -674,7 +657,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027103_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('103', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_103" id="db_d_gp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
@@ -687,7 +670,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027104_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('104', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_104" id="db_d_gp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
@@ -700,7 +683,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027105_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('105', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_105" id="db_d_gp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
@@ -713,7 +696,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027106_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                 product_id = row[column_index['product_id']];
+                 var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('106', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_106" id="db_d_gp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
@@ -726,7 +709,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027107_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('107', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_107" id="db_d_gp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
@@ -739,7 +722,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027108_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('108', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_108" id="db_d_gp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
@@ -752,7 +735,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027109_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('109', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_109" id="db_d_gp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
@@ -765,7 +748,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"]],
               "render": function ( data, type, row ) {
-                product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('110', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_d_gp_span striped_span db_d_gp_span_110" id="db_d_gp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
@@ -3719,15 +3702,15 @@ $("#chkavges").change(function() {
   }
 
   function generateSpan(group_number, product_id, data) {
-    var group_4027100_product = 'yes';
+    var group_name_product = 'yes';
     if(debter_product_data[group_number]) {
         var debter_4027100_product_ids = debter_product_data[group_number] ;
         var product_list_arr = debter_4027100_product_ids.split(',');
         if(product_list_arr.indexOf(product_id) == -1) { 
-          group_4027100_product = 'no';
+          group_name_product = 'no';
         }
     }
-    return group_4027100_product;
+    return group_name_product;
   }
     /* File Upload Ends */
 
@@ -3830,5 +3813,176 @@ $("#chkavges").change(function() {
       }
     });
   });
+
+  $(".show_cols_dsp, .show_cols_all_dsp").change(function () {
+    var selected_group = new Array();
+    $('.show_cols_dsp').each(function (index) {
+      if ($(this).is(':checked')) {
+        selected_group.push($(this).attr('name'));
+      }
+
+    });
+
+    var selected_group_str = selected_group.toString();
+    // ajax it
+    var request = $.ajax({
+      url: document_root_url + '/scripts/get_category_brands.php',
+      method: "POST",
+      data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
+      dataType: "json"
+    });
+
+    request.done(function (response_data) {
+      var resp_obj = response_data;
+      $('i.sim-tree-checkbox').removeClass('checked');
+      $('#flexCheckDefault').prop('checked', false);
+      $("#hdn_selectedcategories").val(resp_obj["msg"]);
+
+      if (resp_obj["msg"]) { // means status = checked
+        $('#flexCheckDefault').prop('checked', true);
+        var cat_id_arr = resp_obj["msg"].split(',');
+        $.each(cat_id_arr, function (key, value) {
+          $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+        });
+        toggleCheckbox('none');
+      } else {
+        $("i.sim-tree-checkbox").addClass('checked');
+        $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
+        $("#flexCheckDefault").prop('checked', true);
+      }
+      table.draw();
+    }
+    );
+
+    request.fail(function (jqXHR, textStatus) {
+      alert("Request failed: " + textStatus);
+    });
+  });
+
+
+$("#flexCheckDefault").change(function () {
+    var current_status = $(this).prop('checked');
+
+    var cat_all_str = $("#hdn_selectedcategories").val();
+    if (cat_all_str != '' && cat_all_str != -1) {//means this is a group list
+      var cat_all_arr = cat_all_str.split(',');
+      if (current_status) { // check all hiddencategories
+        $.each(cat_all_arr, function (key, value) {
+          $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+        });
+        toggleCheckbox('none');
+      } else { //uncheck all hiddencategories
+        $.each(cat_all_arr, function (key, value) {
+          $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
+        });
+        toggleCheckbox('');
+
+        // reset to show no records found
+        $("#hdn_selectedcategories").val('-1');
+        $('.show_cols_dsp').prop('checked', false);
+        $('.show_cols_all_dsp').prop('checked', false);
+
+      }
+
+    } else if (current_status) {
+      $("#hdn_selectedcategories").val('');
+      toggleAllCategories(current_status);
+    } else {
+      $("#hdn_selectedcategories").val('-1');
+      toggleAllCategories(current_status);
+    }
+
+    table.draw();
+  });
+
+  
+  $('#reset_btn_id').on('click', function () {
+    $('.txtsearch').val('');
+    $('#brand').val('');
+    $('#supplier_type').val('');
+    $('#dtSearch').val('');
+    $('#filter_with').val('');
+    $('#hdn_selectedbrand').val('');
+    $('#hdn_filters').val('');
+    table.search('').columns().search('').draw();
+  });
+
+  var tree = simTree({
+    el: '#tree',
+    data: list,
+    check: true,
+    linkParent: true,
+    expand: 'expand',
+    checked: 'checked',
+
+    onClick: function (item) {
+    },
+    onChange: function (item) {
+   /*    var selectedCategories = new Array();
+      $.each(item, function (key, value) {
+        selectedCategories.push(value["id"]);
+      });
+      $("#hdn_selectedcategories").val(selectedCategories); */
+
+      
+      var updated_cats = new Array();
+      $.each($('.sim-tree-checkbox'), function (index, value) {
+        if ($(this).hasClass('checked')) {
+          updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+        }
+      });
+      $("#hdn_selectedcategories").val(updated_cats);
+      $("#hdn_showupdated").val("0");
+
+      $("#chkall").prop('checked', false);
+      $("#check_all_cnt").html(0);
+
+      table.draw();
+    },
+    done: function () {
+      $("#flexCheckDefault").prop('checked', true);
+      toggleAllCategories(true);
+      $('#hdn_selectedcategories').val('');
+      table.draw();
+    }
+
+  });
+
+  function toggleCheckbox(new_status) {
+
+    $('a>i.sim-tree-checkbox').each(function (index) {
+      $(this).parent('a').parent('li').removeClass('disabled');
+      if (!$(this).hasClass('checked')) {
+        if (new_status == 'none') {
+          $(this).parent('a').parent('li').addClass('disabled');
+        } else {
+          $(this).parent('a').parent('li').removeClass('disabled');
+        }
+      }
+    });
+  }
+
+
+  function toggleAllCategories(status) {
+    
+    var any_disabled = false;
+    $('a>i.sim-tree-checkbox').each(function (index) {
+      if ($(this).parent('a').parent('li').hasClass('disabled')) {
+        any_disabled = true;
+      }
+
+      if (any_disabled)
+        return false;
+    });
+
+    if (!any_disabled) {
+      if (status) {
+        $("i.sim-tree-checkbox").addClass('checked');
+      } else {
+        $("i.sim-tree-checkbox").removeClass('checked');
+      }
+    }
+    return true;
+  }
 
 });
