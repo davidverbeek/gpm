@@ -65,7 +65,7 @@ include "define/constants.php";
   }
 
   .db_sp_editable_column {
-   background-color: #90EE90 !important;  
+  /* background-color: #90EE90 !important; */ 
   }
   .db_m_bp_editable_column {
    background-color: #7AC3FF !important;   
