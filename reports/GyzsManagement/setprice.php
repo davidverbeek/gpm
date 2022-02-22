@@ -126,6 +126,16 @@ foreach($allUpdatedRecords as $updated_rec) {
     $all_updated_categories[] = $updated_rec["category_id"];
 }
 // Get Updated records categories
+// Get debter product ids
+$sql = "SELECT customer_group_name, product_ids  FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id";
+
+if ($result = $conn->query($sql)) {
+  $debter_data = array();
+  while($row = $result->fetch_assoc()) {
+    $group_number = substr($row['customer_group_name'], -3);
+    $debter_data[$group_number] = $row["product_ids"];
+  }
+}
 ?>
 <style>
 .loader
@@ -150,14 +160,25 @@ foreach($allUpdatedRecords as $updated_rec) {
   font-style: italic;
 }
 
+.striped_span {
+  background: repeating-linear-gradient(
+  45deg,
+  #606dbc,
+  #606dbc 10px,
+  #465298 10px,
+  #465298 20px
+  );
+  color: #ffffff;
+  padding:0px 20px 0px 30px;
+  text-align: left;
+}
 
 .refreshicon {
     color: #323584;
     font-size: 16px;
-   /* width: 27%; */
     padding: 40px,40px;
     cursor: pointer;
-    }
+}
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -595,7 +616,8 @@ foreach($allUpdatedRecords as $updated_rec) {
     var list = <?php echo json_encode($categories) ?>;
     var all_updated_categories = <?php echo json_encode($all_updated_categories) ?>;
     var all_product_categories = <?php echo file_get_contents("pm_logs/pm_product_categories.txt") ?>;
-    var product_category_id = <?php echo file_get_contents("pm_logs/product_cat_id.txt") ?>;   
+    var product_category_id = <?php echo file_get_contents("pm_logs/product_cat_id.txt") ?>;  
+    var debter_product_data = <?php echo json_encode($debter_data) ?>; 
   </script>
   <script src="<?php echo $document_root_url; ?>/js/setprice.js"></script>
   <!-- Load Custom price Js Ends -->  
