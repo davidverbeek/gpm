@@ -3416,29 +3416,7 @@ $('.table tfoot th').each( function () {
 
   });
  */
-  var tree = simTree({
-  el: '#tree',
-  data: list,
-  check: true,
-  linkParent: true,
-  expand:'expand',
-  onClick: function (item) {  
-  },
-  onChange: function (item) {
-  var selectedCategories = new Array();
-   $.each( item, function( key, value ) {
-      selectedCategories.push(value["id"]);
-  });
-  $("#hdn_selectedcategories").val(selectedCategories);
-  $("#hdn_showupdated").val("0");
-
-  $("#chkall").prop('checked', false);
-  $("#check_all_cnt").html(0);
-
-  table.draw(); 
-  }
-  });
-
+  
 
     /* File Upload Starts */
 
@@ -3805,8 +3783,6 @@ $("#chkavges").change(function() {
                       $("#chkall").prop('checked', false);
                       $("#check_all_cnt").html(0);
                       table.ajax.reload( null, false );
-
-            
           } 
         }      
 
@@ -3822,7 +3798,6 @@ $("#chkavges").change(function() {
       }
 
     });
-
     var selected_group_str = selected_group.toString();
     // ajax it
     var request = $.ajax({
@@ -3834,23 +3809,26 @@ $("#chkavges").change(function() {
 
     request.done(function (response_data) {
       var resp_obj = response_data;
-      $('i.sim-tree-checkbox').removeClass('checked');
-      $('#flexCheckDefault').prop('checked', false);
-      $("#hdn_selectedcategories").val(resp_obj["msg"]);
-
       if (resp_obj["msg"]) { // means status = checked
+        $('i.sim-tree-checkbox').removeClass('checked');
         $('#flexCheckDefault').prop('checked', true);
         var cat_id_arr = resp_obj["msg"].split(',');
         $.each(cat_id_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
         });
         toggleCheckbox('none');
-      } else {
+
+        $("#hdn_selectedcategories").val(resp_obj["msg"]);
+        table.draw();
+      } else if( $("#hdn_selectedcategories").val() == -1) {
+
+      } else { // remove category filter
+        $("#hdn_selectedcategories").val(resp_obj["msg"]);
         $("i.sim-tree-checkbox").addClass('checked');
         $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
         $("#flexCheckDefault").prop('checked', true);
+        table.draw();
       }
-      table.draw();
     }
     );
 
@@ -3876,12 +3854,8 @@ $("#flexCheckDefault").change(function () {
           $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
         });
         toggleCheckbox('');
-
         // reset to show no records found
         $("#hdn_selectedcategories").val('-1');
-        $('.show_cols_dsp').prop('checked', false);
-        $('.show_cols_all_dsp').prop('checked', false);
-
       }
 
     } else if (current_status) {
@@ -3923,15 +3897,18 @@ $("#flexCheckDefault").change(function () {
         selectedCategories.push(value["id"]);
       });
       $("#hdn_selectedcategories").val(selectedCategories); */
-
-      
       var updated_cats = new Array();
       $.each($('.sim-tree-checkbox'), function (index, value) {
         if ($(this).hasClass('checked')) {
           updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
         }
       });
-      $("#hdn_selectedcategories").val(updated_cats);
+
+      if($.isEmptyObject(updated_cats)) {
+        $("#hdn_selectedcategories").val('-1');
+      } else { 
+        $("#hdn_selectedcategories").val(updated_cats);
+      }
       $("#hdn_showupdated").val("0");
 
       $("#chkall").prop('checked', false);
@@ -3957,7 +3934,7 @@ $("#flexCheckDefault").change(function () {
           $(this).parent('a').parent('li').addClass('disabled');
         } else {
           $(this).parent('a').parent('li').removeClass('disabled');
-        }
+        } 
       }
     });
   }
