@@ -45,9 +45,7 @@ $(document).ready(function () {
       "fixedHeader": true,
       "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
-        
-         var selected_cats = $('#hdn_selectedcategories').val();
-          
+          var selected_cats = $('#hdn_selectedcategories').val();
          //if(selected_cats) {
             $.ajax({
              url: document_root_url+'/scripts/process_data_price_management.php',
@@ -910,7 +908,7 @@ $(document).ready(function () {
         "url": document_root_url+"/scripts/create_query.php",
         "type": "POST",
         "data": function ( d ) {
-            d.categories = $('#hdn_selectedcategories').val(),
+            d.categories =  $('#hdn_selectedcategories').val(),
             d.showupdated = $('#hdn_showupdated').val(),
             d.hdn_filters = $('#hdn_filters').val(),
             d.hdn_stijging_text = $('#hdn_stijging_text').val()
@@ -3680,12 +3678,12 @@ $("#chkavges").change(function() {
   }
 
   function generateSpan(group_number, product_id, data) {
-    var group_name_product = 'yes';
+    var group_name_product = 'no';
     if(debter_product_data[group_number]) {
-        var debter_4027100_product_ids = debter_product_data[group_number] ;
-        var product_list_arr = debter_4027100_product_ids.split(',');
-        if(product_list_arr.indexOf(product_id) == -1) { 
-          group_name_product = 'no';
+        var debter_name_product_ids = debter_product_data[group_number] ;
+        var product_list_arr = debter_name_product_ids.split(',');
+        if(product_list_arr.indexOf(product_id) != -1) {
+          group_name_product = 'yes';
         }
     }
     return group_name_product;
@@ -3798,43 +3796,51 @@ $("#chkavges").change(function() {
       }
 
     });
-    var selected_group_str = selected_group.toString();
-    // ajax it
-    var request = $.ajax({
-      url: document_root_url + '/scripts/get_category_brands.php',
-      method: "POST",
-      data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
-      dataType: "json"
-    });
 
-    request.done(function (response_data) {
-      var resp_obj = response_data;
-      if (resp_obj["msg"]) { // means status = checked
-        $('i.sim-tree-checkbox').removeClass('checked');
-        $('#flexCheckDefault').prop('checked', true);
-        var cat_id_arr = resp_obj["msg"].split(',');
-        $.each(cat_id_arr, function (key, value) {
-          $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
-        });
-        toggleCheckbox('none');
+    if ($.isEmptyObject(selected_group)) {
+      $("#hdn_selectedcategories").val('');
+      $("i.sim-tree-checkbox").addClass('checked');
+      $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
+      $("#flexCheckDefault").attr("disabled", false);
+      $("#flexCheckDefault").prop('checked', true);
+      table.draw();
+    } else {
+      var selected_group_str = selected_group.toString();
+      // ajax it
+      var request = $.ajax({
+        url: document_root_url + '/scripts/get_category_brands.php',
+        method: "POST",
+        data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
+        dataType: "json"
+      });
 
-        $("#hdn_selectedcategories").val(resp_obj["msg"]);
-        table.draw();
-      } else if( $("#hdn_selectedcategories").val() == -1) {
-
-      } else { // remove category filter
-        $("#hdn_selectedcategories").val(resp_obj["msg"]);
-        $("i.sim-tree-checkbox").addClass('checked');
-        $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
-        $("#flexCheckDefault").prop('checked', true);
-        table.draw();
+      request.done(function (response_data) {
+        var resp_obj = response_data;
+        if (resp_obj["msg"]) { // means status = checked
+          $('i.sim-tree-checkbox').removeClass('checked');
+          $('#flexCheckDefault').prop('checked', true);
+          var cat_id_arr = resp_obj["msg"].split(',');
+          $.each(cat_id_arr, function (key, value) {
+            $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+          });
+          toggleCheckbox('none');
+          $("#hdn_selectedcategories").val(resp_obj["msg"]);
+          table.draw();
+        } else { // remove category filter
+          $("#hdn_selectedcategories").val('-1');
+          $("i.sim-tree-checkbox").removeClass('checked');
+          $("i.sim-tree-checkbox").parent('a').parent('li').addClass('disabled');
+          $("#flexCheckDefault").prop('checked', false);
+          $("#flexCheckDefault").attr("disabled", true);
+          table.draw();
+        }
       }
-    }
     );
 
     request.fail(function (jqXHR, textStatus) {
       alert("Request failed: " + textStatus);
     });
+    }//end else
   });
 
 
@@ -3857,7 +3863,6 @@ $("#flexCheckDefault").change(function () {
         // reset to show no records found
         $("#hdn_selectedcategories").val('-1');
       }
-
     } else if (current_status) {
       $("#hdn_selectedcategories").val('');
       toggleAllCategories(current_status);
@@ -3865,7 +3870,6 @@ $("#flexCheckDefault").change(function () {
       $("#hdn_selectedcategories").val('-1');
       toggleAllCategories(current_status);
     }
-
     table.draw();
   });
 
@@ -3892,11 +3896,6 @@ $("#flexCheckDefault").change(function () {
     onClick: function (item) {
     },
     onChange: function (item) {
-   /*    var selectedCategories = new Array();
-      $.each(item, function (key, value) {
-        selectedCategories.push(value["id"]);
-      });
-      $("#hdn_selectedcategories").val(selectedCategories); */
       var updated_cats = new Array();
       $.each($('.sim-tree-checkbox'), function (index, value) {
         if ($(this).hasClass('checked')) {
@@ -3905,9 +3904,9 @@ $("#flexCheckDefault").change(function () {
       });
 
       if($.isEmptyObject(updated_cats)) {
-        $("#hdn_selectedcategories").val('-1');
+       $("#hdn_selectedcategories").val('-1');
       } else { 
-        $("#hdn_selectedcategories").val(updated_cats);
+      $("#hdn_selectedcategories").val(updated_cats);
       }
       $("#hdn_showupdated").val("0");
 
