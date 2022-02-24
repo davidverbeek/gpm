@@ -908,7 +908,11 @@ $(document).ready(function () {
         "url": document_root_url+"/scripts/create_query.php",
         "type": "POST",
         "data": function ( d ) {
-            d.categories =  $('#hdn_selectedcategories').val(),
+          var selected_categories ='-1';
+            if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
+               selected_categories = $('#hdn_selectedcategories').val();
+            }
+            d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
             d.hdn_filters = $('#hdn_filters').val(),
             d.hdn_stijging_text = $('#hdn_stijging_text').val()
@@ -3827,7 +3831,6 @@ $("#chkavges").change(function() {
           $("#hdn_selectedcategories").val(resp_obj["msg"]);
           table.draw();
         } else { // remove category filter
-          $("#hdn_selectedcategories").val('-1');
           $("i.sim-tree-checkbox").removeClass('checked');
           $("i.sim-tree-checkbox").parent('a').parent('li').addClass('disabled');
           $("#flexCheckDefault").prop('checked', false);
@@ -3854,20 +3857,17 @@ $("#flexCheckDefault").change(function () {
         $.each(cat_all_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
         });
-        toggleCheckbox('none');
+        //toggleCheckbox('none');
       } else { //uncheck all hiddencategories
         $.each(cat_all_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
         });
-        toggleCheckbox('');
-        // reset to show no records found
-        $("#hdn_selectedcategories").val('-1');
+       // toggleCheckbox('none');
       }
     } else if (current_status) {
       $("#hdn_selectedcategories").val('');
       toggleAllCategories(current_status);
     } else {
-      $("#hdn_selectedcategories").val('-1');
       toggleAllCategories(current_status);
     }
     table.draw();
@@ -3903,11 +3903,9 @@ $("#flexCheckDefault").change(function () {
         }
       });
 
-      if($.isEmptyObject(updated_cats)) {
-       $("#hdn_selectedcategories").val('-1');
-      } else { 
+     
       $("#hdn_selectedcategories").val(updated_cats);
-      }
+     
       $("#hdn_showupdated").val("0");
 
       $("#chkall").prop('checked', false);
