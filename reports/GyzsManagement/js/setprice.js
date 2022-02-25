@@ -902,7 +902,6 @@ $(document).ready(function () {
           $(row).removeClass("selected");
         }
       },
-      
 
       "ajax": {
         "url": document_root_url+"/scripts/create_query.php",
@@ -3797,15 +3796,13 @@ $("#chkavges").change(function() {
       }
     });
   });
-
-  $(".show_cols_dsp, .show_cols_all_dsp").change(function () {
+  $(".show_cols_dsp, .show_cols_all_dsp, .show_cols_dmbp, .show_cols_all_dmbp, .show_cols_all_dmsp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_all_ddgp").change(function () {
     var selected_group = new Array();
-    $('.show_cols_dsp').each(function (index) {
+    $('.show_cols_dmbp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_dsp').each(function (index) {
       if ($(this).is(':checked')) {
         selected_group.push($(this).attr('name'));
       }
     });
-
     if ($.isEmptyObject(selected_group)) {
       $("#hdn_selectedcategories").val('');
       $("i.sim-tree-checkbox").addClass('checked');
