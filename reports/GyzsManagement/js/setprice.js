@@ -910,7 +910,13 @@ $(document).ready(function () {
         "data": function ( d ) {
           var selected_categories ='-1';
             if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
-               selected_categories = $('#hdn_selectedcategories').val();
+              updated_cats = new Array();
+               $.each($('.sim-tree-checkbox'), function (index, value) {
+                if ($(this).hasClass('checked')) {
+                  updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+                }
+              });
+              selected_categories = updated_cats.toString();
             }
             d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
@@ -3798,7 +3804,6 @@ $("#chkavges").change(function() {
       if ($(this).is(':checked')) {
         selected_group.push($(this).attr('name'));
       }
-
     });
 
     if ($.isEmptyObject(selected_group)) {
@@ -3820,23 +3825,21 @@ $("#chkavges").change(function() {
 
       request.done(function (response_data) {
         var resp_obj = response_data;
+        $("#hdn_selectedcategories").val(resp_obj["msg"]);
+        $('i.sim-tree-checkbox').removeClass('checked');
         if (resp_obj["msg"]) { // means status = checked
-          $('i.sim-tree-checkbox').removeClass('checked');
           $('#flexCheckDefault').prop('checked', true);
           var cat_id_arr = resp_obj["msg"].split(',');
           $.each(cat_id_arr, function (key, value) {
             $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
           });
           toggleCheckbox('none');
-          $("#hdn_selectedcategories").val(resp_obj["msg"]);
-          table.draw();
         } else { // remove category filter
-          $("i.sim-tree-checkbox").removeClass('checked');
           $("i.sim-tree-checkbox").parent('a').parent('li').addClass('disabled');
           $("#flexCheckDefault").prop('checked', false);
           $("#flexCheckDefault").attr("disabled", true);
-          table.draw();
         }
+        table.draw();
       }
     );
 
@@ -3846,26 +3849,21 @@ $("#chkavges").change(function() {
     }//end else
   });
 
-
 $("#flexCheckDefault").change(function () {
     var current_status = $(this).prop('checked');
-
     var cat_all_str = $("#hdn_selectedcategories").val();
-    if (cat_all_str != '' && cat_all_str != -1) {//means this is a group list
+    if ($('input.show_cols_dsp').is(":checked") && cat_all_str != '' && cat_all_str != -1) {//means this is a group list
       var cat_all_arr = cat_all_str.split(',');
       if (current_status) { // check all hiddencategories
         $.each(cat_all_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
         });
-        //toggleCheckbox('none');
       } else { //uncheck all hiddencategories
         $.each(cat_all_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
         });
-       // toggleCheckbox('none');
       }
     } else if (current_status) {
-      $("#hdn_selectedcategories").val('');
       toggleAllCategories(current_status);
     } else {
       toggleAllCategories(current_status);
@@ -3895,28 +3893,15 @@ $("#flexCheckDefault").change(function () {
 
     onClick: function (item) {
     },
-    onChange: function (item) {
-      var updated_cats = new Array();
-      $.each($('.sim-tree-checkbox'), function (index, value) {
-        if ($(this).hasClass('checked')) {
-          updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
-        }
-      });
-
-     
-      $("#hdn_selectedcategories").val(updated_cats);
-     
+    onChange: function (item) { 
       $("#hdn_showupdated").val("0");
-
       $("#chkall").prop('checked', false);
       $("#check_all_cnt").html(0);
-
       table.draw();
     },
     done: function () {
       $("#flexCheckDefault").prop('checked', true);
       toggleAllCategories(true);
-      $('#hdn_selectedcategories').val('');
       table.draw();
     }
 
