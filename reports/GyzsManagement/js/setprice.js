@@ -16,7 +16,6 @@ $(document).ready(function () {
 
 
   function toggleAllCategories(status) {
-    
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
       if ($(this).parent('a').parent('li').hasClass('disabled')) {
@@ -3805,7 +3804,7 @@ $("#chkavges").change(function() {
     });
     if ($.isEmptyObject(selected_group)) {
       $("#hdn_selectedcategories").val('');
-      $("i.sim-tree-checkbox").addClass('checked');
+      checkIt(true, true);
       $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
       $("#flexCheckDefault").attr("disabled", false);
       $("#flexCheckDefault").prop('checked', true);
@@ -3823,12 +3822,13 @@ $("#chkavges").change(function() {
       request.done(function (response_data) {
         var resp_obj = response_data;
         $("#hdn_selectedcategories").val(resp_obj["msg"]);
-        $('i.sim-tree-checkbox').removeClass('checked');
+        checkIt(false, false);
         if (resp_obj["msg"]) { // means status = checked
           $('#flexCheckDefault').prop('checked', true);
           var cat_id_arr = resp_obj["msg"].split(',');
           $.each(cat_id_arr, function (key, value) {
-            $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+            var $li = $('li[data-id=' + value + ']');
+            checkGiven($li, true, true);
           });
           toggleCheckbox('none');
         } else { // remove category filter
@@ -3901,11 +3901,9 @@ $("#flexCheckDefault").change(function () {
       toggleAllCategories(true);
       table.draw();
     }
-
   });
 
   function toggleCheckbox(new_status) {
-
     $('a>i.sim-tree-checkbox').each(function (index) {
       $(this).parent('a').parent('li').removeClass('disabled');
       if (!$(this).hasClass('checked')) {
@@ -3920,25 +3918,63 @@ $("#flexCheckDefault").change(function () {
 
 
   function toggleAllCategories(status) {
-    
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
       if ($(this).parent('a').parent('li').hasClass('disabled')) {
         any_disabled = true;
       }
-
       if (any_disabled)
         return false;
     });
 
     if (!any_disabled) {
       if (status) {
-        $("i.sim-tree-checkbox").addClass('checked');
+        checkIt(true, true);
       } else {
-        $("i.sim-tree-checkbox").removeClass('checked');
+        checkIt(false,false);
       }
     }
     return true;
+  }
+
+  function checkIt(status, flag)
+  {
+    $("i.sim-tree-checkbox").each(function() {
+      var $check = $(this);
+      var $li = $check.closest('li');
+      var $childUl, $childUlCheck;
+      var data = $li.data();
+      if (typeof status === 'undefined') {
+        status = !data.checked;
+      }
+
+      if (status === true) {
+        $check.removeClass('sim-tree-semi').addClass('checked');
+      } else if (status === false) {
+        $check.removeClass('checked sim-tree-semi');
+      } else if (status === 'semi') {
+        $check.removeClass('checked').addClass('sim-tree-semi');
+      }
+      $li.data('checked', status);
+   });
+  }
+
+  function checkGiven($li, status, flag)
+  {
+    var data = $li.data();
+    if (typeof status === 'undefined') {
+        status = !data.checked;
+    }
+    var $a = $li.children('a');
+    var $check = $a.children('.sim-tree-checkbox');
+    if (status === true) {
+      $check.removeClass('sim-tree-semi').addClass('checked');
+    } else if (status === false) {
+      $check.removeClass('checked sim-tree-semi');
+    } else if (status === 'semi') {
+      $check.removeClass('checked').addClass('sim-tree-semi');
+    }
+    $li.data('checked', status);
   }
 
 });
