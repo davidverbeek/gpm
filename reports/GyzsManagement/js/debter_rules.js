@@ -126,7 +126,7 @@ $(document).ready(function () {
 
     //get selected customer group
     var selected_group = $(this).val();
-    $(".sim-tree-checkbox").removeClass('checked');
+    checkIt(false, false);
     toggleCheckbox('');
     $("#hdn_existingcategories").val('');
     $("#hdn_selectedcategories").val('');
@@ -143,17 +143,15 @@ $(document).ready(function () {
           var cat_id_arr = categories_str.split(',');
 
           $.each(cat_id_arr, function (key, value) {
-            $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+            var $li = $("li[data-id='" + value + "']");
+            checkGiven($li, true, true);
+            
           });
           $("#hdn_existingcategories").val(resp_obj["msg"]);
-          toggleCheckbox('none');
-          //$('a#linkCategories').css('display', 'block');
-          
         } else {
-          $(".sim-tree-checkbox").removeClass('checked');
-          toggleCheckbox('');
+          checkIt(false, false);
         }
-
+        toggleCheckbox('none');
         $("#flexCheckDefault").prop('checked', false);
       }
     });
@@ -193,7 +191,7 @@ $(document).ready(function () {
     $('a>i.sim-tree-checkbox').each(function (index) {
       if ($(this).parent('a').parent('li').hasClass('disabled')) {
         // means dont work on full list
-        any_disabled = true;
+        any_disabled=true;
       } 
 
       if(any_disabled)
@@ -202,13 +200,10 @@ $(document).ready(function () {
 
     if (!any_disabled) {
       if (status) {
-        // $(this).addClass('checked');
-        $("i.sim-tree-checkbox").addClass('checked');
-          
-        } else {
-          //$(this).removeClass('checked');
-          $("i.sim-tree-checkbox").removeClass('checked');
-        }
+        checkIt(true, true);
+      } else {
+        checkIt(false,false);
+      }
     } 
 
     var cat_all_str = $("#hdn_existingcategories").val();
@@ -216,16 +211,55 @@ $(document).ready(function () {
 
     if (status) { // check all hiddencategories
       $.each(cat_all_arr, function(key,value ) {
-        $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+        var $li = $("li[data-id='" + value + "']");
+        checkGiven($li, true, true);
       });
     } else {
       $.each(cat_all_arr, function(key,value ) {
-        $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
+        var $li = $("li[data-id='" + value + "']");
+        checkGiven($li, false, false);
       });
     }
-      
-    // check if any disabled?
-
   });
+
+  function checkIt(status, flag)
+  {
+    $("i.sim-tree-checkbox").each(function() {
+      var $check = $(this);
+      var $li = $check.closest('li');
+      var $childUl, $childUlCheck;
+      var data = $li.data();
+      if (typeof status === 'undefined') {
+        status = !data.checked;
+      }
+
+      if (status === true) {
+        $check.removeClass('sim-tree-semi').addClass('checked');
+      } else if (status === false) {
+        $check.removeClass('checked sim-tree-semi');
+      } else if (status === 'semi') {
+        $check.removeClass('checked').addClass('sim-tree-semi');
+      }
+      $li.data('checked', status);
+   });
+  }
+
+  function checkGiven($li, status, flag)
+  {
+    var data = $li.data();
+    if (typeof status === 'undefined') {
+        status = !data.checked;
+    }
+    var $a = $li.children('a');
+    var $check = $a.children('.sim-tree-checkbox');
+    if (status === true) {
+      $check.removeClass('sim-tree-semi').addClass('checked');
+    } else if (status === false) {
+      $check.removeClass('checked sim-tree-semi');
+    } else if (status === 'semi') {
+      $check.removeClass('checked').addClass('sim-tree-semi');
+    }
+    $li.data('checked', status);
+  }
  
 });
