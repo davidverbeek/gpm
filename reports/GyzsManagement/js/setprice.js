@@ -14,7 +14,6 @@ $(document).ready(function () {
   });
 
 
-
   function toggleAllCategories(status) {
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
@@ -951,6 +950,7 @@ $(document).ready(function () {
       var ischecked = $("#chkbulkupdates").is(':checked');
       if(ischecked) {
         $(".editable_column").css("cssText", "background-color: #a2a3b7 !important;");
+
         
         $(".sp_editable_column input").attr("disabled","disabled");
         $(".pm_bp_editable_column input").attr("disabled","disabled");
@@ -1009,10 +1009,9 @@ $(document).ready(function () {
 
           var grouptdclassdgp = "db_d_gp_editable_column_"+deb_cnt;
           var grouptdinputdgp = "db_d_gp_editable_column_"+deb_cnt+" input";
-
-
           $("."+grouptdclass+"").css("cssText", "background-color: #90EE90 !important;");
           $("."+grouptdinput+"").removeAttr("disabled","disabled");
+          $('.striped_span').parent('td').css("cssText", "background-color: #93c4f5 !important;");
 
           $("."+grouptdclassmbp+"").css("cssText", "background-color: #7AC3FF !important;");
           $("."+grouptdinputmbp+"").removeAttr("disabled","disabled");
@@ -1023,7 +1022,6 @@ $(document).ready(function () {
           $("."+grouptdclassdgp+"").css("cssText", "background-color: #FF6B6B !important;");
           $("."+grouptdinputdgp+"").removeAttr("disabled","disabled");
         } 
-
         // For Debter
 
       }
@@ -1176,9 +1174,6 @@ $(document).ready(function () {
         $(".pm_bp_editable_column input").attr("disabled","disabled");
         $(".pm_sp_editable_column input").attr("disabled","disabled");
         $(this).closest('.discount_on_gross_editable_column').find('input')[0].select();
-
-
-
         $(this).closest('tr').addClass("selected");
 
         $.each(debter_groups, function( debindex, debvalue ){

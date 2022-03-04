@@ -161,16 +161,12 @@ if ($result = $conn->query($sql)) {
 }
 
 .striped_span {
-  background: repeating-linear-gradient(
-  45deg,
-  #606dbc,
-  #606dbc 10px,
-  #465298 10px,
-  #465298 20px
-  );
-  color: #ffffff;
-  padding:0px 20px 0px 30px;
-  text-align: left;
+    /*background-color: #93c4f5; /*#dee2e6;*/
+    color: #000;
+    padding:32px 30px 30px 30px;
+    margin-left:auto;
+    margin-right:auto;
+    text-align: left;
 }
 
 .refreshicon {
