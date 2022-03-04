@@ -161,7 +161,6 @@ if ($result = $conn->query($sql)) {
 }
 
 .striped_span {
-    /*background-color: #93c4f5; /*#dee2e6;*/
     color: #000;
     padding:32px 30px 30px 30px;
     margin-left:auto;
