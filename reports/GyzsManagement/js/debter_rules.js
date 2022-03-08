@@ -78,7 +78,7 @@ $(document).ready(function () {
 
   $("#btnsave").click(function () {
     var selected_group = $("#sel_debt_group").val();
-    
+    var old_cats = $("#hdn_existingcategories").val();
     var updated_cats = new Array();
     $.each($('.sim-tree-checkbox'), function (index, value) {
       if ($(this).hasClass('checked')) {
@@ -87,11 +87,7 @@ $(document).ready(function () {
     });
     $("#hdn_existingcategories").val(updated_cats);
     var selected_cat_new = $("#hdn_existingcategories").val();
-
-    if (selected_cat_new == 0) {
-      alert("Please select at least one Category.");
-      return false;
-    } else if (selected_group == '') {
+    if (selected_group == '') {
       alert("Please select Customer group.");
       $("#sel_debt_group").focus();
       return false;
@@ -99,7 +95,7 @@ $(document).ready(function () {
       $.ajax({
         url: document_root_url + '/scripts/get_category_brands.php',
         "type": "POST",
-        data: ({ customer_group: selected_group, type: 'save_rule', cat_id_new: selected_cat_new }),
+        data: ({ customer_group: selected_group, type: 'save_rule', cat_id_new: selected_cat_new, on_load_categories: old_cats }),
         success: function (response_data) {
           var resp_obj = jQuery.parseJSON(response_data);
           if (resp_obj["msg"]) {
@@ -114,7 +110,6 @@ $(document).ready(function () {
             $(".sim-tree-checkbox").removeClass('checked');
             $('a#linkCategories').css('display', 'none');
             $("#flexCheckDefault").prop('checked', false);
-
             toggleCheckbox('');
           }
         }

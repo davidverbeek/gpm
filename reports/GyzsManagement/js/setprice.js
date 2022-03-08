@@ -950,7 +950,7 @@ $(document).ready(function () {
       var ischecked = $("#chkbulkupdates").is(':checked');
       if(ischecked) {
         $(".editable_column").css("cssText", "background-color: #a2a3b7 !important;");
-
+        $('.striped_span').css("color", "rgb(84, 84, 84)");
         
         $(".sp_editable_column input").attr("disabled","disabled");
         $(".pm_bp_editable_column input").attr("disabled","disabled");
@@ -994,6 +994,7 @@ $(document).ready(function () {
         $(".pm_bp_editable_column input").removeAttr("disabled");
         $(".pm_sp_editable_column input").removeAttr("disabled");
         $(".discount_on_gross_editable_column input").removeAttr("disabled");
+        $('.striped_span').css("color", "black");
 
         // For Debter
          var deb_cnt = 100;
@@ -1012,7 +1013,7 @@ $(document).ready(function () {
           $("."+grouptdclass+"").css("cssText", "background-color: #90EE90 !important;");
           $("."+grouptdinput+"").removeAttr("disabled","disabled");
           $('.striped_span').parent('td').css("cssText", "background-color: #93c4f5 !important;");
-
+          
           $("."+grouptdclassmbp+"").css("cssText", "background-color: #7AC3FF !important;");
           $("."+grouptdinputmbp+"").removeAttr("disabled","disabled");
 
