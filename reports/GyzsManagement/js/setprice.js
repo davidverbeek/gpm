@@ -1012,7 +1012,7 @@ $(document).ready(function () {
           var grouptdinputdgp = "db_d_gp_editable_column_"+deb_cnt+" input";
           $("."+grouptdclass+"").css("cssText", "background-color: #90EE90 !important;");
           $("."+grouptdinput+"").removeAttr("disabled","disabled");
-          $('.striped_span').parent('td').css("cssText", "background-color: #93c4f5 !important;");
+          $('.striped_span').parent('td').css("cssText", "background-color: #dee2e6 !important;");
           
           $("."+grouptdclassmbp+"").css("cssText", "background-color: #7AC3FF !important;");
           $("."+grouptdinputmbp+"").removeAttr("disabled","disabled");
@@ -1048,7 +1048,7 @@ $(document).ready(function () {
   $(document).on("click", ".editable_column" , function() { 
    
    var ischecked = $("#chkbulkupdates").is(':checked');
-    $(this).closest(".editable_column").find('input')[0].select();
+  $(this).closest(".editable_column").find('input')[0].select();
    if(ischecked) {
 
     const debter_groups = ["100","101","102","103","104","105","106","107","108","109","110"];
