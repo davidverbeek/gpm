@@ -14,9 +14,7 @@ $(document).ready(function () {
   });
 
 
-
   function toggleAllCategories(status) {
-    
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
       if ($(this).parent('a').parent('li').hasClass('disabled')) {
@@ -45,9 +43,7 @@ $(document).ready(function () {
       "fixedHeader": true,
       "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
-        
-         var selected_cats = $('#hdn_selectedcategories').val();
-          
+          var selected_cats = $('#hdn_selectedcategories').val();
          //if(selected_cats) {
             $.ajax({
              url: document_root_url+'/scripts/process_data_price_management.php',
@@ -904,13 +900,22 @@ $(document).ready(function () {
           $(row).removeClass("selected");
         }
       },
-      
 
       "ajax": {
         "url": document_root_url+"/scripts/create_query.php",
         "type": "POST",
         "data": function ( d ) {
-            d.categories = $('#hdn_selectedcategories').val(),
+          var selected_categories ='-1';
+            if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
+              updated_cats = new Array();
+               $.each($('.sim-tree-checkbox'), function (index, value) {
+                if ($(this).hasClass('checked')) {
+                  updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+                }
+              });
+              selected_categories = updated_cats.toString();
+            }
+            d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
             d.hdn_filters = $('#hdn_filters').val(),
             d.hdn_stijging_text = $('#hdn_stijging_text').val()
@@ -945,6 +950,7 @@ $(document).ready(function () {
       var ischecked = $("#chkbulkupdates").is(':checked');
       if(ischecked) {
         $(".editable_column").css("cssText", "background-color: #a2a3b7 !important;");
+        $('.striped_span').css("color", "rgb(84, 84, 84)");
         
         $(".sp_editable_column input").attr("disabled","disabled");
         $(".pm_bp_editable_column input").attr("disabled","disabled");
@@ -988,6 +994,7 @@ $(document).ready(function () {
         $(".pm_bp_editable_column input").removeAttr("disabled");
         $(".pm_sp_editable_column input").removeAttr("disabled");
         $(".discount_on_gross_editable_column input").removeAttr("disabled");
+        $('.striped_span').css("color", "black");
 
         // For Debter
          var deb_cnt = 100;
@@ -1003,11 +1010,10 @@ $(document).ready(function () {
 
           var grouptdclassdgp = "db_d_gp_editable_column_"+deb_cnt;
           var grouptdinputdgp = "db_d_gp_editable_column_"+deb_cnt+" input";
-
-
           $("."+grouptdclass+"").css("cssText", "background-color: #90EE90 !important;");
           $("."+grouptdinput+"").removeAttr("disabled","disabled");
-
+          $('.striped_span').parent('td').css("cssText", "background-color: #93c4f5 !important;");
+          
           $("."+grouptdclassmbp+"").css("cssText", "background-color: #7AC3FF !important;");
           $("."+grouptdinputmbp+"").removeAttr("disabled","disabled");
 
@@ -1017,7 +1023,6 @@ $(document).ready(function () {
           $("."+grouptdclassdgp+"").css("cssText", "background-color: #FF6B6B !important;");
           $("."+grouptdinputdgp+"").removeAttr("disabled","disabled");
         } 
-
         // For Debter
 
       }
@@ -1043,18 +1048,18 @@ $(document).ready(function () {
   $(document).on("click", ".editable_column" , function() { 
    
    var ischecked = $("#chkbulkupdates").is(':checked');
-   $(this).closest(".editable_column").find('input')[0].select();
+    $(this).closest(".editable_column").find('input')[0].select();
    if(ischecked) {
 
     const debter_groups = ["100","101","102","103","104","105","106","107","108","109","110"];
 
-      var getclassclicked = [];
+      var getclassclicked =  getclassclicked_for_span = [];
       if($(this).closest('.editable_column').find('input').length > 0) {
         var getclassclicked = ($(this).closest('.editable_column').find('input').attr("class")).split(" ");
+      } else if($(this).closest('.editable_column').find('span').length > 0) {
+        var getclassclicked_of_span =  ($(this).closest('.editable_column').find('span').attr("class")).split(" ");
       }
       
-      
-      //pm_bp_editable_column
       $(".editable_column").css("cssText", "background-color: #a2a3b7 !important;");
       
       var index = $(this).closest('tr').index();
@@ -1071,7 +1076,7 @@ $(document).ready(function () {
         $(this).closest('.sp_editable_column').find('input')[0].select();
         $(this).closest('tr').addClass("selected");
 
-        $.each(debter_groups, function( debindex, debvalue ){
+        $.each(debter_groups, function( debindex, debvalue ) {
           var remtdinput = "db_sp_editable_column_"+debvalue+" input";
           var remtdinputdbmbp = "db_m_bp_editable_column_"+debvalue+" input";
           var remtdinputdbmsp = "db_m_sp_editable_column_"+debvalue+" input";
@@ -1170,9 +1175,6 @@ $(document).ready(function () {
         $(".pm_bp_editable_column input").attr("disabled","disabled");
         $(".pm_sp_editable_column input").attr("disabled","disabled");
         $(this).closest('.discount_on_gross_editable_column').find('input')[0].select();
-
-
-
         $(this).closest('tr').addClass("selected");
 
         $.each(debter_groups, function( debindex, debvalue ){
@@ -1368,8 +1370,174 @@ $(document).ready(function () {
           } 
         });
       }
+      if(getclassclicked_of_span[0] == "db_sp_span") {
+        var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
+        var grouptdclass = "db_sp_editable_column_"+getclicked_debter_grp[3];
+        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
-      
+        var grouptdinput = "db_sp_editable_column_"+getclicked_debter_grp[3]+" input";
+        $(this).closest('tr').addClass("selected");
+        $("."+grouptdinput+"").removeAttr("disabled");
+        $(".sp_editable_column input").attr("disabled","disabled");
+        $(".pm_bp_editable_column input").attr("disabled","disabled");
+        $(".pm_sp_editable_column input").attr("disabled","disabled");
+        $(".discount_on_gross_editable_column input").attr("disabled","disabled");
+        $(".db_m_bp_editable_column_"+getclicked_debter_grp[3]+" input").attr("disabled","disabled");
+        $(".db_m_sp_editable_column_"+getclicked_debter_grp[3]+" input").attr("disabled","disabled");
+        $(".db_d_gp_editable_column_"+getclicked_debter_grp[3]+" input").attr("disabled","disabled");
+
+        debter_groups.splice(debter_groups.indexOf(getclicked_debter_grp[3]),1);
+
+        $.each(debter_groups, function( debindex, debvalue ){
+          var remtdinput = "db_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbmbp = "db_m_bp_editable_column_"+debvalue+" input";
+          var remtdinputdbmsp = "db_m_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbdgp = "db_d_gp_editable_column_"+debvalue+" input";
+
+          $("."+remtdinput+"").attr("disabled","disabled");
+          $("."+remtdinputdbmbp+"").attr("disabled","disabled");
+          $("."+remtdinputdbmsp+"").attr("disabled","disabled");
+          $("."+remtdinputdbdgp+"").attr("disabled","disabled");
+        });
+        $(this).closest("."+grouptdclass+"").find('input')[0].select();
+        $(".db_sp_"+getclicked_debter_grp[3]+"" ).each(function( index ) {
+          $(this).removeClass("current_index");
+        });
+
+        $(this).closest("."+grouptdclass+"").find('input').addClass('current_index');
+        $(".db_sp_"+getclicked_debter_grp[3]+"" ).each(function( index ) {
+          if($(this).hasClass("current_index")) {
+            current_index = index;
+            current_val = $( this ).val();
+          }
+        });
+      } else if(getclassclicked_of_span[0] == "db_m_bp_span") {
+        var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
+        var grouptdclass = "db_m_bp_editable_column_"+getclicked_debter_grp[4];
+        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+
+        var grouptdinput = "db_m_bp_editable_column_"+getclicked_debter_grp[4]+" input";
+        $(this).closest('tr').addClass("selected");
+
+        $("."+grouptdinput+"").removeAttr("disabled");
+        $(".sp_editable_column input").attr("disabled","disabled");
+        $(".pm_bp_editable_column input").attr("disabled","disabled");
+        $(".pm_sp_editable_column input").attr("disabled","disabled");
+        $(".discount_on_gross_editable_column input").attr("disabled","disabled");
+        $(".db_sp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+        $(".db_m_sp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+        $(".db_d_gp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+
+        debter_groups.splice(debter_groups.indexOf(getclicked_debter_grp[4]),1);
+        $.each(debter_groups, function( debindex, debvalue ){
+          var remtdinputdbmbp = "db_m_bp_editable_column_"+debvalue+" input";
+          var remtdinput = "db_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbmsp = "db_m_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbdgp = "db_d_gp_editable_column_"+debvalue+" input";
+
+          $("."+remtdinput+"").attr("disabled","disabled");
+          $("."+remtdinputdbmbp+"").attr("disabled","disabled");
+          $("."+remtdinputdbmsp+"").attr("disabled","disabled");
+          $("."+remtdinputdbdgp+"").attr("disabled","disabled");
+        });
+        
+        $(this).closest("."+grouptdclass+"").find('input')[0].select();
+        $(".db_m_bp_"+getclicked_debter_grp[4]+"" ).each(function( index ) {
+          $(this).removeClass("current_index");
+        });
+
+        $(this).closest("."+grouptdclass+"").find('input').addClass('current_index');
+        $(".db_m_bp_"+getclicked_debter_grp[4]+"" ).each(function( index ) {
+          if($(this).hasClass("current_index")) {
+            current_index = index;
+            current_val = $( this ).val();
+          }
+        });
+      } else if(getclassclicked_of_span[0] == "db_m_sp_span") {
+        var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
+        var grouptdclass = "db_m_sp_editable_column_"+getclicked_debter_grp[4];
+        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+
+        var grouptdinput = "db_m_sp_editable_column_"+getclicked_debter_grp[4]+" input";
+        $(this).closest('tr').addClass("selected");
+
+        $("."+grouptdinput+"").removeAttr("disabled");
+        $(".sp_editable_column input").attr("disabled","disabled");
+        $(".pm_bp_editable_column input").attr("disabled","disabled");
+        $(".pm_sp_editable_column input").attr("disabled","disabled");
+        $(".discount_on_gross_editable_column input").attr("disabled","disabled");
+        $(".db_sp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+        $(".db_m_sp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+        $(".db_d_gp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+
+        debter_groups.splice(debter_groups.indexOf(getclicked_debter_grp[4]),1);
+        $.each(debter_groups, function( debindex, debvalue ){
+          var remtdinputdbmbp = "db_m_bp_editable_column_"+debvalue+" input";
+          var remtdinput = "db_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbmsp = "db_m_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbdgp = "db_d_gp_editable_column_"+debvalue+" input";
+
+          $("."+remtdinput+"").attr("disabled","disabled");
+          $("."+remtdinputdbmbp+"").attr("disabled","disabled");
+          $("."+remtdinputdbmsp+"").attr("disabled","disabled");
+          $("."+remtdinputdbdgp+"").attr("disabled","disabled");
+        });
+        
+        $(this).closest("."+grouptdclass+"").find('input')[0].select();
+        $(".db_m_bp_"+getclicked_debter_grp[4]+"" ).each(function( index ) {
+          $(this).removeClass("current_index");
+        });
+
+        $(this).closest("."+grouptdclass+"").find('input').addClass('current_index');
+        $(".db_m_bp_"+getclicked_debter_grp[4]+"" ).each(function( index ) {
+          if($(this).hasClass("current_index")) {
+            current_index = index;
+            current_val = $( this ).val();
+          }
+        });
+
+      } else if(getclassclicked_of_span[0] == "db_d_gp_span") {
+        var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
+        var grouptdclass = "db_d_gp_editable_column_"+getclicked_debter_grp[4];
+        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+
+        var grouptdinput = "db_d_gp_editable_column_"+getclicked_debter_grp[4]+" input";
+        $(this).closest('tr').addClass("selected");
+
+        $("."+grouptdinput+"").removeAttr("disabled");
+        $(".sp_editable_column input").attr("disabled","disabled");
+        $(".pm_bp_editable_column input").attr("disabled","disabled");
+        $(".pm_sp_editable_column input").attr("disabled","disabled");
+        $(".discount_on_gross_editable_column input").attr("disabled","disabled");
+        $(".db_sp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+        $(".db_m_bp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+        $(".db_m_sp_editable_column_"+getclicked_debter_grp[4]+" input").attr("disabled","disabled");
+
+        debter_groups.splice(debter_groups.indexOf(getclicked_debter_grp[4]),1);
+        $.each(debter_groups, function( debindex, debvalue ){
+          var remtdinput = "db_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbmbp = "db_m_bp_editable_column_"+debvalue+" input";
+          var remtdinputdbmsp = "db_m_sp_editable_column_"+debvalue+" input";
+          var remtdinputdbdgp = "db_d_gp_editable_column_"+debvalue+" input";
+
+          $("."+remtdinput+"").attr("disabled","disabled");
+          $("."+remtdinputdbmbp+"").attr("disabled","disabled");
+          $("."+remtdinputdbmsp+"").attr("disabled","disabled");
+          $("."+remtdinputdbdgp+"").attr("disabled","disabled");
+        });
+        
+        $(this).closest("."+grouptdclass+"").find('input')[0].select();
+        $(".db_d_gp_"+getclicked_debter_grp[4]+"" ).each(function( index ) {
+          $(this).removeClass("current_index");
+        });
+        $(this).closest("."+grouptdclass+"").find('input').addClass('current_index');
+        $(".db_d_gp_"+getclicked_debter_grp[4]+"" ).each(function( index ) {
+          if($(this).hasClass("current_index")) {
+            current_index = index;
+            current_val = $( this ).val();
+          }
+        });
+      }
       setColWidths();
     }
   });
@@ -1724,9 +1892,6 @@ $(document).ready(function () {
   });
 
 
-
-
-
 $(".show_cols").each(function () {
   //$(this).prop('checked', true);
 });
@@ -1736,7 +1901,6 @@ var cols_selected = [];
 $(".show_cols").change(function() {
   var ischecked= $(this).is(':checked');
   var checkedval = $(this).val();
-
 
   if(ischecked) {
     table.column(checkedval).visible(true);
@@ -3680,12 +3844,12 @@ $("#chkavges").change(function() {
   }
 
   function generateSpan(group_number, product_id, data) {
-    var group_name_product = 'yes';
+    var group_name_product = 'no';
     if(debter_product_data[group_number]) {
-        var debter_4027100_product_ids = debter_product_data[group_number] ;
-        var product_list_arr = debter_4027100_product_ids.split(',');
-        if(product_list_arr.indexOf(product_id) == -1) { 
-          group_name_product = 'no';
+        var debter_name_product_ids = debter_product_data[group_number] ;
+        var product_list_arr = debter_name_product_ids.split(',');
+        if(product_list_arr.indexOf(product_id) != -1) {
+          group_name_product = 'yes';
         }
     }
     return group_name_product;
@@ -3789,83 +3953,76 @@ $("#chkavges").change(function() {
       }
     });
   });
-
-  $(".show_cols_dsp, .show_cols_all_dsp").change(function () {
+  $(".show_cols_dsp, .show_cols_all_dsp, .show_cols_dmbp, .show_cols_all_dmbp, .show_cols_all_dmsp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_all_ddgp").change(function () {
     var selected_group = new Array();
-    $('.show_cols_dsp').each(function (index) {
+    $('.show_cols_dmbp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_dsp').each(function (index) {
       if ($(this).is(':checked')) {
         selected_group.push($(this).attr('name'));
       }
-
     });
-    var selected_group_str = selected_group.toString();
-    // ajax it
-    var request = $.ajax({
-      url: document_root_url + '/scripts/get_category_brands.php',
-      method: "POST",
-      data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
-      dataType: "json"
-    });
+    if ($.isEmptyObject(selected_group)) {
+      $("#hdn_selectedcategories").val('');
+      checkIt(true, true);
+      $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
+      $("#flexCheckDefault").attr("disabled", false);
+      $("#flexCheckDefault").prop('checked', true);
+      table.draw();
+    } else {
+      var selected_group_str = selected_group.toString();
+      // ajax it
+      var request = $.ajax({
+        url: document_root_url + '/scripts/get_category_brands.php',
+        method: "POST",
+        data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
+        dataType: "json"
+      });
 
-    request.done(function (response_data) {
-      var resp_obj = response_data;
-      if (resp_obj["msg"]) { // means status = checked
-        $('i.sim-tree-checkbox').removeClass('checked');
-        $('#flexCheckDefault').prop('checked', true);
-        var cat_id_arr = resp_obj["msg"].split(',');
-        $.each(cat_id_arr, function (key, value) {
-          $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
-        });
-        toggleCheckbox('none');
-
+      request.done(function (response_data) {
+        var resp_obj = response_data;
         $("#hdn_selectedcategories").val(resp_obj["msg"]);
-        table.draw();
-      } else if( $("#hdn_selectedcategories").val() == -1) {
-
-      } else { // remove category filter
-        $("#hdn_selectedcategories").val(resp_obj["msg"]);
-        $("i.sim-tree-checkbox").addClass('checked');
-        $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
-        $("#flexCheckDefault").prop('checked', true);
+        checkIt(false, false);
+        if (resp_obj["msg"]) { // means status = checked
+          $('#flexCheckDefault').prop('checked', true);
+          var cat_id_arr = resp_obj["msg"].split(',');
+          $.each(cat_id_arr, function (key, value) {
+            var $li = $('li[data-id=' + value + ']');
+            checkGiven($li, true, true);
+          });
+          toggleCheckbox('none');
+        } else { // remove category filter
+          $("i.sim-tree-checkbox").parent('a').parent('li').addClass('disabled');
+          $("#flexCheckDefault").prop('checked', false);
+          $("#flexCheckDefault").attr("disabled", true);
+        }
         table.draw();
       }
-    }
     );
 
     request.fail(function (jqXHR, textStatus) {
       alert("Request failed: " + textStatus);
     });
+    }//end else
   });
-
 
 $("#flexCheckDefault").change(function () {
     var current_status = $(this).prop('checked');
-
     var cat_all_str = $("#hdn_selectedcategories").val();
-    if (cat_all_str != '' && cat_all_str != -1) {//means this is a group list
+    if ($('input.show_cols_dsp').is(":checked") && cat_all_str != '' && cat_all_str != -1) {//means this is a group list
       var cat_all_arr = cat_all_str.split(',');
       if (current_status) { // check all hiddencategories
         $.each(cat_all_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
         });
-        toggleCheckbox('none');
       } else { //uncheck all hiddencategories
         $.each(cat_all_arr, function (key, value) {
           $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
         });
-        toggleCheckbox('');
-        // reset to show no records found
-        $("#hdn_selectedcategories").val('-1');
       }
-
     } else if (current_status) {
-      $("#hdn_selectedcategories").val('');
       toggleAllCategories(current_status);
     } else {
-      $("#hdn_selectedcategories").val('-1');
       toggleAllCategories(current_status);
     }
-
     table.draw();
   });
 
@@ -3891,42 +4048,20 @@ $("#flexCheckDefault").change(function () {
 
     onClick: function (item) {
     },
-    onChange: function (item) {
-   /*    var selectedCategories = new Array();
-      $.each(item, function (key, value) {
-        selectedCategories.push(value["id"]);
-      });
-      $("#hdn_selectedcategories").val(selectedCategories); */
-      var updated_cats = new Array();
-      $.each($('.sim-tree-checkbox'), function (index, value) {
-        if ($(this).hasClass('checked')) {
-          updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
-        }
-      });
-
-      if($.isEmptyObject(updated_cats)) {
-        $("#hdn_selectedcategories").val('-1');
-      } else { 
-        $("#hdn_selectedcategories").val(updated_cats);
-      }
+    onChange: function (item) { 
       $("#hdn_showupdated").val("0");
-
       $("#chkall").prop('checked', false);
       $("#check_all_cnt").html(0);
-
       table.draw();
     },
     done: function () {
       $("#flexCheckDefault").prop('checked', true);
       toggleAllCategories(true);
-      $('#hdn_selectedcategories').val('');
       table.draw();
     }
-
   });
 
   function toggleCheckbox(new_status) {
-
     $('a>i.sim-tree-checkbox').each(function (index) {
       $(this).parent('a').parent('li').removeClass('disabled');
       if (!$(this).hasClass('checked')) {
@@ -3941,25 +4076,63 @@ $("#flexCheckDefault").change(function () {
 
 
   function toggleAllCategories(status) {
-    
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
       if ($(this).parent('a').parent('li').hasClass('disabled')) {
         any_disabled = true;
       }
-
       if (any_disabled)
         return false;
     });
 
     if (!any_disabled) {
       if (status) {
-        $("i.sim-tree-checkbox").addClass('checked');
+        checkIt(true, true);
       } else {
-        $("i.sim-tree-checkbox").removeClass('checked');
+        checkIt(false,false);
       }
     }
     return true;
+  }
+
+  function checkIt(status, flag)
+  {
+    $("i.sim-tree-checkbox").each(function() {
+      var $check = $(this);
+      var $li = $check.closest('li');
+      var $childUl, $childUlCheck;
+      var data = $li.data();
+      if (typeof status === 'undefined') {
+        status = !data.checked;
+      }
+
+      if (status === true) {
+        $check.removeClass('sim-tree-semi').addClass('checked');
+      } else if (status === false) {
+        $check.removeClass('checked sim-tree-semi');
+      } else if (status === 'semi') {
+        $check.removeClass('checked').addClass('sim-tree-semi');
+      }
+      $li.data('checked', status);
+   });
+  }
+
+  function checkGiven($li, status, flag)
+  {
+    var data = $li.data();
+    if (typeof status === 'undefined') {
+        status = !data.checked;
+    }
+    var $a = $li.children('a');
+    var $check = $a.children('.sim-tree-checkbox');
+    if (status === true) {
+      $check.removeClass('sim-tree-semi').addClass('checked');
+    } else if (status === false) {
+      $check.removeClass('checked sim-tree-semi');
+    } else if (status === 'semi') {
+      $check.removeClass('checked').addClass('sim-tree-semi');
+    }
+    $li.data('checked', status);
   }
 
 });

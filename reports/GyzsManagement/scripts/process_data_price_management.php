@@ -18,6 +18,17 @@
   $type = $_REQUEST['type'];
   $response_data = array();
 
+  function getDebterProducts($conn, $debter_number) {
+    $debter_product_arr = array();
+    if($debter_number){
+    $sql = "SELECT customer_group_name, product_ids FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id WHERE price_management_customer_groups.customer_group_name= $debter_number";
+    $result_chk_all = $conn->query($sql);
+    $debterData = $result_chk_all->fetch_all(MYSQLI_ASSOC);
+    $debter_product_arr = explode(',', $debterData[0]['product_ids']);
+    }
+    return $debter_product_arr;
+  }//end getDebterProducts()
+
  
 
 switch ($type) {
@@ -483,33 +494,35 @@ if($isAllChecked == 1) {
   $from = "From Multiple Select";
 } 
 
+// get debter products
 if(count($allData) > 0) {
+  $debter_product_arr = getDebterProducts($conn,$debter_number);
   $all_selected_data = array();
   foreach($allData as $k=>$v) {
-    $all_selected_data[$v["product_id"]]['product_id'] = $v["product_id"];
-    $all_selected_data[$v["product_id"]]['sku'] = $v["sku"];
-
-
-    $actual_selling_price = $v[$selected_debter_column_index];
-    $pmd_buying_price = $v['buying_price'];
-    $supplier_gross_price = ($v['supplier_gross_price'] == 0 ? 1:$v['supplier_gross_price']);
-
-    if($positive_or_negative == "+") {
-      $debter_selling_price = roundValue((1 + ($selling_percentage/100)) * $actual_selling_price);
-    } else if($positive_or_negative == "-") {
-      $debter_selling_price =  roundValue($actual_selling_price - (($selling_percentage/100) * $actual_selling_price));
+    if($debter_product_arr && !in_array($v["product_id"], $debter_product_arr)) {
+      continue;
     }
+      $all_selected_data[$v["product_id"]]['product_id'] = $v["product_id"];
+      $all_selected_data[$v["product_id"]]['sku'] = $v["sku"];
+      $actual_selling_price = $v[$selected_debter_column_index];
+      $pmd_buying_price = $v['buying_price'];
+      $supplier_gross_price = ($v['supplier_gross_price'] == 0 ? 1:$v['supplier_gross_price']);
 
-    $deb_margin_on_buying_price = roundValue((($debter_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
-    $deb_margin_on_selling_price = roundValue((($debter_selling_price - $pmd_buying_price)/$debter_selling_price) * 100);
-    $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
+      if($positive_or_negative == "+") {
+        $debter_selling_price = roundValue((1 + ($selling_percentage/100)) * $actual_selling_price);
+      } else if($positive_or_negative == "-") {
+        $debter_selling_price =  roundValue($actual_selling_price - (($selling_percentage/100) * $actual_selling_price));
+      }
 
+      $deb_margin_on_buying_price = roundValue((($debter_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
+      $deb_margin_on_selling_price = roundValue((($debter_selling_price - $pmd_buying_price)/$debter_selling_price) * 100);
+      $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
 
-    $all_selected_data[$v['product_id']]['selling_price'] = $debter_selling_price;
-    $all_selected_data[$v['product_id']]['profit_margin_bp'] = $deb_margin_on_buying_price;
-    $all_selected_data[$v['product_id']]['profit_margin_sp'] = $deb_margin_on_selling_price;
-    $all_selected_data[$v['product_id']]['discount_on_gross'] = $deb_discount_on_gross_price;      
-  }
+      $all_selected_data[$v['product_id']]['selling_price'] = $debter_selling_price;
+      $all_selected_data[$v['product_id']]['profit_margin_bp'] = $deb_margin_on_buying_price;
+      $all_selected_data[$v['product_id']]['profit_margin_sp'] = $deb_margin_on_selling_price;
+      $all_selected_data[$v['product_id']]['discount_on_gross'] = $deb_discount_on_gross_price;
+      }
   $updated_recs = bulkUpdateProducts("debterprice",$all_selected_data,$common_data,$from,"Selling Price For ".$debter_number."");
 }
 $response_data['msg'] = "Products Updated:-".$updated_recs;
@@ -573,7 +586,11 @@ if($isAllChecked == 1) {
 
 if(count($allData) > 0) {
   $all_selected_data = array();
+  $debter_product_arr = getDebterProducts($conn, $common_data["debter_number"]);
   foreach($allData as $k=>$v) {
+    if ($debter_product_arr && !in_array($v["product_id"], $debter_product_arr)) {
+      continue;
+    }
     $all_selected_data[$v["product_id"]]['product_id'] = $v["product_id"];
     $all_selected_data[$v["product_id"]]['sku'] = $v["sku"];
 
@@ -654,7 +671,11 @@ if($isAllChecked == 1) {
 
 if(count($allData) > 0) {
   $all_selected_data = array();
+  $debter_product_arr = getDebterProducts($conn, $common_data["debter_number"]);
   foreach($allData as $k=>$v) {
+    if($debter_product_arr && !in_array($v["product_id"], $debter_product_arr)) {
+      continue;
+    }
     $all_selected_data[$v["product_id"]]['product_id'] = $v["product_id"];
     $all_selected_data[$v["product_id"]]['sku'] = $v["sku"];
 
@@ -735,7 +756,11 @@ if($isAllChecked == 1) {
 
 if(count($allData) > 0) {
   $all_selected_data = array();
+  $debter_product_arr = getDebterProducts($conn,$common_data["debter_number"]);
   foreach($allData as $k=>$v) {
+    if($debter_product_arr && !in_array($v["product_id"], $debter_product_arr)) {
+      continue;
+    }
     $all_selected_data[$v["product_id"]]['product_id'] = $v["product_id"];
     $all_selected_data[$v["product_id"]]['sku'] = $v["sku"];
 

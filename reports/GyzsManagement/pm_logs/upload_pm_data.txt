@@ -1,0 +1,20 @@
+03-03-2022 06:19:49 Updated Price Chunk (0):-Bulk Update Error:You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON DUPLICATE KEY UPDATE net_unit_price = VALUES(net_unit_price), buying_price = ' at line 1
+03-03-2022 07:16:47 Updated Price Chunk (0):-Bulk Update:11
+03-03-2022 12:45:32 Updated Price Chunk (0):-Bulk Update:11
+03-03-2022 12:48:20 Updated Price Chunk (0):-Bulk Update:11
+03-03-2022 12:50:16 Updated Price Chunk (0):-Bulk Update:11
+03-03-2022 12:59:24 Updated Price Chunk (0):-Bulk Update:11
+03-03-2022 13:01:45 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 10:24:35 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 10:26:55 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 10:30:17 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 10:34:06 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 10:47:17 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 10:52:15 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 10:56:40 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 11:23:36 Updated Price Chunk (0):-Bulk Update:11
+04-03-2022 11:28:48 Updated Price Chunk (0):-Bulk Update:11
+09-03-2022 08:07:16 Updated Price Chunk (0):-Bulk Update Error:You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON DUPLICATE KEY UPDATE net_unit_price = VALUES(net_unit_price), buying_price = ' at line 1
+09-03-2022 08:10:17 Updated Price Chunk (0):-Bulk Update:7
+09-03-2022 08:12:57 Updated Price Chunk (0):-Bulk Update:7
+09-03-2022 08:16:25 Updated Price Chunk (0):-Bulk Update:7

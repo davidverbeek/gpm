@@ -59,13 +59,44 @@ case "category_brands":
     $catIdNew = $_POST['cat_id_new'];
     $catId_new_arr = explode(',', $catIdNew);
 
-    $sql_product = "SELECT product_id FROM mage_catalog_category_product WHERE category_id IN ($catIdNew)";
-    $result = $conn->query($sql_product);
-    $product_ids = "";
-    while($row = $result->fetch_assoc()) {
-      $product_ids .= ','.$row['product_id'];
+    $before_update_cats = $_POST['on_load_categories'];
+
+    $old_cats_arr = explode(',', $before_update_cats);
+    $check_old_is_removed = implode(',', array_diff($old_cats_arr, $catId_new_arr));
+    if($check_old_is_removed) {// yes reset prices
+      $sql_reset_products = "SELECT product_id FROM mage_catalog_category_product WHERE category_id IN ($check_old_is_removed)";
+      $result = $conn->query($sql_reset_products);
+      $product_ids = "";
+      while($row = $result->fetch_assoc()) {
+        $product_ids .= ','.$row['product_id'];
+      }
+      $product_ids = ltrim($product_ids, ',');
+
+      $sql = "SELECT customer_group_name, product_ids  FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id AND  price_management_customer_groups.magento_id=$customerGroup";
+      $result = $conn->query($sql);
+      $row = $result->fetch_assoc();
+      $debter_name = $row['customer_group_name'];
+      $debter_col_1 = "group_".$debter_name."_debter_selling_price";
+      $debter_col_2 = "group_".$debter_name."_margin_on_buying_price";
+      $debter_col_3 = "group_".$debter_name."_margin_on_selling_price";
+      $debter_col_4 = "group_".$debter_name."_discount_on_grossprice_b_on_deb_selling_price";
+      $sql_reset_price = "UPDATE price_management_data SET $debter_col_1=0,$debter_col_2=0,$debter_col_3=0,$debter_col_4=0 WHERE product_id IN (".$product_ids.")";
+      $msg_error = "successfull update";
+      if(!$conn->query($sql_reset_price)) {
+        $msg_error =  $conn->error;
+      }
     }
-    $product_ids = ltrim($product_ids, ',');
+    
+    $product_ids = '';
+    if($catIdNew) {
+      $sql_product = "SELECT product_id FROM mage_catalog_category_product WHERE category_id IN ($catIdNew)";
+      $result = $conn->query($sql_product);
+      $product_ids = "";
+      while($row = $result->fetch_assoc()) {
+        $product_ids .= ','.$row['product_id'];
+      }
+        $product_ids = ltrim($product_ids, ',');
+    }
 
     $sql = "INSERT INTO price_management_debter_categories(category_ids,product_ids,customer_group,created_at,updated_at) VALUES ";
     $all_col_data = "('".$catIdNew."', '".$product_ids."','".$customerGroup."',  '".NOW()."', '".NOW()."')";
