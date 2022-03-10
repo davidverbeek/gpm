@@ -1375,18 +1375,18 @@ $(document).ready(function () {
         var grouptdclass = "db_sp_editable_column_"+getclicked_debter_grp[3];
         $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
-        var grouptdinput = "db_sp_editable_column_"+getclicked_debter_grp[2]+" input";
+        var grouptdinput = "db_sp_editable_column_"+getclicked_debter_grp[3]+" input";
         $(this).closest('tr').addClass("selected");
         $("."+grouptdinput+"").removeAttr("disabled");
         $(".sp_editable_column input").attr("disabled","disabled");
         $(".pm_bp_editable_column input").attr("disabled","disabled");
         $(".pm_sp_editable_column input").attr("disabled","disabled");
         $(".discount_on_gross_editable_column input").attr("disabled","disabled");
-        $(".db_m_bp_editable_column_"+getclicked_debter_grp[2]+" input").attr("disabled","disabled");
-        $(".db_m_sp_editable_column_"+getclicked_debter_grp[2]+" input").attr("disabled","disabled");
-        $(".db_d_gp_editable_column_"+getclicked_debter_grp[2]+" input").attr("disabled","disabled");
+        $(".db_m_bp_editable_column_"+getclicked_debter_grp[3]+" input").attr("disabled","disabled");
+        $(".db_m_sp_editable_column_"+getclicked_debter_grp[3]+" input").attr("disabled","disabled");
+        $(".db_d_gp_editable_column_"+getclicked_debter_grp[3]+" input").attr("disabled","disabled");
 
-        debter_groups.splice(debter_groups.indexOf(getclicked_debter_grp[2]),1);
+        debter_groups.splice(debter_groups.indexOf(getclicked_debter_grp[3]),1);
 
         $.each(debter_groups, function( debindex, debvalue ){
           var remtdinput = "db_sp_editable_column_"+debvalue+" input";
@@ -1400,12 +1400,12 @@ $(document).ready(function () {
           $("."+remtdinputdbdgp+"").attr("disabled","disabled");
         });
         $(this).closest("."+grouptdclass+"").find('input')[0].select();
-        $(".db_sp_"+getclicked_debter_grp[2]+"" ).each(function( index ) {
+        $(".db_sp_"+getclicked_debter_grp[3]+"" ).each(function( index ) {
           $(this).removeClass("current_index");
         });
 
         $(this).closest("."+grouptdclass+"").find('input').addClass('current_index');
-        $(".db_sp_"+getclicked_debter_grp[2]+"" ).each(function( index ) {
+        $(".db_sp_"+getclicked_debter_grp[3]+"" ).each(function( index ) {
           if($(this).hasClass("current_index")) {
             current_index = index;
             current_val = $( this ).val();

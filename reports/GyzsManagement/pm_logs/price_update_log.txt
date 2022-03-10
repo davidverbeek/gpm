@@ -6,3 +6,4 @@
 09-03-2022 13:39:29 Updated Price Chunk (0):-Bulk Update Selling Price For 4027105 Debter 4027105 (From Multiple Update Debter Selling Price):5
 09-03-2022 14:26:49 Updated Price Chunk (0):-Bulk Update Selling Price (From Multiple Selling Price Update):1
 09-03-2022 14:27:28 Updated Price Chunk (0):-Bulk Update Multiple Profit Margin (SP) For 4027101 Debter 4027101 (From Multiple Update Debter Margin On Selling Price):3
+10-03-2022 06:49:08 Updated Price Chunk (0):-Bulk Update Selling Price For 4027101 Debter 4027101 (From Multiple Update Debter Selling Price):3
