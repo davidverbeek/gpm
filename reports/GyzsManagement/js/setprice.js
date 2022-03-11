@@ -1026,7 +1026,7 @@ $(document).ready(function () {
         // For Debter
 
       }
-       setColWidths();       
+      setColWidths();
     }
     $("#chkbulkupdates").on('click', enableBulkFunc); 
     /* Enable Bulk Ends */
@@ -1204,8 +1204,10 @@ $(document).ready(function () {
         var getclicked_debter_grp = getclassclicked[2].split("_");
         var grouptdclass = "db_sp_editable_column_"+getclicked_debter_grp[2];
         var grouptdinput = "db_sp_editable_column_"+getclicked_debter_grp[2]+" input";
+       
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
         $(this).closest('tr').addClass("selected");
         $("."+grouptdinput+"").removeAttr("disabled");
         $(".sp_editable_column input").attr("disabled","disabled");
@@ -1246,9 +1248,9 @@ $(document).ready(function () {
         var getclicked_debter_grp = getclassclicked[2].split("_");
         var grouptdclass = "db_m_bp_editable_column_"+getclicked_debter_grp[3];
         var grouptdinput = "db_m_bp_editable_column_"+getclicked_debter_grp[3]+" input";
-
-
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+       
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
         $(this).closest('tr').addClass("selected");
 
         $("."+grouptdinput+"").removeAttr("disabled");
@@ -1291,7 +1293,8 @@ $(document).ready(function () {
         var grouptdinput = "db_m_sp_editable_column_"+getclicked_debter_grp[3]+" input";
         $(this).closest('tr').addClass("selected");
 
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
         $("."+grouptdinput+"").removeAttr("disabled");
         $(".sp_editable_column input").attr("disabled","disabled");
@@ -1332,7 +1335,8 @@ $(document).ready(function () {
         var grouptdclass = "db_d_gp_editable_column_"+getclicked_debter_grp[3];
         var grouptdinput = "db_d_gp_editable_column_"+getclicked_debter_grp[3]+" input";
 
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
         $(this).closest('tr').addClass("selected");
 
         $("."+grouptdinput+"").removeAttr("disabled");
@@ -1373,7 +1377,8 @@ $(document).ready(function () {
       if(getclassclicked_of_span[0] == "db_sp_span") {
         var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
         var grouptdclass = "db_sp_editable_column_"+getclicked_debter_grp[3];
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
         var grouptdinput = "db_sp_editable_column_"+getclicked_debter_grp[3]+" input";
         $(this).closest('tr').addClass("selected");
@@ -1414,7 +1419,8 @@ $(document).ready(function () {
       } else if(getclassclicked_of_span[0] == "db_m_bp_span") {
         var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
         var grouptdclass = "db_m_bp_editable_column_"+getclicked_debter_grp[4];
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
         var grouptdinput = "db_m_bp_editable_column_"+getclicked_debter_grp[4]+" input";
         $(this).closest('tr').addClass("selected");
@@ -1456,7 +1462,8 @@ $(document).ready(function () {
       } else if(getclassclicked_of_span[0] == "db_m_sp_span") {
         var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
         var grouptdclass = "db_m_sp_editable_column_"+getclicked_debter_grp[4];
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
         var grouptdinput = "db_m_sp_editable_column_"+getclicked_debter_grp[4]+" input";
         $(this).closest('tr').addClass("selected");
@@ -1499,7 +1506,8 @@ $(document).ready(function () {
       } else if(getclassclicked_of_span[0] == "db_d_gp_span") {
         var getclicked_debter_grp = getclassclicked_of_span[2].split("_");
         var grouptdclass = "db_d_gp_editable_column_"+getclicked_debter_grp[4];
-        $("."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $('input').parent("td."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
+        $("th."+grouptdclass+"").css("cssText", "background-color: #ffffcc !important;");
 
         var grouptdinput = "db_d_gp_editable_column_"+getclicked_debter_grp[4]+" input";
         $(this).closest('tr').addClass("selected");

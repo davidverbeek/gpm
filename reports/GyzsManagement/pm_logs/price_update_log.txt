@@ -11,3 +11,5 @@
 10-03-2022 10:19:12 Updated Price Chunk (0):-Bulk Update Selling Price For 4027101 Debter 4027101 (From Multiple Select):1
 10-03-2022 10:19:49 Updated Price Chunk (0):-Bulk Update Selling Price For 4027101 Debter 4027101 (From Multiple Select):1
 10-03-2022 10:20:26 Updated Price Chunk (0):-Bulk Update Selling Price For 4027101 Debter 4027101 (From Multiple Select):1
+10-03-2022 13:33:04 Updated Price Chunk (0):-Bulk Update Selling Price For 4027101 Debter 4027101 (From Multiple Update Debter Selling Price):1
+10-03-2022 13:35:50 Updated Price Chunk (0):-Bulk Update Selling Price For 4027101 Debter 4027101 (From Multiple Update Debter Selling Price):4
