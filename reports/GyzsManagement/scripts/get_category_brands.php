@@ -95,7 +95,9 @@ case "category_brands":
       while($row = $result->fetch_assoc()) {
         $product_ids .= ','.$row['product_id'];
       }
-        $product_ids = ltrim($product_ids, ',');
+      $product_ids = ltrim($product_ids, ',');
+      $product_ids = array_unique(explode(',', $product_ids));
+      $product_ids = implode(',', $product_ids);
     }
 
     $sql = "INSERT INTO price_management_debter_categories(category_ids,product_ids,customer_group,created_at,updated_at) VALUES ";
@@ -125,24 +127,26 @@ case "category_brands":
       $from_group_id = $_POST['source_group_id'];
       $to_group_id = $_POST['destination_group_id'];
 
-      $sql = "SELECT category_ids FROM price_management_debter_categories WHERE customer_group={$from_group_id}";
+      $sql = "SELECT category_ids, product_ids FROM price_management_debter_categories WHERE customer_group={$from_group_id}";
       if ($result = $conn->query($sql)) { 
         $row = $result->fetch_assoc();
         $copied = $row['category_ids'];
+        $copied_products = $row['product_ids'];
 
-         $sql_2 = "INSERT INTO price_management_debter_categories(category_ids,customer_group,created_at,updated_at) VALUES ";
-         $all_col_data = "('".$copied."', '".$to_group_id."',  '".NOW()."', '".NOW()."')";
+         $sql_2 = "INSERT INTO price_management_debter_categories(category_ids,product_ids,customer_group,created_at,updated_at) VALUES ";
+         $all_col_data = "('".$copied."','".$copied_products."' ,'".$to_group_id."','".NOW()."', '".NOW()."')";
      
          $sql_2 .= $all_col_data;
          $updated_at = date('Y-m-d h:i:s');
-         $sql_2 .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), customer_group = VALUES(customer_group),updated_at = VALUES(updated_at)";
+         $sql_2 .= " ON DUPLICATE KEY UPDATE category_ids = VALUES(category_ids), product_ids=VALUES(product_ids),customer_group = VALUES(customer_group),updated_at = VALUES(updated_at)";
         
-        if ($result_2 = $conn->query($sql_2)) {
+        if ($result_2 = $conn->query($sql_2) && resetPrice($to_group_id, $copied)) {
           $response_data['msg'] = "Data is copied successfully.";
+        } else {
+          $response_data['msg'] = "Error in reset price or Insert query.";
         }
       } else {
         $response_data['msg'] = "Error in debter copy-rule selection:- ".mysqli_error($conn);
-
       }
     break;
     case "multiple_group_query":
@@ -166,4 +170,35 @@ case "category_brands":
       break;
 }
 echo json_encode($response_data); 
+
+function resetPrice($to_group_id, $new_cats) {
+  global $conn;
+  // get products of this group
+  $sql = "SELECT customer_group_name, product_ids, category_ids FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id AND  price_management_customer_groups.magento_id=$to_group_id";
+  $result = $conn->query($sql);
+  $row = $result->fetch_assoc();
+
+  $before_update_cats = $row['category_ids'];
+
+  $old_cats_arr = explode(',', $before_update_cats);
+  $catId_new_arr = explode(',', $new_cats);
+  $check_old_is_removed = implode(',', array_diff($old_cats_arr, $catId_new_arr));
+  
+  if($row['product_ids'] && $check_old_is_removed) { // yes reset prices
+    $product_ids = $row['product_ids'];
+
+    $debter_name = $row['customer_group_name'];
+    $debter_col_1 = "group_".$debter_name."_debter_selling_price";
+    $debter_col_2 = "group_".$debter_name."_margin_on_buying_price";
+    $debter_col_3 = "group_".$debter_name."_margin_on_selling_price";
+    $debter_col_4 = "group_".$debter_name."_discount_on_grossprice_b_on_deb_selling_price";
+    $sql_reset_price = "UPDATE price_management_data SET $debter_col_1=0,$debter_col_2=0,$debter_col_3=0,$debter_col_4=0 WHERE product_id IN (".$product_ids.")";
+    $msg_error = "successfull update";
+    if(!$conn->query($sql_reset_price)) {
+      $msg_error =  $conn->error;
+    }
+  }
+  return true;
+}
+
 ?>

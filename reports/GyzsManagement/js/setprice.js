@@ -914,6 +914,7 @@ $(document).ready(function () {
                 }
               });
               selected_categories = updated_cats.toString();
+              $('#hdn_selectedcategories').val(selected_categories)
             }
             d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
@@ -2082,7 +2083,9 @@ $(".show_cols_all_ddgp").change(function() {
 $('#example tbody').on("click",".column_cat_filter a",function(e) {
   var index = $(this).closest('tr').index();
   var product_id = table.cells({ row: index, column: column_index["product_id"] }).data()[0];
-  $("#hdn_selectedcategories").val(product_category_id[product_id]);
+  checkIt(false, false);
+  var $li = $("li[data-id='" + product_category_id[product_id] + "']");
+  checkGiven($li, true, true);
   table.ajax.reload( null, false ); 
 });
 
@@ -3973,7 +3976,6 @@ $("#chkavges").change(function() {
       checkIt(true, true);
       $("i.sim-tree-checkbox").parent('a').parent('li').removeClass('disabled');
       $("#flexCheckDefault").attr("disabled", false);
-      $("#flexCheckDefault").prop('checked', true);
       table.draw();
     } else {
       var selected_group_str = selected_group.toString();
@@ -3999,7 +4001,6 @@ $("#chkavges").change(function() {
           toggleCheckbox('none');
         } else { // remove category filter
           $("i.sim-tree-checkbox").parent('a').parent('li').addClass('disabled');
-          $("#flexCheckDefault").prop('checked', false);
           $("#flexCheckDefault").attr("disabled", true);
         }
         table.draw();
@@ -4115,14 +4116,45 @@ $("#flexCheckDefault").change(function () {
       }
 
       if (status === true) {
+        $('#flexCheckDefault').prop('checked', true);
         $check.removeClass('sim-tree-semi').addClass('checked');
       } else if (status === false) {
+        $('#flexCheckDefault').prop('checked', false);
         $check.removeClass('checked sim-tree-semi');
       } else if (status === 'semi') {
         $check.removeClass('checked').addClass('sim-tree-semi');
       }
       $li.data('checked', status);
    });
+  }
+
+  function setParentCheck(e) {
+    var t,
+    i = e.parent("ul"),
+    s = i.parent("li"),
+    n = i.children("li"),
+    a = s.find(">a .sim-tree-checkbox"),
+    r = [],
+    d = n.length;
+  s.length &&
+    (e.find(">a .sim-tree-checkbox").hasClass("sim-tree-semi")
+      ? doCheck(a, "semi")
+      : ($.each(n, function () {
+          !0 === $(this).data("checked") && r.push($(this));
+        }),
+        (t = r.length),
+        d === t && doCheck(a, !0),
+        t || doCheck(a, !1),
+        t >= 1 && t < d && doCheck(a, "semi")));
+  }
+
+  function  doCheck (e, t, i) {
+    var s = e.closest("li"),
+      n = s.data();
+    void 0 === t && (t = !n.checked),
+      !0 === t ? e.removeClass("sim-tree-semi").addClass("checked") : !1 === t ? e.removeClass("checked sim-tree-semi") : "semi" === t && e.removeClass("checked").addClass("sim-tree-semi"),
+      s.data("checked", t),
+      !0 ===/*  this.options.linkParent && */ !i && setParentCheck(s);
   }
 
   function checkGiven($li, status, flag)
@@ -4141,6 +4173,7 @@ $("#flexCheckDefault").change(function () {
       $check.removeClass('checked').addClass('sim-tree-semi');
     }
     $li.data('checked', status);
+    setParentCheck($li);
   }
 
 });
