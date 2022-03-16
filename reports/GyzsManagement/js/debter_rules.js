@@ -91,7 +91,7 @@ $(document).ready(function () {
       alert("Please select Customer group.");
       $("#sel_debt_group").focus();
       return false;
-    } else {
+    } else if(confirm("If categories of the debter are changed. All existing products will be unassigned and their prices will set to ZERO. Are you sure you want to continue?")) {
       $.ajax({
         url: document_root_url + '/scripts/get_category_brands.php',
         "type": "POST",
@@ -157,8 +157,7 @@ $(document).ready(function () {
     toggleCheckbox('');
   });
 
-  $('#btncopy').click(function() { 
-
+  $('#btncopy').click(function() {
    var  source_group_id =  $('#parent_debt_group').val();
    var  child_group_id =  $('#child_debt_group').val();
 
@@ -170,11 +169,11 @@ $(document).ready(function () {
     alert('Please select Group to copy TO.');
     $('#child_debt_group').focus();
     return false;
-   } else {
+   } else if(confirm("Existing products of TO DEBTER will be unassinged and their prices will be set to ZERO. Are you sure you want to continue?")) {
     $.post(document_root_url + '/scripts/get_category_brands.php', { source_group_id: source_group_id, destination_group_id: child_group_id, type: "copy_categories" }, function( data ) {
-      var res = jQuery.parseJSON(data);
-      showDivMessage(res["msg"]);
-     $('.copyfields').val('');
+    var res = jQuery.parseJSON(data);
+    showDivMessage(res["msg"]);
+    $('.copyfields').val('');
     });
   }
   });
