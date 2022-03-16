@@ -6,16 +6,16 @@ ini_set('max_execution_time', '-1');
 
 session_start();
 
-require_once("../../app/Mage.php");
-require_once("./scrap/competitors.php");
-require_once("./scrap/scrap.php");
+require_once("../../../app/Mage.php");
+//require_once("./scrap/competitors.php");
+//require_once("./scrap/scrap.php");
 
 umask(0);
 Mage::app();
 
-include "config/config.php";
-include "define/constants.php";
-include "layout/header.php";
+include "../config/config.php";
+include "../define/constants.php";
+include "../layout/header.php";
 
 // Get Updated records categories
 $sql = "SELECT DISTINCT
@@ -99,8 +99,11 @@ fclose($file);
 
 //update gyzscompetitors_data set product_data = JSON_SET(product_data, "$.Bouwsales", "45") where id = 2;
 
-echo $sql.rtrim($sqldata,",").";";
-
+if($sqldata != "") {
+	echo $sql.rtrim($sqldata,",").";";
+} else {
+	echo "No product of Quofi matches our system.";
+}
 
 
 ?>
