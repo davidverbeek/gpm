@@ -284,28 +284,32 @@ $column_index_roas_current_log = array(
 
 /* Revenue Report Indexes */
 $column_index_revenue_report = array(
+
   "id" => 0,
-  "sku" => 1,
-  "name" => 2,
-  "brand" => 3,
-  "sku_total_quantity_sold" => 4,
-  "sku_total_price_excl_tax" => 5,
-  "sku_vericale_som" => 6,
-  "vericale_som_percentage" => 7,
-  "sku_bp_excl_tax" => 8,
-  "sku_sp_excl_tax" => 9,
-  "sku_abs_margin" => 10,
-  "sku_margin_bp" => 11,
-  "sku_margin_sp" => 12,
-  "sku_vericale_som_bp" => 13,
-  "sku_vericale_som_bp_percentage" => 14,
-  "sku_refund_qty" => 15,
-  "sku_refund_revenue_amount" => 16,
-  "sku_refund_bp_amount" => 17,
-  "sku_vericale_som_abs" => 18,
-  "sku_vericale_som_abs_percentage" => 19,
-  "product_id" => 20,
-  "reportdate" => 21
+  "supplier_type" => 1,
+
+  "sku" => 2,
+  "name" => 3,
+  "brand" => 4,
+  "sku_total_quantity_sold" => 5,
+  "sku_total_price_excl_tax" => 6,
+  "sku_vericale_som" => 7,
+  "vericale_som_percentage" => 8,
+  "sku_bp_excl_tax" => 9,
+  "sku_sp_excl_tax" => 10,
+  "sku_abs_margin" => 11,
+  "sku_margin_bp" => 12,
+  "sku_margin_sp" => 13,
+  "sku_vericale_som_bp" => 14,
+  "sku_vericale_som_bp_percentage" => 15,
+  "sku_refund_qty" => 16,
+  "sku_refund_revenue_amount" => 17,
+  "sku_refund_bp_amount" => 18,
+  "sku_vericale_som_abs" => 19,
+  "sku_vericale_som_abs_percentage" => 20,
+  "product_id" => 21,
+  "reportdate" => 22,
+ 
  );
 /* Revenue Report Indexes */
 

@@ -12,9 +12,9 @@ $table = "gyzsrevenuedata AS rd
           LEFT JOIN
           mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
           LEFT JOIN
-          mage_catalog_product_entity_varchar AS mcpev_productname ON mcpev_productname.entity_id = rd.product_id
-          AND mcpev_productname.attribute_id = '".PRODUCTNAME."'
-          ";
+          mage_catalog_product_entity_varchar AS mcpev_productname ON mcpev_productname.entity_id = rd.product_id AND mcpev_productname.attribute_id = '".PRODUCTNAME."'
+          LEFT JOIN
+          price_management_data AS pmd ON pmd.product_id = rd.product_id";
 
 // Table's primary key
 $primaryKey = 'DISTINCT rd.sku';
@@ -33,6 +33,7 @@ if($_POST['categories']) {
 // indexes
 $columns = array(
   array( 'db' => 'DISTINCT rd.id AS id', 'dt' => $column_index_revenue_report["id"]),
+  array( 'db' => 'pmd.supplier_type AS supplier_type', 'dt' => $column_index_revenue_report["supplier_type"]),
   array( 'db' => 'rd.sku AS sku', 'dt' => $column_index_revenue_report["sku"]),
   array( 'db' => 'mcpev_productname.value AS name', 'dt' => $column_index_revenue_report["name"]),
   array( 'db' => 'meaov.value AS brand',  'dt' => $column_index_revenue_report["brand"]),

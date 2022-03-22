@@ -81,6 +81,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
                         <table id="example" class="table position-relative custom-override-table">
                             <thead style="z-index: 9999999;">
                               <th>Id</th>
+                              <th>Leverancier</th>
                               <th>Sku</th>
                               <th>Name</th>
                               <th>Merken</th>
@@ -106,6 +107,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
                             </thead>
                             <tfoot style="display: none;" class="tfoothead">
                               <th>Id</th>
+                              <th>Leverancier</th>
                               <th>Sku</th>
                               <th>Name</th>
                               <th>Merken</th>
@@ -137,6 +139,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
 
                             <tfoot class="tfootsum">
                               <th style="font-size: 0;">Id</th>
+                              <th style="font-size: 0;">Leverancier</th>
                               <th style="font-size: 0;">Sku</th>
                               <th style="font-size: 0;">Name</th>
                               <th style="font-size: 0;">Merken</th>
@@ -162,8 +165,6 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
 
                               <th style="font-size: 0;">Abs Mar. Vericale som</th>
                               <th style="font-size: 0;">Abs Mar. Vericale som %</th>
-
-                                  
                             </tfoot>
                             
                         </table>
