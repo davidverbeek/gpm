@@ -254,10 +254,13 @@ class SSP {
 
                     	/* Process Columns Ends */	
 
-
-						$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-						//$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
-						$columnSearch[] = "".$get_column." LIKE ".$binding;
+						if($column['db'] == 'meaov.value AS brand') {
+							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
+							$columnSearch[] = "".$get_column."=".$binding;
+						} else {
+							$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
+							$columnSearch[] = "".$get_column." LIKE ".$binding;
+						}
 					}
 				}
 			}
