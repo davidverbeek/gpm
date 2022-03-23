@@ -26,6 +26,7 @@ function exportData() {
 
     foreach($allData as $key=>$data) {
       $get_data[$data["sku"]]["reportdate"] = $data["reportdate"];
+      $get_data[$data["sku"]]["Leverancier"] = $data["supplier_type"];
       $get_data[$data["sku"]]["sku"] = $data["sku"];
       $get_data[$data["sku"]]["name"] = mb_convert_encoding($data["name"], 'UTF-8', 'UTF-8');
       $get_data[$data["sku"]]["brand"] = mb_convert_encoding($data["brand"], 'UTF-8', 'UTF-8');
@@ -84,7 +85,7 @@ function exportData() {
     }
   } 
 
-  $header[0] = array("Revenue Date Range", "Artikelnummer (Artikel)","Naam","Merk","Categorie 1","Categorie 2","Categorie 3","Categorie 4","Afzet","Omzet","Vericale som","Vericale som (%)","Inkoopprijs (Inkpr)", "Verkoopprijs (Vkpr)","Absolute Margin", "Profit margin BP %","Profit margin SP %","Vericale som (BP)","Vericale som (BP %)","Refund Quantities","Refund Amount","Refund Amount (BP)","Abs Mar. Vericale som","Abs Mar. Vericale som %");
+  $header[0] = array("Revenue Date Range", "Leverancier","Artikelnummer (Artikel)","Naam","Merk","Categorie 1","Categorie 2","Categorie 3","Categorie 4","Afzet","Omzet","Vericale som","Vericale som (%)","Inkoopprijs (Inkpr)", "Verkoopprijs (Vkpr)","Absolute Margin", "Profit margin BP %","Profit margin SP %","Vericale som (BP)","Vericale som (BP %)","Refund Quantities","Refund Amount","Refund Amount (BP)","Abs Mar. Vericale som","Abs Mar. Vericale som %");
   $profit_margin_sp = round(array_sum($total_abs_margin) / array_sum($total_revenue),2);
 
   $footer[count($get_data)+1] = array("Total","-","-","-","-","-","-","-","-","-",number_format(array_sum($total_revenue), 2, ',', '.'),"-","-","-", number_format(array_sum($total_abs_margin), 2, ',', '.'),"-",$profit_margin_sp, number_format(array_sum($total_buying_price), 2, ',', '.'),"-","-", number_format(array_sum($total_refund), 2, ',', '.'),"-","-","-");
