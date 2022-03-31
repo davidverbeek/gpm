@@ -14,11 +14,41 @@ error_reporting(E_ALL);
 
 ini_set('max_execution_time', 0);
 
-$revenue_data = array();
+$revenue_data = $revenue_data_365 = array();
+$revenue_data_365 = getAfzet_365('current_date()', '365');
+$revenue_data = getRevenue($created_at,$created_at_to_date, $revenue_data_365);
+function getAfzet_365($current_date, $days) {
+  global $conn;
+  $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND created_at BETWEEN ".$current_date." - INTERVAL ".$days." DAY AND NOW()";
+  $allactiveOrdersByDays = $conn->query($sql_all_orders);
+  $allactiveOrdersByDays = $allactiveOrdersByDays->fetch_all(MYSQLI_ASSOC);
+  $all_ordered_skus_365 = $sku_quantities_in_order = array();
+  if(count($allactiveOrdersByDays)) {
+    foreach($allactiveOrdersByDays as $order) {
+        $order_id = $order['entity_id'];
+        $sql_order_items = "SELECT * FROM mage_sales_flat_order_item WHERE order_id = '".$order_id."'";
+        $allOrderItems = $conn->query($sql_order_items);
+        $allOrderItems = $allOrderItems->fetch_all(MYSQLI_ASSOC);
 
-$revenue_data = getRevenue($created_at,$created_at_to_date);
+        foreach($allOrderItems as $order_item) {
+            $qty_ordered = $order_item['qty_ordered'];
+            $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['Quantity'] = $qty_ordered;
+        }
+    }
+    if(count($sku_quantities_in_order)) {
+        foreach($sku_quantities_in_order as $sku=>$orders) {
+            $order_wise_quantities_365 = array();
+            foreach($orders as $order_id=>$sku_data) {
+              $order_wise_quantities_365[] = $sku_data['Quantity'];
+            }
+            $all_ordered_skus_365[$sku]['sku_total_quantity_sold_365'] = array_sum($order_wise_quantities_365);
+        }
+    }
+  }
+  return $all_ordered_skus_365;
+}//end getafzet_365()
 
-function getRevenue($created_at,$created_at_to_date) {
+function getRevenue($created_at,$created_at_to_date, $all_ordered_skus_365) {
 global $conn;
 $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$created_at." 00:00:00' AND  created_at <= '".$created_at_to_date." 23:59:00')";
 $allactiveOrders = $conn->query($sql_all_orders);
@@ -37,8 +67,6 @@ $sku_quantities_in_order = array();
     $allOrderItems = $allOrderItems->fetch_all(MYSQLI_ASSOC);
     
     foreach($allOrderItems as $order_item) {
-
-     
       $product_id = $order_item['product_id'];
       $qty_ordered = $order_item['qty_ordered'];
       $qty_refunded = $order_item['qty_refunded'];
@@ -56,21 +84,16 @@ $sku_quantities_in_order = array();
       
       $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['afwijkenidealeverpakking'] = $afwijkenidealeverpakking;
       $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['idealeverpakking'] = $idealeverpakking;
-      
-      
     }
-     
   }
 
   $vericale_som = array();
-    $vericale_som_bp = array();
-    $vericale_som_abs = array();
+  $vericale_som_bp = array();
+  $vericale_som_abs = array();
 
   if(count($sku_quantities_in_order)) {
     
     $all_ordered_skus = array();
-    
-
     foreach($sku_quantities_in_order as $sku=>$orders) {
 
       //if(!(in_array($sku,array('1803729','1716500')))) {
@@ -130,8 +153,6 @@ $sku_quantities_in_order = array();
 
       $temp_bp_excl_tax = ($all_ordered_skus[$sku]['sku_bp_excl_tax'] == 0 ? 1 : $all_ordered_skus[$sku]['sku_bp_excl_tax']);
       $temp_sp_excl_tax = ($all_ordered_skus[$sku]['sku_sp_excl_tax'] == 0 ? 1 : $all_ordered_skus[$sku]['sku_sp_excl_tax']);
-      
-      
       $all_ordered_skus[$sku]['sku_margin_bp'] =  round(($all_ordered_skus[$sku]['sku_abs_margin'] / $temp_bp_excl_tax) * 100,2);
       $all_ordered_skus[$sku]['sku_margin_sp'] =  round(($all_ordered_skus[$sku]['sku_abs_margin'] / $temp_sp_excl_tax) * 100,2);
 
@@ -146,15 +167,11 @@ $sku_quantities_in_order = array();
       $all_ordered_skus[$sku]['sku_refund_qty'] = array_sum($order_wise_refunded_quantities);
       $all_ordered_skus[$sku]['sku_refund_revenue_amount'] = array_sum($refunded_sp_excl_tax);
       $all_ordered_skus[$sku]['sku_refund_bp_amount'] = array_sum($refunded_bp_excl_tax);
-
-
+      $all_ordered_skus[$sku]['sku_total_quantity_sold_365'] = $all_ordered_skus_365[$sku]['sku_total_quantity_sold_365'] ?? 0;
     }
   }
-
   return $all_ordered_skus;
 }
-
-
 $total_vericale_sum_of_revenue = $revenue_data["total_vericale_som"];
 $total_vericale_sum_of_bp = $revenue_data["total_vericale_som_bp"];
 $total_vericale_sum_of_abs = $revenue_data["total_vericale_som_abs"];
@@ -162,9 +179,6 @@ $total_vericale_sum_of_abs = $revenue_data["total_vericale_som_abs"];
 unset($revenue_data["total_vericale_som"]);
 unset($revenue_data["total_vericale_som_bp"]);
 unset($revenue_data["total_vericale_som_abs"]);
-
-
-
 array_multisort(array_column($revenue_data, 'sku_total_price_excl_tax'), SORT_DESC, $revenue_data);
 
 if(count($revenue_data)) {
@@ -189,12 +203,7 @@ if(count($revenue_data)) {
     $revenue_data[$sku]["sku_vericale_som_abs_percentage"] = $sku_vericale_som_abs_percentage;    
   }
 }
-
 $final_data = array();
 $final_data['revenue_data'] = $revenue_data;
 $final_data['total_revenue'] = $total_vericale_sum_of_revenue;
 $final_data['total_bp'] = $total_vericale_sum_of_bp;
- 
-
-
-
