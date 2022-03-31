@@ -28,7 +28,7 @@ function exportData() {
       $get_data[$data["sku"]]["reportdate"] = $data["reportdate"];
       $get_data[$data["sku"]]["Leverancier"] = $data["supplier_type"];
       $get_data[$data["sku"]]["sku"] = $data["sku"];
-      $get_data[$data["sku"]]["Carrier Level"] = $data["carrier_level"];
+      $get_data[$data["sku"]]["carrier_level"] = $data["carrier_level"];
       $get_data[$data["sku"]]["name"] = mb_convert_encoding($data["name"], 'UTF-8', 'UTF-8');
       $get_data[$data["sku"]]["brand"] = mb_convert_encoding($data["brand"], 'UTF-8', 'UTF-8');
       
