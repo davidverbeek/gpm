@@ -10,11 +10,17 @@ $table = "gyzsrevenuedata AS rd
           mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = rd.product_id
           AND mcpei.attribute_id = '".MERK."'
           LEFT JOIN
+          mage_catalog_product_entity_int AS mcpei_transmission ON mcpei_transmission.entity_id = rd.product_id
+          AND mcpei_transmission.attribute_id = '".tansmission."'
+          LEFT JOIN
+          mage_catalog_product_entity_int AS mcpei_brieven ON mcpei_brieven.entity_id = rd.product_id
+          AND mcpei_brieven.attribute_id = '".brievenbuspakket."'
+          LEFT JOIN
           mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
           LEFT JOIN
-          mage_catalog_product_entity_varchar AS mcpev_productname ON mcpev_productname.entity_id = rd.product_id
-          AND mcpev_productname.attribute_id = '".PRODUCTNAME."'
-          ";
+          mage_catalog_product_entity_varchar AS mcpev_productname ON mcpev_productname.entity_id = rd.product_id AND mcpev_productname.attribute_id = '".PRODUCTNAME."'
+          LEFT JOIN
+          price_management_data AS pmd ON pmd.product_id = rd.product_id";
 
 // Table's primary key
 $primaryKey = 'DISTINCT rd.sku';
@@ -33,12 +39,14 @@ if($_POST['categories']) {
 // indexes
 $columns = array(
   array( 'db' => 'DISTINCT rd.id AS id', 'dt' => $column_index_revenue_report["id"]),
+  array( 'db' => 'pmd.supplier_type AS supplier_type', 'dt' => $column_index_revenue_report["supplier_type"]),
   array( 'db' => 'rd.sku AS sku', 'dt' => $column_index_revenue_report["sku"]),
+  array( 'db' => '(CASE WHEN (mcpei_transmission.value = 1) THEN "Transmission" ELSE (CASE WHEN (mcpei_brieven.value = 1) THEN "Briefpost" ELSE "Pakketpost" END) END) AS carrier_level',  'dt' => $column_index_revenue_report["carrier_level"]),
   array( 'db' => 'mcpev_productname.value AS name', 'dt' => $column_index_revenue_report["name"]),
   array( 'db' => 'meaov.value AS brand',  'dt' => $column_index_revenue_report["brand"]),
-  array( 'db' => 'rd.sku_total_quantity_sold AS sku_total_quantity_sold', 'dt' => $column_index_revenue_report["sku_total_quantity_sold"]),
-  array( 'db' => 'rd.sku_total_price_excl_tax AS sku_total_price_excl_tax', 'dt' => $column_index_revenue_report["sku_total_price_excl_tax"]),
-
+  array( 'db' => 'rd.sku_total_quantity_sold_365 AS sku_total_quantity_sold_365', 'dt' => $column_index_revenue_report["sku_total_quantity_sold_365"]),
+  array('db' => 'rd.sku_total_quantity_sold AS sku_total_quantity_sold', 'dt' =>  $column_index_revenue_report["sku_total_quantity_sold"]),
+  array('db' => 'rd.sku_total_price_excl_tax AS sku_total_price_excl_tax', 'dt' => $column_index_revenue_report["sku_total_price_excl_tax"]),
   array( 'db' => 'rd.sku_vericale_som AS sku_vericale_som', 'dt' => $column_index_revenue_report["sku_vericale_som"]),
   array( 'db' => 'rd.vericale_som_percentage AS vericale_som_percentage', 'dt' => $column_index_revenue_report["vericale_som_percentage"]),
   array( 'db' => 'rd.sku_bp_excl_tax AS sku_bp_excl_tax', 'dt' => $column_index_revenue_report["sku_bp_excl_tax"]),

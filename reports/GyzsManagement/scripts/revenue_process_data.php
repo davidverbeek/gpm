@@ -292,11 +292,11 @@ function insertrevenueChunks($revenue_data,$from,$to) {
                           " . $r_data['sku_refund_bp_amount'] . ", 
                           '".$from." To ".$to."',
                           " . $r_data['sku_vericale_som_abs'] . ",
-                          " . $r_data['sku_vericale_som_abs_percentage'] . "
+                          " . $r_data['sku_vericale_som_abs_percentage'] . ",
+                          ". $r_data['sku_total_quantity_sold_365']."
                         )";
 
     }
-
 
   $sql .= implode(",", $all_col_data);
   //echo $sql;

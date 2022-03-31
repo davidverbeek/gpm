@@ -17,7 +17,7 @@ $(document).ready(function() {
           // Pagination added after Table
           $(".dataTables_wrapper div:nth-child(3)").insertAfter($('.datatable'));
 
-          if(that[0][0] != column_index_revenue_report["brand"]) {
+          if(that[0][0] != column_index_revenue_report["brand"] && that[0][0] != column_index_revenue_report["supplier_type"]) {
             $( 'input', this.footer() ).on( 'keyup change clear', function () {
                 if ( that.search() !== this.value ) {     
                   that
@@ -25,6 +25,14 @@ $(document).ready(function() {
                       .draw();
                 }
             });
+          }  else if(that[0][0] == column_index_revenue_report["supplier_type"]) {
+            var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;"><option value="">All</option><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
+                .appendTo( $(that.footer()).empty())
+                .on( 'change', function () {
+                      that
+                      .search( this.value )
+                      .draw();
+                } );
           } else {
 
                 var column = this;
