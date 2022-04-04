@@ -65,11 +65,6 @@ function fixArrayOfCheckboxes($check ) {
 
     //$chkroasrange = fixArrayOfCheckboxes($_REQUEST['chkroasrange']);
 
-
-
-
-
-
     if(is_array($_REQUEST['roasmin']) && is_array($_REQUEST['roasmax']) && is_array($_REQUEST['roasval'])) {
       for($i=0;$i<count($_REQUEST['roasmin']);$i++) {
         $roas_settings['roas_range'][$_REQUEST['roasmin'][$i]."-".$_REQUEST['roasmax'][$i]]['r_val'] = $_REQUEST['roasval'][$i];
@@ -88,10 +83,9 @@ function fixArrayOfCheckboxes($check ) {
     } 
 
     $roas_settings['transmission_shipping_cost'] = $_REQUEST['transmission_shipping_cost'];
+    $roas_settings['sku_afzet_in_days'] = $_REQUEST['sku_afzet_period'];
     $roas_settings['transmission_packing_cost'] = $_REQUEST['transmission_packing_cost'];
     $roas_settings['transmission_extra_return_shipment_cost'] = $_REQUEST['transmission_extra_return_shipment_cost'];
-
-
     $roas_settings['pakketpost_shipping_cost'] = $_REQUEST['pakketpost_shipping_cost'];
     $roas_settings['pakketpost_packing_cost'] = $_REQUEST['pakketpost_packing_cost'];
     $roas_settings['pakketpost_extra_return_shipment_cost'] = $_REQUEST['pakketpost_extra_return_shipment_cost'];
@@ -152,9 +146,6 @@ function fixArrayOfCheckboxes($check ) {
     
     $roas_settings['bol_return_from_date'] = $_REQUEST['bol_return_from_date'];
     $roas_settings['bol_return_to_date'] = $_REQUEST['bol_return_to_date'];
-
-
-
     $roas_settings["exclude_bol"] = $_REQUEST['excludeBol'];
 
     $sql = "UPDATE pm_settings SET roas = '".serialize($roas_settings)."' WHERE id = 1";
@@ -168,6 +159,9 @@ $sql = "SELECT * FROM pm_settings WHERE id = 1";
 $result = $conn->query($sql);
 $settings_data = $result->fetch_assoc();
 $settings_data['roas'] = unserialize($settings_data["roas"]);
+
+
+
 
 
 $roas_lb_cnt = 0;
@@ -278,9 +272,6 @@ if(is_array($settings_data['roas']['employeecost_range'])) {
           <!-- start-form-body -->
           <form id="frmsettings" method="post" action="settings.php" class="needs-validation" novalidate>
           <div class="row">
-           
-            
-
             <div class="col-lg-12">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
@@ -846,9 +837,15 @@ if(is_array($settings_data['roas']['employeecost_range'])) {
                       </div>
                   </div>
 
-                  
-
-
+                  <div class="form-group row">
+                      <label for="sku_afzet_period" class="col-sm-2 col-form-label">Afzet For The Period</label> 
+                      <div class="col-sm-10">
+                        <input type="number" step="1" class="form-control form-control-user" placeholder="Afzet For The Period" name="sku_afzet_period" value="<?php echo $settings_data['roas']["sku_afzet_in_days"]; ?>" required>
+                        (in Days)
+                        <div class="valid-feedback">Looks Good!.</div>
+                        <div class="invalid-feedback">Enter afzet_for_the_priod. (Eg 90)</div>
+                      </div>
+                  </div>
                   <div>
                       <input type="checkbox" id="excludeBol" name="excludeBol" <?php if($settings_data['roas']["exclude_bol"] == 1) { ?> checked="checked" <?php } ?> value="1" style="margin-top:5px;">
                       <label>Exclude Bol orders in Roas calculation</label>

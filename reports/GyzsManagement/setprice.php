@@ -237,6 +237,7 @@ if ($result = $conn->query($sql)) {
                                   <th>SKU <i class="fas fa-envelope-open" style="font-size:12px; cursor:pointer; color:#3a3d99" title="Mark all as read"></i></th>
                                   <th>Ean</th>
                                   <th>Merk</th>
+                                  <th>Afzet</th>
                                   <th>Brutopr</th>
                                   <th>Webshop Gross Price</th>
                                   <th>Korting brutopr</th>
@@ -285,6 +286,7 @@ if ($result = $conn->query($sql)) {
                                   <th>SKU <i class="fas fa-envelope-open" style="font-size:12px; cursor:pointer; color:#3a3d99" title="Mark all as read"></i></th>
                                   <th>Ean</th>
                                   <th>Merk</th>
+                                  <th>Afzet</th>
                                   <th>Brutopr</th>
                                   <th>Webshop Gross Price</th>
                                   <th>Korting brutopr</th>
@@ -295,12 +297,9 @@ if ($result = $conn->query($sql)) {
                                   <th>Afw.Ideal.verp</th>
                                   <th>Webshop Afwijkenidealeverpakking</th>
                                   <th>PM Inkpr</th>
-
                                   <th>Cat Gem</th>
                                   <th>Merk Gem</th>
                                   <th>Cat Merk Gem</th>
-
-
                                   <th>WS Inkpr</th>
                                   <th>WS Verkpr</th>
                                   <th>Korting bruto vkpr</th>
@@ -468,8 +467,11 @@ if ($result = $conn->query($sql)) {
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="5" name="brand" class="show_cols open_by_default"><span>Merk</span>
                             </label>
+                            <label for="afzet" class="col-6">
+                                <input type="checkbox" value="6" name="afzet" class="show_cols"><span>Afzet</span>
+                            </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="6" name="supplier_gross_price" class="show_cols"><span>Brutopr</span>
+                                <input type="checkbox" value="7" name="supplier_gross_price" class="show_cols"><span>Brutopr</span>
                             </label>
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="8" name="s_d_o_gp" class="show_cols"><span>Korting brutopr</span>
@@ -496,10 +498,6 @@ if ($result = $conn->query($sql)) {
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="18" name="a_p_c_p_b" class="show_cols chav"><span>Cat Merk Gem</span>
                             </label>
-
-
-
-
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="19" name="g_b_p" class="show_cols"><span>WS Inkpr</span>
                             </label>

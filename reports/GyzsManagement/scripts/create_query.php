@@ -1,4 +1,4 @@
-  <?php
+<?php
 
  include "../define/constants.php";
  include "../config/dbconfig.php";
@@ -22,7 +22,9 @@ LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_afw ON mcpev_afw.entity_i
 LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_ideal ON mcpev_ideal.entity_id = pmd.product_id AND mcpev_ideal.attribute_id = '".IDEALEVERPAKKING."'
 
 LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
-LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
+
+LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'
+LEFT JOIN price_management_afzet_data AS pmaf ON pmaf.product_id = pmd.product_id";
 
 //mcpev_grossprice
 //mcpev_netprice
@@ -126,6 +128,7 @@ $columns = array(
   array( 'db' => 'mcpe.sku AS sku', 'dt' => $column_index["sku"] ),
   array( 'db' => 'mcpev.value AS ean', 'dt' => $column_index["ean"]),
   array( 'db' => 'meaov.value AS brand',  'dt' => $column_index["brand"]),
+  array( 'db' => 'pmaf.total_quantity_sold-pmaf.refund_qty AS afzet',  'dt' => $column_index["afzet"]),
   
   array( 'db' => 'CAST(pmd.gross_unit_price AS DECIMAL(10,'.$scale.')) AS supplier_gross_price',  'dt' => $column_index["supplier_gross_price"]),
   array( 'db' => 'CAST(REPLACE(mcpev_grossprice.value,",",".") AS DECIMAL(10,'.$scale.')) AS webshop_supplier_gross_price',  'dt' => $column_index["webshop_supplier_gross_price"]),
@@ -225,11 +228,7 @@ $columns = array(
   array( 'db' => 'pmd.group_4027110_margin_on_buying_price AS group_4027110_margin_on_buying_price', 'dt' => $column_index["group_4027110_margin_on_buying_price"]),
   array( 'db' => 'pmd.group_4027110_margin_on_selling_price AS group_4027110_margin_on_selling_price', 'dt' => $column_index["group_4027110_margin_on_selling_price"]),
   array( 'db' => 'pmd.group_4027110_discount_on_grossprice_b_on_deb_selling_price AS group_4027110_discount_on_grossprice_b_on_deb_selling_price', 'dt' => $column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"]),
-
-
   array( 'db' => 'pmd.is_updated AS is_updated',  'dt' => $column_index["is_updated"]),
-   
-  
   array( 'db' => 'pmd.is_activated AS is_activated',  'dt' => $column_index["is_activated"]),
   
 array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"]),
