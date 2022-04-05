@@ -95,7 +95,7 @@ function exportData() {
     }
   } 
 
-  $header[0] = array("Leverancier","Naam","Artikelnummer (Artikel)","Ean","Merk","Afzet","Categorie 1","Categorie 2","Categorie 3","Categorie 4","Brutoprijs (Brutopr)","Leverancier Netto Prijs (Lev.Nettopr)","Idealeverpakking (Ideal.verp)","Afwijkenidealeverpakking (Afw.Ideal.verp)","Inkoopprijs (Inkpr)","Inkoopprijs (Inkpr per piece)", "Nieuwe Verkoopprijs (Niewe Vkpr)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)", "4027100","4027101","4027102","4027103","4027104","4027105","4027106","4027107","4027108","4027109","4027110","Stijging","Cat Gem","Merk Gem","Cat Merk Gem","Locatie","Artikelnummer");
+  $header[0] = array("Leverancier","Naam","Artikelnummer (Artikel)","Ean","Merk","Afzet ({$settings_data['roas']['sku_afzet_in_days']})","Categorie 1","Categorie 2","Categorie 3","Categorie 4","Brutoprijs (Brutopr)","Leverancier Netto Prijs (Lev.Nettopr)","Idealeverpakking (Ideal.verp)","Afwijkenidealeverpakking (Afw.Ideal.verp)","Inkoopprijs (Inkpr)","Inkoopprijs (Inkpr per piece)", "Nieuwe Verkoopprijs (Niewe Vkpr)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)", "4027100","4027101","4027102","4027103","4027104","4027105","4027106","4027107","4027108","4027109","4027110","Stijging","Cat Gem","Merk Gem","Cat Merk Gem","Locatie","Artikelnummer");
   
   $_SESSION['exported_data'] = array_values($header+$get_data);
 }
