@@ -101,6 +101,8 @@ exit;
 
 session_start();
 
+
+
 require_once("../../app/Mage.php");
 umask(0);
 Mage::app();
@@ -116,7 +118,6 @@ if(!isset($_SESSION["price_id"])) {
 include "config/config.php";
 include "define/constants.php";
 include "layout/header.php";
-
 // Get Updated records categories
 $sql_updated_recs = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, price_management_data AS pmd WHERE mccp.product_id = pmd.product_id AND pmd.is_updated = '1'";
 $result_updated_recs = $conn->query($sql_updated_recs);
@@ -237,7 +238,7 @@ if ($result = $conn->query($sql)) {
                                   <th>SKU <i class="fas fa-envelope-open" style="font-size:12px; cursor:pointer; color:#3a3d99" title="Mark all as read"></i></th>
                                   <th>Ean</th>
                                   <th>Merk</th>
-                                  <th>Afzet</th>
+                                  <th>Afzet(<?php echo $settings_data['roas']['sku_afzet_in_days']?>)</th>
                                   <th>Brutopr</th>
                                   <th>Webshop Gross Price</th>
                                   <th>Korting brutopr</th>
@@ -286,7 +287,7 @@ if ($result = $conn->query($sql)) {
                                   <th>SKU <i class="fas fa-envelope-open" style="font-size:12px; cursor:pointer; color:#3a3d99" title="Mark all as read"></i></th>
                                   <th>Ean</th>
                                   <th>Merk</th>
-                                  <th>Afzet</th>
+                                  <th>Afzet(<?php echo $settings_data['roas']['sku_afzet_in_days']?>)</th>
                                   <th>Brutopr</th>
                                   <th>Webshop Gross Price</th>
                                   <th>Korting brutopr</th>
@@ -468,7 +469,7 @@ if ($result = $conn->query($sql)) {
                                 <input type="checkbox" value="5" name="brand" class="show_cols open_by_default"><span>Merk</span>
                             </label>
                             <label for="afzet" class="col-6">
-                                <input type="checkbox" value="6" name="afzet" class="show_cols"><span>Afzet</span>
+                                <input type="checkbox" value="6" name="afzet" class="show_cols"><span>Afzet(<?php echo $settings_data['roas']['sku_afzet_in_days']?>)</span>
                             </label>
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="7" name="supplier_gross_price" class="show_cols"><span>Brutopr</span>
