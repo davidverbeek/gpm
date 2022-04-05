@@ -114,7 +114,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
                               <th>Carrier level</th>
                               <th>Name</th>
                               <th>Merken</th>
-                              <th>Afzet (<?php echo $settings_data['roas']['sku_afzet_by_days'] ?>)</th>
+                              <th>Afzet (<?php echo $settings_data['roas']['sku_afzet_in_days'] ?>)</th>
                               <th>Afzet</th>
                               <th>Omzet</th>
                               <th>Vericale som</th>
