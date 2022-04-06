@@ -17,7 +17,7 @@ $(document).ready(function() {
           // Pagination added after Table
           $(".dataTables_wrapper div:nth-child(3)").insertAfter($('.datatable'));
 
-          if(that[0][0] != column_index_revenue_report["brand"] && that[0][0] != column_index_revenue_report["supplier_type"]) {
+          if(that[0][0] != column_index_revenue_report["brand"] && that[0][0] != column_index_revenue_report["supplier_type"] && that[0][0] != column_index_revenue_report["carrier_level"]) {
             $( 'input', this.footer() ).on( 'keyup change clear', function () {
                 if ( that.search() !== this.value ) {     
                   that
@@ -33,8 +33,15 @@ $(document).ready(function() {
                       .search( this.value )
                       .draw();
                 } );
+          } else if(that[0][0] == column_index_revenue_report["carrier_level"]) {
+            var select = $('<select id="carrier_level" class="search_carrier_level" style="margin-top:-30px; margin-left:-23px; position:absolute;"><option value="">All</option><option value="Transmission">Transmission</option><option value="Briefpost">Briefpost</option><option value="Pakketpost">Pakketpost</option></select>')
+                .appendTo( $(that.footer()).empty())
+                .on( 'change', function () {
+                      that
+                      .search( this.value )
+                      .draw();
+                } );
           } else {
-
                 var column = this;
                 var select = $('<select id="brand" class="search_brand"><option value="">All</option></select>')
                 .appendTo( $(column.footer()).empty() )
@@ -44,7 +51,6 @@ $(document).ready(function() {
                       .search( this.value )
                       .draw();
                 } );
-
           }
 
         }); 
@@ -86,9 +92,6 @@ $(document).ready(function() {
               } 
            }
           });
-    
-
-
       },
 
       "ajax": {

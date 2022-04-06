@@ -86,7 +86,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
                               <th>Carrier Level</th>
                               <th>Name</th>
                               <th>Merken</th>
-                              <th>Afzet(365)</th>
+                              <th>Afzet (<?php echo $settings_data['roas']['sku_afzet_in_days']?>)</th>
                               <th>Afzet</th>
                               <th>Omzet</th>
                               <th>Vericale som</th>
@@ -114,7 +114,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
                               <th>Carrier level</th>
                               <th>Name</th>
                               <th>Merken</th>
-                              <th>Afzet(365)</th>
+                              <th>Afzet (<?php echo $settings_data['roas']['sku_afzet_in_days'] ?>)</th>
                               <th>Afzet</th>
                               <th>Omzet</th>
                               <th>Vericale som</th>
@@ -148,7 +148,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
                               <th style="font-size: 0;">Carrier Level</th>
                               <th style="font-size: 0;">Name</th>
                               <th style="font-size: 0;">Merken</th>
-                              <th style="font-size: 0;">Afzet(365)</th>
+                              <th style="font-size: 0;">Afzet (<?php echo $settings_data['roas']['sku_afzet_in_days']?>)</th>
                               <th style="font-size: 0;">Afzet</th>
                               <th style="font-size: 0;">Omzet</th>
                               <th id="tot_revenue"><?php echo number_format($rev_data[0]['sku_vericale_som'], 2, ',', '.'); ?></th>

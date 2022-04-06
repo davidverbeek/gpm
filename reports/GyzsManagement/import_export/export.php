@@ -25,7 +25,7 @@ function exportData() {
       $get_data[$data["sku"]]["sku"] = $data["sku"];
       $get_data[$data["sku"]]["ean"] = $data["ean"];
       $get_data[$data["sku"]]["brand"] = mb_convert_encoding($data["brand"], 'UTF-8', 'UTF-8');
-      
+      $get_data[$data["sku"]["afzet"]] = $data["afzet"];
       if(isset($get_all_product_categories[$data["product_id"]]["1"])) {
         $get_data[$data["sku"]]["category_level_1"] = mb_convert_encoding($get_all_product_categories[$data["product_id"]]["1"], 'UTF-8', 'UTF-8');
       } else {
@@ -86,21 +86,16 @@ function exportData() {
         $get_data[$data["sku"]][$h_cust_group] = $deb_price;
       }
       //Debters
-
       $get_data[$data["sku"]]["percentage_increase"] = $data["percentage_increase"];
-
       $get_data[$data["sku"]]["avg_category"] = $data["avg_category"];
       $get_data[$data["sku"]]["avg_brand"] = $data["avg_brand"];
       $get_data[$data["sku"]]["avg_per_category_per_brand"] = $data["avg_per_category_per_brand"];
       $get_data[$data["sku"]]["locatie"] = $locatie[$data["product_id"]]["locatie"];
-
       $get_data[$data["sku"]]["artikelnummer"] = $locatie[$data["product_id"]]["gyzs_sku"];
-      
-
     }
   } 
 
-  $header[0] = array("Leverancier","Naam","Artikelnummer (Artikel)","Ean","Merk","Categorie 1","Categorie 2","Categorie 3","Categorie 4","Brutoprijs (Brutopr)","Leverancier Netto Prijs (Lev.Nettopr)","Idealeverpakking (Ideal.verp)","Afwijkenidealeverpakking (Afw.Ideal.verp)","Inkoopprijs (Inkpr)","Inkoopprijs (Inkpr per piece)", "Nieuwe Verkoopprijs (Niewe Vkpr)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)", "4027100","4027101","4027102","4027103","4027104","4027105","4027106","4027107","4027108","4027109","4027110","Stijging","Cat Gem","Merk Gem","Cat Merk Gem","Locatie","Artikelnummer");
+  $header[0] = array("Leverancier","Naam","Artikelnummer (Artikel)","Ean","Merk","Afzet ({$settings_data['roas']['sku_afzet_in_days']})","Categorie 1","Categorie 2","Categorie 3","Categorie 4","Brutoprijs (Brutopr)","Leverancier Netto Prijs (Lev.Nettopr)","Idealeverpakking (Ideal.verp)","Afwijkenidealeverpakking (Afw.Ideal.verp)","Inkoopprijs (Inkpr)","Inkoopprijs (Inkpr per piece)", "Nieuwe Verkoopprijs (Niewe Vkpr)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)", "4027100","4027101","4027102","4027103","4027104","4027105","4027106","4027107","4027108","4027109","4027110","Stijging","Cat Gem","Merk Gem","Cat Merk Gem","Locatie","Artikelnummer");
   
   $_SESSION['exported_data'] = array_values($header+$get_data);
 }
