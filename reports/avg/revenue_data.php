@@ -15,34 +15,17 @@ error_reporting(E_ALL);
 ini_set('max_execution_time', 0);
 
 $revenue_data = $revenue_data_365 = array();
-$revenue_data_365 = getAfzet_365('current_date()', '365');
+$revenue_data_365 = getAfzet_365();
 $revenue_data = getRevenue($created_at,$created_at_to_date, $revenue_data_365);
-function getAfzet_365($current_date, $days) {
+function getAfzet_365() {
   global $conn;
-  $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND created_at BETWEEN ".$current_date." - INTERVAL ".$days." DAY AND NOW()";
+  $sql_all_orders = "SELECT sku, total_quantity_sold - refund_qty AS afzet_365 FROM price_management_afzet_data";
   $allactiveOrdersByDays = $conn->query($sql_all_orders);
   $allactiveOrdersByDays = $allactiveOrdersByDays->fetch_all(MYSQLI_ASSOC);
-  $all_ordered_skus_365 = $sku_quantities_in_order = array();
+  $all_ordered_skus_365 = array();
   if(count($allactiveOrdersByDays)) {
-    foreach($allactiveOrdersByDays as $order) {
-        $order_id = $order['entity_id'];
-        $sql_order_items = "SELECT * FROM mage_sales_flat_order_item WHERE order_id = '".$order_id."'";
-        $allOrderItems = $conn->query($sql_order_items);
-        $allOrderItems = $allOrderItems->fetch_all(MYSQLI_ASSOC);
-
-        foreach($allOrderItems as $order_item) {
-            $qty_ordered = $order_item['qty_ordered'];
-            $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['Quantity'] = $qty_ordered;
-        }
-    }
-    if(count($sku_quantities_in_order)) {
-        foreach($sku_quantities_in_order as $sku=>$orders) {
-            $order_wise_quantities_365 = array();
-            foreach($orders as $order_id=>$sku_data) {
-              $order_wise_quantities_365[] = $sku_data['Quantity'];
-            }
-            $all_ordered_skus_365[$sku]['sku_total_quantity_sold_365'] = array_sum($order_wise_quantities_365);
-        }
+    foreach($allactiveOrdersByDays as $orders) {
+        $all_ordered_skus_365[$orders['sku']]['sku_total_quantity_sold_365'] = $orders['afzet_365'];
     }
   }
   return $all_ordered_skus_365;
