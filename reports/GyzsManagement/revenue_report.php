@@ -28,7 +28,6 @@ $all_updated_categories = array();
 foreach($allUpdatedRecords as $updated_rec) {
     $all_updated_categories[] = $updated_rec["category_id"];
 }
-// Get Updated records categories
 
 // Get Revenue
 $sql_revenue = "SELECT * FROM gyzsrevenuedata ORDER BY sku_vericale_som DESC LIMIT 1";
@@ -40,8 +39,14 @@ $sql_sum = "SELECT SUM(sku_refund_revenue_amount) AS tot_refund_amount, SUM(sku_
 $res_sum = $conn->query($sql_sum);
 $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
 
-// Get Revenue
-
+// Get categories
+$sql_cats = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, gyzsrevenuedata AS rd WHERE mccp.product_id = rd.product_id";
+$result_cats = $conn->query($sql_cats);
+$allCategories = $result_cats->fetch_all(MYSQLI_ASSOC);
+$revenue_categories = array();
+foreach($allCategories as $cat) {
+  $revenue_categories[] = $cat["category_id"];
+}
 ?>
 
 <body>
@@ -232,7 +237,7 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
 
     <!-- Hiddens -->
         <div>
-          <input type="hidden" name="hdn_selectedcategories" id="hdn_selectedcategories" />
+          <input type="hidden" name="hdn_selectedcategories" id="hdn_selectedcategories"  />
           <input type="hidden" name="hdn_selectedbrand" id="hdn_selectedbrand" />
           
           
@@ -250,9 +255,12 @@ $res_sum_data = $res_sum->fetch_all(MYSQLI_ASSOC);
     var document_root_url = "<?php echo $document_root_url; ?>";
     var list = <?php echo json_encode($categories) ?>;
     var settings = <?php echo json_encode($settings_data) ?>;
+    var categoriesOfProducts = <?php echo json_encode($revenue_categories) ?>;
   </script>
   <script src="js/revenue_report.js"></script>
-
+  <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+  
 <script>
  $( function() {
     $(function() {
