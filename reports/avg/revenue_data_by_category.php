@@ -35,7 +35,7 @@ function getAfzet_365() {
 
 function getRevenue($created_at,$created_at_to_date,$all_ordered_skus_365,$categories,$filter_name) { //echo json_encode($categories);exit;
 global $conn;
-$sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$created_at." 00:00:00' AND  created_at <= '".$created_at_to_date." 23:59:00') limit 10";
+$sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$created_at." 00:00:00' AND  created_at <= '".$created_at_to_date." 23:59:00')";
 $allactiveOrders = $conn->query($sql_all_orders);
 $allactiveOrders = $allactiveOrders->fetch_all(MYSQLI_ASSOC);
 $order_lines = 0;
@@ -43,6 +43,7 @@ $total_item_quantity = array();
 $sku_quantities_in_order = $all_ordered_skus= array();
 
   foreach($allactiveOrders as $order) {
+
 
     $order_id = $order['entity_id'];
 

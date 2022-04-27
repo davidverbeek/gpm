@@ -160,7 +160,9 @@ $(document).ready(function() {
         selectedFilters.push(selectedCategories.toString());
         var filter_type = 'get_revenue_data_by_category';
         if ($('#brand').val() != '') {
+          selectedFilters.length = 0;
           selectedFilters.push($('#brand').val());
+          selectedFilters.push(selectedCategories.toString());
           filter_type = 'get_revenue_data_by_both';
         }
         getRevenueDataByFilter(filter_type, selectedFilters);
