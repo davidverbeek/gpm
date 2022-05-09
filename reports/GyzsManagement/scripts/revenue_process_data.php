@@ -29,7 +29,7 @@ switch ($type) {
 
     $stream = stream_context_create($options);
     $get_revenue_data = json_decode(file_get_contents($url_path, false, $stream),true);
-    
+    //print_r($get_revenue_data);exit;
 
     $fetch_error = "error";
    if(count($get_revenue_data['revenue_data'])) {
@@ -39,6 +39,8 @@ switch ($type) {
 
     $truncate_sql = "TRUNCATE TABLE gyzsrevenuedata";
     $conn->query($truncate_sql);
+
+    //print_r($get_revenue_data['revenue_data']);exit;
 
     $fetch_error = "noerror";
     $chunks_revenue_data = array_chunk($get_revenue_data['revenue_data'],ROASINSERTCHUNK,true);
@@ -92,6 +94,16 @@ switch ($type) {
 
     $response_data['msg']["brands"] = $brands;
   }
+
+  $sql_cats = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, gyzsrevenuedata AS rd WHERE mccp.product_id = rd.product_id";
+  $result_cats = $conn->query($sql_cats);
+  $allCategories = $result_cats->fetch_all(MYSQLI_ASSOC);
+  $revenue_categories = array();
+  foreach($allCategories as $cat) {
+    $revenue_categories[] = $cat["category_id"];
+  }
+  $response_data['msg']["categories"] = $revenue_categories;
+  
   break;
 
   case "update_mag_order":
@@ -260,6 +272,67 @@ switch ($type) {
     $response_data['msg'] = $bulk_update_error_msg;
   break;
 
+  case "get_revenue_data_by_filter":
+    
+    $from = $_REQUEST['from'];
+    $to = $_REQUEST['to'];
+    $category_arr = $_REQUEST['data'];
+    $filter_name = $_REQUEST['filter_name'];
+    $url_path = ''.$roas_document_root_url.'/fetch_revenue_data_by_category.php';
+    $post_data = array('from' => $from, 'to' => $to, 'categories' => $category_arr,'roas_settings' => $settings_data['roas'], 'filter_name' => $filter_name);
+
+    $options = array(
+      'http' => array(
+      'method' => 'POST',
+      'content' => http_build_query($post_data))
+    );
+    $stream = stream_context_create($options);
+    $get_revenue_data = json_decode(file_get_contents($url_path, false, $stream),true);
+  
+    //print_r($get_revenue_data);exit;
+
+   // print_r(count($get_revenue_data['revenue_data']));exit;
+
+    $fetch_error = "error";
+   if(count($get_revenue_data['revenue_data'])) {
+
+    $revenue_log = "../pm_logs/revenue_log.txt";
+    file_put_contents($revenue_log,"Revenue Log:-".date("d-m-Y H:i:s")."\n");
+
+    $truncate_sql = "TRUNCATE TABLE gyzsrevenuedata";
+    $conn->query($truncate_sql);
+
+    $fetch_error = "noerror";
+    $chunks_revenue_data = array_chunk($get_revenue_data['revenue_data'],ROASINSERTCHUNK,true);
+    foreach($chunks_revenue_data as $c_k=>$data) {
+      $rec = insertrevenueChunksInView($data,$from,$to);
+      file_put_contents($revenue_log,"Chunk ".$c_k." :-".$rec,FILE_APPEND);
+    }
+  } else {
+    $truncate_sql = "TRUNCATE TABLE gyzsrevenuedata";
+    $conn->query($truncate_sql);
+    $fetch_error = "noerror";
+  }
+
+  $fetch_response_data["err"] = $fetch_error;
+  
+  $fetch_response_data["date_selected"] = $from." To ".$to;
+  $fetch_response_data["total_revenue"] = number_format($get_revenue_data['total_revenue'], 2, ',', '.');
+  $fetch_response_data["total_bp"] = number_format($get_revenue_data['total_bp'], 2, ',', '.');
+
+  $getsum_data = getSUM();
+  
+  $fetch_response_data["tot_refund_amount"] = number_format($getsum_data[0]['tot_refund_amount'], 2, ',', '.');
+  $fetch_response_data["tot_abs_margin"] = number_format($getsum_data[0]['tot_abs_margin'], 2, ',', '.');
+  
+  $tot_pm_sp = $getsum_data[0]['tot_abs_margin'] / $get_revenue_data['total_revenue'];
+
+  $fetch_response_data["tot_pm_sp"] = number_format($tot_pm_sp, 2, ',', '.');
+
+  $response_data['msg'] = $fetch_response_data;
+  
+  break;
+
 }
 
 function insertrevenueChunks($revenue_data,$from,$to) {
@@ -299,13 +372,13 @@ function insertrevenueChunks($revenue_data,$from,$to) {
     }
 
   $sql .= implode(",", $all_col_data);
-  //echo $sql;
-  //exit;
-
+/*   echo $sql;
+  exit;
+ */
     if($conn->query($sql)) {
       return "Inserted:-".count($revenue_data)."\n";
     } else {
-      return "Error in chunk insertion:- ".mysqli_error($conn)."\n";
+      return "Error in chunk insertion:- ".mysqli_error($conn)."\n".$sql;
     }
 
 }
@@ -319,5 +392,53 @@ function getSUM() {
   return $res_sum_data;     
 }
 
-echo json_encode($response_data); 
-?>
+function insertrevenueChunksInView($revenue_data,$from,$to) {
+    
+  global $conn;
+
+  $all_cols = array();
+  $all_col_data = array();
+
+  $sql_view = "REPLACE VIEW gyzsrevenuedata_by_category AS SELECT * FROM gyzsrevenuedata";
+  
+  $sql = "INSERT INTO gyzsrevenuedata_by_category VALUES ";
+
+  foreach($revenue_data as $sku=>$r_data) {
+    
+    $all_col_data[] = "(NULL,
+                        '" . $r_data['sku'] . "',
+                        '" . $r_data['product_id'] . "',
+                        " . $r_data['sku_total_quantity_sold'] . ",
+                        " . $r_data['sku_total_price_excl_tax'] . ",
+                        " . $r_data['sku_bp_excl_tax'] . ",
+                        " . $r_data['sku_sp_excl_tax'] . ",
+                        " . $r_data['sku_abs_margin'] . ",
+                        " . $r_data['sku_margin_bp'] . ",
+                        " . $r_data['sku_margin_sp'] . ",
+                        " . $r_data['vericale_som_percentage'] . ",
+                        " . $r_data['sku_vericale_som'] . ",
+                        " . $r_data['sku_vericale_som_bp'] . ",
+                        " . $r_data['sku_vericale_som_bp_percentage'] . ",
+                        " . $r_data['sku_refund_qty'] . ",
+                        " . $r_data['sku_refund_revenue_amount'] . ",
+                        " . $r_data['sku_refund_bp_amount'] . ", 
+                        '".$from." To ".$to."',
+                        " . $r_data['sku_vericale_som_abs'] . ",
+                        " . $r_data['sku_vericale_som_abs_percentage'] . ",
+                        ". $r_data['sku_total_quantity_sold_365']."
+                      )";
+
+  }
+
+$sql .= implode(",", $all_col_data);
+/*   echo $sql;
+exit;
+*/
+  if($conn->query($sql)) {
+    return "Inserted:-".count($revenue_data)."\n";
+  } else {
+    return "Error in chunk insertion:- ".mysqli_error($conn)."\n";
+  }
+
+}
+echo json_encode($response_data);
