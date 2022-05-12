@@ -12,11 +12,20 @@ $sql_settings = "SELECT * FROM pm_settings WHERE id = 1";
 $setting_resource = $conn->query($sql_settings);
 $setting_row = $setting_resource->fetch_assoc();
 $setting_row['roas'] = unserialize($setting_row['roas']);
-$days = $setting_row['roas']['sku_afzet_in_days'] ?? '365';//echo $days;exit;
-$revenue_data = getAfzet_365('current_date()', $days);
-function getAfzet_365($current_date, $days) {
+$days = $setting_row['roas']['sku_afzet_in_days'] ?? '1 year';
+$revenue_data = getAfzet_365($days);
+function getAfzet_365($days) {
   global $conn;
-  $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND created_at BETWEEN ".$current_date." - INTERVAL ".$days." DAY AND NOW()";
+  $current_date = date('Y-m-d');
+
+  if($days == '1 year') {
+    $lastyear = strtotime("-1 year", time());
+    $last_year_date = date("Y-m-d", $lastyear);
+  } else {
+    $lastyear = strtotime("-".$days."day", time());
+    $last_year_date = date("Y-m-d", $lastyear);
+  }
+  $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$current_date." 00:00:00' AND  created_at <= '".$last_year_date." 23:59:00')";
   $allactiveOrdersByDays = $conn->query($sql_all_orders);
   $allactiveOrdersByDays = $allactiveOrdersByDays->fetch_all(MYSQLI_ASSOC);
   $all_ordered_skus_365 = $sku_quantities_in_order = array();
