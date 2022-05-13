@@ -21,11 +21,12 @@ function getAfzet_365($days) {
   if($days == '1 year') {
     $lastyear = strtotime("-1 year", time());
     $last_year_date = date("Y-m-d", $lastyear);
+    $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$last_year_date." 00:00:00' AND  created_at <= '".$current_date." 00:00:00')";
   } else {
     $lastyear = strtotime("-".$days." day", time());
     $last_year_date = date("Y-m-d", $lastyear);
+    $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$last_year_date." 00:00:00' AND  created_at <= '".$current_date." 23:59:00')";
   }
-  $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$last_year_date." 00:00:00' AND  created_at <= '".$current_date." 00:00:00')";
   $allactiveOrdersByDays = $conn->query($sql_all_orders);
   $allactiveOrdersByDays = $allactiveOrdersByDays->fetch_all(MYSQLI_ASSOC);
   $all_ordered_skus_365 = $sku_quantities_in_order = array();
