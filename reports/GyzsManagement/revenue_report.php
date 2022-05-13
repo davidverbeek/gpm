@@ -48,7 +48,30 @@ foreach($allCategories as $cat) {
   $revenue_categories[] = $cat["category_id"];
 }
 ?>
-
+<style>
+.loader
+{
+    position: fixed;
+    z-index: 9999999999;
+    opacity: 0.5;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background: url('images/loading.gif') 50% 50% no-repeat #f9f9f9;
+}
+.loader_txt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align-last: center;
+  color: #323584;
+  font-weight: bold;
+  font-style: italic;
+}
+</style>
+<div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Filtering Records...</span></div>
 <body>
     <main>
         <!-- Sidebar -->
@@ -256,6 +279,7 @@ foreach($allCategories as $cat) {
     var list = <?php echo json_encode($categories) ?>;
     var settings = <?php echo json_encode($settings_data) ?>;
     var categoriesOfProducts = <?php echo json_encode($revenue_categories) ?>;
+    var all_product_categories = <?php echo file_get_contents("pm_logs/pm_product_categories.txt") ?>;
   </script>
   <script src="js/revenue_report.js"></script>
   <script src=
