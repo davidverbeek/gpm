@@ -548,7 +548,7 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <?php 
-                                $deb_col_idx = 27;
+                                $deb_col_idx = 28;
                             for($hc=0;$hc<=10;$hc++) { 
                                 $h_cust_group = intval(4027100 + $hc);
                             ?>
