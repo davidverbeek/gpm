@@ -43,13 +43,14 @@ $(document).ready(function () {
       "fixedHeader": true,
       "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
+
           var selected_cats = $('#hdn_selectedcategories').val();
          //if(selected_cats) {
             $.ajax({
              url: document_root_url+'/scripts/process_data_price_management.php',
              "type": "POST",
              data: ({ selected_cats: selected_cats, type: 'category_brands'}),
-             success: function(response_data){
+             success: function(response_data) {
                 var resp_obj = jQuery.parseJSON(response_data);
                 if(resp_obj["msg"]) {
 
@@ -1951,7 +1952,6 @@ $(".show_cols_all").change(function() {
 $(".show_deb_cols").change(function() {
   var ischecked= $(this).is(':checked');
   var checkedval = $(this).val();
-
 
   if(ischecked) {
     table.column(checkedval).visible(true);
@@ -4016,7 +4016,7 @@ $("#chkavges").change(function() {
 $("#flexCheckDefault").change(function () {
     var current_status = $(this).prop('checked');
     var cat_all_str = $("#hdn_selectedcategories").val();
-    if ($('input.show_cols_dsp').is(":checked") && cat_all_str != '' && cat_all_str != -1) {//means this is a group list
+    if ($('input.show_deb_cols').is(":checked") && cat_all_str != '' && cat_all_str != -1) {//means this is a group list
       var cat_all_arr = cat_all_str.split(',');
       if (current_status) { // check all hiddencategories
         $.each(cat_all_arr, function (key, value) {
