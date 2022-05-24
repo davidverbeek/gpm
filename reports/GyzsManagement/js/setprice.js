@@ -4025,10 +4025,6 @@ $("#flexCheckDefault").change(function () {
           checkGiven($li, true, true);
         });
       } else { //uncheck all hiddencategories
-       /*  $.each(cat_all_arr, function (key, value) {
-          $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
-        }); */
-
         $.each(cat_all_arr, function (key, value) {
           var $li = $('li[data-id=' + value + ']');
           checkGiven($li, false, true);
