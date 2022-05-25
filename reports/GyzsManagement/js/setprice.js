@@ -3964,7 +3964,18 @@ $("#chkavges").change(function() {
       }
     });
   });
-  $(".show_cols_dsp, .show_cols_all_dsp, .show_cols_dmbp, .show_cols_all_dmbp, .show_cols_all_dmsp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_all_ddgp").change(function () {
+  $(".show_deb_cols, .show_cols_all_dsp, .show_cols_all_dmbp, .show_cols_all_dmsp, .show_cols_all_ddgp").change(function () {
+    if ($(".show_deb_cols").is(':checked')) {
+      $("label[for='btnDebCategories']").css('display', 'block');
+    }
+    else {
+      if(!$(".show_deb_cols").is(':checked')) {
+        $("label[for='btnDebCategories']").css('display', 'none');
+      }
+    };
+  });
+
+$("#btnDebCategories").click(function () {
     var selected_group = new Array();
     $('.show_cols_dmbp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_dsp').each(function (index) {
       if ($(this).is(':checked')) {
@@ -4004,8 +4015,7 @@ $("#chkavges").change(function() {
           $("#flexCheckDefault").attr("disabled", true);
         }
         table.draw();
-      }
-    );
+      });
 
     request.fail(function (jqXHR, textStatus) {
       alert("Request failed: " + textStatus);

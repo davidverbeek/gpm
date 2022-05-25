@@ -547,8 +547,15 @@ if ($result = $conn->query($sql)) {
                                 <input type="checkbox" value="all_dmbp" name="all_dmbp" class="show_cols_all_ddgp"><span>All Discount GP</span>
                             </label>
 
+                            <div style="clear:both;"></div>
+                            <label for="btnDebCategories" class="col-12" style="background:#dddeee; padding: 5px;display:none;">
+                                <button class="btn btn-purple btn-sm no-modal col-6" type="button" id="btnDebCategories" style="float:right;">
+                                <i class="fa fa-filter"></i>Apply Debter Categories
+                                </button>
+                            </label>
+                            <div style="clear:both;"></div>
                             <?php 
-                                $deb_col_idx = 27;
+                                $deb_col_idx = 28;
                             for($hc=0;$hc<=10;$hc++) { 
                                 $h_cust_group = intval(4027100 + $hc);
                             ?>
