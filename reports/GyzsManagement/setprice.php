@@ -548,7 +548,7 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <div style="clear:both;"></div>
-                            <label for="btnDebCategories" class="col-12" style="background:#dddeee; padding: 5px;display:none;">
+                            <label for="btnDebCategories" class="col-12" style="display:none;">
                                 <button class="btn btn-purple btn-sm no-modal col-6" type="button" id="btnDebCategories" style="float:right;">
                                 <i class="fa fa-filter"></i>Apply Debter Categories
                                 </button>

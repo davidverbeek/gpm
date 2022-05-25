@@ -3967,11 +3967,8 @@ $("#chkavges").change(function() {
   $(".show_deb_cols, .show_cols_all_dsp, .show_cols_all_dmbp, .show_cols_all_dmsp, .show_cols_all_ddgp").change(function () {
     if ($(".show_deb_cols").is(':checked')) {
       $("label[for='btnDebCategories']").css('display', 'block');
-    }
-    else {
-      if(!$(".show_deb_cols").is(':checked')) {
-        $("label[for='btnDebCategories']").css('display', 'none');
-      }
+    } else {
+      $("label[for='btnDebCategories']").css('display', 'none');
     };
   });
 
