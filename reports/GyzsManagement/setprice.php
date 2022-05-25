@@ -1,4 +1,3 @@
-
 <?php
 
   
@@ -549,8 +548,9 @@ if ($result = $conn->query($sql)) {
 
                             <div style="clear:both;"></div>
                             <label for="btnDebCategories" class="col-12" style="display:none;">
-                                <button class="btn btn-purple btn-sm no-modal col-6" type="button" id="btnDebCategories" style="float:right;">
+                                <button class="btn btn-purple btn-sm no-modal col-7" type="button" id="btnDebCategories" style="float:right;">
                                 <i class="fa fa-filter"></i>Apply Debter Categories
+                                <span class="loading-img-update" style="display: none;"></span>
                                 </button>
                             </label>
                             <div style="clear:both;"></div>

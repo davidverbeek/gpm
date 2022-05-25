@@ -815,11 +815,8 @@ $(document).ready(function () {
                             that
                             .search( this.value )
                             .draw();
-                            
-
                       } );
-                } 
-                else if(that[0][0] != column_index["brand"]) {
+                } else if(that[0][0] != column_index["brand"]) {
                 $( 'input', this.footer() ).on( 'keyup change clear', function () {
                     if ( that.search() !== this.value ) {
 
@@ -831,7 +828,6 @@ $(document).ready(function () {
                     }
                 } );
               } else {
-
                   var column = this;
                   var select = $('<select id="brand" class="search_brand" style="margin-top:-30px; margin-left:-63px; position:absolute;"><option value="">All</option></select>')
                       .appendTo( $(column.footer()).empty() )
@@ -843,11 +839,9 @@ $(document).ready(function () {
 
                             $("#chkall").prop('checked', false);
                             $("#check_all_cnt").html(0);
-
-
-                      } );
+                      });
                   }
-          } ); 
+          }); 
       },
       "rowCallback": function( row, data ) {
 
@@ -882,7 +876,6 @@ $(document).ready(function () {
         }
         
         var hdn_percentage_increase_column = $("#hdn_percentage_increase_column").val();
-       
 
         if(data[column_index["is_updated"]] == 1) {
           $node = this.api().row(row).nodes().to$();
@@ -3876,7 +3869,7 @@ $("#chkavges").change(function() {
         beforeSend:function(){
           $("#btnexport").css("opacity",0.5);
           $("#loading-img-export").css({"display": "inline-block"});   
-          $("#btnexport").off( 'click' ); 
+          $("#btnexport").off( 'click' );
         },
         success:function(data) {
           window.location.href = document_root_url+"/import_export/download_exported.php";
@@ -3992,7 +3985,13 @@ $("#btnDebCategories").click(function () {
         url: document_root_url + '/scripts/get_category_brands.php',
         method: "POST",
         data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
-        dataType: "json"
+        dataType: "json",
+        beforeSend:function(){
+          $("#btnDebCategories").css("opacity",0.5);
+          $("#btnDebCategories").find('span.loading-img-update').css({"display": "inline-block"});  
+          $("#btnDebCategories").attr('disabled','disabled');
+        }
+
       });
 
       request.done(function (response_data) {
@@ -4011,6 +4010,9 @@ $("#btnDebCategories").click(function () {
           $("i.sim-tree-checkbox").parent('a').parent('li').addClass('disabled');
           $("#flexCheckDefault").attr("disabled", true);
         }
+        $("#btnDebCategories").css("opacity",1);
+        $("#btnDebCategories").find('span.loading-img-update').css({"display": "none"});
+        $('#btnDebCategories').removeAttr('disabled');
         table.draw();
       });
 
