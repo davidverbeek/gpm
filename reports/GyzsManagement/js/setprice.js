@@ -43,8 +43,8 @@ $(document).ready(function () {
       "fixedHeader": true,
       "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
-
-          var selected_cats = $('#hdn_selectedcategories').val();
+         
+         var selected_cats = getTreeCategories();
          //if(selected_cats) {
             $.ajax({
              url: document_root_url+'/scripts/process_data_price_management.php',
@@ -791,8 +791,6 @@ $(document).ready(function () {
             }
       ],
       initComplete: function () {
-
-      
           // Apply the search
           this.api().columns().every( function () {
               var that = this;
@@ -908,7 +906,6 @@ $(document).ready(function () {
                 }
               });
               selected_categories = updated_cats.toString();
-              $('#hdn_selectedcategories').val(selected_categories)
             }
             d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
@@ -3961,6 +3958,7 @@ $("#chkavges").change(function() {
     if ($(".show_deb_cols").is(':checked')) {
       $("label[for='btnDebCategories']").css('display', 'block');
     } else {
+      $("#btnDebCategories").trigger( "click" );
       $("label[for='btnDebCategories']").css('display', 'none');
     };
   });
@@ -3988,7 +3986,7 @@ $("#btnDebCategories").click(function () {
         dataType: "json",
         beforeSend:function(){
           $("#btnDebCategories").css("opacity",0.5);
-          $("#btnDebCategories").find('span.loading-img-update').css({"display": "inline-block"});  
+          $("#btnDebCategories").find('span.loading-img-update').css({"display": "inline-block"});
           $("#btnDebCategories").attr('disabled','disabled');
         }
 
@@ -4115,4 +4113,17 @@ $("#flexCheckDefault").change(function () {
     }
     return true;
   }
+    function getTreeCategories() {
+      var selected_categories="";
+      if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
+        updated_cats = new Array();
+        $.each($('.sim-tree-checkbox'), function (index, value) {
+          if ($(this).hasClass('checked')) {
+          updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+          }
+        });
+        selected_categories = updated_cats.toString();
+      }
+      return selected_categories;
+    }//end getTreeCategories()
 });
