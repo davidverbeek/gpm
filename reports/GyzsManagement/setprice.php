@@ -173,6 +173,12 @@ if ($result = $conn->query($sql)) {
     padding: 40px,40px;
     cursor: pointer;
 }
+
+.search_group_dd {
+    margin-top: -30px;
+    margin-left: -42px;
+    position: absolute;
+}
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -547,12 +553,12 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <div style="clear:both;"></div>
-                            <label for="btnDebCategories" class="col-12" style="display:none;">
-                                <button class="btn btn-purple btn-sm no-modal col-7" type="button" id="btnDebCategories" style="float:right;">
-                                <i class="fa fa-filter"></i>Apply Debter Categories
-                                <span class="loading-img-update" style="display: none;"></span>
-                                </button>
-                            </label>
+                                <label for="btnDebCategories" class="col-12" style="display:none;">
+                                    <button class="btn btn-purple btn-sm no-modal col-7" type="button" id="btnDebCategories" style="float:right;">
+                                        <i class="fa fa-filter"></i>Apply Debter Categories
+                                        <span class="loading-img-update" style="display: none;"></span>
+                                    </button>
+                                </label>
                             <div style="clear:both;"></div>
                             <?php 
                                 $deb_col_idx = 28;
@@ -600,6 +606,7 @@ if ($result = $conn->query($sql)) {
           <input type="hidden" name="hdn_log_column" id="hdn_log_column" value="18" />
 
           <input type="hidden" name="hdn_stijging_text" id="hdn_stijging_text" />
+          <input type="hidden" name="hdn_group_search_text" id="hdn_group_search_text" />
 
         </div>
         <!-- End of Hiddens -->

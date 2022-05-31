@@ -814,6 +814,85 @@ $(document).ready(function () {
                             .search( this.value )
                             .draw();
                       } );
+                } else if (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"]) {
+                   var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">Select filters</option><option value="14">Less than OR Equal to</option><option value="15">Greater than OR Equal to</option><option value="16">Between</option></select>')
+                      .appendTo( $(that.footer()).empty())
+                      .on( 'change', function () {
+                        let action_dd = $(this).attr('id');
+                        if($(this).val() == 0) {
+                          alert('Field cannot be blank');
+                          return false;
+                        }
+
+                           var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
+
+                           let label_display ="";
+                           if(getclassclicked[2].includes("db_m_bp_editable_column")) {
+                             label_display = "Marge Inkpr %";
+                           }
+
+                            if(getclassclicked[2].includes("db_sp_editable_column")) {
+                              label_display = "Verkpr";
+                            }
+
+                            if(getclassclicked[2].includes("db_d_gp_editable_column")) {
+                              label_display = "Korting Brutpr %";
+                            }
+
+                            if(getclassclicked[2].includes("db_m_sp_editable_column")) {
+                              label_display = "Marge Verkpr %";
+                            }
+                            var group_filter_text = deb_column_name = "";
+                            if($(this).val() == 14) {
+                              group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" <=";
+                              make_expression = "pmd.db_column <= ";
+                            } else if($(this).val() == 16) {
+                              group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" between below 2 values (Enter 2 values seperated by |||)";
+                              make_expression = "pmd.db_column";
+                            } else if($(this).val() == 15) {
+                              group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" >=";
+                              make_expression = "pmd.db_column >= ";
+                            }
+                            var group_price_text = prompt(group_filter_text);
+                            if(group_price_text.length == 0) {
+                              alert("Field should not be blank");
+                              $(this).val('0');
+                              return false;
+                            } else if($(this).val() == 16 && group_price_text.indexOf('|||') === -1) {
+                              alert("Seperator ||| is required in Between condition.");
+                              $(this).val('0');
+                              return false;
+                            } else {
+                              if (group_price_text != null) {
+                                let result = "";
+                                if($(this).val() == 16) {
+                                  const myArray = group_price_text.split("|||");
+                                  if(myArray[1].length == 0) {
+                                    alert("please provide second value");
+                                    $(this).val('0');
+                                    return false;
+                                  } else if (myArray[1] < myArray[0]) {
+                                    alert("First value should be greater than Second value");
+                                    $(this).val('0');
+                                    return false;
+                                  } else {
+                                    result = make_expression.concat(" between "+myArray[0]+" AND "+myArray[1]);
+                                  }
+                                } else {
+                                  result = make_expression.concat(group_price_text);
+                                }
+                                $("#hdn_group_search_text").val(result);
+                                $("#hdn_filters").val(that[0][0]);
+                                $( ".search_group_dd" ).each(function( index ) { //alert($(this).val() + $(this).attr('id'));
+                                  if($(this).val() != "0" && $(this).attr('id') != action_dd) {
+                                   let reset_dd = $(this).attr('id');
+                                   $('#'+reset_dd).val('0');
+                                  }
+                                });
+                                table.draw();
+                              }
+                            }
+                      });
                 } else if(that[0][0] != column_index["brand"]) {
                 $( 'input', this.footer() ).on( 'keyup change clear', function () {
                     if ( that.search() !== this.value ) {
@@ -838,7 +917,7 @@ $(document).ready(function () {
                             $("#chkall").prop('checked', false);
                             $("#check_all_cnt").html(0);
                       });
-                  }
+              }
           }); 
       },
       "rowCallback": function( row, data ) {
@@ -910,7 +989,8 @@ $(document).ready(function () {
             d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
             d.hdn_filters = $('#hdn_filters').val(),
-            d.hdn_stijging_text = $('#hdn_stijging_text').val()
+            d.hdn_stijging_text = $('#hdn_stijging_text').val(),
+            d.hdn_group_search_text = $('#hdn_group_search_text').val()
         }
       }
   });
@@ -1037,10 +1117,10 @@ $(document).ready(function () {
   var current_val;
   var current_last_index;
 
-  $(document).on("click", ".editable_column" , function() { 
+  $(document).on("click", ".editable_column" , function() {
    
    var ischecked = $("#chkbulkupdates").is(':checked');
-  $(this).closest(".editable_column").find('input')[0].select();
+  //$(this).closest(".editable_column").find('input')[0].select();
    if(ischecked) {
 
     const debter_groups = ["100","101","102","103","104","105","106","107","108","109","110"];
@@ -1839,15 +1919,12 @@ $(document).ready(function () {
         return false;
       }
 
-
       if (Stijging_text != null) {
         $("#hdn_stijging_text").val(Stijging_text);
         $("#hdn_filters").val($(this).val());
         table.draw(); 
       }
-    
     }
-
   });
 
   $("#chkall").change(function() {
