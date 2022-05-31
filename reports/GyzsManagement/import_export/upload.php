@@ -198,7 +198,7 @@ if(isset($_POST['hidden_field']))
 		);
 	}
 
-	echo json_encode($output);exit;
+	echo json_encode($output);
 }
 
 function getAllPriceManagementData() {
@@ -254,7 +254,7 @@ function getAllPriceManagementData() {
 			LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_ideal ON mcpev_ideal.entity_id = pmd.product_id AND mcpev_ideal.attribute_id = '".IDEALEVERPAKKING."'
 
           LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
-          LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."' ORDER BY pmd.id desc limit 10";
+          LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
 
 
     if ($result = $conn->query($sql)) { 
@@ -387,11 +387,7 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 		$new_selling_price = roundValue((float) $selling_price);
 	}
 
-/* 	print_r($pmd_buying_price);
-	echo $get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"];
-	echo $new_selling_price;
-	echo $get_all_price_management_data[$chunked_xlsx_sku]["new_selling_price"];exit; */
-	
+
 	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
 
@@ -437,48 +433,6 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 
 	return array($col_data, $historyArray);
 }//end getSqlOfColumns()
-
-function getDebterSql() {
-	$debter_data_to_insert = "";
-	$xlsx_debter_col_start_index = 3;
-	foreach($allcustomer_groups as $g_id=>$g_name) {
-		$xlsx_debter_selling_price = $chunked_xlsx_value[$xlsx_debter_col_start_index];
-			if(isset($xlsx_debter_selling_price) && $xlsx_debter_selling_price != 0) {
-				$d_selling_price = "";
-				if($afwijkenidealeverpakking === "0") {
-					$d_selling_price = round($xlsx_debter_selling_price * $idealeverpakking,2);
-				} else {
-					$d_selling_price = round($xlsx_debter_selling_price,2);
-				}
-
-				$d_margin_on_buying_price = round((($d_selling_price - $pmd_buying_price) / $pmd_buying_price) * 100,2);
-				$d_margin_on_selling_price = round((($d_selling_price - $pmd_buying_price) / $d_selling_price) * 100,2);
-				$d_discount_on_gross = round((1 - ($d_selling_price/$supplier_gross_price)) * 100,2);
-				
-				// check whether product belongs to debter?
-				$xlsx_product_id = $get_all_price_management_data[$chunked_xlsx_sku]["product_id"];
-				$given_debter_product_arr = array();
-				if (isset($debter_product_arr[$g_name])) {
-					$given_debter_product_arr = explode(',', $debter_product_arr[$g_name]);
-				}
-				if ($given_debter_product_arr && !in_array($xlsx_product_id, $given_debter_product_arr)) {
-					$d_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$g_name."_debter_selling_price"];
-					$d_margin_on_buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$g_name."_margin_on_buying_price"];
-					$d_margin_on_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$g_name."_margin_on_selling_price"];
-					$d_discount_on_gross = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$g_name."_discount_on_grossprice_b_on_deb_selling_price"];
-				}
-				$debter_data_to_insert .= "'".$g_id."','".$d_selling_price."','".$d_margin_on_buying_price."','".$d_margin_on_selling_price."','".$d_discount_on_gross."',";
-			} else {
-				$debter_data_to_insert .= "'0','0','0','0','0',";
-			}
-			$xlsx_debter_col_start_index++;
-	}
-	$debter_data_to_insert = rtrim($debter_data_to_insert,",");
-	// Insert debter data ends
-
-	$col_data[] = "('".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."',".$debter_data_to_insert.")";
-									
-}
 
 
 /**
