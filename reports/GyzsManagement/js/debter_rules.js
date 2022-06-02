@@ -126,12 +126,15 @@ $(document).ready(function () {
     $("#hdn_existingcategories").val('');
     $("#hdn_selectedcategories").val('');
 
-    $.ajax({
+    var request = $.ajax({
       url: document_root_url + '/scripts/get_category_brands.php',
       "type": "POST",
       data: ({ customer_group: selected_group, type: 'get_categories' }),
-      success: function (response_data) {
-        var resp_obj = jQuery.parseJSON(response_data);
+      dataType: "json",
+    });
+
+    request.done(function (response_data) {
+        var resp_obj = response_data;
         if (resp_obj["msg"]) {
           // select these categories
           var categories_str = resp_obj["msg"];
@@ -148,7 +151,6 @@ $(document).ready(function () {
         }
         toggleCheckbox('none');
         $("#flexCheckDefault").prop('checked', false);
-      }
     });
 
   });
@@ -254,6 +256,36 @@ $(document).ready(function () {
       $check.removeClass('checked').addClass('sim-tree-semi');
     }
     $li.data('checked', status);
+    setParentCheck($li);
+  }
+
+  function setParentCheck(e) {
+    var t,
+    i = e.parent("ul"),
+    s = i.parent("li"),
+    n = i.children("li"),
+    a = s.find(">a .sim-tree-checkbox"),
+    r = [],
+    d = n.length;
+  s.length &&
+    (e.find(">a .sim-tree-checkbox").hasClass("sim-tree-semi")
+      ? doCheck(a, "semi")
+      : ($.each(n, function () {
+          !0 === $(this).data("checked") && r.push($(this));
+        }),
+        (t = r.length),
+        d === t && doCheck(a, !0),
+        t || doCheck(a, !1),
+        t >= 1 && t < d && doCheck(a, "semi")));
+  }
+
+  function  doCheck (e, t, i) {
+    var s = e.closest("li"),
+      n = s.data();
+    void 0 === t && (t = !n.checked),
+      !0 === t ? e.removeClass("sim-tree-semi").addClass("checked") : !1 === t ? e.removeClass("checked sim-tree-semi") : "semi" === t && e.removeClass("checked").addClass("sim-tree-semi"),
+      s.data("checked", t),
+      !0 ===/*  this.options.linkParent && */ !i && setParentCheck(s);
   }
  
 });
