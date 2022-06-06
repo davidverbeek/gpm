@@ -815,83 +815,63 @@ $(document).ready(function () {
                             .draw();
                       } );
                 } else if (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"]) {
-                   var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">Select filters</option><option value="14">Less than OR Equal to</option><option value="15">Greater than OR Equal to</option><option value="16">Between</option></select>')
+                   var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
                       .appendTo( $(that.footer()).empty())
                       .on( 'change', function () {
                         let action_dd = $(this).attr('id');
+                        $( ".search_group_dd" ).each(function() {
+                          let reset_dd = $(this).attr('id');
+                          if($(this).val() != "0" && reset_dd != action_dd) {
+                           $('#'+reset_dd).val('0');
+                          }
+                        });
                         if($(this).val() == 0) {
-                          alert('Field cannot be blank');
-                          return false;
+                          $("#hdn_filters").val('');
+                          table.draw();
+                          return true;
+                        }
+                        var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
+
+                        let label_display ="";
+                        if(getclassclicked[2].includes("db_m_bp_editable_column")) {
+                          label_display = "Marge Inkpr %";
                         }
 
-                           var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
+                        if(getclassclicked[2].includes("db_sp_editable_column")) {
+                          label_display = "Verkpr";
+                        }
 
-                           let label_display ="";
-                           if(getclassclicked[2].includes("db_m_bp_editable_column")) {
-                             label_display = "Marge Inkpr %";
-                           }
+                        if(getclassclicked[2].includes("db_d_gp_editable_column")) {
+                          label_display = "Korting Brutpr %";
+                        }
 
-                            if(getclassclicked[2].includes("db_sp_editable_column")) {
-                              label_display = "Verkpr";
-                            }
-
-                            if(getclassclicked[2].includes("db_d_gp_editable_column")) {
-                              label_display = "Korting Brutpr %";
-                            }
-
-                            if(getclassclicked[2].includes("db_m_sp_editable_column")) {
-                              label_display = "Marge Verkpr %";
-                            }
-                            var group_filter_text = deb_column_name = "";
-                            if($(this).val() == 14) {
-                              group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" <=";
-                              make_expression = "pmd.db_column <= ";
-                            } else if($(this).val() == 16) {
-                              group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" between below 2 values (Enter 2 values seperated by |||)";
-                              make_expression = "pmd.db_column";
-                            } else if($(this).val() == 15) {
-                              group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" >=";
-                              make_expression = "pmd.db_column >= ";
-                            }
-                            var group_price_text = prompt(group_filter_text);
-                            if(group_price_text.length == 0) {
-                              alert("Field should not be blank");
-                              $(this).val('0');
-                              return false;
-                            } else if($(this).val() == 16 && group_price_text.indexOf('|||') === -1) {
-                              alert("Seperator ||| is required in Between condition.");
-                              $(this).val('0');
-                              return false;
-                            } else {
-                              if (group_price_text != null) {
-                                let result = "";
-                                if($(this).val() == 16) {
-                                  const myArray = group_price_text.split("|||");
-                                  if(myArray[1].length == 0) {
-                                    alert("please provide second value");
-                                    $(this).val('0');
-                                    return false;
-                                  } else if (myArray[1] < myArray[0]) {
-                                    alert("First value should be greater than Second value");
-                                    $(this).val('0');
-                                    return false;
-                                  } else {
-                                    result = make_expression.concat(" between "+myArray[0]+" AND "+myArray[1]);
-                                  }
-                                } else {
-                                  result = make_expression.concat(group_price_text);
-                                }
-                                $("#hdn_group_search_text").val(result);
-                                $("#hdn_filters").val(that[0][0]);
-                                $( ".search_group_dd" ).each(function( index ) { //alert($(this).val() + $(this).attr('id'));
-                                  if($(this).val() != "0" && $(this).attr('id') != action_dd) {
-                                   let reset_dd = $(this).attr('id');
-                                   $('#'+reset_dd).val('0');
-                                  }
-                                });
-                                table.draw();
-                              }
-                            }
+                        if(getclassclicked[2].includes("db_m_sp_editable_column")) {
+                          label_display = "Marge Verkpr %";
+                        }
+                        var group_filter_text = deb_column_name = "";
+                        if($(this).val() == 1) {
+                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" <=";
+                          make_expression = "pmd.db_column <= ";
+                        } else if($(this).val() == 3) {
+                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" Between following 2 values";
+                          make_expression = "pmd.db_column";
+                        } else if($(this).val() == 2) {
+                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" >=";
+                          make_expression = "pmd.db_column >= ";
+                        }
+                           // set modal fields
+                        $('span[id=sp_from_debter_price]').text(group_filter_text);
+                        $('#to_debter_price').val('');
+                        $('searchDebterPriceModal>#from_debter_price').val('').focus();
+                        $('#hdn_parent_debter_selected').val($(this).val());
+                        $('#searchDebterPriceModal').modal('show');
+                        $('#hdn_parent_debter_expression').val(make_expression);
+                        if($(this).val() == '3') {
+                          $('div#div-to-price').show();
+                        } else {
+                          $('div#div-to-price').hide();
+                        }
+                        $("#hdn_filters").val(that[0][0]);
                       });
                 } else if(that[0][0] != column_index["brand"]) {
                 $( 'input', this.footer() ).on( 'keyup change clear', function () {
@@ -4190,17 +4170,61 @@ $("#flexCheckDefault").change(function () {
     }
     return true;
   }
-    function getTreeCategories() {
-      var selected_categories="";
-      if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
-        updated_cats = new Array();
-        $.each($('.sim-tree-checkbox'), function (index, value) {
-          if ($(this).hasClass('checked')) {
-          updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+  
+  function getTreeCategories() {
+    var selected_categories="";
+    if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
+      updated_cats = new Array();
+      $.each($('.sim-tree-checkbox'), function (index, value) {
+        if ($(this).hasClass('checked')) {
+        updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+        }
+      });
+      selected_categories = updated_cats.toString();
+    }
+    return selected_categories;
+  }//end getTreeCategories()
+
+  $('#searchDebterPriceModal').modal({ show: false});
+
+  $("button#okSearchDebterPrices").click(function()
+  {
+    var group_price_text = $('#from_debter_price').val();
+      if(group_price_text.length == 0) {
+        alert("Field should not be blank");
+        $('#hdn_parent_debter_selected').val('0');
+        return false;
+      } else if($('#to_debter_price').length == 0) {
+        alert("Field should not be blankll.");
+        $('#hdn_parent_debter_selected').val('0');
+        return false;
+      } else {
+        if (group_price_text != null) {
+          let result = "";
+          if($('#hdn_parent_debter_selected').val() == 3) {
+            const myArray = $('#to_debter_price').val();
+            if(myArray.length == 0) {
+              alert("please provide second value");
+              $('#hdn_parent_debter_selected').val('0');
+              return false;
+            } else if (myArray < group_price_text) {
+              alert("Second value should be greater than First value");
+              $('#hdn_parent_debter_selected').val('0');
+              return false;
+            } else {
+              make_expression = $("#hdn_parent_debter_expression").val();
+              result = make_expression.concat(" between "+group_price_text+" AND "+myArray);
+            }
+          } else {
+            make_expression = $("#hdn_parent_debter_expression").val();
+            result = make_expression.concat(group_price_text);
           }
-        });
-        selected_categories = updated_cats.toString();
+
+          $("#hdn_group_search_text").val(result);
+        }
       }
-      return selected_categories;
-    }//end getTreeCategories()
-});
+      $('#searchDebterPriceModal').modal("toggle");
+    table.draw();
+    return true;
+  });
+  });

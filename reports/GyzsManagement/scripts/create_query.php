@@ -115,7 +115,7 @@ if(isset(($_POST['hdn_filters']))) {
       $column_to_search = $_POST['hdn_filters'];
       $db_column_name = array_search($column_to_search, $column_index);
       $hdn_search_exp = $_POST['hdn_group_search_text'];
-      $extra_where = str_replace('pmd.db_column', 'pmd.'.$db_column_name, $hdn_search_exp);
+      $extra_where .= ' AND '.str_replace('pmd.db_column', 'pmd.'.$db_column_name, $hdn_search_exp);
     break;
   }
 }
