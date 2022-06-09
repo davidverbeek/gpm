@@ -831,40 +831,46 @@ $(document).ready(function () {
                           return true;
                         }
                         var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
-
                         let label_display ="";
                         if(getclassclicked[2].includes("db_m_bp_editable_column")) {
-                          label_display = "Marge Inkpr %";
+                          label_display  = $('thead').children("tr[role='row']").children('th.db_m_bp_editable_column').first().text();
                         }
 
                         if(getclassclicked[2].includes("db_sp_editable_column")) {
-                          label_display = "Verkpr";
+                          label_display  = $('thead').children("tr[role='row']").children('th.db_sp_editable_column').first().text();
                         }
 
                         if(getclassclicked[2].includes("db_d_gp_editable_column")) {
-                          label_display = "Korting Brutpr %";
+                          label_display  = $('thead').children("tr[role='row']").children('th.db_d_gp_editable_column').first().text();
                         }
 
                         if(getclassclicked[2].includes("db_m_sp_editable_column")) {
-                          label_display = "Marge Verkpr %";
+                          label_display  = $('thead').children("tr[role='row']").children('th.db_m_sp_editable_column').first().text();
                         }
                         var group_filter_text = deb_column_name = "";
                         if($(this).val() == 1) {
-                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" <=";
+                          group_filter_text = label_display+" <=";
                           make_expression = "pmd.db_column <= ";
+                          enterOk('from_debter_price');
+                          $("#to_debter_price").unbind( "keypress" );
                         } else if($(this).val() == 3) {
-                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" Between following 2 values";
+                          group_filter_text = label_display;
                           make_expression = "pmd.db_column";
+                          enterOk('to_debter_price');
+                          $( "#from_debter_price").unbind( "keypress" );
                         } else if($(this).val() == 2) {
-                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" >=";
+                          group_filter_text = label_display+" >=";
                           make_expression = "pmd.db_column >= ";
+                          enterOk('from_debter_price');
+                          $("#to_debter_price").unbind( "keypress" );
                         }
                            // set modal fields
                         $('span[id=sp_from_debter_price]').text(group_filter_text);
                         $('#to_debter_price').val('');
-                        $('searchDebterPriceModal>#from_debter_price').val('').focus();
+                        $('#from_debter_price').val('');
                         $('#hdn_parent_debter_selected').val($(this).val());
                         $('#searchDebterPriceModal').modal('show');
+                        $('#searchDebterPriceModal').draggable();
                         $('#hdn_parent_debter_expression').val(make_expression);
                         if($(this).val() == '3') {
                           $('div#div-to-price').show();
@@ -4227,4 +4233,15 @@ $("#flexCheckDefault").change(function () {
     table.draw();
     return true;
   });
-  });
+
+  function enterOk(textbox_id) {
+    $('#'+textbox_id).keypress(function(event){
+      var keycode = (event.keyCode ? event.keyCode : event.which);
+      if(keycode == '13'){
+        $("button#okSearchDebterPrices").trigger("click");
+      }
+    });
+  }
+
+});
+ 
