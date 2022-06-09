@@ -110,10 +110,15 @@ if(isset(($_POST['hdn_filters']))) {
       $extra_where = "pmd.percentage_increase >= '".$hdn_stijging_text."'"; 
     break;
 
-
-  }  
+    case in_array($_POST['hdn_filters'], $column_index):
+      // get column name from index
+      $column_to_search = $_POST['hdn_filters'];
+      $db_column_name = array_search($column_to_search, $column_index);
+      $hdn_search_exp = $_POST['hdn_group_search_text'];
+      $extra_where .= ' AND '.str_replace('pmd.db_column', 'pmd.'.$db_column_name, $hdn_search_exp);
+    break;
+  }
 }
-
 
 //$extra_where = "mccp.category_id IN (2004,2114,2122,2407)";
 
@@ -239,6 +244,7 @@ array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_mana
 
 );
 
+
 // SQL server connection information
 $sql_details = array(
   'user' => $username,
@@ -252,6 +258,7 @@ $sql_details = array(
  * server-side, there is no need to edit below this line.
  */
 
+ //print_r($table);exit;
 require( 'ssp.class.php' );
 
 echo json_encode(

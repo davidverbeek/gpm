@@ -19,6 +19,7 @@ include "define/constants.php";
     <?php } else {  ?>
     <script src="<?php echo $document_root_url; ?>/js/jquery-3.3.1.slim.min.js"></script>
     <script src="<?php echo $document_root_url; ?>/js/simTree.js"></script>
+    <script src="<?php echo $document_root_url; ?>/js/custom_simTree.js"></script>
     <script src="<?php echo $document_root_url; ?>/js/jquery-3.5.1.js"></script>
     <script src="<?php echo $document_root_url; ?>/js/datatables.min.js"></script>
     <script src="<?php echo $document_root_url; ?>/js/dataTables.bootstrap4.min.js"></script>

@@ -43,8 +43,8 @@ $(document).ready(function () {
       "fixedHeader": true,
       "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
-
-          var selected_cats = $('#hdn_selectedcategories').val();
+         
+         var selected_cats = getTreeCategories();
          //if(selected_cats) {
             $.ajax({
              url: document_root_url+'/scripts/process_data_price_management.php',
@@ -791,8 +791,6 @@ $(document).ready(function () {
             }
       ],
       initComplete: function () {
-
-      
           // Apply the search
           this.api().columns().every( function () {
               var that = this;
@@ -815,11 +813,67 @@ $(document).ready(function () {
                             that
                             .search( this.value )
                             .draw();
-                            
-
                       } );
-                } 
-                else if(that[0][0] != column_index["brand"]) {
+                } else if (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"]) {
+                   var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
+                      .appendTo( $(that.footer()).empty())
+                      .on( 'change', function () {
+                        let action_dd = $(this).attr('id');
+                        $( ".search_group_dd" ).each(function() {
+                          let reset_dd = $(this).attr('id');
+                          if($(this).val() != "0" && reset_dd != action_dd) {
+                           $('#'+reset_dd).val('0');
+                          }
+                        });
+                        if($(this).val() == 0) {
+                          $("#hdn_filters").val('');
+                          table.draw();
+                          return true;
+                        }
+                        var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
+
+                        let label_display ="";
+                        if(getclassclicked[2].includes("db_m_bp_editable_column")) {
+                          label_display = "Marge Inkpr %";
+                        }
+
+                        if(getclassclicked[2].includes("db_sp_editable_column")) {
+                          label_display = "Verkpr";
+                        }
+
+                        if(getclassclicked[2].includes("db_d_gp_editable_column")) {
+                          label_display = "Korting Brutpr %";
+                        }
+
+                        if(getclassclicked[2].includes("db_m_sp_editable_column")) {
+                          label_display = "Marge Verkpr %";
+                        }
+                        var group_filter_text = deb_column_name = "";
+                        if($(this).val() == 1) {
+                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" <=";
+                          make_expression = "pmd.db_column <= ";
+                        } else if($(this).val() == 3) {
+                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" Between following 2 values";
+                          make_expression = "pmd.db_column";
+                        } else if($(this).val() == 2) {
+                          group_filter_text = "Debter "+getclassclicked[0]+" "+label_display+" >=";
+                          make_expression = "pmd.db_column >= ";
+                        }
+                           // set modal fields
+                        $('span[id=sp_from_debter_price]').text(group_filter_text);
+                        $('#to_debter_price').val('');
+                        $('searchDebterPriceModal>#from_debter_price').val('').focus();
+                        $('#hdn_parent_debter_selected').val($(this).val());
+                        $('#searchDebterPriceModal').modal('show');
+                        $('#hdn_parent_debter_expression').val(make_expression);
+                        if($(this).val() == '3') {
+                          $('div#div-to-price').show();
+                        } else {
+                          $('div#div-to-price').hide();
+                        }
+                        $("#hdn_filters").val(that[0][0]);
+                      });
+                } else if(that[0][0] != column_index["brand"]) {
                 $( 'input', this.footer() ).on( 'keyup change clear', function () {
                     if ( that.search() !== this.value ) {
 
@@ -831,7 +885,6 @@ $(document).ready(function () {
                     }
                 } );
               } else {
-
                   var column = this;
                   var select = $('<select id="brand" class="search_brand" style="margin-top:-30px; margin-left:-63px; position:absolute;"><option value="">All</option></select>')
                       .appendTo( $(column.footer()).empty() )
@@ -843,11 +896,9 @@ $(document).ready(function () {
 
                             $("#chkall").prop('checked', false);
                             $("#check_all_cnt").html(0);
-
-
-                      } );
-                  }
-          } ); 
+                      });
+              }
+          }); 
       },
       "rowCallback": function( row, data ) {
 
@@ -882,7 +933,6 @@ $(document).ready(function () {
         }
         
         var hdn_percentage_increase_column = $("#hdn_percentage_increase_column").val();
-       
 
         if(data[column_index["is_updated"]] == 1) {
           $node = this.api().row(row).nodes().to$();
@@ -915,12 +965,12 @@ $(document).ready(function () {
                 }
               });
               selected_categories = updated_cats.toString();
-              $('#hdn_selectedcategories').val(selected_categories)
             }
             d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
             d.hdn_filters = $('#hdn_filters').val(),
-            d.hdn_stijging_text = $('#hdn_stijging_text').val()
+            d.hdn_stijging_text = $('#hdn_stijging_text').val(),
+            d.hdn_group_search_text = $('#hdn_group_search_text').val()
         }
       }
   });
@@ -1047,10 +1097,10 @@ $(document).ready(function () {
   var current_val;
   var current_last_index;
 
-  $(document).on("click", ".editable_column" , function() { 
+  $(document).on("click", ".editable_column" , function() {
    
    var ischecked = $("#chkbulkupdates").is(':checked');
-  $(this).closest(".editable_column").find('input')[0].select();
+  //$(this).closest(".editable_column").find('input')[0].select();
    if(ischecked) {
 
     const debter_groups = ["100","101","102","103","104","105","106","107","108","109","110"];
@@ -1849,15 +1899,12 @@ $(document).ready(function () {
         return false;
       }
 
-
       if (Stijging_text != null) {
         $("#hdn_stijging_text").val(Stijging_text);
         $("#hdn_filters").val($(this).val());
         table.draw(); 
       }
-    
     }
-
   });
 
   $("#chkall").change(function() {
@@ -3876,7 +3923,7 @@ $("#chkavges").change(function() {
         beforeSend:function(){
           $("#btnexport").css("opacity",0.5);
           $("#loading-img-export").css({"display": "inline-block"});   
-          $("#btnexport").off( 'click' ); 
+          $("#btnexport").off( 'click' );
         },
         success:function(data) {
           window.location.href = document_root_url+"/import_export/download_exported.php";
@@ -3964,7 +4011,16 @@ $("#chkavges").change(function() {
       }
     });
   });
-  $(".show_cols_dsp, .show_cols_all_dsp, .show_cols_dmbp, .show_cols_all_dmbp, .show_cols_all_dmsp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_all_ddgp").change(function () {
+  $(".show_deb_cols, .show_cols_all_dsp, .show_cols_all_dmbp, .show_cols_all_dmsp, .show_cols_all_ddgp").change(function () {
+    if ($(".show_deb_cols").is(':checked')) {
+      $("label[for='btnDebCategories']").css('display', 'block');
+    } else {
+      $("#btnDebCategories").trigger( "click" );
+      $("label[for='btnDebCategories']").css('display', 'none');
+    };
+  });
+
+$("#btnDebCategories").click(function () {
     var selected_group = new Array();
     $('.show_cols_dmbp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_dsp').each(function (index) {
       if ($(this).is(':checked')) {
@@ -3984,7 +4040,13 @@ $("#chkavges").change(function() {
         url: document_root_url + '/scripts/get_category_brands.php',
         method: "POST",
         data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
-        dataType: "json"
+        dataType: "json",
+        beforeSend:function(){
+          $("#btnDebCategories").css("opacity",0.5);
+          $("#btnDebCategories").find('span.loading-img-update').css({"display": "inline-block"});
+          $("#btnDebCategories").attr('disabled','disabled');
+        }
+
       });
 
       request.done(function (response_data) {
@@ -4003,9 +4065,11 @@ $("#chkavges").change(function() {
           $("i.sim-tree-checkbox").parent('a').parent('li').addClass('disabled');
           $("#flexCheckDefault").attr("disabled", true);
         }
+        $("#btnDebCategories").css("opacity",1);
+        $("#btnDebCategories").find('span.loading-img-update').css({"display": "none"});
+        $('#btnDebCategories').removeAttr('disabled');
         table.draw();
-      }
-    );
+      });
 
     request.fail(function (jqXHR, textStatus) {
       alert("Request failed: " + textStatus);
@@ -4019,12 +4083,15 @@ $("#flexCheckDefault").change(function () {
     if ($('input.show_deb_cols').is(":checked") && cat_all_str != '' && cat_all_str != -1) {//means this is a group list
       var cat_all_arr = cat_all_str.split(',');
       if (current_status) { // check all hiddencategories
+
         $.each(cat_all_arr, function (key, value) {
-          $("li[data-id='" + value + "']").children('a').children('i').addClass('checked');
+          var $li = $('li[data-id=' + value + ']');
+          checkGiven($li, true, true);
         });
       } else { //uncheck all hiddencategories
         $.each(cat_all_arr, function (key, value) {
-          $("li[data-id='" + value + "']").children('a').children('i').removeClass('checked');
+          var $li = $('li[data-id=' + value + ']');
+          checkGiven($li, false, true);
         });
       }
     } else if (current_status) {
@@ -4103,77 +4170,61 @@ $("#flexCheckDefault").change(function () {
     }
     return true;
   }
-
-  function checkIt(status, flag)
-  {
-    $("i.sim-tree-checkbox").each(function() {
-      var $check = $(this);
-      var $li = $check.closest('li');
-      var $childUl, $childUlCheck;
-      var data = $li.data();
-      if (typeof status === 'undefined') {
-        status = !data.checked;
-      }
-
-      if (status === true) {
-        $('#flexCheckDefault').prop('checked', true);
-        $check.removeClass('sim-tree-semi').addClass('checked');
-      } else if (status === false) {
-        $('#flexCheckDefault').prop('checked', false);
-        $check.removeClass('checked sim-tree-semi');
-      } else if (status === 'semi') {
-        $check.removeClass('checked').addClass('sim-tree-semi');
-      }
-      $li.data('checked', status);
-   });
-  }
-
-  function setParentCheck(e) {
-    var t,
-    i = e.parent("ul"),
-    s = i.parent("li"),
-    n = i.children("li"),
-    a = s.find(">a .sim-tree-checkbox"),
-    r = [],
-    d = n.length;
-  s.length &&
-    (e.find(">a .sim-tree-checkbox").hasClass("sim-tree-semi")
-      ? doCheck(a, "semi")
-      : ($.each(n, function () {
-          !0 === $(this).data("checked") && r.push($(this));
-        }),
-        (t = r.length),
-        d === t && doCheck(a, !0),
-        t || doCheck(a, !1),
-        t >= 1 && t < d && doCheck(a, "semi")));
-  }
-
-  function  doCheck (e, t, i) {
-    var s = e.closest("li"),
-      n = s.data();
-    void 0 === t && (t = !n.checked),
-      !0 === t ? e.removeClass("sim-tree-semi").addClass("checked") : !1 === t ? e.removeClass("checked sim-tree-semi") : "semi" === t && e.removeClass("checked").addClass("sim-tree-semi"),
-      s.data("checked", t),
-      !0 ===/*  this.options.linkParent && */ !i && setParentCheck(s);
-  }
-
-  function checkGiven($li, status, flag)
-  {
-    var data = $li.data();
-    if (typeof status === 'undefined') {
-        status = !data.checked;
+  
+  function getTreeCategories() {
+    var selected_categories="";
+    if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
+      updated_cats = new Array();
+      $.each($('.sim-tree-checkbox'), function (index, value) {
+        if ($(this).hasClass('checked')) {
+        updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+        }
+      });
+      selected_categories = updated_cats.toString();
     }
-    var $a = $li.children('a');
-    var $check = $a.children('.sim-tree-checkbox');
-    if (status === true) {
-      $check.removeClass('sim-tree-semi').addClass('checked');
-    } else if (status === false) {
-      $check.removeClass('checked sim-tree-semi');
-    } else if (status === 'semi') {
-      $check.removeClass('checked').addClass('sim-tree-semi');
-    }
-    $li.data('checked', status);
-    setParentCheck($li);
-  }
+    return selected_categories;
+  }//end getTreeCategories()
 
-});
+  $('#searchDebterPriceModal').modal({ show: false});
+
+  $("button#okSearchDebterPrices").click(function()
+  {
+    var group_price_text = $('#from_debter_price').val();
+      if(group_price_text.length == 0) {
+        alert("Field should not be blank");
+        $('#hdn_parent_debter_selected').val('0');
+        return false;
+      } else if($('#to_debter_price').length == 0) {
+        alert("Field should not be blankll.");
+        $('#hdn_parent_debter_selected').val('0');
+        return false;
+      } else {
+        if (group_price_text != null) {
+          let result = "";
+          if($('#hdn_parent_debter_selected').val() == 3) {
+            const myArray = $('#to_debter_price').val();
+            if(myArray.length == 0) {
+              alert("please provide second value");
+              $('#hdn_parent_debter_selected').val('0');
+              return false;
+            } else if (myArray < group_price_text) {
+              alert("Second value should be greater than First value");
+              $('#hdn_parent_debter_selected').val('0');
+              return false;
+            } else {
+              make_expression = $("#hdn_parent_debter_expression").val();
+              result = make_expression.concat(" between "+group_price_text+" AND "+myArray);
+            }
+          } else {
+            make_expression = $("#hdn_parent_debter_expression").val();
+            result = make_expression.concat(group_price_text);
+          }
+
+          $("#hdn_group_search_text").val(result);
+        }
+      }
+      $('#searchDebterPriceModal').modal("toggle");
+    table.draw();
+    return true;
+  });
+  });
