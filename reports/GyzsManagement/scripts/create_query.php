@@ -114,6 +114,13 @@ if(isset(($_POST['hdn_filters']))) {
       // get column name from index
       $column_to_search = $_POST['hdn_filters'];
       $db_column_name = array_search($column_to_search, $column_index);
+      if ($db_column_name == 'profit_percentage') {
+        $db_column_name = 'profit_percentage_buying_price';
+      } elseif($db_column_name == 'discount_on_gross_price') {
+        $db_column_name = 'discount_on_gross';
+      } else {
+        $db_column_name = $db_column_name;
+      }
       $hdn_search_exp = $_POST['hdn_group_search_text'];
       $extra_where .= ' AND '.str_replace('pmd.db_column', 'pmd.'.$db_column_name, $hdn_search_exp);
     break;
