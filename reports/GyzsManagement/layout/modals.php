@@ -394,13 +394,13 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-            <div class="input-group input-group-sm mb-3">
+            <div class="input-group input-group-sm mb-3" id="div-to-price">
               <div class="input-group-prepend">
                 <span class="input-group-text" style="font-size: 12px;" id="sp_from_debter_price">From value</span>
               </div>
-              <input type="text" class="form-control" placeholder="From" aria-label="Username" id="from_debter_price">
-              <span class="input-group-text">-</span>
-              <input type="text" class="form-control" placeholder="To" aria-label="Server" id="to_debter_price">
+              <input type="text" class="form-control"  aria-label="From" id="from_debter_price">
+              <span class="input-group-text" id="span-dash">-</span>
+              <input type="text" class="form-control"  aria-label="To" id="to_debter_price">
             </div>
 
             <input type="hidden" name="hdn_parent_debter_selected" id="hdn_parent_debter_selected">
