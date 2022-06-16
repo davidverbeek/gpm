@@ -819,14 +819,20 @@ $(document).ready(function () {
                       .appendTo( $(that.footer()).empty())
                       .on( 'change', function () {
                         let action_dd = $(this).attr('id');
+
                         $( ".search_group_dd" ).each(function() {
                           let reset_dd = $(this).attr('id');
                           if($(this).val() != "0" && reset_dd != action_dd) {
-                           $('#'+reset_dd).val('0');
+                            $('#'+reset_dd).val('0');
+                            $('#'+reset_dd+' option[value="4"]').remove();
+                            $('select'+'#'+reset_dd).removeAttr('title');
                           }
                         });
                         if($(this).val() == 0) {
                           $("#hdn_filters").val('');
+                          let clicked_dd = $(this).attr('id');
+                          $('#'+clicked_dd+' option[value="4"]').remove();
+                          $('select'+'#'+clicked_dd).removeAttr('title');
                           table.draw();
                           return true;
                         }
@@ -849,7 +855,8 @@ $(document).ready(function () {
                         }
 
                         if((getclassclicked.length > 1) && getclassclicked[1].includes("sp_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.sp_editable_column').first().text();
+                          let c = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+c+')').text();
                         }
 
                         if((getclassclicked.length > 1) && getclassclicked[1].includes("pm_sp_editable_column")) {
@@ -4230,20 +4237,36 @@ $("#flexCheckDefault").change(function () {
         return false;
       }
       $(this).attr('disabled', 'disabled');
-      let result = "";
+      let result = new_option_text = '';
+      make_expression = $("#hdn_parent_debter_expression").val();
       if($('#hdn_parent_debter_selected').val() == 3) {
-        $(this).attr('disabled', 'disabled');
-        make_expression = $("#hdn_parent_debter_expression").val();
-        result = make_expression.concat(" between "+group_price_text+" AND "+myArray);
+        new_option_text = "Between "+group_price_text+" AND "+myArray;
+        result = make_expression.concat(" "+new_option_text);
       } else {
-        $(this).attr('disabled', 'disabled');
-        make_expression = $("#hdn_parent_debter_expression").val();
         result = make_expression.concat(group_price_text);
       }
 
+      if($('#hdn_parent_debter_selected').val() == 1) {
+        new_option_text = "Less than OR Equal to "+group_price_text;
+      }
+      if($('#hdn_parent_debter_selected').val() == 2) {
+        new_option_text = "Greater than OR Equal to "+group_price_text;
+      }
+
+
     $("#hdn_group_search_text").val(result);
+    let clicked_col_indx = $("#hdn_filters").val();
     $('#searchDebterPriceModal').modal("toggle");
     $(this).removeAttr("disabled");
+    var make_id = 'group_indx_'+clicked_col_indx;
+
+    if($("#"+make_id+" option[value=4]").length > 0) {
+      $('#'+make_id+' option[value="4"]').remove();
+      $('select'+'#'+make_id).removeAttr('title');
+    }
+    $('#'+make_id).append($('<option>', { value : 4 }).text(new_option_text));
+    $('select'+'#'+make_id).val("4").change();
+    $('select'+'#'+make_id).attr('title', new_option_text);
     table.draw();
     return true;
   });
