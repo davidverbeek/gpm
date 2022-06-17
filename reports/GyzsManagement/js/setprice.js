@@ -4221,7 +4221,7 @@ $("#flexCheckDefault").change(function () {
 
   $("button#okSearchDebterPrices").click(function()
   {
-    var group_price_text = $('#from_debter_price').val();
+    var group_price_text = parseFloat($('#from_debter_price').val());
       if(group_price_text.length == 0) {
         alert("Field should not be blank");
         return false;
@@ -4231,7 +4231,7 @@ $("#flexCheckDefault").change(function () {
         return false;
       }
 
-      const myArray = $('#to_debter_price').val();
+      var myArray = parseFloat($('#to_debter_price').val());
       if($('#hdn_parent_debter_selected').val() == 3 && myArray < group_price_text) {
         alert("Second value should be greater than First value");
         return false;
@@ -4274,7 +4274,7 @@ $("#flexCheckDefault").change(function () {
   function enterOk(textbox_id) {
     $('#'+textbox_id).keypress(function(event){
       var keycode = (event.keyCode ? event.keyCode : event.which);
-      if(keycode == '13'){
+      if(keycode == '13') {
         $("button#okSearchDebterPrices").trigger("click");
       }
     });
