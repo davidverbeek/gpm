@@ -839,19 +839,23 @@ $(document).ready(function () {
                         var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
                         let label_display ="";
                         if((getclassclicked.length > 2) && getclassclicked[2].includes("db_m_bp_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.db_m_bp_editable_column').first().text();
+                          let m = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
                         }
 
                         if((getclassclicked.length > 2) && getclassclicked[2].includes("db_sp_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.db_sp_editable_column').first().text();
+                          let m = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
                         }
 
                         if((getclassclicked.length > 2) && getclassclicked[2].includes("db_d_gp_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.db_d_gp_editable_column').first().text();
+                          let m = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
                         }
 
                         if((getclassclicked.length > 2) && getclassclicked[2].includes("db_m_sp_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.db_m_sp_editable_column').first().text();
+                          let m = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
                         }
 
                         if((getclassclicked.length > 1) && getclassclicked[1].includes("sp_editable_column")) {
@@ -860,15 +864,18 @@ $(document).ready(function () {
                         }
 
                         if((getclassclicked.length > 1) && getclassclicked[1].includes("pm_sp_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.pm_sp_editable_column').first().text();
+                          let m = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
                         }
 
                         if((getclassclicked.length > 1) && getclassclicked[1].includes("pm_bp_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.pm_bp_editable_column').first().text();
+                          let m = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
                         }
 
                         if((getclassclicked.length > 1) && getclassclicked[1].includes("discount_on_gross_editable_column")) {
-                          label_display  = $('thead').children("tr[role='row']").children('th.discount_on_gross_editable_column').first().text();
+                          let m = $(this).parent("th").index();
+                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
                         }
 
                         var group_filter_text = deb_column_name = "";
