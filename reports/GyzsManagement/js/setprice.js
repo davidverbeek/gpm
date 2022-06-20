@@ -879,21 +879,20 @@ $(document).ready(function () {
                         }
 
                         var group_filter_text = deb_column_name = "";
+                        $("#to_debter_price").unbind("keypress");
+                        $( "#from_debter_price").unbind("keypress");
                         if($(this).val() == 1) {
                           group_filter_text = label_display+" <=";
                           make_expression = "pmd.db_column <= ";
                           enterOk('from_debter_price');
-                          $("#to_debter_price").unbind( "keypress" );
                         } else if($(this).val() == 3) {
                           group_filter_text = label_display;
                           make_expression = "pmd.db_column";
                           enterOk('to_debter_price');
-                          $( "#from_debter_price").unbind( "keypress" );
                         } else if($(this).val() == 2) {
                           group_filter_text = label_display+" >=";
                           make_expression = "pmd.db_column >= ";
                           enterOk('from_debter_price');
-                          $("#to_debter_price").unbind( "keypress" );
                         }
                            // set modal fields
                         $('span[id=sp_from_debter_price]').text(group_filter_text);
@@ -4249,18 +4248,13 @@ $("#flexCheckDefault").change(function () {
       if($('#hdn_parent_debter_selected').val() == 3) {
         new_option_text = "Between "+group_price_text+" AND "+myArray;
         result = make_expression.concat(" "+new_option_text);
-      } else {
+      } else if($('#hdn_parent_debter_selected').val() == 1) {
+        new_option_text = "Less than OR Equal to "+group_price_text;
+        result = make_expression.concat(group_price_text);
+      } else if($('#hdn_parent_debter_selected').val() == 2) {
+        new_option_text = "Greater than OR Equal to "+group_price_text;
         result = make_expression.concat(group_price_text);
       }
-
-      if($('#hdn_parent_debter_selected').val() == 1) {
-        new_option_text = "Less than OR Equal to "+group_price_text;
-      }
-      if($('#hdn_parent_debter_selected').val() == 2) {
-        new_option_text = "Greater than OR Equal to "+group_price_text;
-      }
-
-
     $("#hdn_group_search_text").val(result);
     let clicked_col_indx = $("#hdn_filters").val();
     $('#searchDebterPriceModal').modal("toggle");
