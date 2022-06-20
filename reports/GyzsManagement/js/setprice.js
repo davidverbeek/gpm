@@ -1039,7 +1039,7 @@ $(document).ready(function () {
     var enableBulkFunc = function() {
       var ischecked = $("#chkbulkupdates").is(':checked');
       if(ischecked) {
-        $(".editable_column").css("cssText", "background-color: #a2a3b7 !important;");
+        $(".editable_column").css("cssText", "background-color: #c5c7c9 !important;");
         $('.striped_span').css("color", "rgb(84, 84, 84)");
         
         $(".sp_editable_column input").attr("disabled","disabled");
@@ -1062,17 +1062,16 @@ $(document).ready(function () {
           var grouptdclassdgp = "db_d_gp_editable_column_"+deb_cnt;
           var grouptdinputdgp = "db_d_gp_editable_column_"+deb_cnt+" input";
 
-
-          $("."+grouptdclass+"").css("cssText", "background-color: #a2a3b7 !important;");
+          $("."+grouptdclass+"").css("cssText", "background-color: #c5c7c9 !important;");
           $("."+grouptdinput+"").attr("disabled","disabled");
 
-          $("."+grouptdclassmbp+"").css("cssText", "background-color: #a2a3b7 !important;");
+          $("."+grouptdclassmbp+"").css("cssText", "background-color: #c5c7c9 !important;");
           $("."+grouptdinputmbp+"").attr("disabled","disabled");
 
-          $("."+grouptdclassmsp+"").css("cssText", "background-color: #a2a3b7 !important;");
+          $("."+grouptdclassmsp+"").css("cssText", "background-color: #c5c7c9 !important;");
           $("."+grouptdinputmsp+"").attr("disabled","disabled");
 
-          $("."+grouptdclassdgp+"").css("cssText", "background-color: #a2a3b7 !important;");
+          $("."+grouptdclassdgp+"").css("cssText", "background-color: #c5c7c9 !important;");
           $("."+grouptdinputdgp+"").attr("disabled","disabled");
         }
         
@@ -1150,7 +1149,7 @@ $(document).ready(function () {
         var getclassclicked_of_span =  ($(this).closest('.editable_column').find('span').attr("class")).split(" ");
       }
       
-      $(".editable_column").css("cssText", "background-color: #a2a3b7 !important;");
+      $(".editable_column").css("cssText", "background-color: #c5c7c9 !important;");
       
       var index = $(this).closest('tr').index();
       var product_id = table.cells({ row: index, column: column_index["product_id"] }).data()[0];
