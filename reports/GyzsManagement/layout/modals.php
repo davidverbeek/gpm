@@ -378,3 +378,41 @@
   </div>
 </div>
 <!-- Modal for Revenue logs  -->
+
+
+
+<!-- The Modal -->
+<div class="modal fade" id="searchDebterPriceModal" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h6 class="modal-title" id="FilterModalLabel">Search By Debter Selling Price</h6><div class="update_loader">(Please wait...<span class="loading-img-update" style="display: inline-block;"></span>)</div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+            <div class="input-group input-group-sm mb-3" id="div-to-price">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="font-size: 12px;" id="sp_from_debter_price">From value</span>
+              </div>
+              <input type="text" class="form-control"  aria-label="From" id="from_debter_price">
+              <span class="input-group-text" id="span-dash">-</span>
+              <input type="text" class="form-control"  aria-label="To" id="to_debter_price">
+            </div>
+
+            <input type="hidden" name="hdn_parent_debter_selected" id="hdn_parent_debter_selected">
+            <input type="hidden" name="hdn_parent_debter_expression" id="hdn_parent_debter_expression">
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="okSearchDebterPrices" >OK</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
