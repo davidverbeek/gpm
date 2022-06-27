@@ -4,8 +4,6 @@ include "../define/constants.php";
 include "../lib/SimpleXLSX.php";
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
-  ini_set('memory_limit', '1024M');
-
   error_reporting(E_ALL);
 /*
 what to do ?
@@ -263,34 +261,6 @@ function getAllPriceManagementData() {
 
           LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
           LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     if ($result = $conn->query($sql)) { 
 		$all_pm_data = array();
