@@ -59,7 +59,7 @@ $(document).ready(function () {
                   var selected_opt = $("#hdn_selectedbrand").val();
                   $.each( resp_obj["msg"], function( key, value ) {
                       var selected_str = "";
-                      if(selected_opt.includes(value)) {
+                      if(selected_opt == value) {
                         selected_str = "selected";
                       }
 
@@ -924,17 +924,12 @@ $(document).ready(function () {
                 } );
               } else {
                   var column = this;
-                  var select = $('<select id="brand" class="search_brand" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple size="3"><option value="">All</option></select>')
+                  var select = $('<select id="brand" class="search_brand" style="margin-top:-30px; margin-left:-63px; position:absolute;"><option value="">All</option></select>')
                       .appendTo( $(column.footer()).empty() )
                       .on( 'change', function () {
-                             var selected_brand = new Array();
-                            $("select#brand option:selected").each(function () {
-                              selected_brand.push("'"+$(this).val()+"'");
-                            });
-
-                            $("#hdn_selectedbrand").val(selected_brand.toString());
+                          $("#hdn_selectedbrand").val(this.value);
                             column
-                            .search(selected_brand.toString())
+                            .search(this.value)
                             .draw();
 
                             $("#chkall").prop('checked', false);

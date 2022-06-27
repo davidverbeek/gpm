@@ -255,7 +255,8 @@ class SSP {
                     	/* Process Columns Ends */	
 
 						if($column['db'] == 'meaov.value AS brand') {
-							$columnSearch[] = $get_column." IN (". $str.")";
+							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
+							$columnSearch[] = "".$get_column."=".$binding;
 						} else {
 							$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
 							$columnSearch[] = "".$get_column." LIKE ".$binding;
