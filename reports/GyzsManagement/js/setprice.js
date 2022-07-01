@@ -932,6 +932,8 @@ $(document).ready(function () {
                           selected.push([$(this).val()]);
                         });
                         $("#hdn_selectedbrand").val(selected);
+                        $("#chkall").prop('checked', false);
+                        $("#check_all_cnt").html(0);
 
                         column
                         .search(  $("#hdn_selectedbrand").val(),true,false )
