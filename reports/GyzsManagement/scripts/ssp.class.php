@@ -251,12 +251,15 @@ class SSP {
 							$stringpos = strrpos($column['db'], SPLIT_CHAR);
                     		$get_before_as = substr($column['db'], 0, $stringpos);
                     		$get_column = str_replace(unserialize(SEA),unserialize(REA),trim($get_before_as));
-
-                    	/* Process Columns Ends */	
-
+							
+							/* Process Columns Ends */
 						if($column['db'] == 'meaov.value AS brand') {
 							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
-							$columnSearch[] = "".$get_column."=".$binding;
+							$brand_arr = explode(',', $str);
+							foreach($brand_arr as $brand_val) {
+								$column_where[] =  "".$get_column."= '".$brand_val."'";
+							}
+							$columnSearch[] = '('.implode(' OR ', $column_where).')';
 						} else {
 							$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
 							$columnSearch[] = "".$get_column." LIKE ".$binding;
@@ -293,7 +296,6 @@ class SSP {
 			
 		}
 		*/
-
 		return $where;		
 	}
 
@@ -368,10 +370,7 @@ class SSP {
 		$check_all_data["total_records"] = $recordsFiltered;
 		fwrite($logfile_query,json_encode($check_all_data)."\n\n");
 		// store query for check all functionality
-	
 
-
-		
 		fwrite($logfile,print_r($data,true)."\n\n");
 
 		fwrite($logfile,json_encode($data)."\n\n");
@@ -650,4 +649,3 @@ class SSP {
 		return $a;
 	}
 }
-

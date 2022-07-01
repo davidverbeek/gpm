@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
   $("#p_s_p").click(function () {
     if ($(this).html() == "+") {
 
@@ -12,7 +11,6 @@ $(document).ready(function () {
       $(this).addClass("p_s_p_pos");
     }
   });
-
 
   function toggleAllCategories(status) {
     var any_disabled = false;
@@ -52,20 +50,21 @@ $(document).ready(function () {
              data: ({ selected_cats: selected_cats, type: 'category_brands'}),
              success: function(response_data) {
                 var resp_obj = jQuery.parseJSON(response_data);
-                if(resp_obj["msg"]) {
-
-                  $('#brand').empty().append($('<option>').val("").text("All"));
-                  //$('#brand').empty();
-                  var selected_opt = $("#hdn_selectedbrand").val();
-                  $.each( resp_obj["msg"], function( key, value ) {
-                      var selected_str = "";
-                      if(selected_opt == value) {
-                        selected_str = "selected";
-                      }
-
-                      $('#brand').append($('<option '+selected_str+'>').val(value).text(value));
-                  });
-                }      
+                
+                if (resp_obj["msg"]) {
+                 $('#brand').empty();
+                 var selected_opt = $("#hdn_selectedbrand").val();
+                 var brand_id_arr = selected_opt.split(',');
+                 $.each(resp_obj["msg"], function (key, value) {
+                   var selected_str = "";
+                   if (brand_id_arr.includes(value)) {
+                     selected_str = "selected";
+                   }
+                   $('#brand').append('<option value="' + value + '" ' + selected_str + '>' + value + '</option>');
+                 });
+                 $('#brand').selectpicker('refresh');
+               }
+               $('#brand').selectpicker();
              }
           });
         //}
@@ -924,16 +923,19 @@ $(document).ready(function () {
                 } );
               } else {
                   var column = this;
-                  var select = $('<select id="brand" class="search_brand" style="margin-top:-30px; margin-left:-63px; position:absolute;"><option value="">All</option></select>')
+                  var select = $('<select id="brand" class="search_brand" data-width="fit" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="All"></select>')
                       .appendTo( $(column.footer()).empty() )
-                      .on( 'change', function () {
-                            $("#hdn_selectedbrand").val(this.value);
-                            column
-                            .search( this.value )
-                            .draw();
+                      .on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        var brands = $('#brand option:selected');
+                        var selected = [];
+                        $(brands).each(function(index, brand){
+                          selected.push([$(this).val()]);
+                        });
+                        $("#hdn_selectedbrand").val(selected);
 
-                            $("#chkall").prop('checked', false);
-                            $("#check_all_cnt").html(0);
+                        column
+                        .search(  $("#hdn_selectedbrand").val(),true,false )
+                        .draw();
                       });
               }
           }); 
