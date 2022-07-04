@@ -257,10 +257,17 @@ class SSP {
 							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
 							$brand_arr = explode(',', $str);
 							foreach($brand_arr as $brand_val) {
-								$column_where[] =  "".$get_column."= '".$brand_val."'";
+								$column_brand[] =  "".$get_column."= '".$brand_val."'";
 							}
-							$columnSearch[] = '('.implode(' OR ', $column_where).')';
-						} else {
+							$columnSearch[] = '('.implode(' OR ', $column_brand).')';
+						} elseif($column['db'] == 'pmd.supplier_type AS supplier_type'){
+							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
+							$brand_arr = explode(',', $str);
+							foreach($brand_arr as $brand_val) {
+								$column_supplier[] =  "".$get_column."= '".$brand_val."'";
+							}
+							$columnSearch[] = '('.implode(' OR ', $column_supplier).')';
+						}else {
 							$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
 							$columnSearch[] = "".$get_column." LIKE ".$binding;
 						}
