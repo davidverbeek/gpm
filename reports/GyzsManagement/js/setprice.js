@@ -804,7 +804,7 @@ $(document).ready(function () {
                 });
 
               if(that[0][0] == column_index["supplier_type"]) {
-                  var select = $('<select id="supplier_type" class="search_supplier selectpicker" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true"><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
+                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true" ><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
                       .appendTo( $(that.footer()).empty())
                     .on('changed.bs.select', function () {
                        suppliers_str = '-1';
@@ -935,7 +935,7 @@ $(document).ready(function () {
                 } );
               } else {
                   var column = this;
-                  var select = $('<select id="brand" class="search_brand selectpicker" data-width="fit" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="Please Select" data-actions-box="true"></select>')
+                  var select = $('<select id="brand" class="search_brand selectpicker" data-width="105%" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="Please Select" data-actions-box="true" data-live-search="true"></select>')
                       .appendTo( $(column.footer()).empty() )
                       .on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         if ($(this).val() != '') {
@@ -1045,7 +1045,8 @@ $(document).ready(function () {
 
   $(document).on("keyup", ".form-control, .input_validate" , function(evt) {
      var current_class = $(this).attr("class").split(" ");
-     if(current_class[0] != "discount_on_gross" && current_class[0] != "db_d_gp") {
+     var check_brand_search = $(this).parent('div').attr('class');
+     if(current_class[0] != "discount_on_gross" && current_class[0] != "db_d_gp" && check_brand_search != 'bs-searchbox') {
       var self = $(this);
       self.val(self.val().replace(/[^0-9\.]/g, ''));
       if ((evt.which != 46 || self.val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57)) 
