@@ -63,7 +63,6 @@ $(document).ready(function () {
                  });
                  $('#brand').selectpicker('refresh');
                }
-               //removed
              }
           });
         //}
@@ -805,10 +804,10 @@ $(document).ready(function () {
                 });
 
               if(that[0][0] == column_index["supplier_type"]) {
-                  var select = $('<select id="supplier_type" class="search_supplier selectpicker" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="All" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true"><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
+                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true" ><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
                       .appendTo( $(that.footer()).empty())
-                    .on('change', function () {
-                      var suppliers_str = "-1";
+                    .on('changed.bs.select', function () {
+                       suppliers_str = '-1';
                       if ($(this).val() != "") {
                         var suppliers_e = $("#supplier_type option:selected");
                         var selected = [];
@@ -817,11 +816,14 @@ $(document).ready(function () {
                         });
                         suppliers_str = selected.toString();
                       }
-                      that
+                      }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        if(suppliers_str != "0") {
+                         that
                         .search(suppliers_str)
                         .draw();
-                      }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-                        $(this).selectpicker('selectAll').addClass('show-tick');
+                        }
+                      }).on('loaded.bs.select', function() {
+                        suppliers_str = "0";
                       });
                 } else if ((that[0][0] >= column_index["selling_price"] && that[0][0] <= column_index["discount_on_gross_price"]) || (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"])) {
                    var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
@@ -933,7 +935,7 @@ $(document).ready(function () {
                 } );
               } else {
                   var column = this;
-                  var select = $('<select id="brand" class="search_brand selectpicker" data-width="fit" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="All" data-actions-box="true"></select>')
+                  var select = $('<select id="brand" class="search_brand selectpicker" data-width="105%" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="Please Select" data-actions-box="true" data-live-search="true"></select>')
                       .appendTo( $(column.footer()).empty() )
                       .on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         if ($(this).val() != '') {
@@ -943,22 +945,27 @@ $(document).ready(function () {
                             selected.push([$(this).val()]);
                           });
                           $("#hdn_selectedbrand").val(selected);
-
-                          column
-                            .search($("#hdn_selectedbrand").val(), true, false)
-                            .draw();
+                          brand_str = "1";
                         } else {
-                          column
-                            .search('-1')
-                            .draw();
+                          $("#hdn_selectedbrand").val('-1');
+                          brand_str = "2";
                         }
                         $("#chkall").prop('checked', false);
                         $("#check_all_cnt").html(0);
                       }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         $(this).selectpicker('selectAll').addClass('show-tick');
+                      }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        if(brand_str != "0") {
+                          column
+                          .search($("#hdn_selectedbrand").val(), true, false)
+                          .draw();
+                        }
+                      }).on('loaded.bs.select', function() {
+                        brand_str = "0";
                       });
               }
           }); 
+          $("#supplier_type").selectpicker('selectAll').addClass('show-tick');
       },
       "rowCallback": function( row, data ) {
 
@@ -1038,7 +1045,8 @@ $(document).ready(function () {
 
   $(document).on("keyup", ".form-control, .input_validate" , function(evt) {
      var current_class = $(this).attr("class").split(" ");
-     if(current_class[0] != "discount_on_gross" && current_class[0] != "db_d_gp") {
+     var check_brand_search = $(this).parent('div').attr('class');
+     if(current_class[0] != "discount_on_gross" && current_class[0] != "db_d_gp" && check_brand_search != 'bs-searchbox') {
       var self = $(this);
       self.val(self.val().replace(/[^0-9\.]/g, ''));
       if ((evt.which != 46 || self.val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57)) 
