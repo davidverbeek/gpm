@@ -14,7 +14,7 @@ it is reading file
 if(isset($_POST['hidden_field']))
 {
 	$error = '';
-	$total_line = '';
+	$total_line = '';echo $_POST['chkYesUpdateSp'].'ff';exit;
 	
 	if($_FILES['file']['name'] != '')
 	{
