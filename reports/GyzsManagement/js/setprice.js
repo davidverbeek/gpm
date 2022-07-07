@@ -804,7 +804,7 @@ $(document).ready(function () {
                 });
 
               if(that[0][0] == column_index["supplier_type"]) {
-                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true" ><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
+                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true" data-live-search="true"><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
                       .appendTo( $(that.footer()).empty())
                     .on('changed.bs.select', function () {
                        suppliers_str = '-1';
