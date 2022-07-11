@@ -817,13 +817,15 @@ $(document).ready(function () {
                         suppliers_str = selected.toString();
                       }
                       }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-                        if(suppliers_str != "0") {
-                         that
-                        .search(suppliers_str)
-                        .draw();
+                        if(suppliers_str != "0" && changed_suppliers_str != suppliers_str) {
+                            that
+                            .search(suppliers_str)
+                            .draw();
                         }
                       }).on('loaded.bs.select', function() {
-                        suppliers_str = "0";
+                        suppliers_str = changed_suppliers_str="0";
+                      }).on('show.bs.select', function() {
+                        changed_suppliers_str = suppliers_str;
                       });
                 } else if ((that[0][0] >= column_index["selling_price"] && that[0][0] <= column_index["discount_on_gross_price"]) || (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"])) {
                    var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
@@ -938,6 +940,7 @@ $(document).ready(function () {
                   var select = $('<select id="brand" class="search_brand selectpicker" data-width="105%" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="Please Select" data-actions-box="true" data-live-search="true"></select>')
                       .appendTo( $(column.footer()).empty() )
                       .on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        brand_str = "2";
                         if ($(this).val() != '') {
                           var brands = $('#brand option:selected');
                           var selected = [];
@@ -945,23 +948,23 @@ $(document).ready(function () {
                             selected.push([$(this).val()]);
                           });
                           $("#hdn_selectedbrand").val(selected);
-                          brand_str = "1";
+                          brand_str = selected;
                         } else {
                           $("#hdn_selectedbrand").val('-1');
-                          brand_str = "2";
                         }
                         $("#chkall").prop('checked', false);
                         $("#check_all_cnt").html(0);
                       }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         $(this).selectpicker('selectAll').addClass('show-tick');
+                        brand_str = changed_brand_str = "0";
                       }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-                        if(brand_str != "0") {
+                        if(brand_str != "0" && changed_brand_str != brand_str) {
                           column
                           .search($("#hdn_selectedbrand").val(), true, false)
                           .draw();
                         }
-                      }).on('loaded.bs.select', function() {
-                        brand_str = "0";
+                      }).on('show.bs.select', function() {
+                        changed_brand_str = brand_str;
                       });
               }
           }); 
