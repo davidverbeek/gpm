@@ -107,7 +107,7 @@ if(isset($_POST['hidden_field']))
 														$pmd_buying_price = roundValue((float) $buying_price);
 														$selling_price = roundValue((1 + ($profit_margin/100)) * $pmd_buying_price);
 													}
-													list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);													
+													list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);
 													list($one_row_debter_String) = getSqlOfAllDebters($chunked_xlsx_sku, $pmd_buying_price);
 
 													$join_cols_names .= $one_rowString;
@@ -330,7 +330,6 @@ function getAllPriceManagementData() {
 } else {
 	echo $conn->error;
 }
-//print_r($all_pm_data);exit;
 	return $all_pm_data;
 }
 
