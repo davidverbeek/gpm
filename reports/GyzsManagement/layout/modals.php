@@ -251,16 +251,17 @@
                   <div class="custom-file mb-3">
                     <input class="form-control" type="file" id="formFile" id="file" name="file">
                   </div>
-
-
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="chkYesUpdateSp" name="chkYesUpdateSp">
+                    <label class="form-check-label" for="chkYesUpdateSp">
+                    Update Vkpr
+                    </label><br>
+                  </div>
 
                   <div class="form-group">
                     <input type="hidden" name="hidden_field" value="1" />
                     <input type="submit" name="import" id="import" class="btn btn-primary text" value="Import" style="margin:0px;" />
                   </div>
-
-
-
                 </form>
                  <div class="form-group" id="process">
                       <div class="progress" style="display:none;"></div>
@@ -405,7 +406,7 @@
 
             <input type="hidden" name="hdn_parent_debter_selected" id="hdn_parent_debter_selected">
             <input type="hidden" name="hdn_parent_debter_expression" id="hdn_parent_debter_expression">
-      </div>
+        </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
