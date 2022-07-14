@@ -3761,11 +3761,6 @@ $('.table tfoot th').each( function () {
         })
     });
 
-
-
-
-
-
     $('body').on('click', function () {
                 /*if ($(".sim-tree").css('background-color', '')) {
                     $(".sim-tree").css({

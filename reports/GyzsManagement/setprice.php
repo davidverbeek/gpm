@@ -493,12 +493,12 @@ if ($result = $conn->query($sql)) {
                                 <input type="checkbox" value="13" name="afwijkenidealeverpakking" class="show_cols"><span>Afw.Ideal.verp</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="15" name="buying_price" class="show_cols open_by_default"><span>PM Inkpr</span>
+                                <input type="checkbox" value="16" name="buying_price" class="show_cols open_by_default"><span>PM Inkpr</span>
                             </label>
                             
-                            <label for="brand-a" class="col-6">
+                            <!--<label for="brand-a" class="col-6">
                                 <input type="checkbox" value="16" name="a_p_b" class="show_cols chav"><span>Cat Gem</span>
-                            </label>
+                            </label>-->
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="17" name="a_p_c" class="show_cols chav"><span>Merk Gem</span>
                             </label>
