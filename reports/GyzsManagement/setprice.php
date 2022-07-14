@@ -179,6 +179,7 @@ if ($result = $conn->query($sql)) {
     margin-left: -42px;
     position: absolute;
 }
+
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -229,7 +230,7 @@ if ($result = $conn->query($sql)) {
                         </label>
                     </div>
                 </div>
-
+               
                 <!-- Price Management Table -->
                 <div class="data-toggle overflow-hidden position-fixed" id="data-content">
                     <div class="datatable w-100 h-100 overflow-auto">
@@ -344,7 +345,6 @@ if ($result = $conn->query($sql)) {
             <a class="cog" id="cog-content" ><img src="<?php echo $document_root_url; ?>/css/svg/filter.svg"
                         alt="filter-icon"></a>
             <div class="content-wrapper d-flex flex-column">
-
                 <!-- set-price-card-details -->
                 <div class=" set-price-card card">
                     <div class="hl-title tital-c3">
@@ -424,6 +424,7 @@ if ($result = $conn->query($sql)) {
 
                     <div>
                         <div class="data data-price d-flex">
+                            
                             <select class="form-select form-select-sm" aria-label="Default select example" id="filter_with">
                               <option value="0">Select filters</option>
                               <optgroup label="Related to price">
@@ -626,6 +627,8 @@ if ($result = $conn->query($sql)) {
     var product_category_id = <?php echo file_get_contents("pm_logs/product_cat_id.txt") ?>;  
     var debter_product_data = <?php echo json_encode($debter_data) ?>; 
   </script>
+  <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/twitter-bootstrap.bundle.js"></script>
+  <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/bootstrap-select.min.js"></script>
   <script src="<?php echo $document_root_url; ?>/js/setprice.js"></script>
   <!-- Load Custom price Js Ends -->  
 </body>

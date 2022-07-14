@@ -33,6 +33,7 @@ include "define/constants.php";
     <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/jquery-ui.js"></script>
     <script src="<?php echo $document_root_url; ?>/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="<?php echo $document_root_url; ?>/css/bootstrap-select.min.css" />
     <?php } ?>
     
 </head>

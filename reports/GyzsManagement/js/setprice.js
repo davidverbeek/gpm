@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
   $("#p_s_p").click(function () {
     if ($(this).html() == "+") {
 
@@ -12,7 +11,6 @@ $(document).ready(function () {
       $(this).addClass("p_s_p_pos");
     }
   });
-
 
   function toggleAllCategories(status) {
     var any_disabled = false;
@@ -43,7 +41,6 @@ $(document).ready(function () {
       "fixedHeader": true,
       "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
-         
          var selected_cats = getTreeCategories();
          //if(selected_cats) {
             $.ajax({
@@ -52,20 +49,20 @@ $(document).ready(function () {
              data: ({ selected_cats: selected_cats, type: 'category_brands'}),
              success: function(response_data) {
                 var resp_obj = jQuery.parseJSON(response_data);
-                if(resp_obj["msg"]) {
-
-                  $('#brand').empty().append($('<option>').val("").text("All"));
-                  //$('#brand').empty();
-                  var selected_opt = $("#hdn_selectedbrand").val();
-                  $.each( resp_obj["msg"], function( key, value ) {
-                      var selected_str = "";
-                      if(selected_opt == value) {
-                        selected_str = "selected";
-                      }
-
-                      $('#brand').append($('<option '+selected_str+'>').val(value).text(value));
-                  });
-                }      
+                
+                if (resp_obj["msg"]) {
+                 $('#brand').empty();
+                 var selected_opt = $("#hdn_selectedbrand").val();
+                 var brand_id_arr = selected_opt.split(',');
+                 $.each(resp_obj["msg"], function (key, value) {
+                   var selected_str = "";
+                   if (brand_id_arr.includes(value)) {
+                     selected_str = "selected";
+                   }
+                   $('#brand').append('<option value="' + value + '" ' + selected_str + '>' + value + '</option>');
+                 });
+                 $('#brand').selectpicker('refresh');
+               }
              }
           });
         //}
@@ -807,13 +804,29 @@ $(document).ready(function () {
                 });
 
               if(that[0][0] == column_index["supplier_type"]) {
-                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;"><option value="">All</option><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
+                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true" data-live-search="true"><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
                       .appendTo( $(that.footer()).empty())
-                      .on( 'change', function () {
+                    .on('changed.bs.select', function () {
+                       suppliers_str = '-1';
+                      if ($(this).val() != "") {
+                        var suppliers_e = $("#supplier_type option:selected");
+                        var selected = [];
+                        $(suppliers_e).each(function (index, brand) {
+                          selected.push([$(this).val()]);
+                        });
+                        suppliers_str = selected.toString();
+                      }
+                      }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        if(suppliers_str != "0" && changed_suppliers_str != suppliers_str) {
                             that
-                            .search( this.value )
+                            .search(suppliers_str)
                             .draw();
-                      } );
+                        }
+                      }).on('loaded.bs.select', function() {
+                        suppliers_str = changed_suppliers_str="0";
+                      }).on('show.bs.select', function() {
+                        changed_suppliers_str = suppliers_str;
+                      });
                 } else if ((that[0][0] >= column_index["selling_price"] && that[0][0] <= column_index["discount_on_gross_price"]) || (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"])) {
                    var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
                       .appendTo( $(that.footer()).empty())
@@ -924,19 +937,38 @@ $(document).ready(function () {
                 } );
               } else {
                   var column = this;
-                  var select = $('<select id="brand" class="search_brand" style="margin-top:-30px; margin-left:-63px; position:absolute;"><option value="">All</option></select>')
+                  var select = $('<select id="brand" class="search_brand selectpicker" data-width="105%" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="Please Select" data-actions-box="true" data-live-search="true"></select>')
                       .appendTo( $(column.footer()).empty() )
-                      .on( 'change', function () {
-                          $("#hdn_selectedbrand").val(this.value);
-                            column
-                            .search(this.value)
-                            .draw();
-
-                            $("#chkall").prop('checked', false);
-                            $("#check_all_cnt").html(0);
+                      .on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        brand_str = "2";
+                        if ($(this).val() != '') {
+                          var brands = $('#brand option:selected');
+                          var selected = [];
+                          $(brands).each(function (index, brand) {
+                            selected.push([$(this).val()]);
+                          });
+                          $("#hdn_selectedbrand").val(selected);
+                          brand_str = selected;
+                        } else {
+                          $("#hdn_selectedbrand").val('-1');
+                        }
+                        $("#chkall").prop('checked', false);
+                        $("#check_all_cnt").html(0);
+                      }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        $(this).selectpicker('selectAll').addClass('show-tick');
+                        brand_str = changed_brand_str = "0";
+                      }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        if(brand_str != "0" && changed_brand_str != brand_str) {
+                          column
+                          .search($("#hdn_selectedbrand").val(), true, false)
+                          .draw();
+                        }
+                      }).on('show.bs.select', function() {
+                        changed_brand_str = brand_str;
                       });
               }
           }); 
+          $("#supplier_type").selectpicker('selectAll').addClass('show-tick');
       },
       "rowCallback": function( row, data ) {
 
@@ -1016,7 +1048,8 @@ $(document).ready(function () {
 
   $(document).on("keyup", ".form-control, .input_validate" , function(evt) {
      var current_class = $(this).attr("class").split(" ");
-     if(current_class[0] != "discount_on_gross" && current_class[0] != "db_d_gp") {
+     var check_brand_search = $(this).parent('div').attr('class');
+     if(current_class[0] != "discount_on_gross" && current_class[0] != "db_d_gp" && check_brand_search != 'bs-searchbox') {
       var self = $(this);
       self.val(self.val().replace(/[^0-9\.]/g, ''));
       if ((evt.which != 46 || self.val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57)) 
@@ -4221,7 +4254,7 @@ $("#flexCheckDefault").change(function () {
 
   $("button#okSearchDebterPrices").click(function()
   {
-    var group_price_text = parseFloat($('#from_debter_price').val());
+    var group_price_text = $('#from_debter_price').val();
       if(group_price_text.length == 0) {
         alert("Field should not be blank");
         return false;
@@ -4230,6 +4263,7 @@ $("#flexCheckDefault").change(function () {
         alert("Field should not be blank.");
         return false;
       }
+      group_price_text = parseFloat($('#from_debter_price').val());
 
       var myArray = parseFloat($('#to_debter_price').val());
       if($('#hdn_parent_debter_selected').val() == 3 && myArray < group_price_text) {
