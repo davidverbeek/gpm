@@ -56,13 +56,13 @@ $(document).ready(function () {
                  var brand_id_arr = selected_opt.split(',');
                  $.each(resp_obj["msg"], function (key, value) {
                    var selected_str = "";
-                   if (brand_id_arr.includes(value)) {
+                   if (brand_id_arr.includes(key)) {
                      selected_str = "selected";
                    }
-                   $('#brand').append('<option value="' + value + '" ' + selected_str + '>' + value + '</option>');
+                   $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
                  });
                  $('#brand').selectpicker('refresh');
-               }
+                }
              }
           });
         //}
@@ -966,6 +966,8 @@ $(document).ready(function () {
                       }).on('show.bs.select', function() {
                         changed_brand_str = brand_str;
                       });
+
+
               }
           }); 
           $("#supplier_type").selectpicker('selectAll').addClass('show-tick');
