@@ -2,7 +2,7 @@
 
  include "../define/constants.php";
  include "../config/dbconfig.php";
-
+ 
 $table = "mage_catalog_product_entity AS mcpe
 INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
 INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
@@ -44,7 +44,7 @@ if($_POST['categories']) {
 }
 
 
-if(isset(($_POST['hdn_filters']))) {
+if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
   switch($_POST['hdn_filters']) {
     case "1":
       $extra_where = "CAST(pmd.buying_price AS DECIMAL(10,".$scale.")) > CAST(pmd.selling_price AS DECIMAL(10,".$scale."))";  
@@ -110,19 +110,40 @@ if(isset(($_POST['hdn_filters']))) {
       $extra_where = "pmd.percentage_increase >= '".$hdn_stijging_text."'"; 
     break;
 
-    case in_array($_POST['hdn_filters'], $column_index):
-      // get column name from index
-      $column_to_search = $_POST['hdn_filters'];
+    case (strpos($_POST['hdn_filters'],"task-all-numbers-filterable") !== FALSE):
+      $column_to_search = trim(str_replace("task-all-numbers-filterable","",$_POST['hdn_filters']));
       $db_column_name = array_search($column_to_search, $column_index);
       if ($db_column_name == 'profit_percentage') {
-        $db_column_name = 'profit_percentage_buying_price';
+        $db_column_name = 'pmd.profit_percentage_buying_price';
       } elseif($db_column_name == 'discount_on_gross_price') {
-        $db_column_name = 'discount_on_gross';
+        $db_column_name = 'pmd.discount_on_gross';
+      } elseif($db_column_name == 'afzet') {
+        $db_column_name = '(pmaf.total_quantity_sold-pmaf.refund_qty)';
+      } elseif($db_column_name == 'supplier_discount_gross_price') {
+        $db_column_name = '(1 - (pmd.net_unit_price / CASE WHEN (pmd.gross_unit_price = 0) THEN 1 ELSE (pmd.gross_unit_price) END )) * 100';
+      } elseif($db_column_name == 'supplier_buying_price') {
+        $db_column_name = 'pmd.net_unit_price';
+      } elseif($db_column_name == 'gyzs_discount_gross_price') {
+        $db_column_name = '(1 - ((IF(CASE WHEN mcpet_af.value IS NOT NULL THEN mcpet_af.value = 0 ELSE mcpev_afw.value = 0 END,mcped_selling_price.value * CASE WHEN mcpet.value IS NOT NULL THEN mcpet.value ELSE mcpev_ideal.value END,mcped_selling_price.value)) / (IF(((REPLACE(mcpev_grossprice.value,",",".")) = 0 OR (REPLACE(mcpev_grossprice.value,",",".")) IS NULL), 1, (REPLACE(mcpev_grossprice.value,",",".")))))) * 100';
+      } elseif($db_column_name == 'supplier_gross_price') {
+        $db_column_name = 'pmd.gross_unit_price';
+      } elseif($db_column_name == 'webshop_supplier_gross_price') {
+        $db_column_name = 'mcpev_grossprice.value';
+      } elseif($db_column_name == 'avg_category') {
+        $db_column_name = 'pma.avg_category';
+      } elseif($db_column_name == 'avg_brand') {
+        $db_column_name = 'pma.avg_brand';
+      } elseif($db_column_name == 'gyzs_buying_price') {
+        $db_column_name = '(CASE WHEN (CASE WHEN mcpet_af.value IS NOT NULL THEN mcpet_af.value = 0 ELSE mcpev_afw.value = 0 END) THEN CAST((mcped.value * CASE WHEN mcpet.value IS NOT NULL THEN mcpet.value ELSE mcpev_ideal.value END) AS DECIMAL (10 , '.$scale.' )) ELSE CAST((mcped.value) AS DECIMAL (10 , '.$scale.' )) END)';
+      }elseif($db_column_name == 'gyzs_selling_price') {
+        $db_column_name = '(CASE WHEN (CASE WHEN mcpet_af.value IS NOT NULL THEN mcpet_af.value = 0 ELSE mcpev_afw.value = 0 END) THEN CAST((mcped_selling_price.value * CASE WHEN mcpet.value IS NOT NULL THEN mcpet.value ELSE mcpev_ideal.value END) AS DECIMAL (10 , '.$scale.' )) ELSE CAST((mcped_selling_price.value) AS DECIMAL (10 , '.$scale.' )) END)';
+      } elseif($db_column_name == 'avg_per_category_per_brand') {
+        $db_column_name = 'pma.avg_per_category_per_brand';
       } else {
-        $db_column_name = $db_column_name;
+        $db_column_name = 'pmd.'.$db_column_name;
       }
       $hdn_search_exp = $_POST['hdn_group_search_text'];
-      $extra_where .= ' AND '.str_replace('pmd.db_column', 'pmd.'.$db_column_name, $hdn_search_exp);
+      $extra_where .= ' AND '.str_replace('pmd.db_column', $db_column_name, $hdn_search_exp);
     break;
   }
 }

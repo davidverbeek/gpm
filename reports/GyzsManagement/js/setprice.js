@@ -827,7 +827,12 @@ $(document).ready(function () {
                       }).on('show.bs.select', function() {
                         changed_suppliers_str = suppliers_str;
                       });
-                } else if ((that[0][0] >= column_index["selling_price"] && that[0][0] <= column_index["discount_on_gross_price"]) || (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"])) {
+                } else if ((
+                that[0][0] != column_index["name"] && that[0][0] != column_index["sku"]
+                && that[0][0] != column_index["ean"] && that[0][0] != column_index["brand"]
+                && that[0][0] != column_index["idealeverpakking"] && that[0][0] != column_index["webshop_idealeverpakking"]
+                && that[0][0] != column_index["afwijkenidealeverpakking"] && that[0][0] != column_index["webshop_afwijkenidealeverpakking"]
+                )) {
                    var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
                       .appendTo( $(that.footer()).empty())
                       .on( 'change', function () {
@@ -849,48 +854,11 @@ $(document).ready(function () {
                           table.draw();
                           return true;
                         }
-                        var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
-                        let label_display ="";
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_m_bp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
 
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_sp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_d_gp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_m_sp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("sp_editable_column")) {
-                          let c = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+c+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("pm_sp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("pm_bp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("discount_on_gross_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
+                        var label_display = m = "";
+                        m = $(this).parent("th").index();
+                        label_display = $("tr[role='row']").find('th:eq('+m+')').text();
+                        
                         var group_filter_text = deb_column_name = "";
                         $("#to_debter_price").unbind("keypress");
                         $( "#from_debter_price").unbind("keypress");
@@ -922,7 +890,7 @@ $(document).ready(function () {
                           $('span#span-dash').hide();
                           $('input#to_debter_price').hide();
                         }
-                        $("#hdn_filters").val(that[0][0]);
+                        $("#hdn_filters").val(that[0][0]+'task-all-numbers-filterable');
                       });
                 } else if(that[0][0] != column_index["brand"]) {
                 $( 'input', this.footer() ).on( 'keyup change clear', function () {
@@ -4287,6 +4255,8 @@ $("#flexCheckDefault").change(function () {
       }
     $("#hdn_group_search_text").val(result);
     let clicked_col_indx = $("#hdn_filters").val();
+    clicked_col_indx = clicked_col_indx.replace("task-all-numbers-filterable", "");
+    clicked_col_indx = $.trim(clicked_col_indx);
     $('#searchDebterPriceModal').modal("toggle");
     $(this).removeAttr("disabled");
     var make_id = 'group_indx_'+clicked_col_indx;
