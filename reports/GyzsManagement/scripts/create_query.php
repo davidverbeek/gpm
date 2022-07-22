@@ -14,7 +14,6 @@ LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_productname ON mcpev_prod
 
 LEFT JOIN mage_catalog_product_entity_text AS mcpev_grossprice ON mcpev_grossprice.entity_id = pmd.product_id AND mcpev_grossprice.attribute_id = '".GROSSUNITPRICE."'
 
-
 LEFT JOIN mage_catalog_product_entity_text AS mcpet_af ON mcpet_af.entity_id = pmd.product_id AND mcpet_af.attribute_id = '".afwijkenidealeverpakking."'
 LEFT JOIN mage_catalog_product_entity_text AS mcpet ON mcpet.entity_id = pmd.product_id AND mcpet.attribute_id = '".IDEALEVERPAKKING."'
 
@@ -139,6 +138,8 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $db_column_name = '(CASE WHEN (CASE WHEN mcpet_af.value IS NOT NULL THEN mcpet_af.value = 0 ELSE mcpev_afw.value = 0 END) THEN CAST((mcped_selling_price.value * CASE WHEN mcpet.value IS NOT NULL THEN mcpet.value ELSE mcpev_ideal.value END) AS DECIMAL (10 , '.$scale.' )) ELSE CAST((mcped_selling_price.value) AS DECIMAL (10 , '.$scale.' )) END)';
       } elseif($db_column_name == 'avg_per_category_per_brand') {
         $db_column_name = 'pma.avg_per_category_per_brand';
+      } elseif($db_column_name == 'webshop_idealeverpakking') {
+        $db_column_name = 'CAST(mcpet.value AS UNSIGNED)';
       } else {
         $db_column_name = 'pmd.'.$db_column_name;
       }

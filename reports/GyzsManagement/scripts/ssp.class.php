@@ -267,7 +267,14 @@ class SSP {
 								$column_supplier[] =  "".$get_column."= '".$brand_val."'";
 							}
 							$columnSearch[] = '('.implode(' OR ', $column_supplier).')';
-						}else {
+						}elseif($column['db'] == 'pmd.afwijkenidealeverpakking AS afwijkenidealeverpakking'){
+							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
+							$afw_pmd_arr = explode(',', $str);
+							foreach($afw_pmd_arr as $afw_val) {
+								$column_afw_1[] =  "".$get_column."= '".$afw_val."'";
+							}
+							$columnSearch[] = '('.implode(' OR ', $column_afw_1).')';
+						} else {
 							$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
 							$columnSearch[] = "".$get_column." LIKE ".$binding;
 						}
