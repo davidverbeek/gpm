@@ -956,8 +956,7 @@ $(document).ready(function () {
                     }
           }); 
           $("#supplier_type").selectpicker('selectAll').addClass('show-tick');
-           $("#afw_indx_14").selectpicker('selectAll').addClass('show-tick');
-           $("#afw_indx_15").selectpicker('selectAll').addClass('show-tick');
+          $(".search_afw_dd ").selectpicker('selectAll').addClass('show-tick');
       },
       "rowCallback": function( row, data ) {
 
@@ -1061,7 +1060,11 @@ $(document).ready(function () {
     var enableBulkFunc = function() {
       var ischecked = $("#chkbulkupdates").is(':checked');
       if(ischecked) {
-        $(".editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".sp_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".pm_bp_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".pm_sp_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".discount_on_gross_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+
         $('.striped_span').css("color", "rgb(84, 84, 84)");
         
         $(".sp_editable_column input").attr("disabled","disabled");
@@ -1084,17 +1087,17 @@ $(document).ready(function () {
           var grouptdclassdgp = "db_d_gp_editable_column_"+deb_cnt;
           var grouptdinputdgp = "db_d_gp_editable_column_"+deb_cnt+" input";
 
-          $("."+grouptdclass+"").css("cssText", "background-color: #c5c7c9 !important;");
-          $("."+grouptdinput+"").attr("disabled","disabled");
-
-          $("."+grouptdclassmbp+"").css("cssText", "background-color: #c5c7c9 !important;");
+          $("td."+grouptdclassmbp+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
           $("."+grouptdinputmbp+"").attr("disabled","disabled");
 
-          $("."+grouptdclassmsp+"").css("cssText", "background-color: #c5c7c9 !important;");
+          $("td."+grouptdclassmsp+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
           $("."+grouptdinputmsp+"").attr("disabled","disabled");
 
-          $("."+grouptdclassdgp+"").css("cssText", "background-color: #c5c7c9 !important;");
-          $("."+grouptdinputdgp+"").attr("disabled","disabled");
+          $("td."+grouptdclassdgp+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
+          $("td."+grouptdinputdgp+"").attr("disabled","disabled");
+
+         $("td."+grouptdclass+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
+         $("."+grouptdinput+"").attr("disabled","disabled");
         }
         
         // For Debter
