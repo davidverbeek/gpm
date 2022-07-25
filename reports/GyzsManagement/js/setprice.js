@@ -56,13 +56,13 @@ $(document).ready(function () {
                  var brand_id_arr = selected_opt.split(',');
                  $.each(resp_obj["msg"], function (key, value) {
                    var selected_str = "";
-                   if (brand_id_arr.includes(value)) {
+                   if (brand_id_arr.includes(key)) {
                      selected_str = "selected";
                    }
-                   $('#brand').append('<option value="' + value + '" ' + selected_str + '>' + value + '</option>');
+                   $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
                  });
                  $('#brand').selectpicker('refresh');
-               }
+                }
              }
           });
         //}
@@ -827,107 +827,94 @@ $(document).ready(function () {
                       }).on('show.bs.select', function() {
                         changed_suppliers_str = suppliers_str;
                       });
-                } else if ((that[0][0] >= column_index["selling_price"] && that[0][0] <= column_index["discount_on_gross_price"]) || (that[0][0] >= column_index["group_4027100_debter_selling_price"] && that[0][0] <= column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"])) {
-                   var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
-                      .appendTo( $(that.footer()).empty())
-                      .on( 'change', function () {
-                        let action_dd = $(this).attr('id');
-
-                        $( ".search_group_dd" ).each(function() {
-                          let reset_dd = $(this).attr('id');
-                          if($(this).val() != "0" && reset_dd != action_dd) {
-                            $('#'+reset_dd).val('0');
-                            $('#'+reset_dd+' option[value="4"]').remove();
-                            $('select'+'#'+reset_dd).removeAttr('title');
-                          }
-                        });
-                        if($(this).val() == 0) {
-                          $("#hdn_filters").val('');
-                          let clicked_dd = $(this).attr('id');
-                          $('#'+clicked_dd+' option[value="4"]').remove();
-                          $('select'+'#'+clicked_dd).removeAttr('title');
-                          table.draw();
-                          return true;
-                        }
-                        var getclassclicked = ($(this).closest('.editable_column').attr("class")).split(" ");
-                        let label_display ="";
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_m_bp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_sp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_d_gp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 2) && getclassclicked[2].includes("db_m_sp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("sp_editable_column")) {
-                          let c = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+c+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("pm_sp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("pm_bp_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        if((getclassclicked.length > 1) && getclassclicked[1].includes("discount_on_gross_editable_column")) {
-                          let m = $(this).parent("th").index();
-                          label_display  = $("tr[role='row']").find('th:eq('+m+')').text();
-                        }
-
-                        var group_filter_text = deb_column_name = "";
-                        $("#to_debter_price").unbind("keypress");
-                        $( "#from_debter_price").unbind("keypress");
-                        if($(this).val() == 1) {
-                          group_filter_text = label_display+" <=";
-                          make_expression = "pmd.db_column <= ";
-                          enterOk('from_debter_price');
-                        } else if($(this).val() == 3) {
-                          group_filter_text = label_display;
-                          make_expression = "pmd.db_column";
-                          enterOk('to_debter_price');
-                        } else if($(this).val() == 2) {
-                          group_filter_text = label_display+" >=";
-                          make_expression = "pmd.db_column >= ";
-                          enterOk('from_debter_price');
-                        }
-                           // set modal fields
-                        $('span[id=sp_from_debter_price]').text(group_filter_text);
-                        $('#to_debter_price').val('');
-                        $('#from_debter_price').val('');
-                        $('#hdn_parent_debter_selected').val($(this).val());
-                        $('#searchDebterPriceModal').modal('show');
-                        $('#searchDebterPriceModal').draggable();
-                        $('#hdn_parent_debter_expression').val(make_expression);
-                        if($(this).val() == '3') {
-                          $('span#span-dash').show();
-                          $('input#to_debter_price').show();
-                        } else {
-                          $('span#span-dash').hide();
-                          $('input#to_debter_price').hide();
-                        }
-                        $("#hdn_filters").val(that[0][0]);
-                      });
-                } else if(that[0][0] != column_index["brand"]) {
-                $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                } else if((that[0][0] == column_index["afwijkenidealeverpakking"] || that[0][0] == column_index["webshop_afwijkenidealeverpakking"])) {
+                   var select = $('<select id="afw_indx_'+that[0][0]+'" class="search_afw_dd" style="width:92px" title="All" multiple data-width="fit" data-actions-box="true" data-live-search="true" data-selected-text-format="count > 1"><option value="0">0</option><option value="1">1</option></select>')
+                          .appendTo( $(that.footer()).empty())
+                          .on('changed.bs.select', function () {
+                            afw1_str = '-1';
+                           if ($(this).val() != "") {
+                             var suppliers_e = $("#afw_indx_"+that[0][0]+" option:selected");
+                             var selected = [];
+                             $(suppliers_e).each(function (index, brand) {
+                               selected.push([$(this).val()]);
+                             });
+                             afw1_str = selected.toString();
+                           }
+                           }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                             if(afw1_str != "2" && changed_afw1_str != afw1_str) {
+                                 that
+                                 .search(afw1_str)
+                                 .draw();
+                             }
+                           }).on('loaded.bs.select', function() {
+                             afw1_str = changed_afw1_str="2";
+                           }).on('show.bs.select', function() {
+                            changed_afw1_str = afw1_str;
+                           });
+                  }else if ((
+                    that[0][0] != column_index["name"] && that[0][0] != column_index["sku"]
+                    && that[0][0] != column_index["ean"] && that[0][0] != column_index["brand"]
+                    && that[0][0] != column_index["afwijkenidealeverpakking"] && that[0][0] != column_index["webshop_afwijkenidealeverpakking"]
+                    )) {
+                       var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
+                          .appendTo( $(that.footer()).empty())
+                          .on( 'change', function () {
+                            let action_dd = $(this).attr('id');
+                            $( ".search_group_dd" ).each(function() {
+                              let reset_dd = $(this).attr('id');
+                              if($(this).val() != "0" && reset_dd != action_dd) {
+                                $('#'+reset_dd).val('0');
+                                $('#'+reset_dd+' option[value="4"]').remove();
+                                $('select'+'#'+reset_dd).removeAttr('title');
+                              }
+                            });
+                            if($(this).val() == 0) {
+                              $("#hdn_filters").val('');
+                              let clicked_dd = $(this).attr('id');
+                              $('#'+clicked_dd+' option[value="4"]').remove();
+                              $('select'+'#'+clicked_dd).removeAttr('title');
+                              table.draw();
+                              return true;
+                            }
+                            var label_display = m = "";
+                            m = $(this).parent("th").index();
+                            label_display = $("tr[role='row']").find('th:eq('+m+')').text();
+                            var group_filter_text = deb_column_name = "";
+                            $("#to_debter_price").unbind("keypress");
+                            $( "#from_debter_price").unbind("keypress");
+                            if($(this).val() == 1) {
+                              group_filter_text = label_display+" <=";
+                              make_expression = "pmd.db_column <= ";
+                              enterOk('from_debter_price');
+                            } else if($(this).val() == 3) {
+                              group_filter_text = label_display;
+                              make_expression = "pmd.db_column";
+                              enterOk('to_debter_price');
+                            } else if($(this).val() == 2) {
+                              group_filter_text = label_display+" >=";
+                              make_expression = "pmd.db_column >= ";
+                              enterOk('from_debter_price');
+                            }
+                               // set modal fields
+                            $('span[id=sp_from_debter_price]').text(group_filter_text);
+                            $('#to_debter_price').val('');
+                            $('#from_debter_price').val('');
+                            $('#hdn_parent_debter_selected').val($(this).val());
+                            $('#searchDebterPriceModal').modal('show');
+                            $('#searchDebterPriceModal').draggable();
+                            $('#hdn_parent_debter_expression').val(make_expression);
+                            if($(this).val() == '3') {
+                              $('span#span-dash').show();
+                              $('input#to_debter_price').show();
+                            } else {
+                              $('span#span-dash').hide();
+                              $('input#to_debter_price').hide();
+                            }
+                            $("#hdn_filters").val(that[0][0]+'task-all-numbers-filterable');
+                          });
+                    } else if(that[0][0] != column_index["brand"] && (that[0][0] == column_index["afwijkenidealeverpakking"] || column_index["webshop_afwijkenidealeverpakking"])) { // this is of sku , nam, afw
+                $( 'input', this.footer() ).on( 'keyup change clear', function () { alert(that[0][0]);
                     if ( that.search() !== this.value ) {
-
                         if(that[0][0] != column_index["is_updated"]) {
                           that
                             .search( this.value )
@@ -966,9 +953,10 @@ $(document).ready(function () {
                       }).on('show.bs.select', function() {
                         changed_brand_str = brand_str;
                       });
-              }
+                    }
           }); 
           $("#supplier_type").selectpicker('selectAll').addClass('show-tick');
+          $(".search_afw_dd ").selectpicker('selectAll').addClass('show-tick');
       },
       "rowCallback": function( row, data ) {
 
@@ -1072,7 +1060,11 @@ $(document).ready(function () {
     var enableBulkFunc = function() {
       var ischecked = $("#chkbulkupdates").is(':checked');
       if(ischecked) {
-        $(".editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".sp_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".pm_bp_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".pm_sp_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+        $(".discount_on_gross_editable_column").css("cssText", "background-color: #c5c7c9 !important;");
+
         $('.striped_span').css("color", "rgb(84, 84, 84)");
         
         $(".sp_editable_column input").attr("disabled","disabled");
@@ -1095,17 +1087,17 @@ $(document).ready(function () {
           var grouptdclassdgp = "db_d_gp_editable_column_"+deb_cnt;
           var grouptdinputdgp = "db_d_gp_editable_column_"+deb_cnt+" input";
 
-          $("."+grouptdclass+"").css("cssText", "background-color: #c5c7c9 !important;");
-          $("."+grouptdinput+"").attr("disabled","disabled");
-
-          $("."+grouptdclassmbp+"").css("cssText", "background-color: #c5c7c9 !important;");
+          $("td."+grouptdclassmbp+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
           $("."+grouptdinputmbp+"").attr("disabled","disabled");
 
-          $("."+grouptdclassmsp+"").css("cssText", "background-color: #c5c7c9 !important;");
+          $("td."+grouptdclassmsp+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
           $("."+grouptdinputmsp+"").attr("disabled","disabled");
 
-          $("."+grouptdclassdgp+"").css("cssText", "background-color: #c5c7c9 !important;");
-          $("."+grouptdinputdgp+"").attr("disabled","disabled");
+          $("td."+grouptdclassdgp+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
+          $("td."+grouptdinputdgp+"").attr("disabled","disabled");
+
+         $("td."+grouptdclass+"").has( "input" ).css("cssText", "background-color: #ffffcc !important;");
+         $("."+grouptdinput+"").attr("disabled","disabled");
         }
         
         // For Debter
@@ -4285,6 +4277,8 @@ $("#flexCheckDefault").change(function () {
       }
     $("#hdn_group_search_text").val(result);
     let clicked_col_indx = $("#hdn_filters").val();
+    clicked_col_indx = clicked_col_indx.replace("task-all-numbers-filterable", "");
+    clicked_col_indx = $.trim(clicked_col_indx);
     $('#searchDebterPriceModal').modal("toggle");
     $(this).removeAttr("disabled");
     var make_id = 'group_indx_'+clicked_col_indx;

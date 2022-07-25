@@ -1285,7 +1285,7 @@ break;
 
 case "category_brands":
 
-$brands = array(); 
+$brands = array();
 $selected_cats = $_POST['selected_cats'];
 
 $cat_que = "";
@@ -1293,6 +1293,17 @@ if($selected_cats != "") {
   $cat_que = " WHERE mccp.category_id IN (".$selected_cats.")";
 }
 
+$get_count_by_brand = "SELECT
+meaov.value AS brand,
+count(DISTINCT
+mcpe.entity_id) AS product_count
+FROM mage_catalog_product_entity AS MCPE INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
+INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
+LEFT JOIN mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id AND mcpei.attribute_id = '2120' 
+LEFT JOIN mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
+".$cat_que."
+group by meaov.value
+ORDER BY meaov.value ASC";
 
 $sql = "SELECT DISTINCT
 mcpe.entity_id AS product_id,
@@ -1311,16 +1322,25 @@ mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
 ".$cat_que."
 ORDER BY meaov.value ASC";
 
+$product_count = array();
+if ($result = $conn->query($get_count_by_brand)) {
+  while ($row = $result->fetch_assoc()) {
+    $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
+    if($brand !== NULL && $brand != "") {
+      $product_count[$brand] = $row['product_count'];
+    }
+ }
+}
+
 if ($result = $conn->query($sql)) {
   while ($row = $result->fetch_assoc()) {
     $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
     if($brand !== NULL && $brand != "") {
-     $brands[$brand] = $brand;
-   }
+      $brands[$brand] = $brand.'('.$product_count[$brand].')';
+    }
  }
 }
 $response_data['msg'] = $brands;
-
 break;
 
 
