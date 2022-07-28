@@ -511,9 +511,9 @@ $(document).ready(function () {
               "targets": [column_index["group_4027105_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
                  var product_id = row[column_index['product_id']];
-                var product_status= generateSpan('104', product_id, data);
+                var product_status= generateSpan('105', product_id, data);
                 if (product_status == 'no') {
-                  return '<span class="db_m_sp_span striped_span db_m_sp_span_104" id="db_m_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
+                  return '<span class="db_m_sp_span striped_span db_m_sp_span_105" id="db_m_sp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
                 } else {
                   return '<input type="text" class="db_m_sp input_validate db_m_sp_105" default-value="'+data+'" value="'+data+'" id="db_m_sp_editable_column_105_'+row[column_index["product_id"]]+'" />';
                 }
@@ -913,7 +913,7 @@ $(document).ready(function () {
                             $("#hdn_filters").val(that[0][0]+'task-all-numbers-filterable');
                           });
                     } else if(that[0][0] != column_index["brand"] && (that[0][0] == column_index["afwijkenidealeverpakking"] || column_index["webshop_afwijkenidealeverpakking"])) { // this is of sku , nam, afw
-                $( 'input', this.footer() ).on( 'keyup change clear', function () { alert(that[0][0]);
+                $( 'input', this.footer() ).on('keyup change clear', function () {
                     if ( that.search() !== this.value ) {
                         if(that[0][0] != column_index["is_updated"]) {
                           that
@@ -921,7 +921,7 @@ $(document).ready(function () {
                             .draw();
                         }
                     }
-                } );
+                });
               } else {
                   var column = this;
                   var select = $('<select id="brand" class="search_brand selectpicker" data-width="105%" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="Please Select" data-actions-box="true" data-live-search="true"></select>')
@@ -4185,7 +4185,11 @@ $("#flexCheckDefault").change(function () {
       $("#hdn_showupdated").val("0");
       $("#chkall").prop('checked', false);
       $("#check_all_cnt").html(0);
-      table.draw();
+      $("#hdn_selectedbrand").val('');
+      table
+      .columns(column_index["brand"])
+      .search('')
+      .draw();
     },
     done: function () {
       $("#flexCheckDefault").prop('checked', true);
