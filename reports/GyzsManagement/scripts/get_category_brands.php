@@ -46,11 +46,11 @@ case "category_brands":
 
   if ($result = $conn->query($sql)) {
     while ($row = $result->fetch_assoc()) {
-      $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
-      if($brand !== NULL && $brand != "") {
-      $brands[$brand] = $brand;
+        $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
+        if($brand !== NULL && $brand != "") {
+        $brands[$brand] = $brand;
+      }
     }
-  }
   }
   $response_data['msg'] = $brands;
   break;
@@ -127,6 +127,13 @@ case "category_brands":
       $from_group_id = $_POST['source_group_id'];
       $to_group_id = $_POST['destination_group_id'];
 
+      $copied = "";
+      $sql = "SELECT category_ids, product_ids FROM price_management_debter_categories WHERE customer_group={$from_group_id}";
+        if ($result = $conn->query($sql)) {
+          $row = $result->fetch_assoc();
+          $copied = $row['category_ids'];
+        }
+
       if(resetPrice($to_group_id, $copied)) {
         $sql = "SELECT category_ids, product_ids FROM price_management_debter_categories WHERE customer_group={$from_group_id}";
         if ($result = $conn->query($sql)) { 
@@ -148,7 +155,7 @@ case "category_brands":
           $response_data['msg'] = "Error in debter copy-rule selection:-".mysqli_error($conn);
         }
     } else {
-      $response_data['msg'] = "Error in reset price.";
+      $response_data['msg'] = "Both debters are already same.";
     }
     break;
     case "multiple_group_query":
@@ -180,31 +187,43 @@ function resetPrice($to_group_id, $new_cats) {
   $result = $conn->query($sql);
   $row = $result->fetch_assoc();
   $before_update_cats = $row['category_ids'];
-  $check_old_is_removed = '';
+  $check_old_is_removed = array();
+  $catId_new_arr = explode(',', $new_cats);
+  $old_cats_arr = explode(',', $before_update_cats);
+  sort($catId_new_arr);
+  sort($old_cats_arr);
   if($before_update_cats) {
-    $old_cats_arr = explode(',', $before_update_cats);
-    $catId_new_arr = explode(',', $new_cats);
-    $check_old_is_removed = implode(',', array_diff($old_cats_arr, $catId_new_arr));
+    $check_old_is_removed = array_diff($old_cats_arr, $catId_new_arr);
   } else {
     $old_cats_arr =  $before_update_cats;
   }
   
-  if($row['product_ids'] && $check_old_is_removed) { // yes reset prices
-    $product_ids = $row['product_ids'];
+  if((count($check_old_is_removed)) > 0) { // yes reset prices
+
+    $unassigned_cats = implode(',', $check_old_is_removed);
+
+    $sql = "SELECT DISTINCT mcpe.entity_id AS product_ids FROM mage_catalog_product_entity AS mcpe
+    INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
+    INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
+    WHERE mccp.category_id IN (".$unassigned_cats.")"; //echo $sql;exit;
+
+    $result = $conn->query($sql);$product_ids=array();
+    while ($row_products = $result->fetch_assoc()) {
+      $product_ids[] = $row_products['product_ids'];
+    }
+    $unassign_products = implode(',', $product_ids);
 
     $debter_name = $row['customer_group_name'];
     $debter_col_1 = "group_".$debter_name."_debter_selling_price";
     $debter_col_2 = "group_".$debter_name."_margin_on_buying_price";
     $debter_col_3 = "group_".$debter_name."_margin_on_selling_price";
     $debter_col_4 = "group_".$debter_name."_discount_on_grossprice_b_on_deb_selling_price";
-    $sql_reset_price = "UPDATE price_management_data SET $debter_col_1=0,$debter_col_2=0,$debter_col_3=0,$debter_col_4=0 WHERE product_id IN (".$product_ids.")";
+    $sql_reset_price = "UPDATE price_management_data SET $debter_col_1=0,$debter_col_2=0,$debter_col_3=0,$debter_col_4=0 WHERE product_id IN (".$unassign_products.")";
     $msg_error = "successfull reset ";
     if(!$conn->query($sql_reset_price)) {
       $msg_error =  $conn->mysqli_error();
       return false;
     }
   }
-  return true;
+  return ($catId_new_arr != $old_cats_arr);
 }
-
-?>
