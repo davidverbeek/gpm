@@ -60,6 +60,10 @@ $(document).ready(function () {
                      selected_str = "selected";
                    }
                    $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
+
+
+
+
                  });
                  $('#brand').selectpicker('refresh');
                 }
@@ -753,7 +757,7 @@ $(document).ready(function () {
               "className": "editable_column db_d_gp_editable_column db_d_gp_editable_column_110"
             },
 
-            //  Debter Discount on Gross Price
+            //Debter Discount on Gross Price
 
             {
               "targets": [column_index["discount_on_gross_price"]],
@@ -4186,8 +4190,12 @@ $("#flexCheckDefault").change(function () {
       $("#chkall").prop('checked', false);
       $("#check_all_cnt").html(0);
       $("#hdn_selectedbrand").val('');
+      $("#supplier_type").selectpicker('selectAll');
+      $('#supplier_type').selectpicker('refresh');
+
+     // $('.dropdown').val([]);
       table
-      .columns(column_index["brand"])
+      .columns([column_index["brand"], column_index["supplier_type"]])
       .search('')
       .draw();
     },
@@ -4268,6 +4276,7 @@ $("#flexCheckDefault").change(function () {
       }
       $(this).attr('disabled', 'disabled');
       let result = new_option_text = '';
+
       make_expression = $("#hdn_parent_debter_expression").val();
       if($('#hdn_parent_debter_selected').val() == 3) {
         new_option_text = "Between "+group_price_text+" AND "+myArray;
@@ -4308,3 +4317,4 @@ $("#flexCheckDefault").change(function () {
   }
 
 });
+
