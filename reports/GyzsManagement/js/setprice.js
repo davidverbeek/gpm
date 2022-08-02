@@ -60,10 +60,6 @@ $(document).ready(function () {
                      selected_str = "selected";
                    }
                    $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
-
-
-
-
                  });
                  $('#brand').selectpicker('refresh');
                 }
@@ -1130,7 +1126,6 @@ $(document).ready(function () {
           var grouptdinputdgp = "db_d_gp_editable_column_"+deb_cnt+" input";
           $("."+grouptdclass+"").css("cssText", "background-color: #90EE90 !important;");
           $("."+grouptdinput+"").removeAttr("disabled","disabled");
-          $('.striped_span').parent('td').css("cssText", "background-color: #dee2e6 !important;");
           
           $("."+grouptdclassmbp+"").css("cssText", "background-color: #7AC3FF !important;");
           $("."+grouptdinputmbp+"").removeAttr("disabled","disabled");
@@ -1140,6 +1135,7 @@ $(document).ready(function () {
 
           $("."+grouptdclassdgp+"").css("cssText", "background-color: #FF6B6B !important;");
           $("."+grouptdinputdgp+"").removeAttr("disabled","disabled");
+          $('.striped_span').parent('td').css("cssText", "background-color: #dee2e6 !important;");
         } 
         // For Debter
 
@@ -3927,9 +3923,11 @@ $("#chkavges").change(function() {
             if(check_import_errors == 0) {
               $('#import_errors').css('display', 'none');
             }
-
           }
-          table.ajax.reload( null, false );
+          table.ajax.reload(function () {
+            $('#message').html("");
+            $('#formFile').val('');
+          }, false);
         }
         
         /*
@@ -3976,7 +3974,7 @@ $("#chkavges").change(function() {
     /* File Upload Ends */
 
     /* File Exports Starts */
-      var btnExportFunc = function() {
+    var btnExportFunc = function() {
 //window.location.href = document_root_url+"/import_export/export.php";
 
         $.ajax({
@@ -4315,6 +4313,4 @@ $("#flexCheckDefault").change(function () {
       }
     });
   }
-
 });
-
