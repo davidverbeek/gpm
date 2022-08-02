@@ -169,7 +169,7 @@ if(isset($_POST['hidden_field']))
 															if (isset($debter_product_arr[$head_cust_group_name])) {
 																$given_debter_product_arr = explode(',', $debter_product_arr[$head_cust_group_name]);
 															}
-															if (count($given_debter_product_arr) == 0 && !in_array($xlsx_product_id, $given_debter_product_arr)) {
+															if (count($given_debter_product_arr) == 0 || !in_array($xlsx_product_id, $given_debter_product_arr)) {
 																$d_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
 																$d_margin_on_buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
 																$d_margin_on_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
