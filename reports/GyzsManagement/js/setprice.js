@@ -3927,6 +3927,7 @@ $("#chkavges").change(function() {
           table.ajax.reload(function () {
             $('#message').html("");
             $('#formFile').val('');
+            $('#chkYesUpdateSp').prop('checked', false);
           }, false);
         }
         

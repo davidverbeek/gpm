@@ -190,7 +190,7 @@ if(isset($_POST['hidden_field']))
 									
 									$progress_status["current_record"] = $current_rec;
 									$progress_status["percentage"] = intval($current_rec/$progress_status["total_records"] * 100);
-									$progress_status['er_imp']["er_summary"] = "<div>Imported ".$valid_count." Out Of ".$progress_status["total_records"]."</div>";
+									$progress_status['er_imp']["er_summary"] = "<div>Imported ".$valid_count." Out Of ".($progress_status["total_records"]-1)."</div>";
 
 									file_put_contents($progress_file_path, json_encode($progress_status));
 									$current_rec++;
