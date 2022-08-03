@@ -76,16 +76,25 @@ if(isset($_POST['hidden_field']))
 											$join_cols_names = "(";
 
 											if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && in_array("Nieuwe Verkoopprijs (Niewe Vkpr per piece)", $chunk_xlsx_data[0][0])) {
-												$debter_buying_price = $buying_price = $chunked_xlsx_value[1];
+												$buying_price = $chunked_xlsx_value[1];
+												if($afwijkenidealeverpakking === "0") {
+													$debter_buying_price = roundValue((float) $buying_price * $idealeverpakking);
+												} else  {
+													$debter_buying_price  = roundValue((float) $buying_price);
+												}
 												$selling_price = $chunked_xlsx_value[2];
 												list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);
 												$join_cols_names .= $one_rowString;
 												$historyArray[] = $one_historyString;
 												$updated_product_skus[] = $chunked_xlsx_sku;
 											} elseif(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && !in_array("Nieuwe Verkoopprijs (Niewe Vkpr per piece)", $chunk_xlsx_data[0][0])) {
-												$debter_buying_price = $buying_price = $chunked_xlsx_value[1];
+												 $buying_price = $chunked_xlsx_value[1];
+												if($afwijkenidealeverpakking === "0") {
+													$debter_buying_price = roundValue((float) $buying_price * $idealeverpakking);
+												} else  {
+													$debter_buying_price  = roundValue((float) $buying_price);
+												}
 												if(!isset($_POST['chkYesUpdateSp'])) {
-
 													$selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["new_selling_price"];
 													if($afwijkenidealeverpakking === "0") {
 														$selling_price = roundValue((float) $selling_price / $idealeverpakking);
@@ -107,7 +116,7 @@ if(isset($_POST['hidden_field']))
 														$selling_price = roundValue((1 + ($profit_margin/100)) * $pmd_buying_price);
 													}
 													list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);
-													list($one_row_debter_String) = getSqlOfAllDebters($chunked_xlsx_sku, $pmd_buying_price);
+													list($one_row_debter_String) = getSqlOfAllDebters($chunked_xlsx_sku, $debter_buying_price);
 
 													$join_cols_names .= $one_rowString;
 													$join_cols_names .= ','.$one_row_debter_String;
@@ -115,58 +124,52 @@ if(isset($_POST['hidden_field']))
 													$updated_product_skus[] = $chunked_xlsx_sku;
 												}
 											} elseif(!in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && in_array("Nieuwe Verkoopprijs (Niewe Vkpr per piece)", $chunk_xlsx_data[0][0])) {
-												$buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"];
+												$debter_buying_price = $buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"];
 												$key = array_search ("Nieuwe Verkoopprijs (Niewe Vkpr per piece)", $chunk_xlsx_data[0][0]);
 												$selling_price = $chunked_xlsx_value[$key];
 												
 												if($afwijkenidealeverpakking === "0") {
 													$buying_price = roundValue((float) $buying_price / $idealeverpakking);
-												}											
-												$debter_buying_price = $buying_price;
+												}
 												list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);
 												
 												$join_cols_names .= $one_rowString;
 												$historyArray[] = $one_historyString;
 												$updated_product_skus[] = $chunked_xlsx_sku;
 											} else { // means both buying and sp are not in xlsx
-												$buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"];
-												if($afwijkenidealeverpakking === "0") {
-													$buying_price = roundValue((float) $buying_price / $idealeverpakking);
-												}
-												$debter_buying_price = $buying_price;
+												$debter_buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"];
 												$join_cols_names .= "'".$chunked_xlsx_sku."'";
 											}
-
 											$allcustomer_groups = getCustomerGroups();
-											$check_debter_header = array_diff($allcustomer_groups,$chunk_xlsx_data[0][0]);
+											$check_debter_header = array_diff($allcustomer_groups, $chunk_xlsx_data[0][0]);
 											if(count($check_debter_header) < count($allcustomer_groups) && !isset($_POST['chkYesUpdateSp'])) {
 												$xls_debter_header_arr = array_diff($allcustomer_groups,$check_debter_header);
 												$join_cols_names .= ",";
 												$debter_product_arr = getDebterProducts();
-												$debter_data_to_insert = $insert_update_group_data = "";
+												$debter_data_to_insert = "";
+												$xlsx_product_id = $get_all_price_management_data[$chunked_xlsx_sku]["product_id"];
 												foreach($xls_debter_header_arr as $head_cust_group_id=>$head_cust_group_name) {
 													$key = array_search ($head_cust_group_name, $chunk_xlsx_data[0][0]);
 														$xlsx_debter_selling_price = $chunked_xlsx_value[$key];
 														if($xlsx_debter_selling_price != 0) {
-															$d_selling_price = 0.00;
 															if($afwijkenidealeverpakking === "0") {
 																$d_selling_price = round($xlsx_debter_selling_price * $idealeverpakking,2);
-																$debter_buying_price = round($debter_buying_price * $idealeverpakking,2);
 															} else {
 																$d_selling_price = round($xlsx_debter_selling_price,2);
 															}
+															if($d_selling_price == 0) {echo 'inf';exit;}
 															$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 															$d_margin_on_buying_price = round((($d_selling_price - $debter_buying_price) / $debter_buying_price) * 100,2);
 															$d_margin_on_selling_price = round((($d_selling_price - $debter_buying_price) / $d_selling_price) * 100,2);
 															$d_discount_on_gross = round((1 - ($d_selling_price/$supplier_gross_price)) * 100,2);
+
 															
 															// check whether product belongs to debter?
-															$xlsx_product_id = $get_all_price_management_data[$chunked_xlsx_sku]["product_id"];
 															$given_debter_product_arr = array();
 															if (isset($debter_product_arr[$head_cust_group_name])) {
 																$given_debter_product_arr = explode(',', $debter_product_arr[$head_cust_group_name]);
 															}
-															if (count($given_debter_product_arr) > 0 && !in_array($xlsx_product_id, $given_debter_product_arr)) {
+															if (count($given_debter_product_arr) == 0 || !in_array($xlsx_product_id, $given_debter_product_arr)) {
 																$d_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
 																$d_margin_on_buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
 																$d_margin_on_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
@@ -298,7 +301,7 @@ function getAllPriceManagementData() {
 		$all_pm_data = array();
 		while ($row = $result->fetch_assoc()) { 
 			//$comp_sku = strtolower($row['sku']);
-				$comp_sku = trim($row['sku']);
+			$comp_sku = trim($row['sku']);
 			$all_pm_data[$comp_sku]["product_id"] = $row['product_id'];
 			$all_pm_data[$comp_sku]["sku"] = $row['sku'];
 
