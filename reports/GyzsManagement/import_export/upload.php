@@ -157,7 +157,6 @@ if(isset($_POST['hidden_field']))
 															} else {
 																$d_selling_price = round($xlsx_debter_selling_price,2);
 															}
-															if($d_selling_price == 0) {echo 'inf';exit;}
 															$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 															$d_margin_on_buying_price = round((($d_selling_price - $debter_buying_price) / $debter_buying_price) * 100,2);
 															$d_margin_on_selling_price = round((($d_selling_price - $debter_buying_price) / $d_selling_price) * 100,2);
@@ -427,7 +426,6 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 		$pmd_buying_price = roundValue((float) $buying_price);
 		$new_selling_price = roundValue((float) $selling_price);
 	}
-
 	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
 
