@@ -151,13 +151,12 @@ if(isset($_POST['hidden_field']))
 												foreach($xls_debter_header_arr as $head_cust_group_id=>$head_cust_group_name) {
 													$key = array_search ($head_cust_group_name, $chunk_xlsx_data[0][0]);
 														$xlsx_debter_selling_price = $chunked_xlsx_value[$key];
-														if($xlsx_debter_selling_price != 0) {
+														if(isset($xlsx_debter_selling_price)) {
 															if($afwijkenidealeverpakking === "0") {
 																$d_selling_price = round($xlsx_debter_selling_price * $idealeverpakking,2);
 															} else {
 																$d_selling_price = round($xlsx_debter_selling_price,2);
 															}
-															if($d_selling_price == 0) {echo 'inf';exit;}
 															$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 															$d_margin_on_buying_price = round((($d_selling_price - $debter_buying_price) / $debter_buying_price) * 100,2);
 															$d_margin_on_selling_price = round((($d_selling_price - $debter_buying_price) / $d_selling_price) * 100,2);
@@ -191,7 +190,7 @@ if(isset($_POST['hidden_field']))
 									
 									$progress_status["current_record"] = $current_rec;
 									$progress_status["percentage"] = intval($current_rec/$progress_status["total_records"] * 100);
-									$progress_status['er_imp']["er_summary"] = "<div>Imported ".$valid_count." Out Of ".$progress_status["total_records"]."</div>";
+									$progress_status['er_imp']["er_summary"] = "<div>Imported ".$valid_count." Out Of ".($progress_status["total_records"]-1)."</div>";
 
 									file_put_contents($progress_file_path, json_encode($progress_status));
 									$current_rec++;
@@ -427,15 +426,21 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 		$pmd_buying_price = roundValue((float) $buying_price);
 		$new_selling_price = roundValue((float) $selling_price);
 	}
-
 	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
 
-	$profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
+	if(!isset($_POST['chkYesUpdateSp'])){
+		$profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
+	}
 	$profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
 	$percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
 	$discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
-	$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
+
+	if(!isset($_POST['chkYesUpdateSp'])){
+		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
+	} else {
+		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."','".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
+	}
 	
 	// Add in history
 	$fields_changed = array();
@@ -532,8 +537,8 @@ function makeSqlForUpdateSp()
 	$last_part_sql = " ON DUPLICATE KEY UPDATE";
 	$back_part_cols = "";
 
-	$sql .= ",net_unit_price, buying_price, selling_price, profit_percentage_buying_price, profit_percentage_selling_price, percentage_increase, discount_on_gross";
-	$back_part_cols = " net_unit_price = VALUES(net_unit_price), buying_price = VALUES(buying_price), selling_price = VALUES(selling_price),profit_percentage_buying_price = VALUES(profit_percentage_buying_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
+	$sql .= ",net_unit_price, buying_price, selling_price,profit_percentage_selling_price, percentage_increase, discount_on_gross";
+	$back_part_cols = " net_unit_price = VALUES(net_unit_price), buying_price = VALUES(buying_price), selling_price = VALUES(selling_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
 
 	$allcustomer_groups = getCustomerGroups();
 	$group_cols = $insert_update_group_data = "";
@@ -581,10 +586,6 @@ function getSqlOfAllDebters($xlsx_sku, $buying_price) {
             $deb_margin_on_buying_price = $get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
 
             $debter_selling_price = roundValue((1 + ($deb_margin_on_buying_price/100)) * $buying_price);
-			if($debter_selling_price == 0) {
-				echo 'Infinity error';
-				exit;
-			}
             $deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
             $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
 			//$group_cols .= $group_col_magento_id.",".$group_col_debter_selling_price.",".$group_col_margin_on_buying_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
