@@ -190,7 +190,7 @@ if(isset($_POST['hidden_field']))
 									
 									$progress_status["current_record"] = $current_rec;
 									$progress_status["percentage"] = intval($current_rec/$progress_status["total_records"] * 100);
-									$progress_status['er_imp']["er_summary"] = "<div>Imported ".$valid_count." Out Of ".$progress_status["total_records"]."</div>";
+									$progress_status['er_imp']["er_summary"] = "<div>Imported ".$valid_count." Out Of ".($progress_status["total_records"]-1)."</div>";
 
 									file_put_contents($progress_file_path, json_encode($progress_status));
 									$current_rec++;
@@ -426,7 +426,6 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 		$pmd_buying_price = roundValue((float) $buying_price);
 		$new_selling_price = roundValue((float) $selling_price);
 	}
-
 	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
 
