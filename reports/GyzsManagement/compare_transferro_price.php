@@ -9,7 +9,7 @@ $startTime = time();
 $mageFilename = '../../app/Mage.php';
 require_once $mageFilename;
 Mage::setIsDeveloperMode(true);
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 umask(0);
 Mage::app('admin');
 Mage::register('isSecureArea', 1);
@@ -82,7 +82,7 @@ try {
 		if(curl_errno($ch))
 		echo 'Curl error: '.curl_error($ch);
 		curl_close($ch);
-
+		$supplier_id = '3';
 		if(isset($return_tf_data["TradeItems"]) && count($return_tf_data["TradeItems"]) > 0) {
 			foreach($return_tf_data["TradeItems"] as $tfk=>$tfd) {
 				
@@ -92,15 +92,14 @@ try {
 				$products[$tfk]['min_order_qty'] = (int)$tfd['TradeitemOrderAmount'];
 				$products[$tfk]['bp_per_piece'] = $tfd['NetUnitPrice'];
 				$products[$tfk]['ean'] = $tfd['Gtin'];
-				$products[$tfk]['supplier_id'] = '3';
 			}
-		} else {
+		} /* else {
 			Mage::log("Error in chunk:-"."$chunkSKU_key".null, 'update_transferro_product_stock_rest.log');
-		}
+		} */
 	$sql_2 = "INSERT INTO all_supplier_products(sku,ean,supplier_id,bp_per_piece,bp_min_order_qty, min_order_qty, afwijkenidealeverpakking, created_at, modified_at) VALUES ";
 	$all_col_data = array();
 	foreach ($products as $key=>$data) {
-		$all_col_data[] = "('".$data['sku']."','".$data['ean']."' ,'".$data['supplier_id']."','".$data['bp_per_piece']."','".$data['bp_min_order_qty']."', '".$data['min_order_qty']."','".$data['afwijkenidealeverpakking']."', '".NOW()."', '".NOW()."')";
+		$all_col_data[] = "('".$data['sku']."','".$data['ean']."' ,'".$supplier_id."','".$data['bp_per_piece']."','".$data['bp_min_order_qty']."', '".$data['min_order_qty']."','".$data['afwijkenidealeverpakking']."', '".NOW()."', '".NOW()."')";
 	}
 
 	$sql_2 .= implode(',', $all_col_data);

@@ -5,26 +5,24 @@ ini_set('memory_limit', '6G');
 ini_set('max_execution_time', 300); // 5 minutes
 umask(0);
 Mage::app();
-ini_set('max_execution_time', 300); 
-
-$txt = 'compareDozonCostprijs';
+/* $txt = 'compareDozonCostprijs';
 
 Mage::app("default")->setCurrentStore(3);
 
 Mage::log("Update ".$txt." Started.", NULL, 'update-'.$txt.'.log');
 
-$storeId = Mage::app()->getStore()->getStoreId();
+$storeId = Mage::app()->getStore()->getStoreId(); */
 // Read Dozon xml
 $xmlfile = "prijslijst/301141200000BM_dozon.xml";
 $reader = new XMLReader();
 $reader->open($xmlfile);
 $dozon_xml_price_data = array();
 $all_col_data=array();
-libxml_use_internal_errors(TRUE);
+//libxml_use_internal_errors(TRUE);
 
 while ($reader->read()) { 
   if($reader->nodeType == XMLReader::ELEMENT && $reader->name == 'Grouping') { 
-   $grouping_data = new SimpleXMLElement($reader->readOuterXml());//print_r($grouping_data);exit;
+   $grouping_data = new SimpleXMLElement($reader->readOuterXml());
    
     foreach($grouping_data->TradeItemLine AS $trade_item_key=>$trade_item_data) {
         $trade_item_data = convertoarray($trade_item_data);
@@ -48,23 +46,12 @@ while ($reader->read()) {
         }
 
         $cost = round((($NetPrice / $NumberOfUnitsInPriceBasis) * $MinimumOrderQuantity),2);
-        
-        //$dozon_xml_price_data[$xml_sku]["xml_cost"] = $cost;
-
-        //$dozon_xml_price_data[$xml_sku]["xml_NetPrice"] = $NetPrice;
-        //$dozon_xml_price_data[$xml_sku]["xml_NumberOfUnitsInPriceBasis"] = $NumberOfUnitsInPriceBasis;
-        //$dozon_xml_price_data[$xml_sku]["min_order_qty"] = $MinimumOrderQuantity;
-
         $dozon_xml_price_data[$xml_sku]["bp_min_order_qty"] = $cost;
         $dozon_xml_price_data[$xml_sku]["bp_per_piece"] = $cost/$dozon_xml_price_data[$xml_sku]["min_order_qty"];
-       // $dozon_xml_price_data[$xml_sku]["supplier_id"] = '3';
-
-        //print_r($dozon_xml_price_data);exit;
     }
  }
 
 }
-//echo count($dozon_xml_price_data);exit;
 const PMCHUNK = 1000;
 $supplier_id='3';
 $chunk_xlsx_data = array_chunk( $dozon_xml_price_data, PMCHUNK);
