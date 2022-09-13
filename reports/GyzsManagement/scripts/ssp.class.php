@@ -254,21 +254,18 @@ class SSP {
 							
 							/* Process Columns Ends */
 						if($column['db'] == 'meaov.value AS brand') {
-							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
 							$brand_arr = explode(',', $str);
 							foreach($brand_arr as $brand_val) {
 								$column_brand[] =  "".$get_column."= '".$brand_val."'";
 							}
 							$columnSearch[] = '('.implode(' OR ', $column_brand).')';
 						} elseif($column['db'] == 'pmd.supplier_type AS supplier_type'){
-							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
 							$brand_arr = explode(',', $str);
 							foreach($brand_arr as $brand_val) {
 								$column_supplier[] =  "".$get_column."= '".$brand_val."'";
 							}
 							$columnSearch[] = '('.implode(' OR ', $column_supplier).')';
 						}elseif($column['db'] == 'pmd.afwijkenidealeverpakking AS afwijkenidealeverpakking'){
-							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
 							$afw_pmd_arr = explode(',', $str);
 							foreach($afw_pmd_arr as $afw_val) {
 								$column_afw_1[] =  "".$get_column."= '".$afw_val."'";
@@ -328,7 +325,7 @@ class SSP {
 	 *  @param  array $columns Column information array
 	 *  @return array          Server-side processing response array
 	 */
-	static function simple ( $request, $conn, $table, $primaryKey, $columns, $extra_where = "")
+	static function simple ( $request, $conn, $table, $primaryKey, $columns, $extra_where = "", $group_by="")
 	{
 		$bindings = array();
 		$db = self::db( $conn );
@@ -337,6 +334,10 @@ class SSP {
 		$limit = self::limit( $request, $columns );
 		$order = self::order( $request, $columns );
 		$where = self::filter( $request, $columns, $bindings, $extra_where);
+		$group = '';
+		if($group_by) {
+			$group = 'group by '.$group_by;
+		}
 
 		 /* echo "<pre>";
 		 print_r(self::pluck($columns, 'db')); */
@@ -347,6 +348,7 @@ class SSP {
 		 $raw_sql = "SELECT ".implode(",", self::pluck($columns, 'db'))."
 			 FROM $table
 			 $where
+			 $group
 			 $order
 			 $limit";
 
@@ -357,6 +359,7 @@ class SSP {
 			"SELECT ".implode(",", self::pluck($columns, 'db'))."
 			 FROM $table
 			 $where
+			 $group
 			 $order
 			 $limit"
 		);
@@ -396,6 +399,7 @@ class SSP {
 		fwrite($logfile, "Filtered Count:-".intval( $recordsFiltered )."\n\n");
 
 		fwrite($logfile, "Total Count:-".intval( $recordsTotal )."\n\n");
+
 		/*
 		 * Output
 		 */
