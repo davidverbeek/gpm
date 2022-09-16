@@ -406,14 +406,32 @@
 
             <input type="hidden" name="hdn_parent_debter_selected" id="hdn_parent_debter_selected">
             <input type="hidden" name="hdn_parent_debter_expression" id="hdn_parent_debter_expression">
-        </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="okSearchDebterPrices" >OK</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
 
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="okSearchDebterPrices" >OK</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="ActivateSelectedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to GO LIVE with this pricing?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" style="font-size: 10px;">
+                <div id="loading-img" style="display:none; position: absolute;"></div>
+                By clicking on below "Yes" button the selling price of <span id="total_selected_records"></span> selected records will be queued to GO LIVE in the NEXT CYCLE.</div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                  <a class="btn btn-primary" href="#" id="confirmedActivatedSelected">Yes</a>
+                </div>
+              </div>
     </div>
   </div>
 </div>
