@@ -36,15 +36,19 @@ if(isset($_POST['hidden_field']))
 				if(isset($_POST['chkYesUpdateSp'])) {
 					$valid_header = array("Artikelnummer (Artikel)","Inkoopprijs (Inkpr per piece)");
 				} else {
-					$valid_header = array("Artikelnummer (Artikel)","Inkoopprijs (Inkpr per piece)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)","4027100","4027101","4027102","4027103","4027104","4027105","4027106","4027107","4027108","4027109","4027110");
+					$valid_header = array("Artikelnummer (Artikel)","Inkoopprijs (Inkpr per piece)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)","ZZP","Aannemer M","Aannemer L","Metaal","Interieurbouw","Slotenservice","Scholen/Zorg","DHZ","Installatie","Glashandel","VVE","Groen","Timmerfabriek","Overheid","Weder1","Weder2");
 				}
 					$check_header = array_diff($chunk_xlsx_data[0][0],$valid_header);
+
 					if(count($check_header) > 0) {
 						$error = 'Header Names Mismatched, please check your xlsx header row names';
 						if(isset($_POST['chkYesUpdateSp'])) {
 							$error = 'Only Two Header Namely Artikelnummer (Artikel),Inkoopprijs (Inkpr per piece) should be present';
 						}
 					} else {
+							if(!isset($_POST['chkYesUpdateSp'])) {
+								GetGroupNameOfAlias($chunk_xlsx_data[0][0]);
+							}
 							$get_all_price_management_data = getAllPriceManagementData();
 							foreach($chunk_xlsx_data as $chunked_idx=>$chunked_xlsx_values) {
 
@@ -61,11 +65,11 @@ if(isset($_POST['hidden_field']))
 											// there should be only two columns in xlsx
 											list($sql, $last_part_sql) = makeSqlForUpdateSp();
 										}
-										$current_rec++; 
+										$current_rec++;
 										continue;
 									}									
 									if(array_key_exists($chunked_xlsx_sku, $get_all_price_management_data)) {
-											if( (isset($chunked_xlsx_value[1]) && !is_numeric($chunked_xlsx_value[1])) || (isset($chunked_xlsx_value[2]) && !is_numeric($chunked_xlsx_value[2])) || (isset($chunked_xlsx_value[3]) && !is_numeric($chunked_xlsx_value[3])) || (isset($chunked_xlsx_value[4]) && !is_numeric($chunked_xlsx_value[4])) || (isset($chunked_xlsx_value[5]) && !is_numeric($chunked_xlsx_value[5])) || (isset($chunked_xlsx_value[6]) && !is_numeric($chunked_xlsx_value[6])) || (isset($chunked_xlsx_value[7]) && !is_numeric($chunked_xlsx_value[7])) || (isset($chunked_xlsx_value[8]) && !is_numeric($chunked_xlsx_value[8])) || (isset($chunked_xlsx_value[9]) && !is_numeric($chunked_xlsx_value[9])) || (isset($chunked_xlsx_value[10]) && !is_numeric($chunked_xlsx_value[10])) || (isset($chunked_xlsx_value[11]) && !is_numeric($chunked_xlsx_value[11])) || (isset($chunked_xlsx_value[12]) && !is_numeric($chunked_xlsx_value[12])) || (isset($chunked_xlsx_value[13]) && !is_numeric($chunked_xlsx_value[13])) ) {
+											if( (isset($chunked_xlsx_value[1]) && !is_numeric($chunked_xlsx_value[1])) || (isset($chunked_xlsx_value[2]) && !is_numeric($chunked_xlsx_value[2])) || (isset($chunked_xlsx_value[3]) && !is_numeric($chunked_xlsx_value[3])) || (isset($chunked_xlsx_value[4]) && !is_numeric($chunked_xlsx_value[4])) || (isset($chunked_xlsx_value[5]) && !is_numeric($chunked_xlsx_value[5])) || (isset($chunked_xlsx_value[6]) && !is_numeric($chunked_xlsx_value[6])) || (isset($chunked_xlsx_value[7]) && !is_numeric($chunked_xlsx_value[7])) || (isset($chunked_xlsx_value[8]) && !is_numeric($chunked_xlsx_value[8])) || (isset($chunked_xlsx_value[9]) && !is_numeric($chunked_xlsx_value[9])) || (isset($chunked_xlsx_value[10]) && !is_numeric($chunked_xlsx_value[10])) || (isset($chunked_xlsx_value[11]) && !is_numeric($chunked_xlsx_value[11])) || (isset($chunked_xlsx_value[12]) && !is_numeric($chunked_xlsx_value[12])) || (isset($chunked_xlsx_value[13]) && !is_numeric($chunked_xlsx_value[13])) || (isset($chunked_xlsx_value[14]) && !is_numeric($chunked_xlsx_value[14])) || (isset($chunked_xlsx_value[15]) && !is_numeric($chunked_xlsx_value[15])) || (isset($chunked_xlsx_value[16]) && !is_numeric($chunked_xlsx_value[16])) || (isset($chunked_xlsx_value[17]) && !is_numeric($chunked_xlsx_value[17])) || (isset($chunked_xlsx_value[18]) && !is_numeric($chunked_xlsx_value[18])) ) {
 												$progress_status['er_imp'][$current_rec] = "<div style='color:red;'><i class='fas fa-exclamation-triangle'></i>&nbsp; Row data not valid. (Row ".($current_rec).")</div>";
 												$current_rec++; continue;
 											}
@@ -73,6 +77,7 @@ if(isset($_POST['hidden_field']))
 											$afwijkenidealeverpakking = $get_all_price_management_data[$chunked_xlsx_sku]["new_afwijkenidealeverpakking"];
 											$idealeverpakking = $get_all_price_management_data[$chunked_xlsx_sku]["new_idealeverpakking"];
 											$debter_buying_price = 0.00;
+											$one_rowString = $one_historyString = '';
 											$join_cols_names = "(";
 
 											if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && in_array("Nieuwe Verkoopprijs (Niewe Vkpr per piece)", $chunk_xlsx_data[0][0])) {
@@ -152,6 +157,7 @@ if(isset($_POST['hidden_field']))
 													$key = array_search ($head_cust_group_name, $chunk_xlsx_data[0][0]);
 														$xlsx_debter_selling_price = $chunked_xlsx_value[$key];
 														if(isset($xlsx_debter_selling_price)) {
+															$d_selling_price = "";
 															if($afwijkenidealeverpakking === "0") {
 																$d_selling_price = round($xlsx_debter_selling_price * $idealeverpakking,2);
 															} else {
@@ -169,11 +175,11 @@ if(isset($_POST['hidden_field']))
 																$given_debter_product_arr = explode(',', $debter_product_arr[$head_cust_group_name]);
 															}
 															if (count($given_debter_product_arr) == 0 || !in_array($xlsx_product_id, $given_debter_product_arr)) {
-																$d_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
-																$d_margin_on_buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
-																$d_margin_on_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
-																$d_discount_on_gross = $get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
-															}
+																$d_selling_price = is_null($get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"])?0.0000:$get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
+																$d_margin_on_buying_price = is_null($get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"])?0.0000:$get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
+																$d_margin_on_selling_price = is_null($get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"])?0.0000:$get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
+																$d_discount_on_gross = is_null($get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
+																}
 															$debter_data_to_insert .= "'".$head_cust_group_id."','".$d_selling_price."','".$d_margin_on_buying_price."','".$d_margin_on_selling_price."','".$d_discount_on_gross."',";
 														} else {
 															$debter_data_to_insert .= "'0','0','0','0','0',";
@@ -347,7 +353,7 @@ function roundValue($val) {
 }
 function getCustomerGroups($group_number=null) {
   global $conn;
-  $sql = "SELECT * FROM price_management_customer_groups ORDER BY magento_id";
+  $sql = "SELECT * FROM price_management_customer_groups ORDER BY sort_order";
   if(!is_null($group_number)) {
 	$sql = "SELECT * FROM price_management_customer_groups where customer_group_name='".$group_number."'";
   }
@@ -428,14 +434,14 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 	}
 	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
-
+	
 	if(!isset($_POST['chkYesUpdateSp'])){
 		$profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
 	}
 	$profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
 	$percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
 	$discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
-
+	
 	if(!isset($_POST['chkYesUpdateSp'])){
 		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
 	} else {
@@ -586,16 +592,29 @@ function getSqlOfAllDebters($xlsx_sku, $buying_price) {
             $deb_margin_on_buying_price = $get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
 
             $debter_selling_price = roundValue((1 + ($deb_margin_on_buying_price/100)) * $buying_price);
-            $deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
+			$deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
             $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
 			//$group_cols .= $group_col_magento_id.",".$group_col_debter_selling_price.",".$group_col_margin_on_buying_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
         } else {
-            $debter_selling_price = $get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
-            $deb_margin_on_selling_price = $get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
-            $deb_discount_on_gross_price = $get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
+            $debter_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
+            $deb_margin_on_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
+            $deb_discount_on_gross_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
         }
-	   $col_data .= $debter_selling_price.",".$deb_margin_on_selling_price.",".$deb_discount_on_gross_price.",";
+	   $col_data .= "'".$debter_selling_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
 	}
 	$col_data = rtrim($col_data, ',');
 	return array($col_data);
 }//end getSqlOfAllDebters()
+
+function GetGroupNameOfAlias(&$xlsx_header_arr) {
+	global $conn;
+	$sql = "SELECT customer_group_name, group_alias FROM price_management_customer_groups ORDER BY sort_order";
+	$all_customer_groups = array();
+	if ($result = $conn->query($sql)) {
+		while ($row = $result->fetch_assoc()) {
+			if($a=array_search($row['group_alias'], $xlsx_header_arr)) {
+				$xlsx_header_arr[$a] = $row['customer_group_name'];
+			}
+		}
+	}
+}

@@ -82,6 +82,29 @@ table.custom-override-table thead tr:nth-child(2) th input {
   transition: box-shadow 0.1s, background 0.4s;
   width: 70%;
 }
+table#compare_dt thead tr:nth-child(3) th {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+table#compare_dt thead tr:nth-child(3) th input {
+  background: #dddeee;
+  text-align: center;
+  padding: 5px 0;
+  margin: 10px;
+  font-family: poppins-medium;
+  font-weight: 600;
+  font-size: 9px;
+  height: 20px;
+  outline: none;
+  border: none;
+  border-radius: 1px;
+  caret-color: var(--lightdark-purple);
+  transition: box-shadow 0.1s, background 0.4s;
+  width: 70%;
+}
+
 table.custom-override-table thead tr:nth-child(2) th input:focus {
   background: #e9e9f198;
   box-shadow: 0 0 0 2px #3235856c;

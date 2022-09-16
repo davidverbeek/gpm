@@ -325,7 +325,7 @@ class SSP {
 	 *  @param  array $columns Column information array
 	 *  @return array          Server-side processing response array
 	 */
-	static function simple ( $request, $conn, $table, $primaryKey, $columns, $extra_where = "")
+	static function simple ( $request, $conn, $table, $primaryKey, $columns, $extra_where = "", $group_by="")
 	{
 		$bindings = array();
 		$db = self::db( $conn );
@@ -334,6 +334,10 @@ class SSP {
 		$limit = self::limit( $request, $columns );
 		$order = self::order( $request, $columns );
 		$where = self::filter( $request, $columns, $bindings, $extra_where);
+		$group = '';
+		if($group_by) {
+			$group = 'group by '.$group_by;
+		}
 
 		 /* echo "<pre>";
 		 print_r(self::pluck($columns, 'db')); */
@@ -344,6 +348,7 @@ class SSP {
 		 $raw_sql = "SELECT ".implode(",", self::pluck($columns, 'db'))."
 			 FROM $table
 			 $where
+			 $group
 			 $order
 			 $limit";
 
@@ -354,6 +359,7 @@ class SSP {
 			"SELECT ".implode(",", self::pluck($columns, 'db'))."
 			 FROM $table
 			 $where
+			 $group
 			 $order
 			 $limit"
 		);
@@ -393,6 +399,7 @@ class SSP {
 		fwrite($logfile, "Filtered Count:-".intval( $recordsFiltered )."\n\n");
 
 		fwrite($logfile, "Total Count:-".intval( $recordsTotal )."\n\n");
+
 		/*
 		 * Output
 		 */

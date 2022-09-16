@@ -313,4 +313,39 @@ $column_index_revenue_report = array(
 /* Revenue Report Indexes */
 
 
+$column_index_compare_prices = array(
+  "m_ean" => 0,
+  "m_sku" => 1,
+  "m_buying_price" => 2,
+  "m_qty" => 3,
+  "m_afw" => 4,
+  "m_piece" => 5,
+  "p_sku" => 6,
+  "p_buying_price" => 7,
+  "p_qty" => 8,
+
+  "p_afw" => 9,
+
+  "p_piece" => 10,
+  "t_sku" => 11,
+
+  "t_buying_price" => 12,
+  "t_qty" => 13,
+
+  "t_afw" => 14,
+  "t_piece" => 15,
+  "d_sku" => 16,
+  "d_buying_price" => 17,
+  "d_qty" => 18,
+  "d_afw" => 19,
+
+
+  "d_piece" => 20,
+  "m_supplier_id" => 21,
+  "p_supplier_id" => 22,
+  "t_supplier_id" => 23,
+  "d_supplier_id" => 24,
+ );
+
+
 ?>
