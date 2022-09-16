@@ -163,6 +163,7 @@ if(isset($_POST['hidden_field']))
 															} else {
 																$d_selling_price = round($xlsx_debter_selling_price,2);
 															}
+															//if($d_selling_price == 0) {echo 'inf';exit;}
 															$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 															$d_margin_on_buying_price = round((($d_selling_price - $debter_buying_price) / $debter_buying_price) * 100,2);
 															$d_margin_on_selling_price = round((($d_selling_price - $debter_buying_price) / $d_selling_price) * 100,2);
@@ -204,6 +205,10 @@ if(isset($_POST['hidden_field']))
 								}
 
 								$sql .= implode(",", $all_col_data) . $last_part_sql;
+
+								//echo $sql;
+								//exit;
+
 								if($conn->query($sql)) {
 								bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_xlsx_values));
 								changeUpdateStatus($conn, implode("','", $updated_product_skus));
@@ -441,7 +446,8 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 	$profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
 	$percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
 	$discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
-	
+	//$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
+
 	if(!isset($_POST['chkYesUpdateSp'])){
 		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
 	} else {
@@ -592,7 +598,11 @@ function getSqlOfAllDebters($xlsx_sku, $buying_price) {
             $deb_margin_on_buying_price = $get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
 
             $debter_selling_price = roundValue((1 + ($deb_margin_on_buying_price/100)) * $buying_price);
-			$deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
+			//if($debter_selling_price == 0) {
+			//	echo 'Infinity error';
+			//	exit;
+		//	}
+            $deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
             $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
 			//$group_cols .= $group_col_magento_id.",".$group_col_debter_selling_price.",".$group_col_margin_on_buying_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
         } else {
