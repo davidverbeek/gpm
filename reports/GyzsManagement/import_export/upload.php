@@ -60,8 +60,13 @@ if(isset($_POST['hidden_field']))
 									$chunked_xlsx_sku = trim($chunked_xlsx_value[0]);
 									if($current_rec == 1) {
 										if(!isset($_POST['chkYesUpdateSp'])) {
-											list($sql, $last_part_sql) = makeSqlDependingOnXl($chunk_xlsx_data[0][0]);
-										} elseif(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0])) {
+											if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0])){
+												// there should be only two columns in xlsx
+												list($sql, $last_part_sql) = makeSqlForUpdateSp(1);
+											} else {
+												list($sql, $last_part_sql) = makeSqlDependingOnXl($chunk_xlsx_data[0][0]);
+											}
+										} else {
 											// there should be only two columns in xlsx
 											list($sql, $last_part_sql) = makeSqlForUpdateSp();
 										}
@@ -69,7 +74,7 @@ if(isset($_POST['hidden_field']))
 										continue;
 									}									
 									if(array_key_exists($chunked_xlsx_sku, $get_all_price_management_data)) {
-											if( (isset($chunked_xlsx_value[1]) && !is_numeric($chunked_xlsx_value[1])) || (isset($chunked_xlsx_value[2]) && !is_numeric($chunked_xlsx_value[2])) || (isset($chunked_xlsx_value[3]) && !is_numeric($chunked_xlsx_value[3])) || (isset($chunked_xlsx_value[4]) && !is_numeric($chunked_xlsx_value[4])) || (isset($chunked_xlsx_value[5]) && !is_numeric($chunked_xlsx_value[5])) || (isset($chunked_xlsx_value[6]) && !is_numeric($chunked_xlsx_value[6])) || (isset($chunked_xlsx_value[7]) && !is_numeric($chunked_xlsx_value[7])) || (isset($chunked_xlsx_value[8]) && !is_numeric($chunked_xlsx_value[8])) || (isset($chunked_xlsx_value[9]) && !is_numeric($chunked_xlsx_value[9])) || (isset($chunked_xlsx_value[10]) && !is_numeric($chunked_xlsx_value[10])) || (isset($chunked_xlsx_value[11]) && !is_numeric($chunked_xlsx_value[11])) || (isset($chunked_xlsx_value[12]) && !is_numeric($chunked_xlsx_value[12])) || (isset($chunked_xlsx_value[13]) && !is_numeric($chunked_xlsx_value[13])) || (isset($chunked_xlsx_value[14]) && !is_numeric($chunked_xlsx_value[14])) || (isset($chunked_xlsx_value[15]) && !is_numeric($chunked_xlsx_value[15])) || (isset($chunked_xlsx_value[16]) && !is_numeric($chunked_xlsx_value[16])) || (isset($chunked_xlsx_value[17]) && !is_numeric($chunked_xlsx_value[17])) || (isset($chunked_xlsx_value[18]) && !is_numeric($chunked_xlsx_value[18])) ) {
+											if((isset($chunked_xlsx_value[1]) && !is_numeric($chunked_xlsx_value[1])) || (isset($chunked_xlsx_value[2]) && !is_numeric($chunked_xlsx_value[2])) || (isset($chunked_xlsx_value[3]) && !is_numeric($chunked_xlsx_value[3])) || (isset($chunked_xlsx_value[4]) && !is_numeric($chunked_xlsx_value[4])) || (isset($chunked_xlsx_value[5]) && !is_numeric($chunked_xlsx_value[5])) || (isset($chunked_xlsx_value[6]) && !is_numeric($chunked_xlsx_value[6])) || (isset($chunked_xlsx_value[7]) && !is_numeric($chunked_xlsx_value[7])) || (isset($chunked_xlsx_value[8]) && !is_numeric($chunked_xlsx_value[8])) || (isset($chunked_xlsx_value[9]) && !is_numeric($chunked_xlsx_value[9])) || (isset($chunked_xlsx_value[10]) && !is_numeric($chunked_xlsx_value[10])) || (isset($chunked_xlsx_value[11]) && !is_numeric($chunked_xlsx_value[11])) || (isset($chunked_xlsx_value[12]) && !is_numeric($chunked_xlsx_value[12])) || (isset($chunked_xlsx_value[13]) && !is_numeric($chunked_xlsx_value[13])) || (isset($chunked_xlsx_value[14]) && !is_numeric($chunked_xlsx_value[14])) || (isset($chunked_xlsx_value[15]) && !is_numeric($chunked_xlsx_value[15])) || (isset($chunked_xlsx_value[16]) && !is_numeric($chunked_xlsx_value[16])) || (isset($chunked_xlsx_value[17]) && !is_numeric($chunked_xlsx_value[17])) || (isset($chunked_xlsx_value[18]) && !is_numeric($chunked_xlsx_value[18])) ) {
 												$progress_status['er_imp'][$current_rec] = "<div style='color:red;'><i class='fas fa-exclamation-triangle'></i>&nbsp; Row data not valid. (Row ".($current_rec).")</div>";
 												$current_rec++; continue;
 											}
@@ -122,7 +127,6 @@ if(isset($_POST['hidden_field']))
 													}
 													list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);
 													list($one_row_debter_String) = getSqlOfAllDebters($chunked_xlsx_sku, $debter_buying_price);
-
 													$join_cols_names .= $one_rowString;
 													$join_cols_names .= ','.$one_row_debter_String;
 													$historyArray[] = $one_historyString;
@@ -137,7 +141,6 @@ if(isset($_POST['hidden_field']))
 													$buying_price = roundValue((float) $buying_price / $idealeverpakking);
 												}
 												list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);
-												
 												$join_cols_names .= $one_rowString;
 												$historyArray[] = $one_historyString;
 												$updated_product_skus[] = $chunked_xlsx_sku;
@@ -180,7 +183,8 @@ if(isset($_POST['hidden_field']))
 																$d_margin_on_buying_price = is_null($get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"])?0.0000:$get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
 																$d_margin_on_selling_price = is_null($get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"])?0.0000:$get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
 																$d_discount_on_gross = is_null($get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$chunked_xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
-																}
+															}
+
 															$debter_data_to_insert .= "'".$head_cust_group_id."','".$d_selling_price."','".$d_margin_on_buying_price."','".$d_margin_on_selling_price."','".$d_discount_on_gross."',";
 														} else {
 															$debter_data_to_insert .= "'0','0','0','0','0',";
@@ -189,6 +193,13 @@ if(isset($_POST['hidden_field']))
 												$debter_data_to_insert = rtrim($debter_data_to_insert,",");
 												$join_cols_names .= $debter_data_to_insert;
 											}
+
+											if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && !isset($_POST['chkYesUpdateSp'])) {
+												// make array of debters not in xlsx
+												list($one_row_debter_String_2) = getSqlOfAllDebtersDueToBP($chunked_xlsx_sku, $debter_buying_price, $chunk_xlsx_data[0][0]);
+												$join_cols_names .= ','.$one_row_debter_String_2;
+											}
+											//get debters not in xlsx
 											$join_cols_names .= ')';
 											$all_col_data[] = $join_cols_names;
 									} else {
@@ -205,10 +216,6 @@ if(isset($_POST['hidden_field']))
 								}
 
 								$sql .= implode(",", $all_col_data) . $last_part_sql;
-
-								//echo $sql;
-								//exit;
-
 								if($conn->query($sql)) {
 								bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_xlsx_values));
 								changeUpdateStatus($conn, implode("','", $updated_product_skus));
@@ -439,8 +446,7 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 	}
 	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
 	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
-	
-	if(!isset($_POST['chkYesUpdateSp'])){
+	if(!isset($_POST['chkYesUpdateSp'])) {
 		$profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
 	}
 	$profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
@@ -448,7 +454,7 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 	$discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
 	//$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
 
-	if(!isset($_POST['chkYesUpdateSp'])){
+	if(!isset($_POST['chkYesUpdateSp'])) {
 		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
 	} else {
 		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."','".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
@@ -542,27 +548,37 @@ function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
 /**
  * function will create sql column names list including all debters when updateSp is checked
  */
-function makeSqlForUpdateSp()
+function makeSqlForUpdateSp($flag_update_profit_margin_bp = 0)
 {
 	//xlsx will have all debters columns
 	$sql = "INSERT INTO price_management_data(sku";
 	$last_part_sql = " ON DUPLICATE KEY UPDATE";
 	$back_part_cols = "";
 
-	$sql .= ",net_unit_price, buying_price, selling_price,profit_percentage_selling_price, percentage_increase, discount_on_gross";
-	$back_part_cols = " net_unit_price = VALUES(net_unit_price), buying_price = VALUES(buying_price), selling_price = VALUES(selling_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
-
+	if($flag_update_profit_margin_bp == 0) {
+		$sql .= ",net_unit_price, buying_price, selling_price,profit_percentage_selling_price, percentage_increase, discount_on_gross";
+		$back_part_cols = " net_unit_price = VALUES(net_unit_price), buying_price = VALUES(buying_price), selling_price = VALUES(selling_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
+	} else {
+		$sql .= ",net_unit_price, buying_price, selli
+		ng_price, profit_percentage_buying_price, profit_percentage_selling_price, percentage_increase, discount_on_gross";
+		$back_part_cols = " net_unit_price = VALUES(net_unit_price), buying_price = VALUES(buying_price), selling_price = VALUES(selling_price),profit_percentage_buying_price = VALUES(profit_percentage_buying_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
+	}
 	$allcustomer_groups = getCustomerGroups();
 	$group_cols = $insert_update_group_data = "";
 	foreach($allcustomer_groups as $head_cust_group_id=>$head_cust_group_name) {
-		//$group_col_magento_id = "group_".$head_cust_group_name."_magento_id";
+		$group_col_magento_id = "group_".$head_cust_group_name."_magento_id";
 		$group_col_debter_selling_price = "group_".$head_cust_group_name."_debter_selling_price";
 		$group_col_margin_on_buying_price = "group_".$head_cust_group_name."_margin_on_buying_price";
 		$group_col_margin_on_selling_price = "group_".$head_cust_group_name."_margin_on_selling_price";
 		$group_col_discount_on_grossprice_b_on_deb_selling_price = "group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price";
-		$group_cols .= $group_col_debter_selling_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
-	
-		$insert_update_group_data .= $group_col_debter_selling_price." = VALUES(".$group_col_debter_selling_price."),".$group_col_margin_on_selling_price." = VALUES(".$group_col_margin_on_selling_price."),".$group_col_discount_on_grossprice_b_on_deb_selling_price." = VALUES(".$group_col_discount_on_grossprice_b_on_deb_selling_price."),";
+		
+		if($flag_update_profit_margin_bp == 0) {
+			$group_cols .= $group_col_debter_selling_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
+			$insert_update_group_data .= $group_col_debter_selling_price." = VALUES(".$group_col_debter_selling_price."),".$group_col_margin_on_selling_price." = VALUES(".$group_col_margin_on_selling_price."),".$group_col_discount_on_grossprice_b_on_deb_selling_price." = VALUES(".$group_col_discount_on_grossprice_b_on_deb_selling_price."),";
+		} else {
+			$group_cols .= $group_col_magento_id.",".$group_col_debter_selling_price.",".$group_col_margin_on_buying_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
+			$insert_update_group_data .= $group_col_debter_selling_price." = VALUES(".$group_col_debter_selling_price."),".$group_col_margin_on_buying_price." = VALUES(".$group_col_margin_on_buying_price."),".$group_col_margin_on_selling_price." = VALUES(".$group_col_margin_on_selling_price."),".$group_col_discount_on_grossprice_b_on_deb_selling_price." = VALUES(".$group_col_discount_on_grossprice_b_on_deb_selling_price."),";
+		}
 	}
 
 	if($group_cols) {
@@ -628,3 +644,37 @@ function GetGroupNameOfAlias(&$xlsx_header_arr) {
 		}
 	}
 }
+
+
+function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
+
+    $allcustomer_groups = getCustomerGroups();
+	$get_all_price_management_data = getAllPriceManagementData();
+    $supplier_gross_price = ($get_all_price_management_data[$xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$xlsx_sku]["new_gross_unit_price"]);
+	$debter_product_arr = getDebterProducts();
+	$col_data = "";
+	$xlsx_product_id = $get_all_price_management_data[$xlsx_sku]["product_id"];
+	$debter_not_in_xlsx_arr = array_diff($allcustomer_groups, $xlsx_header_row);
+	foreach($debter_not_in_xlsx_arr as $head_cust_group_id=>$head_cust_group_name) {
+		$given_debter_product_arr = array();
+		if (isset($debter_product_arr[$head_cust_group_name])) {
+			$given_debter_product_arr = explode(',', $debter_product_arr[$head_cust_group_name]);
+		}
+		if (count($given_debter_product_arr) > 0 && in_array($xlsx_product_id, $given_debter_product_arr)) {
+            $deb_margin_on_buying_price = $get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
+
+            $debter_selling_price = roundValue((1 + ($deb_margin_on_buying_price/100)) * $buying_price);
+			$deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
+            $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
+		} else {
+			$deb_margin_on_buying_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
+			$debter_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
+            $deb_margin_on_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
+            $deb_discount_on_gross_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
+        }
+
+	   $col_data .= "'".$head_cust_group_id."','".$debter_selling_price."','".$deb_margin_on_buying_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
+	}
+	$col_data = rtrim($col_data, ',');
+	return array($col_data);
+}//end getSqlOfAllDebtersDueToBp()
