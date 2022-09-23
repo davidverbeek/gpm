@@ -251,12 +251,6 @@
                   <div class="custom-file mb-3">
                     <input class="form-control" type="file" id="formFile" id="file" name="file">
                   </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="1" id="chkYesUpdateSp" name="chkYesUpdateSp">
-                    <label class="form-check-label" for="chkYesUpdateSp">
-                    Update Vkpr
-                    </label><br>
-                  </div>
 
                   <div class="form-group">
                     <input type="hidden" name="hidden_field" value="1" />
