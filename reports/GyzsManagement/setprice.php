@@ -386,16 +386,20 @@ if ($result = $conn->query($sql)) {
                                 <i class="fa fa-check-circle" aria-hidden="true"></i>Activate Updated
                             </button>
 
-                           <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnexport">
+                            
+                            <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnselected">
+                                <i class="fas fa-list-alt"></i>Activate Selected
+                            </button>
+
+                             <div>&nbsp;</div>
+                             <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnexport">
                                 <i class="fas fa-file-export"></i>Export Data
                                 <span id="loading-img-export" style="display: none;"></span>
                             </button>
 
-                             <div>&nbsp;</div>
                              <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnimport" data-bs-toggle="modal" data-bs-target="#ImportModal">
                                 <i class="fas fa-file-import"></i></i>Import Data 
                              </button>
-
                              <!-- <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnundo" data-bs-toggle="modal" data-bs-target="#UndoModal">
                                 <i class="fas fa-undo"></i></i>Undo Selling Price 
                              </button> -->

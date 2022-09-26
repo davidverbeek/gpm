@@ -3632,8 +3632,6 @@ $('.table tfoot th').each( function () {
    $(this).html( '<input type="text" class="txtsearch" placeholder="Zoek" />' );
   }
  });
-     
-
   $('.table tfoot tr').insertAfter($('.table thead tr'));
   
   table.column(column_index["webshop_supplier_gross_price"]).visible(false);
@@ -4066,8 +4064,7 @@ $("#chkavges").change(function() {
                       $("#check_all_cnt").html(0);
                       table.ajax.reload( null, false );
           } 
-        }      
-
+        }
       }
     });
   });
@@ -4314,4 +4311,43 @@ $("#flexCheckDefault").change(function () {
       }
     });
   }
+
+
+  $('#btnselected').click(function () {
+    let products_selected = 0;
+    $('tr.selected').each(function (index) {
+      products_selected++;
+    });
+    $('#ActivateSelectedModal').modal('toggle');
+    $('#total_selected_records').html("<b>" + products_selected + "</b>");
+  });
+
+  $('#confirmedActivatedSelected').click(function () {
+    $("#ActivateSelectedModal").css("opacity", 0.8);
+    $("#loading-img").css({ "display": "block" });
+    let products_selected = [];
+    $('tr.selected').each(function (index) {
+      var product_id_str = $(this).find("td:eq(10) input").attr('id');
+      var product_id_array = product_id_str.split('_');
+      products_selected.push($(product_id_array).get(-1));
+    });
+
+    $.ajax({
+      url: document_root_url + '/scripts/process_data_price_management.php',
+      type: 'POST',
+      data: ({ type: 'confirm_selected', product_ids: products_selected }),
+      success: function (response_data) {
+        var resp_obj = jQuery.parseJSON(response_data);
+        if (resp_obj["msg"]) {
+          if (resp_obj["msg"] == "Success") {
+            $("#ActivateSelectedModal").css("opacity", 1);
+            $("#loading-img").css({ "display": "none" });
+            $('#ActivateSelectedModal').modal('toggle');
+            table.ajax.reload(null, false);
+          }
+        }
+      }
+    });
+  });
 });
+
