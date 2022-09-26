@@ -218,7 +218,6 @@ if(isset($_POST['hidden_field']))
 								}
 
 								$sql .= implode(",", $all_col_data) . $last_part_sql;
-								echo $sql;exit;
 
 								if($conn->query($sql)) {
 								bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_xlsx_values));
