@@ -125,8 +125,8 @@ if(isset($_POST['hidden_field']))
 														$pmd_buying_price = roundValue((float) $buying_price);
 														$selling_price = roundValue((1 + ($profit_margin/100)) * $pmd_buying_price);
 													}
-													list($one_rowString, $one_historyString) = getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price);
-													
+													list($one_rowString, $one_historyString) = getSqlOfColumns_removed_multiplication($chunked_xlsx_sku, $pmd_buying_price, $selling_price);
+
 													//list($one_row_debter_String) = getSqlOfAllDebters($chunked_xlsx_sku, $debter_buying_price);
 													$join_cols_names .= $one_rowString;
 													//$join_cols_names .= ','.$one_row_debter_String;
@@ -679,3 +679,61 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
 	$col_data = rtrim($col_data, ',');
 	return array($col_data);
 }//end getSqlOfAllDebtersDueToBp()
+
+
+function getSqlOfColumns_removed_multiplication($chunked_xlsx_sku, $pmd_buying_price, $new_selling_price)
+{
+	$get_all_price_management_data = getAllPriceManagementData();
+	$historyArray = "";
+
+	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);
+	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
+	$profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
+	$profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
+	$percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
+	$discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
+	//$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
+
+	//if(!isset($_POST['chkYesUpdateSp'])) {
+	$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
+	/* } else {
+		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."','".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
+	} */
+	
+	// Add in history
+	$fields_changed = array();
+	$buying_price_changed = 0;
+
+	if($get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"] !=  $pmd_buying_price) {
+		  $fields_changed[] = "new_buying_price";
+		  $buying_price_changed = 1;
+	}
+	if($get_all_price_management_data[$chunked_xlsx_sku]["new_selling_price"] !=  $new_selling_price) {
+		  $fields_changed[] = "new_selling_price";
+	}
+
+	if( ($get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"] !=  $pmd_buying_price) || ($get_all_price_management_data[$chunked_xlsx_sku]["new_selling_price"] !=  $new_selling_price) ) {
+		$historyArray = "('".$get_all_price_management_data[$chunked_xlsx_sku]["product_id"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["old_net_unit_price"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["old_gross_unit_price"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["old_idealeverpakking"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["old_afwijkenidealeverpakking"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["old_buying_price"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"]."',
+		'".roundValue($pmd_buying_price)."',
+
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["new_idealeverpakking"]."',
+		'".$get_all_price_management_data[$chunked_xlsx_sku]["new_afwijkenidealeverpakking"]."',
+		'".roundValue($pmd_buying_price)."',
+		'".roundValue($new_selling_price)."',
+		'".date("Y-m-d H:i:s")."',
+		'Price Management',
+		'No',
+		'".json_encode($fields_changed)."',
+		'".$buying_price_changed."'
+	  )";
+	}
+
+	return array($col_data, $historyArray);
+}
