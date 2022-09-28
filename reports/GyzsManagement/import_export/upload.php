@@ -55,21 +55,19 @@ if(isset($_POST['hidden_field']))
 								$all_col_data = array();
 								$updated_product_skus = array();
 								$historyArray = array();
-								$sql = $last_part_sql = "";
+								$sql = $last_part_sql = $sql_debters = $last_part_sql_debters="";
 								foreach($chunked_xlsx_values as $c_k=>$chunked_xlsx_value) {
 									$chunked_xlsx_sku = trim($chunked_xlsx_value[0]);
 									if($current_rec == 1) {
-										//if(!isset($_POST['chkYesUpdateSp'])) {
-											if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0])){
-												// there should be only two columns in xlsx
-												list($sql, $last_part_sql) = makeSqlForUpdateSp(1);
-											} else {
-												list($sql, $last_part_sql) = makeSqlDependingOnXl($chunk_xlsx_data[0][0]);
-											}
-										/* } else {
-											// there should be only two columns in xlsx
-											list($sql, $last_part_sql) = makeSqlForUpdateSp();
-										} */
+										list($sql, $last_part_sql) = makeSqlDependingOnXl($chunk_xlsx_data[0][0]);
+										$allcustomer_groups = getCustomerGroups();
+										$check_debter_header = array_diff($allcustomer_groups, $chunk_xlsx_data[0][0]);
+										if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && count($check_debter_header) > 0) {
+											list($sql_debters, $last_part_sql_debters) = makeSqlForUpdateSp($chunk_xlsx_data[0][0]);
+											$sql = str_replace(') VALUES', ',', $sql);
+											$sql .= $sql_debters.") VALUES ";
+											$last_part_sql .= ','.$last_part_sql_debters;
+										}
 										$current_rec++;
 										continue;
 									}									
@@ -218,7 +216,6 @@ if(isset($_POST['hidden_field']))
 								}
 
 								$sql .= implode(",", $all_col_data) . $last_part_sql;
-
 								if($conn->query($sql)) {
 								bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_xlsx_values));
 								changeUpdateStatus($conn, implode("','", $updated_product_skus));
@@ -455,12 +452,8 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 	$discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
 	//$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
 
-	//if(!isset($_POST['chkYesUpdateSp'])) {
 	$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."', '".$profit_margin."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
-	/* } else {
-		$col_data = "'".$chunked_xlsx_sku."', '".$pmd_buying_price."', '".$pmd_buying_price."', '".$new_selling_price."','".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
-	} */
-	
+
 	// Add in history
 	$fields_changed = array();
 	$buying_price_changed = 0;
@@ -533,7 +526,7 @@ function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
 	}
 	if($group_cols) {
 		$group_cols = rtrim($group_cols,",");
-		$sql .= ', '.$group_cols.") VALUES ";
+		$sql .= ','.$group_cols.") VALUES ";
 		$insert_update_group_data = rtrim($insert_update_group_data, ',');
 		$last_part_sql .= $back_part_cols;
 		$last_part_sql .= " ".$insert_update_group_data;
@@ -546,52 +539,35 @@ function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
 
 }//end makeSqlDependingOnXl();
 
-/**
- * function will create sql column names list including all debters when updateSp is checked
- */
-function makeSqlForUpdateSp($flag_update_profit_margin_bp = 0)
+function makeSqlForUpdateSp($xlsx_header_row)
 {
-	//xlsx will have all debters columns
-	$sql = "INSERT INTO price_management_data(sku";
-	$last_part_sql = " ON DUPLICATE KEY UPDATE";
+	$sql = $last_part_sql ="";
 	$back_part_cols = "";
 
-	if($flag_update_profit_margin_bp == 0) {
-		$sql .= ",net_unit_price, buying_price, selling_price,profit_percentage_selling_price, percentage_increase, discount_on_gross";
-		$back_part_cols = " net_unit_price = VALUES(net_unit_price), buying_price = VALUES(buying_price), selling_price = VALUES(selling_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
-	} else {
-		$sql .= ",net_unit_price, buying_price, selling_price, profit_percentage_buying_price, profit_percentage_selling_price, percentage_increase, discount_on_gross";
-		$back_part_cols = " net_unit_price = VALUES(net_unit_price), buying_price = VALUES(buying_price), selling_price = VALUES(selling_price),profit_percentage_buying_price = VALUES(profit_percentage_buying_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
-	}
 	$allcustomer_groups = getCustomerGroups();
+	$debter_not_in_xlsx_arr = array_diff($allcustomer_groups, $xlsx_header_row);
 	$group_cols = $insert_update_group_data = "";
-	foreach($allcustomer_groups as $head_cust_group_id=>$head_cust_group_name) {
+	foreach($debter_not_in_xlsx_arr as $head_cust_group_id=>$head_cust_group_name) {
 		$group_col_magento_id = "group_".$head_cust_group_name."_magento_id";
 		$group_col_debter_selling_price = "group_".$head_cust_group_name."_debter_selling_price";
 		$group_col_margin_on_buying_price = "group_".$head_cust_group_name."_margin_on_buying_price";
 		$group_col_margin_on_selling_price = "group_".$head_cust_group_name."_margin_on_selling_price";
 		$group_col_discount_on_grossprice_b_on_deb_selling_price = "group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price";
 		
-		if($flag_update_profit_margin_bp == 0) {
-			$group_cols .= $group_col_debter_selling_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
-			$insert_update_group_data .= $group_col_debter_selling_price." = VALUES(".$group_col_debter_selling_price."),".$group_col_margin_on_selling_price." = VALUES(".$group_col_margin_on_selling_price."),".$group_col_discount_on_grossprice_b_on_deb_selling_price." = VALUES(".$group_col_discount_on_grossprice_b_on_deb_selling_price."),";
-		} else {
-			$group_cols .= $group_col_magento_id.",".$group_col_debter_selling_price.",".$group_col_margin_on_buying_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
-			$insert_update_group_data .= $group_col_debter_selling_price." = VALUES(".$group_col_debter_selling_price."),".$group_col_margin_on_buying_price." = VALUES(".$group_col_margin_on_buying_price."),".$group_col_margin_on_selling_price." = VALUES(".$group_col_margin_on_selling_price."),".$group_col_discount_on_grossprice_b_on_deb_selling_price." = VALUES(".$group_col_discount_on_grossprice_b_on_deb_selling_price."),";
-		}
+		$group_cols .= $group_col_debter_selling_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
+		$insert_update_group_data .= $group_col_debter_selling_price." = VALUES(".$group_col_debter_selling_price."),".$group_col_margin_on_selling_price." = VALUES(".$group_col_margin_on_selling_price."),".$group_col_discount_on_grossprice_b_on_deb_selling_price." = VALUES(".$group_col_discount_on_grossprice_b_on_deb_selling_price."),";
 	}
 
 	if($group_cols) {
 		$group_cols = rtrim($group_cols,",");
-		$sql .= ', '.$group_cols.") VALUES ";
+		$sql .= $group_cols;
 		$insert_update_group_data = rtrim($insert_update_group_data, ',');
-		$last_part_sql .= $back_part_cols;
 		$last_part_sql .= " ".$insert_update_group_data;
-	} else {
+	} /* else {
 		$back_part_cols = rtrim($back_part_cols, ', ');
 		$last_part_sql .= $back_part_cols;
 		$sql .= ") VALUES ";
-	}
+	} */
 
 	return array($sql, $last_part_sql);
 }
@@ -621,8 +597,7 @@ function getSqlOfAllDebters($xlsx_sku, $buying_price) {
 		//	}
             $deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
             $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
-			//$group_cols .= $group_col_magento_id.",".$group_col_debter_selling_price.",".$group_col_margin_on_buying_price.",".$group_col_margin_on_selling_price.",".$group_col_discount_on_grossprice_b_on_deb_selling_price.",";
-        } else {
+		} else {
             $debter_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
             $deb_margin_on_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
             $deb_discount_on_gross_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
@@ -674,7 +649,9 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
             $deb_discount_on_gross_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
         }
 
-	   $col_data .= "'".$head_cust_group_id."','".$debter_selling_price."','".$deb_margin_on_buying_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
+	  // $col_data .= "'".$head_cust_group_id."','".$debter_selling_price."','".$deb_margin_on_buying_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
+		$col_data .= "'".$debter_selling_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
+
 	}
 	$col_data = rtrim($col_data, ',');
 	return array($col_data);
