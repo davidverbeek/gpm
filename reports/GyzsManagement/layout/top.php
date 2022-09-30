@@ -71,6 +71,12 @@
         </a>
     </li>
 
+    <li class="nav-item <?php if (strpos($_SERVER['REQUEST_URI'], 'compare_prices') > 0) { ?> active  <?php } ?> ">
+        <a class="nav-link setting" href="compare_prices.php">
+            <span>Compare Prices</span>
+        </a>
+    </li>
+
     <li class="nav-item <?php if (strpos($_SERVER['REQUEST_URI'], 'settings') > 0) { ?> active  <?php } ?> ">
         <a class="nav-link setting" href="settings.php" style="transition: 0.3s;">
             <img alt="GYZS" src="css/svg/settings-purple.svg" style="transition: 0.3s;">

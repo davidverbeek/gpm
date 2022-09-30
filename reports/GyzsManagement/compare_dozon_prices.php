@@ -5,6 +5,8 @@ ini_set('memory_limit', '6G');
 ini_set('max_execution_time', 300); // 5 minutes
 umask(0);
 Mage::app();
+
+//$conn->query("delete from all_supplier_products where supplier_id='4'");exit;
 /* $txt = 'compareDozonCostprijs';
 
 Mage::app("default")->setCurrentStore(3);
@@ -53,7 +55,7 @@ while ($reader->read()) {
 
 }
 const PMCHUNK = 1000;
-$supplier_id='3';
+$supplier_id='4';
 $chunk_xlsx_data = array_chunk( $dozon_xml_price_data, PMCHUNK);
 if(count($chunk_xlsx_data)>0 && count($chunk_xlsx_data[0]) > 1) {
     foreach($chunk_xlsx_data as $chunked_idx=>$chunked_xlsx_values) {

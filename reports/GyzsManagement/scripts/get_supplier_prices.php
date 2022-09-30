@@ -77,10 +77,6 @@ $columns = array(
     array( 'db' => 'prop1001.supplier_id AS m_supplier_id', 'dt' => 22 ),
     array( 'db' => 'prop1001.supplier_id AS m_supplier_id', 'dt' => 23 ),
     array( 'db' => 'prop1001.supplier_id AS m_supplier_id', 'dt' => 24 ),
-
-
-
-
 );
  
 // SQL server connection information
@@ -90,6 +86,42 @@ $sql_details = array(
     'db'   => $dbname,
     'host' => $servername
 );
+
+if(isset($_POST['hdn_filters'])) {
+    $db_column_name = '';
+    switch($_POST['hdn_filters']) {
+        case (strpos($_POST['hdn_filters'],"task-all-numbers-filterable-csp") !== FALSE):
+            $column_to_search = trim(str_replace("task-all-numbers-filterable-csp","",$_POST['hdn_filters']));
+            $db_column_name = array_search($column_to_search, $column_index_compare_prices);
+            if ($db_column_name == 'm_buying_price') {
+                $db_column_name = 'prop1001.bp_min_order_qty';
+            } elseif($db_column_name == 'p_buying_price'){
+                $db_column_name = 'prop1002.bp_min_order_qty';
+            } elseif($db_column_name == 't_buying_price'){
+                $db_column_name = 'prop1003.bp_min_order_qty';
+            } elseif($db_column_name == 'd_buying_price'){
+                $db_column_name = 'prop1004.bp_min_order_qty';
+            } elseif($db_column_name == 'm_piece'){
+                $db_column_name = 'prop1001.bp_per_piece';
+            } elseif($db_column_name == 'p_piece'){
+                $db_column_name = 'prop1002.bp_per_piece';
+            } elseif($db_column_name == 't_piece'){
+                $db_column_name = 'prop1003.bp_per_piece';
+            } elseif($db_column_name == 'd_piece'){
+                $db_column_name = 'prop1004.bp_per_piece';
+            }
+        break;
+    }
+    //$selected_categories = implode(",",$_REQUEST['categories']);
+    $column_exp = str_replace('csp.db_column',$db_column_name,$_POST['hdn_group_search_text']);
+    $extra_where = $column_exp;
+    $column_to_search = trim(str_replace("task-all-numbers-filterable-csp","",$_POST['hdn_filters']));
+
+
+ } else {
+    //$extra_where = "mccp.category_id IN ('')";
+   $extra_where = "";
+ }
  
  
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -100,5 +132,6 @@ $sql_details = array(
 require( 'ssp.class.php' );
  
 echo json_encode(
-    SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns, "", 'prod.ean' )
+    SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns, $extra_where, 'prod.ean' )
 );
+
