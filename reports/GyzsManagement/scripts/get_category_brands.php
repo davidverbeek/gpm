@@ -17,7 +17,7 @@ ini_set('memory_limit','3G');
 
 $response_data = array();
 
-$brands = array(); 
+$brands = array();
 $selected_cats = $_POST['selected_cats'];
 $type = $_POST['type'];
 
@@ -53,6 +53,39 @@ case "category_brands":
     }
   }
   $response_data['msg'] = $brands;
+  break;
+  case "brandfilter_cats":
+    $brand_arr = explode(',', $_POST['brand_value']);
+    $brand = "'" . implode ( "', '",$brand_arr) . "'";
+    
+    $side_cats = $_POST['sidebar_cats'];
+    $cats = array();
+
+    $cat_que = "";
+    if($side_cats != "") {
+      $cat_que = " WHERE meaov.value IN ($brand) AND mccp.category_id IN (".$side_cats.")";
+    }
+
+    $sql = "SELECT DISTINCT mccp.category_id AS category_id
+    FROM
+  mage_catalog_product_entity AS mcpe
+  INNER JOIN
+  mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
+  INNER JOIN
+  price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
+  LEFT JOIN
+  mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id
+  AND mcpei.attribute_id = '".MERK."'
+  LEFT JOIN
+  mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
+  ".$cat_que." order by category_id asc";
+  if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_assoc()) {
+        $brands[] = trim($row['category_id']);
+    }
+  }
+  file_put_contents("test.txt",$sql);
+  $response_data['msg'] =  $brands;
   break;
   case "save_rule":
     $customerGroup = $_POST['customer_group'];
