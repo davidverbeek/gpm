@@ -65,17 +65,22 @@ $(document).ready(function () {
                 
                 if (resp_obj["msg"]) {
                   $('#brand').empty();
+
                   var selected_opt = $("#hdn_selectedbrand").val();
-                  var brand_id_arr = selected_opt.split(',');//alert(brand_id_arr.length);
+                  var brand_id_arr = selected_opt.split(',');
                   $.each(resp_obj["msg"], function (key, value) {
                     var selected_str = "";
                     if (brand_id_arr.includes(key)) {
                       selected_str = "selected";
                     }
                     $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
-                    //console.log($('#brand').val());
                   });
                   $('#brand').selectpicker('refresh');
+
+                  var check = $("#brand option:selected").length;
+                  if(check == 0){
+                    $('#brand').selectpicker('selectAll');
+                  }
                 }
                 if(flag == 1) {
                   $('#hdn_brandfiltercats').val('');
