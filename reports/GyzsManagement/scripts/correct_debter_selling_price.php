@@ -2,27 +2,32 @@
 
 include "../define/constants.php";
 include "../config/dbconfig.php";
+include "../lib/SimpleXLSXGen.php";
 
 function changeUpdateStatus($conn,$product_id) {
   $change_status = "UPDATE price_management_data SET is_updated = '1' WHERE product_id IN (".$product_id.")";
   $conn->query($change_status);
 }
 
-function bulkUpdateProducts($type,$data,$update_type, $log_type) {
+
+function bulkExcelFile($all_excel_row) {
+  $valid_header = array("Artikelnummer (Artikel)","4027100","4027101","4027102","4027103","4027104","4027105","4027106","4027107","4027108","4027109","4027110","4027111","4027112","4027113","4027114","4027115");
+  array_unshift($all_excel_row, $valid_header);
+  SimpleXLSXGen::fromArray($all_excel_row)->saveAs("../pm_logs/min_debter_price.xlsx");
+}
+
+function bulkUpdateProducts($type,$data,$update_type, $log_type, $excel_data) {
     $chunk_size = PMCHUNK;
     global $conn;
-    $total_inserted_records = array();
+    $total_inserted_records =  $all_excel_row = array();
     $chunk_data = array_chunk($data,$chunk_size);
   
     if(count($chunk_data)) {
       foreach($chunk_data as $chunk_index=>$chunk_values) {
-        $all_col_data = array();
-        $updated_product_ids = array();
-        $all_history_data = array();
-  
-        if($type == "debterprice") {
+        $all_col_data = $updated_product_ids = array();
+        //if($type == "debterprice") {
             $sql = "INSERT INTO price_management_data (product_id, sku";
-            for($d=0;$d<=15;$d++) { 
+            for($d=0; $d<=15; $d++) {
                 $debter_number = intval(4027100 + $d);
                 $c_d_id = "group_".$debter_number."_magento_id";
                 $c_d_sp = "group_".$debter_number."_debter_selling_price";
@@ -32,13 +37,13 @@ function bulkUpdateProducts($type,$data,$update_type, $log_type) {
                 $sql .= ", ".$c_d_id.", ".$c_d_sp.", ".$c_d_m_bp.", ".$c_d_m_sp.", ".$c_d_o_gp;
             }
             $sql .= ") VALUES ";
-        }
+        //}
   
         foreach($chunk_values as $key=>$chunk_value) {
             $create_col_data = "";
           //if($type == "debterprice") {
             $create_col_data = "('".$chunk_value['product_id']."', '".$chunk_value['sku']."', '";
-            for($d=0;$d<=15;$d++) { 
+            for($d=0;$d<=15;$d++) {
                 $debter_number = intval(4027100 + $d);
                 $c_d_id = "group_".$debter_number."_magento_id";
                 $c_d_sp = "group_".$debter_number."_debter_selling_price";
@@ -50,13 +55,15 @@ function bulkUpdateProducts($type,$data,$update_type, $log_type) {
             $create_col_data = rtrim($create_col_data, "'");
             $create_col_data = rtrim($create_col_data, ",");
             $all_col_data[] = $create_col_data .")";
-          //}
+
+            if(array_key_exists($chunk_value['product_id'],$excel_data))
+            $all_excel_row[] = $excel_data[$chunk_value['product_id']];
+            //}
           $updated_product_ids[] = $chunk_value["product_id"];
         }
-
-       // if($type == "debterprice") {
+        // if($type == "debterprice") {
             $sql .= implode(",", $all_col_data) . " ON DUPLICATE KEY UPDATE ";
-            for($d=0;$d<=15;$d++) { 
+            for($d=0; $d<=15; $d++) {
                 $debter_number = intval(4027100 + $d);
                 $c_d_id = "group_".$debter_number."_magento_id";
                 $c_d_sp = "group_".$debter_number."_debter_selling_price";
@@ -67,16 +74,14 @@ function bulkUpdateProducts($type,$data,$update_type, $log_type) {
               }
               $sql = rtrim($sql, ', ');
           if($conn->query($sql)) {
-            bulkInsertLog($chunk_index,"Bulk Update ".$update_type." Respective Debters (".$log_type."):".count($chunk_values));
             changeUpdateStatus($conn, implode(",", $updated_product_ids));
             $total_inserted_records[] = count($chunk_values);
           } else {
             bulkInsertLog($chunk_index,"Bulk Update ".$update_type." Error For Respective Debters  (".$log_type."):".mysqli_error($conn));
           }
-  
         //}
-  
-      }
+      }//end chunks
+      bulkExcelFile($all_excel_row);
     }
     return array_sum($total_inserted_records);
   }
@@ -89,9 +94,7 @@ function bulkUpdateProducts($type,$data,$update_type, $log_type) {
 $table = "mage_catalog_product_entity AS mcpe
 INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
 INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
-
-LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'
-";
+LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
 
 $columns = array(
   array( 'db' => 'DISTINCT mcpe.entity_id AS product_id'),
@@ -101,8 +104,8 @@ $columns = array(
   array( 'db' => 'pmd.selling_price AS selling_price'),
   array( 'db' => 'pmd.profit_percentage_buying_price AS profit_percentage_buying_price' ),
   array( 'db' => 'pmd.profit_percentage_selling_price AS profit_percentage_selling_price'),
-  array( 'db' => 'pmd.group_4027100_magento_id AS group_4027100_magento_id'),
 
+  array( 'db' => 'pmd.group_4027100_magento_id AS group_4027100_magento_id'),
   array( 'db' => 'pmd.group_4027100_debter_selling_price AS group_4027100_debter_selling_price'),
   array( 'db' => 'pmd.group_4027100_margin_on_buying_price AS group_4027100_margin_on_buying_price'),
   array( 'db' => 'pmd.group_4027100_margin_on_selling_price AS group_4027100_margin_on_selling_price'),
@@ -197,17 +200,15 @@ function roundValue($val) {
 simple($table, $columns);
 
 
-function simple ($table, $columns, $extra_where = "")
+function simple ($table, $columns)
 	{
-		$bindings = array();
 		global $conn;
 				
 		 $raw_sql = "SELECT ".implode(",", pluck($columns, 'db'))."
-			 FROM $table ";
+			 FROM $table";
 
-	
+		$excel_data = array();
     $all_selected_data = $db_data = $all_updated_data = array();
-
 
 		// Main query to actually get the data,  limit $chunk_size
 		$sql = 
@@ -218,6 +219,9 @@ function simple ($table, $columns, $extra_where = "")
              
                 $db_data[$v["product_id"]]['product_id'] = $v["product_id"];
                 $db_data[$v["product_id"]]['sku'] = $v["sku"];
+
+                //$excel_data[$v["product_id"]]['product_id'] = $v["product_id"];
+                $excel_data[$v["product_id"]]['sku'] = $v["sku"];
                 for($d=0;$d<=15;$d++) {
                     $cust_group = intval(4027100 + $d);
                     $selected_debter_column_mid = "group_".$cust_group."_magento_id";
@@ -230,6 +234,8 @@ function simple ($table, $columns, $extra_where = "")
                     $db_data[$v["product_id"]][$selected_debter_column_bp] = is_null($v[$selected_debter_column_bp])?0.00:$v[$selected_debter_column_bp];;
                     $db_data[$v["product_id"]][$selected_debter_column_msp] = is_null($v[$selected_debter_column_msp])?0.00:$v[$selected_debter_column_msp];
                     $db_data[$v["product_id"]][$selected_debter_column_gp] = is_null($v[$selected_debter_column_gp])?0.00:$v[$selected_debter_column_gp];
+
+                    $excel_data[$v["product_id"]][$cust_group] = '-';
                 }
 
                 $sql_2 = 
@@ -244,10 +250,6 @@ function simple ($table, $columns, $extra_where = "")
                         $selected_debter_column_msp = "group_".$row_2['debter_number']."_margin_on_selling_price";
                         $selected_debter_column_gp = "group_".$row_2['debter_number']."_discount_on_grossprice_b_on_deb_selling_price";
                         //do calculations
-                        
-                        //$all_selected_data[$v["product_id"]]['product_id'] = $v["product_id"];
-                        //$all_selected_data[$v["product_id"]]['sku'] = $v["sku"];
-
                         $deb_selling_price = $v['selling_price']; 
                         $all_selected_data[$v['product_id']][$selected_debter_column_sp] = $deb_selling_price;
                         $supplier_gross_price = ($v['gross_unit_price'] == 0 ? 1:$v['gross_unit_price']);
@@ -260,22 +262,23 @@ function simple ($table, $columns, $extra_where = "")
                    
                         $all_selected_data[$v['product_id']][$selected_debter_column_msp] = $deb_margin_on_selling_price;
                         $all_selected_data[$v['product_id']][$selected_debter_column_gp] = $deb_discount_on_gross_price;
+                        $excel_data_updated[$v["product_id"]][$row_2['debter_number']] = $deb_selling_price;
                     }
                 }
 
                 if(isset($all_selected_data[$v['product_id']])) {
                   $all_updated_data[$v['product_id']] = array_replace($db_data[$v['product_id']], $all_selected_data[$v['product_id']]);
+                  $all_updated_excel[$v['product_id']] = array_replace($excel_data[$v['product_id']], $excel_data_updated[$v['product_id']]);
                 }
              }
-            
               if(count($all_updated_data) > 0) {
-                $total_updated_recs = bulkUpdateProducts("debterprice",$all_updated_data,"Debter prices more than their PM Vkpr", "All Price Management Products");
-                echo $total_updated_recs .' Products are updated';
+                $total_updated_recs = bulkUpdateProducts("debterprice",$all_updated_data,"Debter prices more than their PM Vkpr", "All Price Management Products", $all_updated_excel);
+                echo "Updated {$total_updated_recs} products. Please check excel file.";
               } else {
                 echo 'Products are already updated.OR No updation because dont have any Debter';
               }
             
-            }
+            }//end simple()
              function pluck ( $a, $prop )
 	{
 		$out = array();
