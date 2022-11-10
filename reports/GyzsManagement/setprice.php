@@ -567,19 +567,19 @@ if ($result = $conn->query($sql)) {
                                 $h_cust_group = intval(4027100 + $hc);
                             ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dsp show_deb_cols"><span>SP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dsp show_deb_cols open_by_default"><span>SP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmbp show_deb_cols"><span>Marg.BP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmbp show_deb_cols open_by_default"><span>Marg.BP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmsp show_deb_cols"><span>Marg.SP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmsp show_deb_cols open_by_default"><span>Marg.SP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols open_by_default"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
                             </label>
 
                             <?php $deb_col_idx++; } ?>    
