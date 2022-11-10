@@ -603,7 +603,7 @@ if ($result = $conn->query($sql)) {
           
           <input type="hidden" name="hdn_selectedcategories" id="hdn_selectedcategories" />
           <input type="hidden" name="hdn_selectedbrand" id="hdn_selectedbrand" />
-          
+
           <input type="hidden" name="hdn_processfilename_n" id="hdn_processfilename_n" value="" />
           <input type="hidden" name="hdn_filters" id="hdn_filters" />
           
@@ -612,6 +612,8 @@ if ($result = $conn->query($sql)) {
 
           <input type="hidden" name="hdn_stijging_text" id="hdn_stijging_text" />
           <input type="hidden" name="hdn_group_search_text" id="hdn_group_search_text" />
+
+          <input type="hidden" name="hdn_brandfiltercats" id="hdn_brandfiltercats" />
 
         </div>
         <!-- End of Hiddens -->
@@ -630,6 +632,8 @@ if ($result = $conn->query($sql)) {
     var all_product_categories = <?php echo file_get_contents("pm_logs/pm_product_categories.txt") ?>;
     var product_category_id = <?php echo file_get_contents("pm_logs/product_cat_id.txt") ?>;  
     var debter_product_data = <?php echo json_encode($debter_data) ?>; 
+    var collect_category_ids = [];
+    var flag = 0;
   </script>
   <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/twitter-bootstrap.bundle.js"></script>
   <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/bootstrap-select.min.js"></script>

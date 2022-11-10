@@ -41,8 +41,21 @@ $(document).ready(function () {
       "fixedHeader": true,
       "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
-         var selected_cats = getTreeCategories();
-         //if(selected_cats) {
+      var selected_cats;
+      var is_debter_checked = 0;
+      $('.show_cols_dmbp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_dsp').each(function (index) {
+        if ($(this).is(':checked') && is_debter_checked == 0) {
+          is_debter_checked = 1;
+        }
+      });
+
+        if(flag == 0) {
+          selected_cats = getTreeCategories();
+        } else if(is_debter_checked == 1) {
+          selected_cats = $('#hdn_selectedcategories').val();
+        } else {
+          selected_cats = collect_category_ids.toString();
+        }
             $.ajax({
              url: document_root_url+'/scripts/process_data_price_management.php',
              "type": "POST",
@@ -51,17 +64,27 @@ $(document).ready(function () {
                 var resp_obj = jQuery.parseJSON(response_data);
                 
                 if (resp_obj["msg"]) {
-                 $('#brand').empty();
-                 var selected_opt = $("#hdn_selectedbrand").val();
-                 var brand_id_arr = selected_opt.split(',');
-                 $.each(resp_obj["msg"], function (key, value) {
-                   var selected_str = "";
-                   if (brand_id_arr.includes(key)) {
-                     selected_str = "selected";
-                   }
-                   $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
-                 });
-                 $('#brand').selectpicker('refresh');
+                  $('#brand').empty();
+
+                  var selected_opt = $("#hdn_selectedbrand").val();
+                  var brand_id_arr = selected_opt.split(',');
+                  $.each(resp_obj["msg"], function (key, value) {
+                    var selected_str = "";
+                    if (brand_id_arr.includes(key)) {
+                      selected_str = "selected";
+                    }
+                    $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
+                  });
+                  $('#brand').selectpicker('refresh');
+
+                  var check = $("#brand option:selected").length;
+                  if(check == 0){
+                    $('#brand').selectpicker('selectAll');
+                  }
+                }
+                if(flag == 1) {
+                  $('#hdn_brandfiltercats').val('');
+                  checkCats_2();
                 }
              }
           });
@@ -946,6 +969,7 @@ $(document).ready(function () {
                         brand_str = changed_brand_str = "0";
                       }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         if(brand_str != "0" && changed_brand_str != brand_str) {
+                          flag = 1;
                           column
                           .search($("#hdn_selectedbrand").val(), true, false)
                           .draw();
@@ -957,21 +981,9 @@ $(document).ready(function () {
           }); 
           $("#supplier_type").selectpicker('selectAll').addClass('show-tick');
           $(".search_afw_dd ").selectpicker('selectAll').addClass('show-tick');
-      },
-      "rowCallback": function( row, data ) {
-
-        //console.log(column_index["debter"]);
-
-         /* if(data[column_index["updated_product_cnt"]] > 0 || data[column_index["older_updated_product_cnt"]] > 0) {
-          $badge = "";
-          if(data[column_index["updated_product_cnt"]] > 0) {
-            $badge = '<span class="badge badge-notify" style="font-size:10px;">'+data[column_index["updated_product_cnt"]]+'</span>';
-          }
-
-          $('td:eq('+(column_index["supplier_type"] - 1)+')', row).prepend('<a href="#pricelogModal" data-remote="pricelogs.php?pid='+data[column_index["product_id"]]+'&s='+data[column_index["sku"]]+'&e='+data[column_index["ean"]]+'" data-toggle="modal" data-target="#pricelogModal"><button class="btnhistory btn btn-info btn-xs" id="'+data[column_index["product_id"]]+'"><i class="fa fa-history"></i> ('+data[column_index["older_updated_product_cnt"]]+')</button>'+$badge+'</a>');
-        } */
-
-        //if(data[column_index["updated_product_cnt"]] > 0) {
+        },
+      "rowCallback": function( row, data, displayNum ) {
+           //if(data[column_index["updated_product_cnt"]] > 0) {
           if( parseFloat(data[column_index["buying_price"]]) < parseFloat(data[column_index["gyzs_buying_price"]]) ) {
            $('td:eq('+(column_index["supplier_type"] - 1)+')', row).append('&nbsp;<img src="images/euro_down.gif" width="auto" height="17" title="Buying price is decreased\n'+parseFloat(data[column_index["gyzs_buying_price"]])+' ==> '+parseFloat(data[column_index["buying_price"]])+'" style="position:absolute; margin-left:4px; cursor:pointer;" />');
           } else if( parseFloat(data[column_index["buying_price"]]) > parseFloat(data[column_index["gyzs_buying_price"]]) ) {
@@ -983,8 +995,6 @@ $(document).ready(function () {
           } else if( parseFloat(data[column_index["selling_price"]]) > parseFloat(data[column_index["gyzs_selling_price"]]) ) {
            $('td:eq('+(column_index["supplier_type"] - 1)+')', row).append('&nbsp;<img src="images/euro_up_sp.gif" width="auto" height="17" title="Selling price is increased\n'+parseFloat(data[column_index["gyzs_selling_price"]])+' ==> '+parseFloat(data[column_index["selling_price"]])+'" style="position:absolute; margin-left:30px; cursor:pointer;" />');
           }
-       // }
-
 
         if(data[column_index["is_activated"]] == 1) {
           $('td:eq('+(column_index["supplier_type"] - 1)+')', row).prepend('<img src="images/activated.png" style="position:absolute;left:29px; width:18px; height:18px; cursor:pointer;" title="Will be LIVE in next cycle" />&nbsp;');
@@ -993,7 +1003,7 @@ $(document).ready(function () {
         var hdn_percentage_increase_column = $("#hdn_percentage_increase_column").val();
 
         if(data[column_index["is_updated"]] == 1) {
-          $node = this.api().row(row).nodes().to$();
+           $node = this.api().row(row).nodes().to$();
            $node.addClass('row_updated')
         }
         if(data[column_index["percentage_increase"]] > 0) {
@@ -1015,15 +1025,29 @@ $(document).ready(function () {
         "type": "POST",
         "data": function ( d ) {
           var selected_categories ='-1';
-            if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
-              updated_cats = new Array();
-               $.each($('.sim-tree-checkbox'), function (index, value) {
-                if ($(this).hasClass('checked')) {
-                  updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
-                }
-              });
-              selected_categories = updated_cats.toString();
+          var is_debter_checked = 0;
+          $('.show_cols_dmbp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_dsp').each(function (index) {
+            if ($(this).is(':checked') && is_debter_checked == 0) {
+              is_debter_checked = 1;
             }
+          });
+            if(flag == 0) {
+              if ($('a>i.sim-tree-checkbox').hasClass('checked')) {
+                updated_cats = new Array();
+                 $.each($('.sim-tree-checkbox'), function (index, value) {
+                  if ($(this).hasClass('checked')) {
+                    updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+                  }
+                });
+                selected_categories = updated_cats.toString();
+                collect_category_ids = updated_cats;
+              }
+            } else if(is_debter_checked == 1) {
+              selected_categories = $('#hdn_selectedcategories').val();
+            } else {
+              selected_categories = collect_category_ids.toString();
+            }
+
             d.categories =  selected_categories,
             d.showupdated = $('#hdn_showupdated').val(),
             d.hdn_filters = $('#hdn_filters').val(),
@@ -4098,12 +4122,11 @@ $("#btnDebCategories").click(function () {
         method: "POST",
         data: ({ customer_group: selected_group_str, type: 'multiple_group_query' }),
         dataType: "json",
-        beforeSend:function(){
+        beforeSend:function() {
           $("#btnDebCategories").css("opacity",0.5);
           $("#btnDebCategories").find('span.loading-img-update').css({"display": "inline-block"});
           $("#btnDebCategories").attr('disabled','disabled');
         }
-
       });
 
       request.done(function (response_data) {
@@ -4140,7 +4163,6 @@ $("#flexCheckDefault").change(function () {
     if ($('input.show_deb_cols').is(":checked") && cat_all_str != '' && cat_all_str != -1) {//means this is a group list
       var cat_all_arr = cat_all_str.split(',');
       if (current_status) { // check all hiddencategories
-
         $.each(cat_all_arr, function (key, value) {
           var $li = $('li[data-id=' + value + ']');
           checkGiven($li, true, true);
@@ -4181,13 +4203,17 @@ $("#flexCheckDefault").change(function () {
 
     onClick: function (item) {
     },
-    onChange: function (item) { 
+    onChange: function (item) {
       $("#hdn_showupdated").val("0");
       $("#chkall").prop('checked', false);
       $("#check_all_cnt").html(0);
       $("#hdn_selectedbrand").val('');
+
       $("#supplier_type").selectpicker('selectAll');
       $('#supplier_type').selectpicker('refresh');
+
+      //18-10-2022
+      flag = 0;
 
      // $('.dropdown').val([]);
       table
@@ -4242,7 +4268,7 @@ $("#flexCheckDefault").change(function () {
       updated_cats = new Array();
       $.each($('.sim-tree-checkbox'), function (index, value) {
         if ($(this).hasClass('checked')) {
-        updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
+          updated_cats.push($(this).parent('a').parent('li').attr('data-id'));
         }
       });
       selected_categories = updated_cats.toString();
@@ -4311,7 +4337,40 @@ $("#flexCheckDefault").change(function () {
       }
     });
   }
+  function checkCats_2() {
+    if($('#brand').val().length > 0) {//it is not empty
+      var brand_id = $("#hdn_selectedbrand").val();
+      var selected_categories;
+      var is_debter_checked = 0;
+      $('.show_cols_dmbp, .show_cols_dmsp, .show_cols_ddgp, .show_cols_dsp').each(function (index) {
+        if ($(this).is(':checked') && is_debter_checked == 0) {
+          is_debter_checked = 1;
+        }
+      });
+      if(is_debter_checked == 1) {
+        selected_categories = $('#hdn_selectedcategories').val();
+      } else {
+        selected_categories = collect_category_ids.toString();
+      }
 
+      var request = $.ajax({
+        url: document_root_url + '/scripts/get_category_brands.php',
+        method: "POST",
+        data: ({ brand_value: brand_id, type: 'brandfilter_cats', sidebar_cats: selected_categories}),
+        dataType: "json",
+        success : function(response_data) {
+          if(response_data["msg"]) {
+              checkIt(false, false);
+              $("#hdn_brandfiltercats").val(response_data["msg"]);
+              $.each(response_data["msg"], function(key,value) {
+                var $li = $("li[data-id='" + value + "']");
+                checkGiven($li, true, true);
+              });
+          }
+        }
+      });
+    }
+  }
 
   $('#btnselected').click(function () {
     let products_selected = 0;
@@ -4350,4 +4409,3 @@ $("#flexCheckDefault").change(function () {
     });
   });
 });
-

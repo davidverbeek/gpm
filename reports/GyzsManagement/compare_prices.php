@@ -16,6 +16,9 @@ include "layout/header.php";?>
     table#compare_dt>thead>tr>th {
         width: 366px;
     }
+    .search_buying_price{
+        width: 70px;
+    }
 </style>
 <body>
     <main>
@@ -48,8 +51,8 @@ include "layout/header.php";?>
                                     <th rowspan="2">Ean</th>
                                     <th colspan="5">Mavis</th>
                                     <th colspan="5">Polvo</th>
-                                    <th colspan="5">Dozon</th>
                                     <th colspan="5">Transferro</th>
+                                    <th colspan="5">Dozon</th>
                                 </tr>
                                 <tr>
                                     <th>SKU</th>
@@ -57,16 +60,19 @@ include "layout/header.php";?>
                                     <th>ideal. Verp</th>
                                     <th>Afw.ideal.verp</th>
                                     <th>Inkpr (per Piece)</th>
+
                                     <th>SKU</th>
                                     <th>Inkpr</th>            
                                     <th>ideal. Verp</th>
                                     <th>Afw.ideal.verp</th>
                                     <th>Inkpr (per Piece)</th>
+
                                     <th>SKU</th>
                                     <th>Inkpr</th>            
                                     <th>ideal. Verp</th>
                                     <th>Afw.ideal.verp</th>
                                     <th>Inkpr (per Piece)</th>
+
                                     <th>SKU</th>
                                     <th>Inkpr</th>            
                                     <th>ideal. Verp</th>
@@ -74,7 +80,6 @@ include "layout/header.php";?>
                                     <th>Inkpr (per Piece)</th>
                                 </tr>
                             </thead>
-                        
                             <tfoot>
                                 <tr>
                                 <th>Ean</th>
@@ -83,16 +88,19 @@ include "layout/header.php";?>
                                 <th>ideal. Verp</th>
                                 <th>Afw.ideal.verp</th>
                                 <th>Inkpr(Per Piece)</th>
+
                                 <th>SKU</th>
                                 <th>Inkpr</th>            
                                 <th>ideal. Verp</th>
                                 <th>Afw.ideal.verp</th>
                                 <th>Inkpr(Per Piece)</th>
+
                                 <th>SKU</th>
                                 <th>Inkpr</th>            
                                 <th>ideal. Verp</th>
                                 <th>Afw.ideal.verp</th>
                                 <th>Inkpr(Per Piece)</th>
+
                                 <th>SKU</th>
                                 <th>Inkpr</th>            
                                 <th>ideal. Verp</th>
@@ -106,9 +114,18 @@ include "layout/header.php";?>
             </div>
         </section>
     </main>
+    <div>
+    <input type="hidden" name="hdn_group_search_text" id="hdn_group_search_text" />
+    <input type="hidden" name="hdn_filters" id="hdn_filters" />
+    </div>
+    <!-- Modals -->
+    <?php include "layout/modals.php"; ?>
+    <!-- End of Modals -->
     <script language="javascript">
     var column_index = <?php echo json_encode($column_index_compare_prices) ?>;
     var document_root_path = "<?php echo $document_root_path ?>";
     var document_root_url = "<?php echo $document_root_url; ?>";
     </script>
-<script type="text/javascript" src="<?php echo $document_root_url; ?>/js/compare_prices.js"></script>
+    <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/compare_prices.js"></script>
+</body>
+</html>
