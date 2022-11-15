@@ -364,7 +364,7 @@ function getCustomerGroups($group_number=null) {
 
 function addInHistory($conn,$updateLogs,$chunk_index="") {
 
-  $insertdata = implode(",", $updateLogs);
+  $insertdata = implode(",", array_filter($updateLogs));
 
   $history = "INSERT INTO 
   price_management_history (
