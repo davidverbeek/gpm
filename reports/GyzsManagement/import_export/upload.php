@@ -393,6 +393,8 @@ function addInHistory($conn,$updateLogs,$chunk_index="") {
     $chunk_msg = "Processed Chunk (".$chunk_index.")\n";
     $chunk_msg .= "Added in history:-".count($updateLogs)."\n".print_r($updateLogs,true)."\n";
     historyLog($chunk_index,$chunk_msg);
+  } else {
+	historyLog($chunk_index,$history.mysqli_error($conn));
   }
 }
 
