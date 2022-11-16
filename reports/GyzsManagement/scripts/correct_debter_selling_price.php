@@ -9,9 +9,8 @@ function changeUpdateStatus($conn,$product_id) {
   $conn->query($change_status);
 }
 
-
 function bulkExcelFile($all_excel_row) {
-  $valid_header = array("Artikelnummer (Artikel)","4027100","4027101","4027102","4027103","4027104","4027105","4027106","4027107","4027108","4027109","4027110","4027111","4027112","4027113","4027114","4027115");
+  $valid_header = array("Artikelnummer (Artikel)","ZZP","Aannemer M","Aannemer L","Metaal","Interieurbouw","Slotenservice","Scholen/zorg","DHZ","Installatie","Glashandel","VVE","Groen","Timmerfabriek","Overheid","Weder1","Weder2");
   array_unshift($all_excel_row, $valid_header);
   SimpleXLSXGen::fromArray($all_excel_row)->saveAs("../pm_logs/min_debter_price.xlsx");
 }
@@ -244,7 +243,6 @@ function simple ($table, $columns)
                 $debters_of_product = $conn->query($sql_2);
                 while($row_2 = $debters_of_product->fetch_assoc()) {
                     $selected_debter_column_sp = "group_".$row_2['debter_number']."_debter_selling_price";
-                   
                     if ($v[$selected_debter_column_sp] > $v['selling_price']) {
                         $selected_debter_column_bp = "group_".$row_2['debter_number']."_margin_on_buying_price";
                         $selected_debter_column_msp = "group_".$row_2['debter_number']."_margin_on_selling_price";
@@ -259,7 +257,6 @@ function simple ($table, $columns)
                         $deb_discount_on_gross_price = roundValue((1 - ($deb_selling_price/$supplier_gross_price)) * 100);
 
                         $all_selected_data[$v['product_id']][$selected_debter_column_bp] =  $deb_margin_on_buying_price;
-                   
                         $all_selected_data[$v['product_id']][$selected_debter_column_msp] = $deb_margin_on_selling_price;
                         $all_selected_data[$v['product_id']][$selected_debter_column_gp] = $deb_discount_on_gross_price;
                         $excel_data_updated[$v["product_id"]][$row_2['debter_number']] = $deb_selling_price;
