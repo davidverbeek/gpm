@@ -59,14 +59,19 @@ $(document).ready(function () {
                    if (brand_id_arr.includes(key)) {
                      selected_str = "selected";
                    }
-                   $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
+                  // $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option><p id="bol'+key+'">Add Bol Minimum Price</p>');
+                  $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
+                  //$('#sel_merk').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
                  });
                  $('#brand').selectpicker('refresh');
+                 //$('#sel_merk').selectpicker('refresh');
+
                 }
              }
           });
         //}
         enableBulkFunc();
+        getCategoryBrand();
       },
       "columnDefs": [
             {
@@ -2422,7 +2427,7 @@ $('#example tbody').on("keyup",".db_sp",function(e) {
                     supplier_gross_price: supplier_gross_price,
                     debter_number: debter_number
                  }),
-           success: function(response_data){
+           success: function(response_data) {
               var resp_obj = jQuery.parseJSON(response_data);
               if(resp_obj["msg"]) {
                   table.ajax.reload( null, false );
@@ -4313,4 +4318,91 @@ $("#flexCheckDefault").change(function () {
       }
     });
   }
+
+  function getCategoryBrand() {
+    var selected_cats = getTreeCategories();
+     //if(selected_cats) {
+        $.ajax({
+         url: document_root_url+'/scripts/process_data_price_management.php',
+         type: "POST",
+         data: ({ selected_cats: selected_cats, type: 'brand_bol_price'}),
+         success: function(response_data) {
+            var resp_obj = jQuery.parseJSON(response_data);
+            if (resp_obj["msg"]) {
+             $('#sel_merk').empty();
+             $('#sel_merk').append('<option value="please_select">Select Merk</option>');
+              var selected_opt = $("#hdn_selectedbol_price").val();
+             //var brand_id_arr = selected_opt.split(',');
+             $.each(resp_obj["msg"], function (key, value) {
+               var selected_str = "";
+               if (key == selected_opt) { //alert(selected_opt);
+                 selected_str = "selected";
+               }
+               $('#sel_merk').append('<option value="' + key + '" ' + selected_str + ' data-tokens="'+key+'">' + value + '</option>');
+             });
+             $('#sel_merk').attr('data-live-search', true);
+             $('#sel_merk').selectpicker('refresh');
+             //$('#sel_merk').attr('data-live-search', true);
+
+            }
+         }
+      });
+}//end getCategoryBrand();
+
+
+$('#bol_p').on("keyup",function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode == 13) {
+    $(".update_loader").show();
+    var formData = {
+      category_ids : $('#hdn_selectedcategories').val(),
+      brand_name : $('#sel_merk').val(),
+      bol_price : $('#bol_p').val(),
+      brands: $('#hdn_selectedbol_price').val(),
+      type : 'dynamic_bol_price'
+    };
+
+    $.ajax({
+      type: "POST",
+      url: document_root_url+'/scripts/process_data_price_management.php',
+      data: formData,
+      dataType: "json",
+      encode: true,
+    }).done(function (res) {
+      $(".update_loader").hide();
+      alert(res['msg']);
+    });
+  }
+
+  e.preventDefault();
+});
+
+$('#sel_merk').on('change', function() { //alert($("#sel_merk option:selected").text());
+  if($(this).val() != 'please_select') {
+    var has_price = $("#sel_merk option:selected").text();
+
+    var regExp = /\(([^)]+)\)/;
+    var matches = regExp.exec(has_price);
+
+    //matches[1] contains the value between the parentheses
+    if(matches.length > 1) {
+      $('#bol_p').val(matches[1]);
+    }
+
+    // var table = $('#example1').DataTable();
+    //$('#serviceload').on('change', function(){
+      $("#hdn_selectedbol_price").val(this.value);
+      $("#hdn_selectedbrand").val(this.value);
+      table.columns(column_index['brand']).search( this.value ).draw();
+    //});
+  } else {
+    $('#bol_p').val('');
+    $("#hdn_selectedbol_price").val('');
+    $("#hdn_selectedbrand").val('');
+    $('.selectpicker').selectpicker('selectAll');
+    table.columns(column_index['brand']).search($("#hdn_selectedbrand").val()).draw();
+  }
+
+});//end sel_merk change
+
 });

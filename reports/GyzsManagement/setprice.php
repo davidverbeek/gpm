@@ -186,7 +186,7 @@ if ($result = $conn->query($sql)) {
 <body>
     <main>
         <!-- Sidebar -->
-          <?php include "layout/left.php"; ?>
+        <?php include "layout/left.php";?>
         <!-- End of Sidebar -->
        
         <!-- Datatable and header  -->
@@ -204,9 +204,22 @@ if ($result = $conn->query($sql)) {
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
+                        </div>
+                    <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
+                    <!-- <form class = "form-inline" role = "form"> -->
+                    <div>
+                        <div class = "form-group">
+                            <label for = "sel_merk" class = "sr-only">Select Merk</label>
+                                <select id="sel_merk" name="sel_merk"  style="font-size: 12px;" class="required custom-select custom-select-sm form-control form-control-sm ddfields">
+                                    <option value="">Select Merk</option>
+                                </select>
+                        </div>
+                        <div class = "form-group">
+                            <label for = "bol_p" class = "sr-only">Bol Price % (min)</label>
+                            <input type="number" step="0.01" class ="form-control form-control-sm" id = "bol_p" placeholder = "Enter Minimum Bol Price">
+                        </div>
                     </div>
-
-                  
+                    <!-- </form> -->
                     <!-- Data Length Filter -->
                     <!--
                     <div class="select-opt">
@@ -599,6 +612,7 @@ if ($result = $conn->query($sql)) {
           
           <input type="hidden" name="hdn_selectedcategories" id="hdn_selectedcategories" />
           <input type="hidden" name="hdn_selectedbrand" id="hdn_selectedbrand" />
+          <input type="hidden" name="hdn_selectedbol_price" id="hdn_selectedbol_price" />
           
           <input type="hidden" name="hdn_processfilename_n" id="hdn_processfilename_n" value="" />
           <input type="hidden" name="hdn_filters" id="hdn_filters" />
