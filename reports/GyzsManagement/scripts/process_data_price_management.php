@@ -1481,15 +1481,16 @@ case "brand_bol_price":
   if($selected_cats != "") {
     $cat_que = " WHERE mccp.category_id IN (".$selected_cats.")";
   }
-
+  //IFNULL(brbp.bol_price,0)  AS product_count
+  //
+  //LEFT JOIN brand_bol_prices_table AS brbp ON meaov.value = brbp.brand_name
   $get_count_by_brand = "SELECT
   meaov.value AS brand,
-  IFNULL(brbp.bol_price,0)  AS product_count
+  IFNULL(pmd.minimum_bol_price,0) AS product_count
   FROM mage_catalog_product_entity AS MCPE INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
   INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
   LEFT JOIN mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id AND mcpei.attribute_id = '2120' 
   LEFT JOIN mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
-  LEFT JOIN brand_bol_prices_table AS brbp ON meaov.value = brbp.brand_name
   ".$cat_que."
   group by meaov.value
   ORDER BY meaov.value ASC";
@@ -1557,7 +1558,7 @@ if($_POST['brand_name']) {
 }
 
 if(count($extra_where) > 1) {
-  $where = implode('AND', array_filter($extra_where));
+  $where = implode(' AND ', array_filter($extra_where));
 } else {
   $where = implode('', array_filter($extra_where));
 }

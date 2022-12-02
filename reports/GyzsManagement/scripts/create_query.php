@@ -265,12 +265,10 @@ $columns = array(
   array( 'db' => 'pmd.is_updated AS is_updated',  'dt' => $column_index["is_updated"]),
   array( 'db' => 'pmd.is_activated AS is_activated',  'dt' => $column_index["is_activated"]),
   
-array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"]),
+  array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"]),
 
   /*array( 'db' => 'CAST((SELECT COUNT(*) AS updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and buying_price_changed = "1" and is_synced = "No") AS UNSIGNED) AS updated_product_cnt',  'dt' => $column_index["updated_product_cnt"]), */
-
-  
-
+  array( 'db' => 'pmd.minimum_bol_price AS minimum_bol_price',  'dt' => $column_index["minimum_bol_price"]),
 );
 
 
