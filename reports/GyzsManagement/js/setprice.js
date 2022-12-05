@@ -4192,11 +4192,8 @@ $("#flexCheckDefault").change(function () {
       $("#hdn_showupdated").val("0");
       $("#chkall").prop('checked', false);
       $("#check_all_cnt").html(0);
-      $("#hdn_selectedbrand").val('');
       $("#supplier_type").selectpicker('selectAll');
       $('#supplier_type').selectpicker('refresh');
-
-     // $('.dropdown').val([]);
       table
       .columns([column_index["brand"], column_index["supplier_type"]])
       .search('')
@@ -4354,8 +4351,9 @@ $('#bol_p').on("keyup",function(e) {
   var keyCode = e.keyCode || e.which;
   if (keyCode == 13) {
     $(".update_loader").show();
+    var selected_cats = getTreeCategories();
     var formData = {
-      category_ids : $('#hdn_selectedcategories').val(),
+      category_ids : selected_cats,
       brand_name : $('#sel_merk').val(),
       bol_price : $('#bol_p').val(),
       brands: $('#hdn_selectedbol_price').val(),
@@ -4371,16 +4369,16 @@ $('#bol_p').on("keyup",function(e) {
     }).done(function (res) {
       $(".update_loader").hide();
       alert(res['msg']);
+      table.columns(column_index['brand']).search($('#sel_merk').val()).draw();
     });
   }
 
   e.preventDefault();
 });
 
-$('#sel_merk').on('change', function() { //alert($("#sel_merk option:selected").text());
+$('#sel_merk').on('change', function() {
   if($(this).val() != 'please_select') {
     var has_price = $("#sel_merk option:selected").text();
-
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(has_price);
 
@@ -4388,13 +4386,9 @@ $('#sel_merk').on('change', function() { //alert($("#sel_merk option:selected").
     if(matches.length > 1) {
       $('#bol_p').val(matches[1]);
     }
-
-    // var table = $('#example1').DataTable();
-    //$('#serviceload').on('change', function(){
-      $("#hdn_selectedbol_price").val(this.value);
-      $("#hdn_selectedbrand").val(this.value);
+     $("#hdn_selectedbol_price").val(this.value);
+     $("#hdn_selectedbrand").val(this.value);
       table.columns(column_index['brand']).search( this.value ).draw();
-    //});
   } else {
     $('#bol_p').val('');
     $("#hdn_selectedbol_price").val('');
@@ -4402,7 +4396,6 @@ $('#sel_merk').on('change', function() { //alert($("#sel_merk option:selected").
     $('.selectpicker').selectpicker('selectAll');
     table.columns(column_index['brand']).search($("#hdn_selectedbrand").val()).draw();
   }
-
 });//end sel_merk change
 
 });

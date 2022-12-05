@@ -215,7 +215,7 @@ if ($result = $conn->query($sql)) {
                         </div>
                         <div class = "form-group">
                             <label for = "bol_p" class = "sr-only">Bol Price % (min)</label>
-                            <input type="number" step="0.01" class ="form-control form-control-sm" id = "bol_p" placeholder = "Enter Minimum Bol Price %">
+                            <input type="number" step="0.01" class ="form-control form-control-sm" id = "bol_p" placeholder = "Min Bol %">
                         </div>
                     </div>
                     <!-- </form> -->
@@ -267,7 +267,7 @@ if ($result = $conn->query($sql)) {
                                   <th>Afw.Ideal.verp</th>
                                   <th>Webshop Afwijkenidealeverpakking</th>
                                   <th>PM Inkpr</th>
-                                  <th>Bol Price(min.) %</th>
+                                  <th>Min Bol(%)</th>
                                   <th>Cat Gem</th>
                                   <th>Merk Gem</th>
                                   <th>Cat Merk Gem</th>
@@ -316,7 +316,7 @@ if ($result = $conn->query($sql)) {
                                   <th>Afw.Ideal.verp</th>
                                   <th>Webshop Afwijkenidealeverpakking</th>
                                   <th>PM Inkpr</th>
-                                  <th>Bol Price(min.) %</th>
+                                  <th>Min Bol(%)</th>
                                   <th>Cat Gem</th>
                                   <th>Merk Gem</th>
                                   <th>Cat Merk Gem</th>
@@ -509,7 +509,7 @@ if ($result = $conn->query($sql)) {
                                 <input type="checkbox" value="16" name="buying_price" class="show_cols open_by_default"><span>PM Inkpr</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="17" name="a_p_b" class="show_cols chav"><span>Bol Price(min.) %</span>
+                                <input type="checkbox" value="17" name="a_p_b" class="show_cols chav"><span>Min Bol(%)</span>
                             </label>
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="18" name="a_p_b" class="show_cols chav"><span>Cat Gem</span>
