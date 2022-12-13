@@ -180,6 +180,23 @@ if ($result = $conn->query($sql)) {
     position: absolute;
 }
 
+.bs-example{
+    margin: 20px;
+}
+    .icon-input-btn{
+        display: inline-block;
+        position: relative;
+    }
+    .icon-input-btn input[type="button"]{
+        padding-left: 2em;
+    }
+    .icon-input-btn .fa{
+        display: inline-block;
+        position: absolute;
+        left: 0.65em;
+        top: 30%;
+    }
+
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -206,16 +223,18 @@ if ($result = $conn->query($sql)) {
                     </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->
-                    <div>
-                        <div class = "form-group">
-                            <label for = "sel_merk" class = "sr-only">Select Merk</label>
-                                <select id="sel_merk" name="sel_merk"  style="font-size: 12px;" class="required custom-select custom-select-sm form-control form-control-sm ddfields">
-                                    <option value="">Select Merk</option>
+                        <div class="row">
+                        <div class="">
+                            <div class="form-group">
+                                <select id="sel_merk" name="sel_merk"  data-style="font-size: 12px;" class="form-control form-control-sm" data-size="10">
+                                <option value="">Select Merk</option>
                                 </select>
+                            </div>
                         </div>
-                        <div class = "form-group">
-                            <label for = "bol_p" class = "sr-only">Bol Price % (min)</label>
+                        <div class="">
+                            <div class="form-group">
                             <input type="number" step="0.01" class ="form-control form-control-sm" id = "bol_p" placeholder = "Min Bol %">
+                            </div>
                         </div>
                     </div>
                     <!-- </form> -->
@@ -233,7 +252,10 @@ if ($result = $conn->query($sql)) {
                         </label>
                     </div>
                     -->
-
+                    <span class="icon-input-btn">
+                        <i class="fa fa-filter"></i>
+                        <input type="button" id="btnDefultBol" value="Default Bol %" class="btn btn-primary btn-sm" name="btnDefultBol" title="Filter By Default Bol %">
+                    </span>
                     <!-- Data Search Filter -->
                     <div class="inner-addon">
                         <label for="dtSearch">
@@ -635,6 +657,7 @@ if ($result = $conn->query($sql)) {
      <!-- Custom price Js -->
   <script language="javascript">
     var column_index = <?php echo json_encode($column_index) ?>;
+    var default_bol_percentage = "<?php echo $settings_data['roas']['bol_buying_percentage'] ?>";
     var document_root_path = "<?php echo $document_root_path ?>";
     var document_root_url = "<?php echo $document_root_url; ?>";
     var list = <?php echo json_encode($categories) ?>;

@@ -861,8 +861,12 @@ $(document).ready(function () {
                     && that[0][0] != column_index["ean"] && that[0][0] != column_index["brand"]
                     && that[0][0] != column_index["afwijkenidealeverpakking"] && that[0][0] != column_index["webshop_afwijkenidealeverpakking"]
                     )) {
-                       var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
-                          .appendTo( $(that.footer()).empty())
+                      if(that[0][0] == column_index["minimum_bol_percentage"]) {
+                        var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="'+default_bol_percentage+'">Default Percentage ("'+default_bol_percentage+'")</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
+                      } else {
+                        var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
+                      }
+                          select.appendTo( $(that.footer()).empty())
                           .on( 'change', function () {
                             let action_dd = $(this).attr('id');
                             $( ".search_group_dd" ).each(function() {
@@ -881,12 +885,19 @@ $(document).ready(function () {
                               table.draw();
                               return true;
                             }
+                            if($(this).val() == default_bol_percentage) {
+                              make_expression = "pmd.db_column = ";
+                              $('#hdn_parent_debter_expression').val(make_expression);
+                              $("#hdn_filters").val(that[0][0]+'task-all-numbers-filterable');
+                              workOk();
+                              return true;
+                            }
                             var label_display = m = "";
                             m = $(this).parent("th").index();
                             label_display = $("tr[role='row']").find('th:eq('+m+')').text();
                             var group_filter_text = deb_column_name = "";
                             $("#to_debter_price").unbind("keypress");
-                            $( "#from_debter_price").unbind("keypress");
+                            $("#from_debter_price").unbind("keypress");
                             if($(this).val() == 1) {
                               group_filter_text = label_display+" <=";
                               make_expression = "pmd.db_column <= ";
@@ -904,7 +915,7 @@ $(document).ready(function () {
                             $('span[id=sp_from_debter_price]').text(group_filter_text);
                             $('#to_debter_price').val('');
                             $('#from_debter_price').val('');
-                            $('#hdn_parent_debter_selected').val($(this).val());
+                            $('#hdn_parent_debter_selected').val($(this).val());     
                             $('#searchDebterPriceModal').modal('show');
                             $('#searchDebterPriceModal').draggable();
                             $('#hdn_parent_debter_expression').val(make_expression);
@@ -4192,6 +4203,7 @@ $("#flexCheckDefault").change(function () {
       $("#hdn_showupdated").val("0");
       $("#chkall").prop('checked', false);
       $("#check_all_cnt").html(0);
+      $("#hdn_selectedbrand").val('');
       $("#supplier_type").selectpicker('selectAll');
       $('#supplier_type').selectpicker('refresh');
       table
@@ -4316,13 +4328,30 @@ $("#flexCheckDefault").change(function () {
     });
   }
 
-  function getCategoryBrand() {
+  function workOk() {
+    let result = new_option_text = '';
+    make_expression = $("#hdn_parent_debter_expression").val();
+    result = make_expression.concat(default_bol_percentage);
+    $("#hdn_group_search_text").val(result);
+    let clicked_col_indx = $("#hdn_filters").val();
+    clicked_col_indx = clicked_col_indx.replace("task-all-numbers-filterable", "");
+    clicked_col_indx = $.trim(clicked_col_indx);
+    var make_id = 'group_indx_'+clicked_col_indx;
+
+    // $('#'+make_id).append($('<option>', { value : 4 }).text(new_option_text));
+   // $('select'+'#'+make_id).val("15").change();
+    //$('select'+'#'+make_id).attr('title', new_option_text);
+    table.draw();
+  }
+
+
+  function getCategoryBrand(is_btn_default_bol=0) {
     var selected_cats = getTreeCategories();
      //if(selected_cats) {
         $.ajax({
          url: document_root_url+'/scripts/process_data_price_management.php',
          type: "POST",
-         data: ({ selected_cats: selected_cats, type: 'brand_bol_price'}),
+         data: ({selected_cats: selected_cats, type: 'brand_bol_price'}),
          success: function(response_data) {
             var resp_obj = jQuery.parseJSON(response_data);
             if (resp_obj["msg"]) {
@@ -4332,13 +4361,14 @@ $("#flexCheckDefault").change(function () {
              //var brand_id_arr = selected_opt.split(',');
              $.each(resp_obj["msg"], function (key, value) {
                var selected_str = "";
-               if (key == selected_opt) { //alert(selected_opt);
+               if (key == selected_opt) {
                  selected_str = "selected";
                }
                $('#sel_merk').append('<option value="' + key + '" ' + selected_str + ' data-tokens="'+key+'">' + value + '</option>');
              });
              $('#sel_merk').attr('data-live-search', true);
              $('#sel_merk').selectpicker('refresh');
+             $('#bol_p').val('');
              //$('#sel_merk').attr('data-live-search', true);
 
             }
@@ -4378,17 +4408,17 @@ $('#bol_p').on("keyup",function(e) {
 
 $('#sel_merk').on('change', function() {
   if($(this).val() != 'please_select') {
-    var has_price = $("#sel_merk option:selected").text();
+   /*  var has_price = $("#sel_merk option:selected").text();
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(has_price);
 
     //matches[1] contains the value between the parentheses
     if(matches.length > 1) {
       $('#bol_p').val(matches[1]);
-    }
-     $("#hdn_selectedbol_price").val(this.value);
-     $("#hdn_selectedbrand").val(this.value);
-      table.columns(column_index['brand']).search( this.value ).draw();
+    } */
+  $("#hdn_selectedbol_price").val(this.value);
+  $("#hdn_selectedbrand").val(this.value);
+  table.columns(column_index['brand']).search( this.value ).draw();
   } else {
     $('#bol_p').val('');
     $("#hdn_selectedbol_price").val('');
@@ -4398,4 +4428,25 @@ $('#sel_merk').on('change', function() {
   }
 });//end sel_merk change
 
+$('#btnDefultBol').on('click', function() {
+  // categories which user has checked in sidebar tree...and selected merk
+  table
+  .columns([column_index["minimum_bol_percentage"]])
+  .search('15.0000')
+  .draw();
+
+  //uncheck categories
+  /*
+  var selected_cats = getTreeCategories();
+  var selected_merk = $('#brand').val();
+  $.ajax({
+    url: document_root_url+'/scripts/process_data_price_management.php',
+    type: "POST",
+    data: ({selected_cats: selected_cats, type: 'get_default_bol', selected_merk: selected_merk}),
+    success: function(response) {
+      //response should be product list..
+    }
+  }); */
+
+});//end btnDefaultBol change
 });

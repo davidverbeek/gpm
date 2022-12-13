@@ -25,7 +25,7 @@ $column_index = array(
   "afwijkenidealeverpakking" => 14,
   "webshop_afwijkenidealeverpakking" => 15,
   "buying_price" => 16,
-  "minimum_bol_price" => 17,
+  "minimum_bol_percentage" => 17,
 
   "avg_category" => 18,
   "avg_brand" => 19,
@@ -130,6 +130,7 @@ define("brievenbuspakket","2204");
 define("ROASINSERTCHUNK","10000");
 define("PMCHUNK","5000");
 define("LOCATIE","2435");
+define("DEFAULTBOLPERCENTAGE", "15.0000");
 
 
 /* Define Attribute Ids*/

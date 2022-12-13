@@ -240,8 +240,7 @@ class SSP {
 
 				$str = $requestColumn['search']['value'];
 
-				if ( $requestColumn['searchable'] == 'true' &&
-				 $str != '' ) {
+				if ( $requestColumn['searchable'] == 'true' && $str != '' ) {
 					if(!empty($column['db'])){
 						
 						/* Process Columns Starts */
@@ -254,21 +253,21 @@ class SSP {
 							
 							/* Process Columns Ends */
 						if($column['db'] == 'meaov.value AS brand') {
-							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
+							//$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
 							$brand_arr = explode(',', $str);
 							foreach($brand_arr as $brand_val) {
 								$column_brand[] =  "".$get_column."= '".$brand_val."'";
 							}
 							$columnSearch[] = '('.implode(' OR ', $column_brand).')';
 						} elseif($column['db'] == 'pmd.supplier_type AS supplier_type'){
-							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
+							//$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
 							$brand_arr = explode(',', $str);
 							foreach($brand_arr as $brand_val) {
 								$column_supplier[] =  "".$get_column."= '".$brand_val."'";
 							}
 							$columnSearch[] = '('.implode(' OR ', $column_supplier).')';
-						}elseif($column['db'] == 'pmd.afwijkenidealeverpakking AS afwijkenidealeverpakking'){
-							$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
+						} elseif($column['db'] == 'pmd.afwijkenidealeverpakking AS afwijkenidealeverpakking'){
+							//$binding = self::bind( $bindings, $str, PDO::PARAM_STR );
 							$afw_pmd_arr = explode(',', $str);
 							foreach($afw_pmd_arr as $afw_val) {
 								$column_afw_1[] =  "".$get_column."= '".$afw_val."'";
