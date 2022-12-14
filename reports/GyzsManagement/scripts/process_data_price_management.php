@@ -1481,119 +1481,60 @@ case "brand_bol_price":
   if($selected_cats != "") {
     $cat_que = " WHERE mccp.category_id IN (".$selected_cats.")";
   }
-  //IFNULL(brbp.bol_price,0)  AS product_count
-  //
-  //LEFT JOIN brand_bol_prices_table AS brbp ON meaov.value = brbp.brand_name
+  
   $get_count_by_brand = "SELECT
-  meaov.value AS brand,
-  IFNULL(pmd.minimum_bol_price,0) AS product_count
+  meaov.value AS brand
   FROM mage_catalog_product_entity AS MCPE INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
   INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
-  LEFT JOIN mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id AND mcpei.attribute_id = '2120' 
+  LEFT JOIN mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id AND mcpei.attribute_id = '".MERK."'
   LEFT JOIN mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
   ".$cat_que."
   group by meaov.value
   ORDER BY meaov.value ASC";
-
-  /* $sql = "SELECT DISTINCT
-  mcpe.entity_id AS product_id,
-  meaov.value AS brand
-  FROM
-  mage_catalog_product_entity AS mcpe
-  INNER JOIN
-  mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
-  INNER JOIN
-  price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
-  LEFT JOIN
-  mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id
-  AND mcpei.attribute_id = '".MERK."'
-  LEFT JOIN
-  mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
-  LEFT JOIN brand_bol_prices_table AS brbp ON meaov.value = brbp.brand_name
-  ".$cat_que."
-  ORDER BY meaov.value ASC"; */
-
+  
   $product_count = array();
   if ($result = $conn->query($get_count_by_brand)) {
-  while ($row = $result->fetch_assoc()) {
-  $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
-  if($brand !== NULL && $brand != "") {
-  $product_count[$brand] = $brand.'('.$row['product_count'].')';
-  }
-  }
-  }
-
-  /* if ($result = $conn->query($sql)) {
     while ($row = $result->fetch_assoc()) {
-    $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
-    if($brand !== NULL && $brand != "") {
-      $brands[$brand] = $brand.'('.$product_count[$brand].')';
+      $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
+      if($brand !== NULL && $brand != "") {
+        $product_count[$brand] = $brand;
+      }
     }
-    }
-  } */
+  }
   $response_data['msg'] = $product_count;
   break;
-  case "dynamic_bol_price":
-    $table = "mage_catalog_product_entity AS mcpe
-INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
-INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
-LEFT JOIN mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id AND mcpei.attribute_id = '".MERK."'
-LEFT JOIN mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value";
 
-if($_POST['category_ids']) {
-  //$selected_categories = implode(",",$_REQUEST['categories']);
- $extra_where[] = "mccp.category_id IN (".$_POST['category_ids'].")";
-} else {
-  //$extra_where = "mccp.category_id IN ('')";
- $extra_where[] = "";
-}
+case "update_bol_percentage_by_merk":
+    $dynamic_bol_price = $_POST['bol_price'];
+    $file_to_check = file_get_contents("../querylog.txt");
+    $myfile = fopen("../querylog.txt", "r") or die("Unable to open file!");
+    $make_query = $one_line = '';
+    while(!strpos($one_line = fgets($myfile), 'LIMIT 0, 200')) {
+      $make_query .= $one_line;
+    }
+    $make_query .= ' LIMIT 0, 200';
+    file_put_contents('monday.txt', $make_query);
+    fclose($myfile);
 
-
-if($_POST['brand_name']) {
-  //$selected_categories = implode(",",$_REQUEST['categories']);
- $extra_where[] = "meaov.value = '".$_POST['brand_name']."'";
-} else {
-  //$extra_where = "mccp.category_id IN ('')";
- $extra_where[] = "";
-}
-
-if(count($extra_where) > 1) {
-  $where = implode(' AND ', array_filter($extra_where));
-} else {
-  $where = implode('', array_filter($extra_where));
-}
-
-$dynamic_bol_price = $_POST['bol_price'];
-
-$raw_sql = "SELECT DISTINCT pmd.sku "."
-			 FROM $table
-			 WHERE $where";
-       $logfile = fopen("../querybollog.txt", "w");
-
-       fwrite($logfile, $raw_sql."\n");
-
-       if($result = $conn->query($raw_sql)) {
-        $product_skus = array();
-        while($row = $result->fetch_assoc()) {
-          $product_skus[] = $row['sku'];
-        }
-        $result -> free_result();
-        $sku_single_quoted = "'" . implode ( "', '", $product_skus ) . "'";
-        $update_sql = "UPDATE price_management_data SET minimum_bol_price=".$dynamic_bol_price." WHERE sku IN (".$sku_single_quoted.")";
-        $msg = "Product SKUs are obtained successfully.";
-        if($result = $conn->query($update_sql)) {
-          $msg = "Bol Price is updated successfully.";
-          file_put_contents('update_bol_price_querylog.txt', "Successful update done <br>".$update_sql);
-        } else {
-          $msg = "Failure in updation.";
-          file_put_contents('update_bol_price_querylog.txt', mysqli_error($conn).'<br>'.$update_sql);
-         }
-       } else {
-        $msg = "Product SKUs NOT obtained..FAILURE.";
-        file_put_contents('update_bol_price_querylog.txt', mysqli_error($conn).'<br>'.$raw_sql);
-       }
-       $response_data['msg'] = $msg.'Product count is '.count($product_skus);
-        break;
+    $sku_arr = array();
+    if($result = $conn->query($make_query)) {
+      while ($row = $result->fetch_assoc()) {
+        $sku_arr[] = $row['sku'];
+      }
+    }
+    file_put_contents('monday_tuesday.txt', implode(',', $sku_arr));
+    $sku_single_quoted = "'" . implode ( "', '", $sku_arr ) . "'";
+    $update_sql = "UPDATE price_management_data SET minimum_bol_percentage=".$dynamic_bol_price." WHERE sku IN (".$sku_single_quoted.")";
+    $msg = "Product SKUs are obtained successfully.";
+    if($result = $conn->query($update_sql)) {
+      $msg = "Bol Price is updated successfully.";
+      file_put_contents('update_bol_price_querylog.txt', "Successful update done <br>".$update_sql);
+    } else {
+      $msg = "Failure in updation.";
+      file_put_contents('update_bol_price_querylog.txt', mysqli_error($conn).'<br>'.$update_sql);
+    }
+    $response_data['msg'] = $msg.'Product count is '.count($sku_arr);
+break;
 }
 
 function getPreviousSellingPriceFromHistory($conn, $product_id) {
@@ -1676,7 +1617,6 @@ function getCategoriesFromProductId($product_id,$get_all_product_categories) {
   } else {
     $product_categories[] = "";
   }
-
   return implode("/", array_filter($product_categories));
 }
 

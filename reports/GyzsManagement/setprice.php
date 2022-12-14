@@ -252,10 +252,10 @@ if ($result = $conn->query($sql)) {
                         </label>
                     </div>
                     -->
-                    <span class="icon-input-btn">
+                    <!--<span class="icon-input-btn">
                         <i class="fa fa-filter"></i>
                         <input type="button" id="btnDefultBol" value="Default Bol %" class="btn btn-primary btn-sm" name="btnDefultBol" title="Filter By Default Bol %">
-                    </span>
+                    </span>-->
                     <!-- Data Search Filter -->
                     <div class="inner-addon">
                         <label for="dtSearch">

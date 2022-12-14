@@ -515,7 +515,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027105_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 var product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('105', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_105" id="db_m_sp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
@@ -952,11 +952,14 @@ $(document).ready(function () {
                           });
                           $("#hdn_selectedbrand").val(selected);
                           brand_str = selected;
+                          if (brands.length == 1) {
+                            $("#hdn_selectedbol_price").val($(this).val());
+                          }
                         } else {
                           $("#hdn_selectedbrand").val('-1');
                         }
                         $("#chkall").prop('checked', false);
-                        $("#check_all_cnt").html(0);
+                        $("#check_all_cnt").html(0);                                                    
                       }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         $(this).selectpicker('selectAll').addClass('show-tick');
                         brand_str = changed_brand_str = "0";
@@ -4337,17 +4340,12 @@ $("#flexCheckDefault").change(function () {
     clicked_col_indx = clicked_col_indx.replace("task-all-numbers-filterable", "");
     clicked_col_indx = $.trim(clicked_col_indx);
     var make_id = 'group_indx_'+clicked_col_indx;
-
-    // $('#'+make_id).append($('<option>', { value : 4 }).text(new_option_text));
-   // $('select'+'#'+make_id).val("15").change();
-    //$('select'+'#'+make_id).attr('title', new_option_text);
     table.draw();
   }
 
 
   function getCategoryBrand(is_btn_default_bol=0) {
     var selected_cats = getTreeCategories();
-     //if(selected_cats) {
         $.ajax({
          url: document_root_url+'/scripts/process_data_price_management.php',
          type: "POST",
@@ -4358,7 +4356,6 @@ $("#flexCheckDefault").change(function () {
              $('#sel_merk').empty();
              $('#sel_merk').append('<option value="please_select">Select Merk</option>');
               var selected_opt = $("#hdn_selectedbol_price").val();
-             //var brand_id_arr = selected_opt.split(',');
              $.each(resp_obj["msg"], function (key, value) {
                var selected_str = "";
                if (key == selected_opt) {
@@ -4369,8 +4366,6 @@ $("#flexCheckDefault").change(function () {
              $('#sel_merk').attr('data-live-search', true);
              $('#sel_merk').selectpicker('refresh');
              $('#bol_p').val('');
-             //$('#sel_merk').attr('data-live-search', true);
-
             }
          }
       });
@@ -4386,8 +4381,7 @@ $('#bol_p').on("keyup",function(e) {
       category_ids : selected_cats,
       brand_name : $('#sel_merk').val(),
       bol_price : $('#bol_p').val(),
-      brands: $('#hdn_selectedbol_price').val(),
-      type : 'dynamic_bol_price'
+      type : 'update_bol_percentage_by_merk'
     };
 
     $.ajax({
@@ -4408,17 +4402,9 @@ $('#bol_p').on("keyup",function(e) {
 
 $('#sel_merk').on('change', function() {
   if($(this).val() != 'please_select') {
-   /*  var has_price = $("#sel_merk option:selected").text();
-    var regExp = /\(([^)]+)\)/;
-    var matches = regExp.exec(has_price);
-
-    //matches[1] contains the value between the parentheses
-    if(matches.length > 1) {
-      $('#bol_p').val(matches[1]);
-    } */
-  $("#hdn_selectedbol_price").val(this.value);
-  $("#hdn_selectedbrand").val(this.value);
-  table.columns(column_index['brand']).search( this.value ).draw();
+    $("#hdn_selectedbol_price").val(this.value);
+    $("#hdn_selectedbrand").val(this.value);
+    table.columns(column_index['brand']).search( this.value ).draw();
   } else {
     $('#bol_p').val('');
     $("#hdn_selectedbol_price").val('');
@@ -4427,26 +4413,4 @@ $('#sel_merk').on('change', function() {
     table.columns(column_index['brand']).search($("#hdn_selectedbrand").val()).draw();
   }
 });//end sel_merk change
-
-$('#btnDefultBol').on('click', function() {
-  // categories which user has checked in sidebar tree...and selected merk
-  table
-  .columns([column_index["minimum_bol_percentage"]])
-  .search('15.0000')
-  .draw();
-
-  //uncheck categories
-  /*
-  var selected_cats = getTreeCategories();
-  var selected_merk = $('#brand').val();
-  $.ajax({
-    url: document_root_url+'/scripts/process_data_price_management.php',
-    type: "POST",
-    data: ({selected_cats: selected_cats, type: 'get_default_bol', selected_merk: selected_merk}),
-    success: function(response) {
-      //response should be product list..
-    }
-  }); */
-
-});//end btnDefaultBol change
 });
