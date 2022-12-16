@@ -1369,6 +1369,13 @@ $data = $result->fetch_assoc();
 $response_data['msg'] = $data["updated_count"];
 break;
 
+case "confirm_selected":
+  $selected_product_ids = $_POST['product_ids'];
+  $confirm_activate = "UPDATE price_management_data SET is_activated = '1' WHERE product_id IN (".implode(",", $selected_product_ids).")";
+  $conn->query($confirm_activate);
+  $response_data['msg'] = "Success";
+  break;
+
 case "confirm_activate":
 $sql = "SELECT product_id FROM price_management_data WHERE is_updated = '1'";
 if ($result = $conn->query($sql)) {

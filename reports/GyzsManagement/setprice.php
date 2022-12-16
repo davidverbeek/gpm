@@ -421,16 +421,20 @@ if ($result = $conn->query($sql)) {
                                 <i class="fa fa-check-circle" aria-hidden="true"></i>Activate Updated
                             </button>
 
-                           <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnexport">
+                            
+                            <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnselected">
+                                <i class="fas fa-list-alt"></i>Activate Selected
+                            </button>
+
+                             <div>&nbsp;</div>
+                             <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnexport">
                                 <i class="fas fa-file-export"></i>Export Data
                                 <span id="loading-img-export" style="display: none;"></span>
                             </button>
 
-                             <div>&nbsp;</div>
                              <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnimport" data-bs-toggle="modal" data-bs-target="#ImportModal">
                                 <i class="fas fa-file-import"></i></i>Import Data 
                              </button>
-
                              <!-- <button class="btn btn-purple btn-sm no-modal col-5" type="button" id="btnundo" data-bs-toggle="modal" data-bs-target="#UndoModal">
                                 <i class="fas fa-undo"></i></i>Undo Selling Price 
                              </button> -->
@@ -647,6 +651,8 @@ if ($result = $conn->query($sql)) {
           <input type="hidden" name="hdn_stijging_text" id="hdn_stijging_text" />
           <input type="hidden" name="hdn_group_search_text" id="hdn_group_search_text" />
 
+          <input type="hidden" name="hdn_brandfiltercats" id="hdn_brandfiltercats" />
+
         </div>
         <!-- End of Hiddens -->
 
@@ -665,6 +671,8 @@ if ($result = $conn->query($sql)) {
     var all_product_categories = <?php echo file_get_contents("pm_logs/pm_product_categories.txt") ?>;
     var product_category_id = <?php echo file_get_contents("pm_logs/product_cat_id.txt") ?>;  
     var debter_product_data = <?php echo json_encode($debter_data) ?>; 
+    var collect_category_ids = [];
+    var flag = 0;
   </script>
   <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/twitter-bootstrap.bundle.js"></script>
   <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/bootstrap-select.min.js"></script>
