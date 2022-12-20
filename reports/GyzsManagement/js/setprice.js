@@ -64,23 +64,6 @@ $(document).ready(function () {
                 var resp_obj = jQuery.parseJSON(response_data);
                 
                 if (resp_obj["msg"]) {
-<<<<<<< HEAD
-                 $('#brand').empty();
-                 var selected_opt = $("#hdn_selectedbrand").val();
-                 var brand_id_arr = selected_opt.split(',');
-                 $.each(resp_obj["msg"], function (key, value) {
-                   var selected_str = "";
-                   if (brand_id_arr.includes(key)) {
-                     selected_str = "selected";
-                   }
-                  // $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option><p id="bol'+key+'">Add Bol Minimum Price</p>');
-                  $('#brand').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
-                  //$('#sel_merk').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
-                 });
-                 $('#brand').selectpicker('refresh');
-                 //$('#sel_merk').selectpicker('refresh');
-
-=======
                   $('#brand').empty();
 
                   var selected_opt = $("#hdn_selectedbrand").val();
@@ -102,7 +85,6 @@ $(document).ready(function () {
                 if(flag == 1) {
                   $('#hdn_brandfiltercats').val('');
                   checkCats_2();
->>>>>>> b57b63c3a2e401d69c16f32b3f9fae61f081b594
                 }
              }
           });
@@ -4244,14 +4226,11 @@ $("#flexCheckDefault").change(function () {
 
       $("#supplier_type").selectpicker('selectAll');
       $('#supplier_type').selectpicker('refresh');
-<<<<<<< HEAD
-=======
 
       //18-10-2022
       flag = 0;
 
      // $('.dropdown').val([]);
->>>>>>> b57b63c3a2e401d69c16f32b3f9fae61f081b594
       table
       .columns([column_index["brand"], column_index["supplier_type"]])
       .search('')
