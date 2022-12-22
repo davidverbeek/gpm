@@ -240,8 +240,7 @@ class SSP {
 
 				$str = $requestColumn['search']['value'];
 
-				if ( $requestColumn['searchable'] == 'true' &&
-				 $str != '' ) {
+				if ( $requestColumn['searchable'] == 'true' && $str != '' ) {
 					if(!empty($column['db'])){
 						
 						/* Process Columns Starts */

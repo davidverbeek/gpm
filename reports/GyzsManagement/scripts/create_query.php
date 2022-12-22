@@ -39,9 +39,8 @@ if($_POST['categories']) {
   $extra_where = "mccp.category_id IN (".$_POST['categories'].")";
 } else {
    //$extra_where = "mccp.category_id IN ('')";
-  $extra_where = "";  
+  $extra_where = "";
 }
-
 
 if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
   switch($_POST['hdn_filters']) {
@@ -108,7 +107,7 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
       $hdn_stijging_text = $_POST['hdn_stijging_text'];
       $extra_where = "pmd.percentage_increase >= '".$hdn_stijging_text."'"; 
     break;
-
+    
     case (strpos($_POST['hdn_filters'],"task-all-numbers-filterable") !== FALSE):
       $column_to_search = trim(str_replace("task-all-numbers-filterable","",$_POST['hdn_filters']));
       $db_column_name = array_search($column_to_search, $column_index);
@@ -180,7 +179,7 @@ $columns = array(
   array( 'db' => 'mcpet_af.value AS webshop_afwijkenidealeverpakking',  'dt' => $column_index["webshop_afwijkenidealeverpakking"]),
 
   array( 'db' => 'CAST(pmd.buying_price AS DECIMAL(10,'.$scale.')) AS buying_price',  'dt' => $column_index["buying_price"]),
-
+  array( 'db' => 'pmd.minimum_bol_percentage AS minimum_bol_percentage',  'dt' => $column_index["minimum_bol_percentage"]),
 
   array( 'db' => 'pma.avg_category AS avg_category',  'dt' => $column_index["avg_category"]),
   array( 'db' => 'pma.avg_brand AS avg_brand',  'dt' => $column_index["avg_brand"]),
@@ -265,12 +264,9 @@ $columns = array(
   array( 'db' => 'pmd.is_updated AS is_updated',  'dt' => $column_index["is_updated"]),
   array( 'db' => 'pmd.is_activated AS is_activated',  'dt' => $column_index["is_activated"]),
   
-array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"]),
+  array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])
 
   /*array( 'db' => 'CAST((SELECT COUNT(*) AS updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and buying_price_changed = "1" and is_synced = "No") AS UNSIGNED) AS updated_product_cnt',  'dt' => $column_index["updated_product_cnt"]), */
-
-  
-
 );
 
 
@@ -287,7 +283,6 @@ $sql_details = array(
  * server-side, there is no need to edit below this line.
  */
 
- //print_r($table);exit;
 require( 'ssp.class.php' );
 
 echo json_encode(

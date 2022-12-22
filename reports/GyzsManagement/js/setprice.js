@@ -90,6 +90,7 @@ $(document).ready(function () {
           });
         //}
         enableBulkFunc();
+        getCategoryBrand();
       },
       "columnDefs": [
             {
@@ -533,7 +534,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["group_4027105_margin_on_selling_price"]],
               "render": function ( data, type, row ) {
-                 var product_id = row[column_index['product_id']];
+                var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('105', product_id, data);
                 if (product_status == 'no') {
                   return '<span class="db_m_sp_span striped_span db_m_sp_span_105" id="db_m_sp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
@@ -879,8 +880,12 @@ $(document).ready(function () {
                     && that[0][0] != column_index["ean"] && that[0][0] != column_index["brand"]
                     && that[0][0] != column_index["afwijkenidealeverpakking"] && that[0][0] != column_index["webshop_afwijkenidealeverpakking"]
                     )) {
-                       var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
-                          .appendTo( $(that.footer()).empty())
+                      if(that[0][0] == column_index["minimum_bol_percentage"]) {
+                        var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="'+default_bol_percentage+'">Default Percentage ("'+default_bol_percentage+'")</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
+                      } else {
+                        var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
+                      }
+                          select.appendTo( $(that.footer()).empty())
                           .on( 'change', function () {
                             let action_dd = $(this).attr('id');
                             $( ".search_group_dd" ).each(function() {
@@ -899,12 +904,19 @@ $(document).ready(function () {
                               table.draw();
                               return true;
                             }
+                            if($(this).val() == default_bol_percentage) {
+                              make_expression = "pmd.db_column = ";
+                              $('#hdn_parent_debter_expression').val(make_expression);
+                              $("#hdn_filters").val(that[0][0]+'task-all-numbers-filterable');
+                              workOk();
+                              return true;
+                            }
                             var label_display = m = "";
                             m = $(this).parent("th").index();
                             label_display = $("tr[role='row']").find('th:eq('+m+')').text();
                             var group_filter_text = deb_column_name = "";
                             $("#to_debter_price").unbind("keypress");
-                            $( "#from_debter_price").unbind("keypress");
+                            $("#from_debter_price").unbind("keypress");
                             if($(this).val() == 1) {
                               group_filter_text = label_display+" <=";
                               make_expression = "pmd.db_column <= ";
@@ -922,7 +934,7 @@ $(document).ready(function () {
                             $('span[id=sp_from_debter_price]').text(group_filter_text);
                             $('#to_debter_price').val('');
                             $('#from_debter_price').val('');
-                            $('#hdn_parent_debter_selected').val($(this).val());
+                            $('#hdn_parent_debter_selected').val($(this).val());     
                             $('#searchDebterPriceModal').modal('show');
                             $('#searchDebterPriceModal').draggable();
                             $('#hdn_parent_debter_expression').val(make_expression);
@@ -959,11 +971,14 @@ $(document).ready(function () {
                           });
                           $("#hdn_selectedbrand").val(selected);
                           brand_str = selected;
+                          if (brands.length == 1) {
+                            $("#hdn_selectedbol_price").val($(this).val());
+                          }
                         } else {
                           $("#hdn_selectedbrand").val('-1');
                         }
                         $("#chkall").prop('checked', false);
-                        $("#check_all_cnt").html(0);
+                        $("#check_all_cnt").html(0);                                                    
                       }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         $(this).selectpicker('selectAll').addClass('show-tick');
                         brand_str = changed_brand_str = "0";
@@ -2446,7 +2461,7 @@ $('#example tbody').on("keyup",".db_sp",function(e) {
                     supplier_gross_price: supplier_gross_price,
                     debter_number: debter_number
                  }),
-           success: function(response_data){
+           success: function(response_data) {
               var resp_obj = jQuery.parseJSON(response_data);
               if(resp_obj["msg"]) {
                   table.ajax.reload( null, false );
@@ -4337,6 +4352,89 @@ $("#flexCheckDefault").change(function () {
       }
     });
   }
+
+  function workOk() {
+    let result = new_option_text = '';
+    make_expression = $("#hdn_parent_debter_expression").val();
+    result = make_expression.concat(default_bol_percentage);
+    $("#hdn_group_search_text").val(result);
+    let clicked_col_indx = $("#hdn_filters").val();
+    clicked_col_indx = clicked_col_indx.replace("task-all-numbers-filterable", "");
+    clicked_col_indx = $.trim(clicked_col_indx);
+    var make_id = 'group_indx_'+clicked_col_indx;
+    table.draw();
+  }
+
+
+  function getCategoryBrand(is_btn_default_bol=0) {
+    var selected_cats = getTreeCategories();
+        $.ajax({
+         url: document_root_url+'/scripts/process_data_price_management.php',
+         type: "POST",
+         data: ({selected_cats: selected_cats, type: 'brand_bol_price'}),
+         success: function(response_data) {
+            var resp_obj = jQuery.parseJSON(response_data);
+            if (resp_obj["msg"]) {
+             $('#sel_merk').empty();
+             $('#sel_merk').append('<option value="please_select">Select Merk</option>');
+              var selected_opt = $("#hdn_selectedbol_price").val();
+             $.each(resp_obj["msg"], function (key, value) {
+               var selected_str = "";
+               if (key == selected_opt) {
+                 selected_str = "selected";
+               }
+               $('#sel_merk').append('<option value="' + key + '" ' + selected_str + ' data-tokens="'+key+'">' + value + '</option>');
+             });
+             $('#sel_merk').attr('data-live-search', true);
+             $('#sel_merk').selectpicker('refresh');
+             $('#bol_p').val('');
+            }
+         }
+      });
+}//end getCategoryBrand();
+
+
+$('#bol_p').on("keyup",function(e) {
+  var keyCode = e.keyCode || e.which;
+  if (keyCode == 13) {
+    $(".update_loader").show();
+    var selected_cats = getTreeCategories();
+    var formData = {
+      category_ids : selected_cats,
+      brand_name : $('#sel_merk').val(),
+      bol_price : $('#bol_p').val(),
+      type : 'update_bol_percentage_by_merk'
+    };
+
+    $.ajax({
+      type: "POST",
+      url: document_root_url+'/scripts/process_data_price_management.php',
+      data: formData,
+      dataType: "json",
+      encode: true,
+    }).done(function (res) {
+      $(".update_loader").hide();
+      alert(res['msg']);
+      table.columns(column_index['brand']).search($('#sel_merk').val()).draw();
+    });
+  }
+
+  e.preventDefault();
+});
+
+$('#sel_merk').on('change', function() {
+  if($(this).val() != 'please_select') {
+    $("#hdn_selectedbol_price").val(this.value);
+    $("#hdn_selectedbrand").val(this.value);
+    table.columns(column_index['brand']).search( this.value ).draw();
+  } else {
+    $('#bol_p').val('');
+    $("#hdn_selectedbol_price").val('');
+    $("#hdn_selectedbrand").val('');
+    $('.selectpicker').selectpicker('selectAll');
+    table.columns(column_index['brand']).search($("#hdn_selectedbrand").val()).draw();
+  }
+});//end sel_merk change
   function checkCats_2() {
     if($('#brand').val().length > 0) {//it is not empty
       var brand_id = $("#hdn_selectedbrand").val();

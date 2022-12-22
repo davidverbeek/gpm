@@ -29,7 +29,7 @@
  *
  * @link http://us3.php.net/manual/en/security.magicquotes.disabling.php
  */
-if (get_magic_quotes_gpc()) {
+//if (get_magic_quotes_gpc()) {
     function mageUndoMagicQuotes($array, $topLevel=true) {
         $newArray = array();
         foreach($array as $key => $value) {
@@ -48,7 +48,7 @@ if (get_magic_quotes_gpc()) {
     $_POST = mageUndoMagicQuotes($_POST);
     $_COOKIE = mageUndoMagicQuotes($_COOKIE);
     $_REQUEST = mageUndoMagicQuotes($_REQUEST);
-}
+//}
 
 /**
  * Object destructor

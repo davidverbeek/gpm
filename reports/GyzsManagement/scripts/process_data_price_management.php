@@ -1481,6 +1481,67 @@ if ($result = $conn->query($sql)) {
   $response_data['msg'] = $bp_changed_products;
 }
 break;
+
+case "brand_bol_price":
+  $selected_cats = $_POST['selected_cats'];
+  $cat_que = "";
+  if($selected_cats != "") {
+    $cat_que = " WHERE mccp.category_id IN (".$selected_cats.")";
+  }
+  
+  $get_count_by_brand = "SELECT
+  meaov.value AS brand
+  FROM mage_catalog_product_entity AS MCPE INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
+  INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
+  LEFT JOIN mage_catalog_product_entity_int AS mcpei ON mcpei.entity_id = pmd.product_id AND mcpei.attribute_id = '".MERK."'
+  LEFT JOIN mage_eav_attribute_option_value AS meaov ON meaov.option_id = mcpei.value
+  ".$cat_que."
+  group by meaov.value
+  ORDER BY meaov.value ASC";
+  
+  $product_count = array();
+  if ($result = $conn->query($get_count_by_brand)) {
+    while ($row = $result->fetch_assoc()) {
+      $brand = trim(mb_convert_encoding($row['brand'], 'UTF-8', 'UTF-8'));
+      if($brand !== NULL && $brand != "") {
+        $product_count[$brand] = $brand;
+      }
+    }
+  }
+  $response_data['msg'] = $product_count;
+  break;
+
+case "update_bol_percentage_by_merk":
+    $dynamic_bol_price = $_POST['bol_price'];
+    $file_to_check = file_get_contents("../querylog.txt");
+    $myfile = fopen("../querylog.txt", "r") or die("Unable to open file!");
+    $make_query = $one_line = '';
+    while(!strpos($one_line = fgets($myfile), 'LIMIT 0, 200')) {
+      $make_query .= $one_line;
+    }
+    $make_query .= ' LIMIT 0, 200';
+    file_put_contents('monday.txt', $make_query);
+    fclose($myfile);
+
+    $sku_arr = array();
+    if($result = $conn->query($make_query)) {
+      while ($row = $result->fetch_assoc()) {
+        $sku_arr[] = $row['sku'];
+      }
+    }
+    file_put_contents('monday_tuesday.txt', implode(',', $sku_arr));
+    $sku_single_quoted = "'" . implode ( "', '", $sku_arr ) . "'";
+    $update_sql = "UPDATE price_management_data SET minimum_bol_percentage=".$dynamic_bol_price." WHERE sku IN (".$sku_single_quoted.")";
+    $msg = "Product SKUs are obtained successfully.";
+    if($result = $conn->query($update_sql)) {
+      $msg = "Bol Price is updated successfully.";
+      file_put_contents('update_bol_price_querylog.txt', "Successful update done <br>".$update_sql);
+    } else {
+      $msg = "Failure in updation.";
+      file_put_contents('update_bol_price_querylog.txt', mysqli_error($conn).'<br>'.$update_sql);
+    }
+    $response_data['msg'] = $msg.'Product count is '.count($sku_arr);
+break;
 }
 
 function getPreviousSellingPriceFromHistory($conn, $product_id) {
@@ -1563,7 +1624,6 @@ function getCategoriesFromProductId($product_id,$get_all_product_categories) {
   } else {
     $product_categories[] = "";
   }
-
   return implode("/", array_filter($product_categories));
 }
 
@@ -1912,4 +1972,6 @@ function getChkAllSql() {
 }
 
 echo json_encode($response_data); 
+
+
 ?>

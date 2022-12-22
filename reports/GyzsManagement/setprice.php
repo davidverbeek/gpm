@@ -180,19 +180,35 @@ if ($result = $conn->query($sql)) {
     position: absolute;
 }
 
+.bs-example{
+    margin: 20px;
+}
+    .icon-input-btn{
+        display: inline-block;
+        position: relative;
+    }
+    .icon-input-btn input[type="button"]{
+        padding-left: 2em;
+    }
+    .icon-input-btn .fa{
+        display: inline-block;
+        position: absolute;
+        left: 0.65em;
+        top: 30%;
+    }
+
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
 <body>
     <main>
         <!-- Sidebar -->
-          <?php include "layout/left.php"; ?>
+        <?php include "layout/left.php";?>
         <!-- End of Sidebar -->
        
         <!-- Datatable and header  -->
         <section class="content-toggle" id="main-content">
             <div class="content-bg-blur h-100">
-                
 
             <!-- Topbar -->
               <?php include "layout/top.php"; ?>
@@ -205,8 +221,23 @@ if ($result = $conn->query($sql)) {
                         <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
                     </div>
-
-                  
+                    <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
+                    <!-- <form class = "form-inline" role = "form"> -->
+                        <div class="row">
+                        <div class="">
+                            <div class="form-group">
+                                <select id="sel_merk" name="sel_merk"  data-style="font-size: 12px;" class="form-control form-control-sm" data-size="10">
+                                <option value="">Select Merk</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="form-group">
+                            <input type="number" step="0.01" class ="form-control form-control-sm" id = "bol_p" placeholder = "Min Bol %">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </form> -->
                     <!-- Data Length Filter -->
                     <!--
                     <div class="select-opt">
@@ -221,7 +252,10 @@ if ($result = $conn->query($sql)) {
                         </label>
                     </div>
                     -->
-
+                    <!--<span class="icon-input-btn">
+                        <i class="fa fa-filter"></i>
+                        <input type="button" id="btnDefultBol" value="Default Bol %" class="btn btn-primary btn-sm" name="btnDefultBol" title="Filter By Default Bol %">
+                    </span>-->
                     <!-- Data Search Filter -->
                     <div class="inner-addon">
                         <label for="dtSearch">
@@ -255,7 +289,7 @@ if ($result = $conn->query($sql)) {
                                   <th>Afw.Ideal.verp</th>
                                   <th>Webshop Afwijkenidealeverpakking</th>
                                   <th>PM Inkpr</th>
-
+                                  <th>Min Bol(%)</th>
                                   <th>Cat Gem</th>
                                   <th>Merk Gem</th>
                                   <th>Cat Merk Gem</th>
@@ -304,6 +338,7 @@ if ($result = $conn->query($sql)) {
                                   <th>Afw.Ideal.verp</th>
                                   <th>Webshop Afwijkenidealeverpakking</th>
                                   <th>PM Inkpr</th>
+                                  <th>Min Bol(%)</th>
                                   <th>Cat Gem</th>
                                   <th>Merk Gem</th>
                                   <th>Cat Merk Gem</th>
@@ -499,43 +534,45 @@ if ($result = $conn->query($sql)) {
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="16" name="buying_price" class="show_cols open_by_default"><span>PM Inkpr</span>
                             </label>
-                            
-                            <!--<label for="brand-a" class="col-6">
-                                <input type="checkbox" value="16" name="a_p_b" class="show_cols chav"><span>Cat Gem</span>
-                            </label>-->
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="17" name="a_p_c" class="show_cols chav"><span>Merk Gem</span>
+                                <input type="checkbox" value="17" name="a_p_b" class="show_cols chav"><span>Min Bol(%)</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="18" name="a_p_c_p_b" class="show_cols chav"><span>Cat Merk Gem</span>
+                                <input type="checkbox" value="18" name="a_p_b" class="show_cols chav"><span>Cat Gem</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="19" name="g_b_p" class="show_cols"><span>WS Inkpr</span>
-                            </label>
-
-                            <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="20" name="g_s_p" class="show_cols"><span>WS Verkpr</span>
+                                <input type="checkbox" value="19" name="a_p_c" class="show_cols chav"><span>Merk Gem</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="21" name="g_d_o_gp" class="show_cols"><span>Korting bruto vkpr</span>
+                                <input type="checkbox" value="20" name="a_p_c_p_b" class="show_cols chav"><span>Cat Merk Gem</span>
+                            </label>
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="21" name="g_b_p" class="show_cols"><span>WS Inkpr</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="22" name="g_d_o_gp" class="show_cols open_by_default"><span>PM Vkpr</span>
+                                <input type="checkbox" value="22" name="g_s_p" class="show_cols"><span>WS Verkpr</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="23" name="g_d_o_gp" class="show_cols open_by_default"><span>Marge Inkpr %</span>
+                                <input type="checkbox" value="23" name="g_d_o_gp" class="show_cols"><span>Korting bruto vkpr</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="24" name="g_d_o_gp" class="show_cols open_by_default"><span>PM Vkpr</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="24" name="g_d_o_gp" class="show_cols open_by_default"><span>Marge Verkpr %</span>
+                                <input type="checkbox" value="25" name="g_d_o_gp" class="show_cols open_by_default"><span>Marge Inkpr %</span>
                             </label>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="25" name="g_d_o_gp" class="show_cols open_by_default"><span>Korting Brupr %</span>
+                                <input type="checkbox" value="26" name="g_d_o_gp" class="show_cols open_by_default"><span>Marge Verkpr %</span>
+                            </label>
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="27" name="g_d_o_gp" class="show_cols open_by_default"><span>Korting Brupr %</span>
                             </label>
 
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="26" name="per_increase" class="show_cols open_by_default"><span>Stijging %</span>
+                                <input type="checkbox" value="28" name="per_increase" class="show_cols open_by_default"><span>Stijging %</span>
                             </label>
 
                             <div style="clear:both;"></div>
@@ -566,24 +603,24 @@ if ($result = $conn->query($sql)) {
                                 </label>
                             <div style="clear:both;"></div>
                             <?php 
-                                $deb_col_idx = 28;
+                                $deb_col_idx = 29;
                             for($hc=0;$hc<=10;$hc++) { 
                                 $h_cust_group = intval(4027100 + $hc);
                             ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dsp show_deb_cols"><span>SP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dsp show_deb_cols open_by_default"><span>SP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmbp show_deb_cols"><span>Marg.BP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmbp show_deb_cols open_by_default"><span>Marg.BP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmsp show_deb_cols"><span>Marg.SP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmsp show_deb_cols open_by_default"><span>Marg.SP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols open_by_default"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
                             </label>
 
                             <?php $deb_col_idx++; } ?>    
@@ -603,7 +640,8 @@ if ($result = $conn->query($sql)) {
           
           <input type="hidden" name="hdn_selectedcategories" id="hdn_selectedcategories" />
           <input type="hidden" name="hdn_selectedbrand" id="hdn_selectedbrand" />
-
+          <input type="hidden" name="hdn_selectedbol_price" id="hdn_selectedbol_price" />
+          
           <input type="hidden" name="hdn_processfilename_n" id="hdn_processfilename_n" value="" />
           <input type="hidden" name="hdn_filters" id="hdn_filters" />
           
@@ -625,6 +663,7 @@ if ($result = $conn->query($sql)) {
      <!-- Custom price Js -->
   <script language="javascript">
     var column_index = <?php echo json_encode($column_index) ?>;
+    var default_bol_percentage = "<?php echo $settings_data['roas']['bol_buying_percentage'] ?>";
     var document_root_path = "<?php echo $document_root_path ?>";
     var document_root_url = "<?php echo $document_root_url; ?>";
     var list = <?php echo json_encode($categories) ?>;
