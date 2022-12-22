@@ -282,7 +282,7 @@ function getAllPriceManagementData() {
 			LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_ideal ON mcpev_ideal.entity_id = pmd.product_id AND mcpev_ideal.attribute_id = '".IDEALEVERPAKKING."'
 
           LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
-          LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."' limit 50";
+          LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
 
     if ($result = $conn->query($sql)) { 
 		$all_pm_data = array();
