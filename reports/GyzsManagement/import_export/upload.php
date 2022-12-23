@@ -41,6 +41,7 @@ if(isset($_POST['hidden_field']))
 					} else {
 						GetGroupNameOfAlias($chunk_xlsx_data[0][0]);
 						$get_all_price_management_data = getAllPriceManagementData();
+						$debter_product_arr_to_session = getDebterProducts();
 						foreach($chunk_xlsx_data as $chunked_idx=>$chunked_xlsx_values) {
 							$all_col_data = $updated_product_skus = $historyArray = array();
 							$sql = $last_part_sql = $sql_debters = $last_part_sql_debters = "";
@@ -122,10 +123,10 @@ if(isset($_POST['hidden_field']))
 										$allcustomer_groups = $_SESSION['debters'];
 										$check_debter_header = array_diff($allcustomer_groups, $chunk_xlsx_data[0][0]);
 
-										if(count($check_debter_header) < count($allcustomer_groups) /* && !isset($_POST['chkYesUpdateSp'] )*/) {
+										if(count($check_debter_header) < count($allcustomer_groups)) {
 											$xls_debter_header_arr = array_diff($allcustomer_groups,$check_debter_header);
 											$join_cols_names .= ",";
-											$debter_product_arr = getDebterProducts();
+											$debter_product_arr = $_SESSION['related_products'];
 											$debter_data_to_insert = "";
 											$xlsx_product_id = $get_all_price_management_data[$chunked_xlsx_sku]["product_id"];
 											foreach($xls_debter_header_arr as $head_cust_group_id=>$head_cust_group_name) {
@@ -598,12 +599,7 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
     $allcustomer_groups = $_SESSION['debters'];
 	$get_all_price_management_data = $_SESSION['import'];
     $supplier_gross_price = ($get_all_price_management_data[$xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$xlsx_sku]["new_gross_unit_price"]);
-	
-	if(isset($_SESSION['related_products'])) {
-		$debter_product_arr = $_SESSION['related_products'];
-	} else {
-		$debter_product_arr = getDebterProducts();
-	}
+	$debter_product_arr = $_SESSION['related_products'];
 	$col_data = "";
 	$xlsx_product_id = $get_all_price_management_data[$xlsx_sku]["product_id"];
 	$debter_not_in_xlsx_arr = array_diff($allcustomer_groups, $xlsx_header_row);
@@ -625,7 +621,6 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
             $deb_discount_on_gross_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];
         }
 		$col_data .= "'".$debter_selling_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
-
 	}
 	$col_data = rtrim($col_data, ',');
 	return array($col_data);
