@@ -25,11 +25,11 @@ if(isset($_POST['hidden_field']))
 		{
 			$xlsx = SimpleXLSX::parse($_FILES['file']['tmp_name']);
 			$chunk_xlsx_data = array_chunk($xlsx->rows(), PMCHUNK);
-			$progress_status = array();
+			$progress_status = $upload_summary = array();
 			$current_rec = 1;
 			$progress_status["total_records"] = count($xlsx->rows());
 			$valid_count = 0;
-			$upload_summary = array();
+			$_SESSION['import']= $_SESSION['debters']= $_SESSION['related_products'] = array();
 
 			$progress_file_path = $document_root_path."/import_export/progress.txt";
 			if(count($chunk_xlsx_data[0]) > 1 && count($chunk_xlsx_data)) {
