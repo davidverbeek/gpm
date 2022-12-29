@@ -42,9 +42,10 @@ if(isset($_POST['hidden_field']))
 						GetGroupNameOfAlias($chunk_xlsx_data[0][0]);
 						$get_all_price_management_data = getAllPriceManagementData();
 						$debter_product_arr_to_session = getDebterProducts();
+						$sql = $last_part_sql = $sql_debters = $last_part_sql_debters = "";
 						foreach($chunk_xlsx_data as $chunked_idx=>$chunked_xlsx_values) {
 							$all_col_data = $updated_product_skus = $historyArray = array();
-							$sql = $last_part_sql = $sql_debters = $last_part_sql_debters = "";
+							$chunk_sql = "";
 							foreach($chunked_xlsx_values as $c_k=>$chunked_xlsx_value) {
 								$chunked_xlsx_sku = trim($chunked_xlsx_value[0]);
 								if($current_rec == 1) {
@@ -69,7 +70,7 @@ if(isset($_POST['hidden_field']))
 										$afwijkenidealeverpakking = $get_all_price_management_data[$chunked_xlsx_sku]["new_afwijkenidealeverpakking"];
 										$idealeverpakking = $get_all_price_management_data[$chunked_xlsx_sku]["new_idealeverpakking"];
 										$debter_buying_price = 0.00;
-										$one_rowString = $one_historyString = '';
+										$one_rowString = $one_historyString = $one_row_debter_String_2 = '';
 										$join_cols_names = "(";
 
 										if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && in_array("Nieuwe Verkoopprijs (Niewe Vkpr per piece)", $chunk_xlsx_data[0][0])) {
@@ -186,22 +187,25 @@ if(isset($_POST['hidden_field']))
 								usleep(50000);
 							}
 
-							$sql .= implode(",", $all_col_data) . $last_part_sql;
-							if($conn->query($sql)) {
-							bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_xlsx_values));
-							changeUpdateStatus($conn, implode("','", $updated_product_skus));
+							if(count($all_col_data) > 0) {
+								$chunk_sql = $sql.implode(",", $all_col_data) . $last_part_sql;
+								if($conn->query($chunk_sql)) {
+									bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_xlsx_values));
+									changeUpdateStatus($conn, implode("','", $updated_product_skus));
 
-								// Add in history
-								if(count($historyArray) > 0) {
-									addInHistory($conn,$historyArray,$chunked_idx);
+									// Add in history
+									if(count($historyArray) > 0) {
+										addInHistory($conn,$historyArray,$chunked_idx);
+									}
+								} else {
+									bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn)."\n".$chunk_sql);
 								}
-								unset($_SESSION['import']);
-								unset($_SESSION['debters']);
-								unset($_SESSION['related_products']);
-							} else {
-								bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn));
-							} 
-						}
+							}
+						}//end of chunk loop
+
+						unset($_SESSION['import']);
+						unset($_SESSION['debters']);
+						unset($_SESSION['related_products']);
 					}
 			} else {
 				$error = 'Xlsx is blank.';
@@ -281,9 +285,8 @@ function getAllPriceManagementData() {
         	LEFT JOIN mage_catalog_product_entity_text AS mcpet_af ON mcpet_af.entity_id = pmd.product_id AND mcpet_af.attribute_id = '".afwijkenidealeverpakking."'
         	LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_afw ON mcpev_afw.entity_id = pmd.product_id AND mcpev_afw.attribute_id = '".afwijkenidealeverpakking."'
 			LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_ideal ON mcpev_ideal.entity_id = pmd.product_id AND mcpev_ideal.attribute_id = '".IDEALEVERPAKKING."'
-
-          LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
-          LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
+			LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
+			LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
 
     if ($result = $conn->query($sql)) { 
 		$all_pm_data = array();
@@ -615,7 +618,7 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
 			$deb_margin_on_selling_price = roundValue((($debter_selling_price - $buying_price)/$debter_selling_price) * 100);
             $deb_discount_on_gross_price = roundValue((1 - ($debter_selling_price/$supplier_gross_price)) * 100);
 		} else {
-			$deb_margin_on_buying_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
+			//$deb_margin_on_buying_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_buying_price"];
 			$debter_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_debter_selling_price"];
             $deb_margin_on_selling_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_margin_on_selling_price"];
             $deb_discount_on_gross_price = is_null($get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"])?0.0000:$get_all_price_management_data[$xlsx_sku]["db_group_".$head_cust_group_name."_discount_on_grossprice_b_on_deb_selling_price"];

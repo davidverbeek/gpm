@@ -107,6 +107,15 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
       $hdn_stijging_text = $_POST['hdn_stijging_text'];
       $extra_where = "pmd.percentage_increase >= '".$hdn_stijging_text."'"; 
     break;
+
+    case "13":
+      $table_cols = array();
+      for($d=0;$d<=15;$d++) {
+        $cust_group = intval(4027100 + $d);
+        $debter_mbp_condition[] = "CAST(group_".$cust_group."_margin_on_buying_price AS DECIMAL(10,".$scale.")) < 0";
+      }
+      $extra_where = "CAST(pmd.profit_percentage_buying_price AS DECIMAL(10,".$scale.")) < 0 OR ".implode(' OR ', $debter_mbp_condition);
+    break;
     
     case (strpos($_POST['hdn_filters'],"task-all-numbers-filterable") !== FALSE):
       $column_to_search = trim(str_replace("task-all-numbers-filterable","",$_POST['hdn_filters']));

@@ -99,9 +99,6 @@ exit;
 */
 
 session_start();
-
-
-
 require_once("../../app/Mage.php");
 umask(0);
 Mage::app();
@@ -475,6 +472,7 @@ if ($result = $conn->query($sql)) {
                                 <option value="7">Decrease in Buying Price</option>
                                 <option value="8">Increase in Selling Price</option>
                                 <option value="9">Decrease in Selling Price</option>
+                                <option value="13">Negative Profit Margin on buying price (Webshop & Debter Both)</option>
                               </optgroup>
                               <optgroup label="General">
                                 <option value="5">Show Updated</option>
