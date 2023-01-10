@@ -162,7 +162,7 @@ function simple ($table, $columns)
         }
 
             $selected_debter_column_sp = "group_".$v['debter_number']."_debter_selling_price";
-            if ($v[$selected_debter_column_sp] > $v['selling_price']) {
+            if (!is_null($v[$selected_debter_column_sp]) && $v[$selected_debter_column_sp] > $v['selling_price']) {
                 $selected_debter_column_bp = "group_".$v['debter_number']."_margin_on_buying_price";
                 $selected_debter_column_msp = "group_".$v['debter_number']."_margin_on_selling_price";
                 $selected_debter_column_gp = "group_".$v['debter_number']."_discount_on_grossprice_b_on_deb_selling_price";
