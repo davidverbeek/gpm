@@ -19,7 +19,7 @@ function bulkUpdateProducts($type,$data,$update_type, $log_type, $excel_data) {
     $chunk_size = PMCHUNK;
     global $conn;
     $total_inserted_records =  $all_excel_row = array();
-    $chunk_data = array_chunk($data,3);
+    $chunk_data = array_chunk($data,PMCHUNK);
   
     if(count($chunk_data)) {
       foreach($chunk_data as $chunk_index=>$chunk_values) {
