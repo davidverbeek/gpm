@@ -78,9 +78,12 @@ function bulkUpdateProducts($type,$data,$update_type, $log_type, $excel_data) {
     return array_sum($total_inserted_records);
   }
 
-  function bulkInsertLog($chunk_index,$chunk_msg) {
+  function bulkInsertLog($chunk_index,$chunk_msg, $type=1) {
     $file_pricechunks_log = "../pm_logs/min_debter_price.txt";
+    if ($type == 1)
     file_put_contents($file_pricechunks_log,"".date("d-m-Y H:i:s")." Updated Price Chunk (".$chunk_index."):-".$chunk_msg."\n",FILE_APPEND);
+    else
+    file_put_contents($file_pricechunks_log,"".date("d-m-Y H:i:s")." ".$chunk_msg."\n",FILE_APPEND);
   }
 
 /* $table = "mage_catalog_product_entity AS mcpe
@@ -108,7 +111,6 @@ $columns = array(
   array( 'db' => 'pmd.selling_price AS selling_price'),
   array( 'db' => 'pmd.profit_percentage_buying_price AS profit_percentage_buying_price'),
   array( 'db' => 'pmd.profit_percentage_selling_price AS profit_percentage_selling_price'),
-  array('db' => 'pmdc.customer_group AS m_id'),
   array('db' => 'pmcg.customer_group_name AS debter_number')
 );
 
@@ -193,7 +195,9 @@ function simple ($table, $columns)
         $total_updated_recs = bulkUpdateProducts("debterprice",$all_updated_data,"Debter prices more than their PM Vkpr", "All Price Management Products", $all_updated_excel);
         echo "Updated {$total_updated_recs} products. Please check excel file.";
       } else {
-        echo 'Products are already updated.OR No updation because dont have any Debter';
+        $chunk_msg = 'All Products are already updated OR No updation because dont have any Debter';
+        echo $chunk_msg;
+        bulkInsertLog(NULL, $chunk_msg, 2);
       }
             
   }//end simple()
