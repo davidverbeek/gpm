@@ -113,11 +113,11 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
       for($d=0;$d<=15;$d++) {
         $debter_mbp_condition_1=array();
         $cust_group = intval(4027100 + $d);
-        $debter_mbp_condition_1[] = "CAST(group_".$cust_group."_margin_on_buying_price AS DECIMAL(10,".$scale.")) < 0";
-        $debter_mbp_condition_1[] = "CAST(group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) != 0";
+        $debter_mbp_condition_1[] = "(CAST(pmd.group_".$cust_group."_margin_on_buying_price AS DECIMAL(10,".$scale.")) < 0";
+        $debter_mbp_condition_1[] = "CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) != 0)";
         $debter_mbp_condition[] = implode(' AND ', $debter_mbp_condition_1);
       }
-      $extra_where = "CAST(pmd.profit_percentage_buying_price AS DECIMAL(10,".$scale.")) < 0 OR ".implode(' OR ', $debter_mbp_condition);
+      $extra_where = "(CAST(pmd.profit_percentage_buying_price AS DECIMAL(10,".$scale.")) < 0 AND CAST(pmd.profit_percentage_selling_price AS DECIMAL(10,".$scale.")) != 0)  AND (".implode(' AND ', $debter_mbp_condition).")";
     break;
     
     case (strpos($_POST['hdn_filters'],"task-all-numbers-filterable") !== FALSE):
