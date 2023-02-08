@@ -46,8 +46,7 @@ function getClient() {
             $new_token = $client->fetchAccessTokenWithRefreshToken($accessToken);            
             $_SESSION['access_token'] = $client->getAccessToken();
             file_put_contents($tokenPath, json_encode($_SESSION['access_token']));
-            $_SESSION['refresh_token'] = $client->getRefreshToken();
-            //file_put_contents($tokenPath, $client->getAccessToken());
+           // $_SESSION['refresh_token'] = $client->getRefreshToken();
         }
     } else {
         if (! isset($_GET['code'])) {
