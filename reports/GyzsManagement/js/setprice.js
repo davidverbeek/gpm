@@ -1,7 +1,6 @@
 $(document).ready(function () {
   $("#p_s_p").click(function () {
     if ($(this).html() == "+") {
-
       $(this).html("-");
       $(this).removeClass("p_s_p_pos");
       $(this).addClass("p_s_p_neg");
@@ -174,10 +173,15 @@ $(document).ready(function () {
               "render": function ( data, type, row ) {
                  var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('102', product_id, data);
+
+                var mark_negative = '';
+                if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
+                  mark_negative = 'check_negative';
+                }
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_102" id="db_sp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
                 } else {
-                  return '<input type="text" class="db_sp input_validate db_sp_102" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
+                  return '<input type="text" class="db_sp input_validate db_sp_102 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
                 }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_102"
@@ -1981,9 +1985,14 @@ $(document).ready(function () {
   $("#filter_with").change(function() {
     if($(this).val() != 10 && $(this).val() != 11 && $(this).val() != 12 ) {
       $("#hdn_filters").val($(this).val());
-      table.draw(); 
-    } else  {
 
+      if($(this).val() == 13){
+        $(".show_cols_all_dsp").prop("checked", true).trigger("change");
+      } else {
+
+      }
+      table.draw();
+    } else {
       var stijging_filter_text = "";
       if($(this).val() == 10) {
         stijging_filter_text = "Stijging <=";
@@ -4505,5 +4514,10 @@ $('#sel_merk').on('change', function() {
         }
       }
     });
+  });
+
+  $('#a_filter_negative_margin').click(function() {
+    $('#filter_with').val('13');
+    $('#filter_with').trigger('change');
   });
 });
