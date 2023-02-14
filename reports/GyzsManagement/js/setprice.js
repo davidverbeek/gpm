@@ -306,13 +306,13 @@ $(document).ready(function () {
                  var product_id = row[column_index['product_id']];
                 var product_status= generateSpan('109', product_id, data);
                 if (product_status == 'no') {
-                  return '<span class="db_sp_span striped_span db_sp_span_109 '+mark_negative+'" id="db_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
+                  return '<span class="db_sp_span striped_span db_sp_span_109" id="db_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
                 } else {
                   var mark_negative = '';
                   if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
                     mark_negative = 'check_negative';
                   }
-                  return '<input type="text" class="db_sp input_validate db_sp_109" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
+                  return '<input type="text" class="db_sp input_validate db_sp_109 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
                 }
               },
               "className": "editable_column db_sp_editable_column db_sp_editable_column_109"
