@@ -238,7 +238,7 @@ if ($result = $conn->query($sql)) {
                                 </div>
                             </div>
                         </div>
-                        <div><a href="#" id="a_filter_negative_margin">Show Negative Margin</a></div>
+                        <div><a href="#" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
                     <!-- </form> -->
                     <!-- Data Length Filter -->
                     <!--
