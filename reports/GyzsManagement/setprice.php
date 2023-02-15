@@ -133,6 +133,20 @@ if ($result = $conn->query($sql)) {
     $debter_data[$group_number] = $row["product_ids"];
   }
 }
+
+$sql_negative_margin = "SELECT count(*) as total_negative_margin_products FROM price_management_data as pmd WHERE ";
+$table_cols = array();
+for($d=0;$d<=15;$d++) {
+  $debter_mbp_condition_1=array();
+  $cust_group = intval(4027100 + $d);
+  $debter_mbp_condition_1[] = "(CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) < CAST(pmd.buying_price AS DECIMAL(10,".$scale."))";
+  $debter_mbp_condition_1[] = "CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) != 0)";
+  $debter_mbp_condition[] = implode(' AND ', $debter_mbp_condition_1);
+}
+$extra_where = "(CAST(pmd.buying_price AS DECIMAL(10,".$scale.")) > pmd.selling_price AND CAST(pmd.selling_price AS DECIMAL(10,".$scale.")) != 0)  OR (".implode(' OR ', $debter_mbp_condition).")";
+$sql_negative_margin .= $extra_where;
+$result_negative_margin = $conn->query($sql_negative_margin);
+$count_negative_margin = $result_negative_margin->fetch_row();
 ?>
 <style>
 .loader
@@ -238,7 +252,11 @@ if ($result = $conn->query($sql)) {
                                 </div>
                             </div>
                         </div>
-                        <div><a href="#" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
+
+                        <?php
+                        if($count_negative_margin[0] > 0) { ?>
+                            <div><a href="javascript: void(0);" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
+                        <?php } ?>
                     <!-- </form> -->
                     <!-- Data Length Filter -->
                     <!--
@@ -305,20 +323,18 @@ if ($result = $conn->query($sql)) {
                                   <th>Korting Brupr %</th>
                                   <th>Stijging %</th>
 
-                                  <?php for($d=0;$d<=10;$d++) { 
+                                  <?php for($d=0;$d<=10;$d++) {
                                     $cust_group = intval(4027100 + $d);
                                    ?> 
                                   <th class="<?php echo $cust_group; ?>">Verkpr<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Marge Inkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Marge Verkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
-
                                   <?php }   ?>
 
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
-                                  
                                 </tr>
                             </thead>
                             <tfoot style="display: none;">
