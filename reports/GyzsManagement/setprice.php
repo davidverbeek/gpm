@@ -133,6 +133,20 @@ if ($result = $conn->query($sql)) {
     $debter_data[$group_number] = $row["product_ids"];
   }
 }
+
+$sql_negative_margin = "SELECT count(*) as total_negative_margin_products FROM price_management_data as pmd WHERE ";
+$table_cols = array();
+for($d=0;$d<=15;$d++) {
+  $debter_mbp_condition_1=array();
+  $cust_group = intval(4027100 + $d);
+  $debter_mbp_condition_1[] = "(CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) < CAST(pmd.buying_price AS DECIMAL(10,".$scale."))";
+  $debter_mbp_condition_1[] = "CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) != 0)";
+  $debter_mbp_condition[] = implode(' AND ', $debter_mbp_condition_1);
+}
+$extra_where = "(CAST(pmd.buying_price AS DECIMAL(10,".$scale.")) > pmd.selling_price AND CAST(pmd.selling_price AS DECIMAL(10,".$scale.")) != 0)  OR (".implode(' OR ', $debter_mbp_condition).")";
+$sql_negative_margin .= $extra_where;
+$result_negative_margin = $conn->query($sql_negative_margin);
+$count_negative_margin = $result_negative_margin->fetch_row();
 ?>
 <style>
 .loader
@@ -194,6 +208,10 @@ if ($result = $conn->query($sql)) {
         top: 30%;
     }
 
+.check_negative {
+    color: red;
+}
+
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -221,19 +239,24 @@ if ($result = $conn->query($sql)) {
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->
                         <div class="row">
-                        <div class="">
-                            <div class="form-group">
-                                <select id="sel_merk" name="sel_merk"  data-style="font-size: 12px;" class="form-control form-control-sm" data-size="10">
-                                <option value="">Select Merk</option>
-                                </select>
+                            <div class="">
+                                <div class="form-group">
+                                    <select id="sel_merk" name="sel_merk"  data-style="font-size: 12px;" class="form-control form-control-sm" data-size="10">
+                                    <option value="">Select Merk</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="form-group">
+                                <input type="number" step="0.01" class ="form-control form-control-sm" id = "bol_p" placeholder = "Min Bol %">
+                                </div>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="form-group">
-                            <input type="number" step="0.01" class ="form-control form-control-sm" id = "bol_p" placeholder = "Min Bol %">
-                            </div>
-                        </div>
-                    </div>
+
+                        <?php
+                        if($count_negative_margin[0] > 0) { ?>
+                            <div><a href="javascript: void(0);" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
+                        <?php } ?>
                     <!-- </form> -->
                     <!-- Data Length Filter -->
                     <!--
@@ -300,20 +323,18 @@ if ($result = $conn->query($sql)) {
                                   <th>Korting Brupr %</th>
                                   <th>Stijging %</th>
 
-                                  <?php for($d=0;$d<=10;$d++) { 
+                                  <?php for($d=0;$d<=10;$d++) {
                                     $cust_group = intval(4027100 + $d);
                                    ?> 
                                   <th class="<?php echo $cust_group; ?>">Verkpr<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Marge Inkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Marge Verkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
-
                                   <?php }   ?>
 
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
-                                  
                                 </tr>
                             </thead>
                             <tfoot style="display: none;">
@@ -606,19 +627,19 @@ if ($result = $conn->query($sql)) {
                                 $h_cust_group = intval(4027100 + $hc);
                             ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dsp show_deb_cols open_by_default"><span>SP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dsp show_deb_cols"><span>SP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmbp show_deb_cols open_by_default"><span>Marg.BP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmbp show_deb_cols"><span>Marg.BP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmsp show_deb_cols open_by_default"><span>Marg.SP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_dmsp show_deb_cols"><span>Marg.SP (<?php echo $h_cust_group; ?>)</span>
                             </label>
                             <?php $deb_col_idx++; ?>
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols open_by_default"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
+                                <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
                             </label>
 
                             <?php $deb_col_idx++; } ?>    
