@@ -31,7 +31,7 @@ $(document).ready(function () {
     }
     return true;
   }
-  function checkNegative(selling_price, profit_margin_buying_price, product_id) {
+  function checkNegative(selling_price, profit_margin_buying_price) {
     var mark_negative = '';
     if ((Number(selling_price) != 0) && (Number(profit_margin_buying_price) < 0)) {
       mark_negative = 'check_negative';
@@ -115,7 +115,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["selling_price"]],
               "render": function ( data, type, row ) {
-                var mark_negative = checkNegative(data, row[column_index["profit_percentage"]], row[column_index["product_id"]]);
+                var mark_negative = checkNegative(data, row[column_index["profit_percentage"]]);
                 return '<input type="text" class="selling_price input_validate '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="sp_editable_column_'+row[column_index["product_id"]]+'" />';
               },
               "className": "editable_column sp_editable_column"
@@ -163,7 +163,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_100" id="db_sp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027100_margin_on_buying_price"]], row[column_index["product_id"]]);
+                  var mark_negative = checkNegative(data, row[column_index["group_4027100_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_100 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_100_'+product_id+'" />';
                 }
               },
@@ -177,7 +177,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_101" id="db_sp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027101_margin_on_buying_price"]], row[column_index["product_id"]]);
+                  var mark_negative = checkNegative(data, row[column_index["group_4027101_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_101 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_101_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -191,7 +191,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_102" id="db_sp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027102_margin_on_buying_price"]], row[column_index["product_id"]]);
+                  var mark_negative = checkNegative(data, row[column_index["group_4027102_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_102 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -206,7 +206,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_103" id="db_sp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027103_margin_on_buying_price"]], row[column_index["product_id"]]);
+                  var mark_negative = checkNegative(data, row[column_index["group_4027103_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_103 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_103_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -234,7 +234,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_105" id="db_sp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027105_margin_on_buying_price"]], row[column_index["product_id"]]);
+                  var mark_negative = checkNegative(data, row[column_index["group_4027105_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_105 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_105_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -262,7 +262,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_107" id="db_sp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027107_margin_on_buying_price"]], row[column_index["product_id"]]);
+                  var mark_negative = checkNegative(data, row[column_index["group_4027107_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_107 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_107_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -290,7 +290,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_109" id="db_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027109_margin_on_buying_price"]], row[column_index["product_id"]]);
+                  var mark_negative = checkNegative(data, row[column_index["group_4027109_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_109 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
                 }
               },
