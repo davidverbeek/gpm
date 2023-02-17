@@ -252,11 +252,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                 </div>
                             </div>
                         </div>
-
-                        <?php
-                        if($count_negative_margin[0] > 0) { ?>
-                            <div><a href="javascript: void(0);" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
-                        <?php } ?>
+                        <div id='show_negative_sentance' style="display:none;"><a href="javascript: void(0);" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
                     <!-- </form> -->
                     <!-- Data Length Filter -->
                     <!--
