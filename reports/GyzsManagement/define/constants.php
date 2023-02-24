@@ -94,12 +94,11 @@ $column_index = array(
   "group_4027110_margin_on_buying_price" => 70,
   "group_4027110_margin_on_selling_price" => 71,
   "group_4027110_discount_on_grossprice_b_on_deb_selling_price" => 72,
-
-
-  "is_updated" => 73,
-  "is_activated" => 74,
-  //"updated_product_cnt" => 70,
-  "mag_updated_product_cnt" => 75
+  "bigshopper_lowest_price"  => 73,
+  "bigshopper_highest_price"  => 74,
+  "is_updated" => 75,
+  "is_activated" => 76,
+  "mag_updated_product_cnt" => 77,
  );
 /* Column Mappings */
 

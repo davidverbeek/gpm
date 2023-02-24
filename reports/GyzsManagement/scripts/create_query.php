@@ -23,7 +23,8 @@ LEFT JOIN mage_catalog_product_entity_varchar AS mcpev_ideal ON mcpev_ideal.enti
 LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
 
 LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'
-LEFT JOIN price_management_afzet_data AS pmaf ON pmaf.product_id = pmd.product_id";
+LEFT JOIN price_management_afzet_data AS pmaf ON pmaf.product_id = pmd.product_id
+LEFT JOIN market_price_range AS mktpr ON mktpr.product_sku = pmd.sku";
 
 //mcpev_grossprice
 //mcpev_netprice
@@ -117,7 +118,7 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $debter_mbp_condition_1[] = "CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) != 0)";
         $debter_mbp_condition[] = implode(' AND ', $debter_mbp_condition_1);
       }
-      $extra_where = "(CAST(pmd.profit_percentage_buying_price AS DECIMAL(10,".$scale.")) < 0 AND CAST(pmd.profit_percentage_selling_price AS DECIMAL(10,".$scale.")) != 0)  AND (".implode(' AND ', $debter_mbp_condition).")";
+      $extra_where = "(CAST(pmd.profit_percentage_buying_price AS DECIMAL(10,".$scale.")) < 0 AND CAST(pmd.selling_price AS DECIMAL(10,".$scale.")) != 0)  OR (".implode(' OR ', $debter_mbp_condition).")";
     break;
     
     case (strpos($_POST['hdn_filters'],"task-all-numbers-filterable") !== FALSE):
@@ -151,6 +152,10 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $db_column_name = 'pma.avg_per_category_per_brand';
       } elseif($db_column_name == 'webshop_idealeverpakking') {
         $db_column_name = 'CAST(mcpet.value AS UNSIGNED)';
+      } elseif($db_column_name == 'bigshopper_lowest_price') {
+        $db_column_name = 'mktpr.lowest_price';
+      } elseif($db_column_name == 'bigshopper_highest_price') {
+        $db_column_name = 'mktpr.highest_price';
       } else {
         $db_column_name = 'pmd.'.$db_column_name;
       }
@@ -275,9 +280,9 @@ $columns = array(
   array( 'db' => 'pmd.group_4027110_discount_on_grossprice_b_on_deb_selling_price AS group_4027110_discount_on_grossprice_b_on_deb_selling_price', 'dt' => $column_index["group_4027110_discount_on_grossprice_b_on_deb_selling_price"]),
   array( 'db' => 'pmd.is_updated AS is_updated',  'dt' => $column_index["is_updated"]),
   array( 'db' => 'pmd.is_activated AS is_activated',  'dt' => $column_index["is_activated"]),
-  
+  array( 'db' => 'CASE WHEN mktpr.lowest_price IS NOT NULL THEN mktpr.lowest_price  ELSE "---" END AS bigshopper_lowest_price',  'dt' => $column_index["bigshopper_lowest_price"]),
+  array( 'db' => 'CASE WHEN mktpr.highest_price IS NOT NULL THEN mktpr.highest_price ELSE "---" END AS bigshopper_highest_price',  'dt' => $column_index["bigshopper_highest_price"]),
   array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])
-
   /*array( 'db' => 'CAST((SELECT COUNT(*) AS updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and buying_price_changed = "1" and is_synced = "No") AS UNSIGNED) AS updated_product_cnt',  'dt' => $column_index["updated_product_cnt"]), */
 );
 

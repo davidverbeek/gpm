@@ -327,7 +327,8 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th class="<?php echo $cust_group; ?>">Marge Verkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <?php }   ?>
-
+                                  <th>Bigsshopper(L.P)</th>
+                                  <th>Bigsshopper(H.P)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -365,7 +366,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th>Korting Brupr %</th>
                                   <th>Stijging %</th>
 
-                                  <?php for($d=0;$d<=10;$d++) { 
+                                  <?php for($d=0;$d<=10;$d++) {
                                     $cust_group = intval(4027100 + $d);
                                    ?> 
                                   <th class="<?php echo $cust_group; ?>">Verkpr<br>(<?php echo $cust_group; ?>)</th>
@@ -374,7 +375,8 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
 
                                   <?php }   ?>
-
+                                  <th>Bigsshopper (L.P)</th>
+                                  <th>Bigsshopper (H.P)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -590,6 +592,14 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                 <input type="checkbox" value="28" name="per_increase" class="show_cols open_by_default"><span>Stijging %</span>
                             </label>
 
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols open_by_default"><span>Bigsshopper (L.P)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols open_by_default"><span>Bigsshopper (H.P)</span>
+                            </label>
+
                             <div style="clear:both;"></div>
 
                             
@@ -619,7 +629,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                             <div style="clear:both;"></div>
                             <?php 
                                 $deb_col_idx = 29;
-                            for($hc=0;$hc<=10;$hc++) { 
+                            for($hc=0;$hc<=10;$hc++) {
                                 $h_cust_group = intval(4027100 + $hc);
                             ?>
                             <label for="brand-a" class="col-6">
@@ -638,7 +648,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                 <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
                             </label>
 
-                            <?php $deb_col_idx++; } ?>    
+                            <?php $deb_col_idx++; } ?>
 
                             <!-- <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="24" name="update_logs" class="show_cols"><span>Update logs</span>
