@@ -41,7 +41,9 @@ include "define/constants.php";
             }
             $valid_count++;
            
-            $all_col_data[] = calculateDiffPercentage($products['product_id'], $products['laagste_prijs_excl_verzending'], $products['hoogste_prijs_excl_verzending']);
+            //$all_col_data[] = calculateDiffPercentage($products['product_id'], $products['laagste_prijs_excl_verzending'], $products['hoogste_prijs_excl_verzending']);
+
+            $all_col_data[] = "('".$products['product_id']."', '".$products['laagste_prijs_excl_verzending']."', '".$products['hoogste_prijs_excl_verzending']."', NULL, NULL)";
             
             $updated_product_skus[] = $products['product_id'];
 
@@ -53,7 +55,6 @@ include "define/constants.php";
             $current_rec++;
             usleep(50000);
          }
-        // print_r($all_col_data);exit;
          if(count($all_col_data)) {
             $chunk_sql = $sql.implode(",", array_filter($all_col_data)) . $last_part_sql;
             if($conn->query($chunk_sql)) {
