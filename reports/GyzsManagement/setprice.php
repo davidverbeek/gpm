@@ -222,7 +222,7 @@ if ($result = $conn->query($sql)) {
                         <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <div style="float:right"><input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                         <div style="float:left;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span>Bigshopper Prices Difference %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
+                         <div style="float:left;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
                      </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->
@@ -314,10 +314,10 @@ if ($result = $conn->query($sql)) {
                                   <th class="<?php echo $cust_group; ?>">Marge Verkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <?php }   ?>
-                                  <th>Bigshopper(L.P)</th>
-                                  <th>Bigshopper(H.P)</th>
-                                    <th>Bigshopper(L.P diff %)</th>
-                                  <th>Bigshopper(H.P diff %)</th>
+                                  <th>B.S. (L.P)</th>
+                                  <th>B.S. (H.P)</th>
+                                  <th>B.S. (L.P %)</th>
+                                  <th>B.S. (H.P %)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -364,10 +364,10 @@ if ($result = $conn->query($sql)) {
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
 
                                   <?php }   ?>
-                                  <th>Bigshopper(L.P)</th>
-                                  <th>Bigshopper(H.P)</th>
-                                    <th>Bigshopper(L.P diff %)</th>
-                                  <th>Bigshopper(H.P diff %)</th>
+                                  <th>B.S. (L.P)</th>
+                                  <th>B.S. (H.P)</th>
+                                  <th>B.S. (L.P %)</th>
+                                  <th>B.S. (H.P %)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -584,19 +584,19 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols  chbs"><span>Bigsshopper (L.P)</span>
+                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols  chbs"><span>B.S. (L.P)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols  chbs"><span>Bigsshopper (H.P)</span>
+                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols  chbs"><span>B.S. (H.P)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="75" name="bs_lower_price_percentage" class="show_cols chbs"><span>Bigshopper (L.P Diff %)</span>
+                                <input type="checkbox" value="75" name="bs_lower_price_percentage" class="show_cols chbs"><span>B.S. (L.P %)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="76" name="bs_higher_price_percentage" class="show_cols  chbs"><span>Bigshopper (H.P Diff %)</span>
+                                <input type="checkbox" value="76" name="bs_higher_price_percentage" class="show_cols  chbs"><span>B.S. (H.P %)</span>
                             </label>
 
                             <div style="clear:both;"></div>
