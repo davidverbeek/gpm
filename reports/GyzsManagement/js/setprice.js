@@ -45,7 +45,7 @@ $(document).ready(function () {
       "pageLength": 200,
       "deferRender": true,
       "fixedHeader": true,
-      "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
+      //"order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
       var selected_cats;
       var is_debter_checked = 0;
@@ -4541,5 +4541,48 @@ $('#sel_merk').on('change', function() {
   $('#a_filter_negative_margin').click(function() {
     $('#filter_with').val('13');
     $('#filter_with').trigger('change');
+  });
+
+
+  $("#chkbigshopper").change(function() {
+    var ischecked = $(this).is(':checked');
+    if(ischecked) {
+      var store_html = $("#showloader").find('span').html();
+      $("#showloader").find('span').html('Please wait......Calculating Bigshopper Difference in Percentages.');
+      $("#showloader").addClass("loader");
+      $(".loader_txt").show();
+      $.ajax({
+         url: document_root_url+'/scripts/process_data_price_management.php',
+         method:"POST",
+         data: ({
+                  type: 'get_bigshopper'
+               }),
+         success: function(response_data){
+            var resp_obj = jQuery.parseJSON(response_data);
+            if(resp_obj["msg"]) {
+                $("#showloader").removeClass("loader");
+                $(".loader_txt").hide();
+                $('.chbs').prop('checked', true);
+                table.ajax.reload( null, false );
+                table.column(column_index["bigshopper_lowest_price"]).visible(true);
+                table.column(column_index["bigshopper_highest_price"]).visible(true);
+                table.column(column_index["bigshopper_lowest_price_diff_percentage"]).visible(true);
+                table.column(column_index["bigshopper_highest_price_diff_percentage"]).visible(true);
+
+                $("table tr th").css({
+                  "width": "100px"
+                });
+                $("#example").width("100%");
+            }
+            $("#showloader").find('span').html(store_html)
+         }
+      });
+    } else {
+        table.column(column_index["bigshopper_lowest_price"]).visible(false);
+        table.column(column_index["bigshopper_highest_price"]).visible(false);
+        table.column(column_index["bigshopper_lowest_price_diff_percentage"]).visible(false);
+        table.column(column_index["bigshopper_highest_price_diff_percentage"]).visible(false);
+        $('.chbs').prop('checked', false);
+    }
   });
 });

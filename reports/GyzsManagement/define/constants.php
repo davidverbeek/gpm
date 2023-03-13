@@ -96,9 +96,11 @@ $column_index = array(
   "group_4027110_discount_on_grossprice_b_on_deb_selling_price" => 72,
   "bigshopper_lowest_price"  => 73,
   "bigshopper_highest_price"  => 74,
-  "is_updated" => 75,
-  "is_activated" => 76,
-  "mag_updated_product_cnt" => 77,
+  "lp_diff_percentage" => 75,
+  "hp_diff_percentage" => 76,
+  "is_updated" => 77,
+  "is_activated" => 78,
+  "mag_updated_product_cnt" => 79,
  );
 /* Column Mappings */
 

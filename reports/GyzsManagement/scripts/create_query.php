@@ -1,3 +1,4 @@
+
 <?php
 
  include "../define/constants.php";
@@ -24,7 +25,7 @@ LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.
 
 LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'
 LEFT JOIN price_management_afzet_data AS pmaf ON pmaf.product_id = pmd.product_id
-LEFT JOIN market_price_range AS mktpr ON mktpr.product_sku = pmd.sku";
+LEFT JOIN bigshopper_prices AS mktpr ON mktpr.product_sku = pmd.sku";
 
 //mcpev_grossprice
 //mcpev_netprice
@@ -156,6 +157,10 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $db_column_name = 'mktpr.lowest_price';
       } elseif($db_column_name == 'bigshopper_highest_price') {
         $db_column_name = 'mktpr.highest_price';
+      } elseif($db_column_name == 'lp_diff_percentage') {
+        $db_column_name = 'mktpr.lp_diff_percentage';
+      } elseif($db_column_name == 'hp_diff_percentage') {
+        $db_column_name = 'mktpr.hp_diff_percentage';
       } else {
         $db_column_name = 'pmd.'.$db_column_name;
       }
@@ -282,6 +287,8 @@ $columns = array(
   array( 'db' => 'pmd.is_activated AS is_activated',  'dt' => $column_index["is_activated"]),
   array( 'db' => 'CASE WHEN mktpr.lowest_price IS NOT NULL THEN mktpr.lowest_price  ELSE "---" END AS bigshopper_lowest_price',  'dt' => $column_index["bigshopper_lowest_price"]),
   array( 'db' => 'CASE WHEN mktpr.highest_price IS NOT NULL THEN mktpr.highest_price ELSE "---" END AS bigshopper_highest_price',  'dt' => $column_index["bigshopper_highest_price"]),
+  array('db' => 'CASE WHEN mktpr.lp_diff_percentage IS NOT NULL THEN mktpr.lp_diff_percentage ELSE "---" END AS lp_diff_percentage', 'dt' => $column_index["lp_diff_percentage"]),
+  array('db' => 'CASE WHEN mktpr.hp_diff_percentage IS NOT NULL THEN mktpr.hp_diff_percentage ELSE "---" END AS hp_diff_percentage', 'dt' => $column_index["hp_diff_percentage"]),
   array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])
   /*array( 'db' => 'CAST((SELECT COUNT(*) AS updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and buying_price_changed = "1" and is_synced = "No") AS UNSIGNED) AS updated_product_cnt',  'dt' => $column_index["updated_product_cnt"]), */
 );

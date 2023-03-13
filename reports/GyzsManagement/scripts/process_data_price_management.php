@@ -1542,6 +1542,12 @@ case "update_bol_percentage_by_merk":
     }
     $response_data['msg'] = $msg.'Product count is '.count($sku_arr);
 break;
+
+case "get_bigshopper":
+  $products_diff_percentage_info = calculateDiffPercentage();
+  updatePercentage($products_diff_percentage_info);
+  $response_data['msg'] = "Success";
+  break;
 }
 
 function getPreviousSellingPriceFromHistory($conn, $product_id) {
@@ -1970,6 +1976,82 @@ function getChkAllSql() {
   return preg_replace($query_binding_search, $query_binding_replace, $query);
 
 }
+
+
+function calculateDiffPercentage() {
+   global $conn, $scale;
+   $sql_bigshopper = "SELECT bs.lowest_price, bs.highest_price, bs.product_sku, pmd.selling_price, pmd.sku FROM price_management_data AS pmd INNER JOIN bigshopper_prices AS bs ON pmd.sku=bs.product_sku";
+
+   $result = $conn->query($sql_bigshopper);
+   if (!$result) {
+      echo 'Could not run query: ' . $conn->error;
+      exit;
+   }
+
+   $col_data = array();
+    while($row = $result->fetch_assoc()) {
+        $bigshopper_lp = $row['lowest_price'];
+        $bigshopper_hp = $row['highest_price'];
+        $selling_price = $row['selling_price'];
+        $sku = $row['sku'];
+
+        $bigshopper_lp_diff_percent = roundValue((($selling_price-$bigshopper_lp)/$selling_price)*100);
+        $bigshopper_hp_diff_percent = roundValue((($bigshopper_hp-$selling_price)/$selling_price)*100);
+
+        $col_data[$sku]['lp_diff_percentage'] = $bigshopper_lp_diff_percent;
+        $col_data[$sku]['hp_diff_percentage'] = $bigshopper_hp_diff_percent;
+    }
+
+   return $col_data;
+ }//end calculateDiffPercentage()
+
+
+ function updatePercentage($products_diff_percentage_info) {
+    global $conn;
+    $sql = "SELECT bs.product_sku FROM price_management_data AS pmd INNER JOIN bigshopper_prices AS bs ON pmd.sku=bs.product_sku";
+    $result = $conn->query($sql);
+    $all_skus = $result->fetch_all();
+
+    $get_chunks = array_chunk($all_skus,10,true);
+
+
+    foreach($get_chunks as $c_k=>$c_d) {
+      $update_bulk_sql = "UPDATE bigshopper_prices SET ";
+      $col_1 = "lp_diff_percentage = (CASE product_sku ";
+      $col_2 = "hp_diff_percentage = (CASE product_sku ";
+      $col_3 = "modified_at='".date('Y-m-d H:i:s')."'";
+      $in_part = " WHERE product_sku IN(";
+      $update_sku_list = [];
+      foreach($c_d as $key_avg=>$data_avg) {
+        $get_product_sku = $data_avg[0];
+        if(isset($products_diff_percentage_info[$get_product_sku])) {
+          $col_1 .=  " WHEN {$get_product_sku} THEN {$products_diff_percentage_info[$get_product_sku]['lp_diff_percentage']}";
+          $col_2 .=  " WHEN {$get_product_sku} THEN {$products_diff_percentage_info[$get_product_sku]['hp_diff_percentage']}";
+          $update_sku_list[] = $get_product_sku;
+        }
+      }
+
+      $col_1 .= " END)";
+      $col_2 .= " END)";
+
+      $update_bulk_sql .= $col_1.', ';
+      $update_bulk_sql .= $col_2.', '.$col_3;
+      $update_bulk_sql .= $in_part."'".implode("', '", $update_sku_list)."'";
+      $update_bulk_sql .= ')';
+
+    $file_update_bs_percentages = "../pm_logs/update_bigshopper_percentages.txt";
+      if($conn->query($update_bulk_sql)) {
+        file_put_contents($file_update_bs_percentages,"".date("d-m-Y H:i:s")." Inserted Percentage Bigshopper Chunk (".count($c_d)."):".$c_k."\n",FILE_APPEND);
+      } else {
+        $err = "Error in Bigshopper percentage chunk  insertion:- ".mysqli_error($conn);
+        file_put_contents($file_update_bs_percentages,"".date("d-m-Y H:i:s").$err."\n".$update_bulk_sql,FILE_APPEND);
+      }
+
+    }
+
+}
+
+
 
 echo json_encode($response_data); 
 

@@ -134,19 +134,7 @@ if ($result = $conn->query($sql)) {
   }
 }
 
-$sql_negative_margin = "SELECT count(*) as total_negative_margin_products FROM price_management_data as pmd WHERE ";
-$table_cols = array();
-for($d=0;$d<=15;$d++) {
-  $debter_mbp_condition_1=array();
-  $cust_group = intval(4027100 + $d);
-  $debter_mbp_condition_1[] = "(CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) < CAST(pmd.buying_price AS DECIMAL(10,".$scale."))";
-  $debter_mbp_condition_1[] = "CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) != 0)";
-  $debter_mbp_condition[] = implode(' AND ', $debter_mbp_condition_1);
-}
-$extra_where = "(CAST(pmd.buying_price AS DECIMAL(10,".$scale.")) > pmd.selling_price AND CAST(pmd.selling_price AS DECIMAL(10,".$scale.")) != 0)  OR (".implode(' OR ', $debter_mbp_condition).")";
-$sql_negative_margin .= $extra_where;
-$result_negative_margin = $conn->query($sql_negative_margin);
-$count_negative_margin = $result_negative_margin->fetch_row();
+
 ?>
 <style>
 .loader
@@ -233,9 +221,9 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                     <div>
                         <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
-                    </div>
+                        <div style="float:right"><input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                         <div style="float:left;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span>Bigshopper Prices Difference %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
+                     </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->
                         <div class="row">
@@ -309,7 +297,6 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th>Cat Gem</th>
                                   <th>Merk Gem</th>
                                   <th>Cat Merk Gem</th>
-
                                   <th>WS Inkpr</th>
                                   <th>WS Verkpr</th>
                                   <th>Korting bruto vkpr</th>
@@ -327,8 +314,10 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th class="<?php echo $cust_group; ?>">Marge Verkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <?php }   ?>
-                                  <th>Bigsshopper(L.P)</th>
-                                  <th>Bigsshopper(H.P)</th>
+                                  <th>Bigshopper(L.P)</th>
+                                  <th>Bigshopper(H.P)</th>
+                                    <th>Bigshopper(L.P diff %)</th>
+                                  <th>Bigshopper(H.P diff %)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -375,8 +364,10 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
 
                                   <?php }   ?>
-                                  <th>Bigsshopper (L.P)</th>
-                                  <th>Bigsshopper (H.P)</th>
+                                  <th>Bigshopper(L.P)</th>
+                                  <th>Bigshopper(H.P)</th>
+                                    <th>Bigshopper(L.P diff %)</th>
+                                  <th>Bigshopper(H.P diff %)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -593,11 +584,19 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols open_by_default"><span>Bigsshopper (L.P)</span>
+                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols  chbs"><span>Bigsshopper (L.P)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols open_by_default"><span>Bigsshopper (H.P)</span>
+                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols  chbs"><span>Bigsshopper (H.P)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="75" name="bs_lower_price_percentage" class="show_cols chbs"><span>Bigshopper (L.P Diff %)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="76" name="bs_higher_price_percentage" class="show_cols  chbs"><span>Bigshopper (H.P Diff %)</span>
                             </label>
 
                             <div style="clear:both;"></div>
