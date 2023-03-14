@@ -93,7 +93,7 @@ $gmail = new Google_Service_Gmail($client);
 $optParams = [];
 $optParams['maxResults'] = 100;
 $optParams['labelIds'] = 'INBOX'; // Only show messages in Inbox
-//$optParams['pageToken'] = '1';
+$optParams['pageToken'] = '1';
 
 $optParams['q'] = "has:attachment larger_than:3000000";
 $optParams['q'] = "subject:Price list ".date('d-m-Y');

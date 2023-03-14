@@ -10,7 +10,7 @@ $(document).ready(function () {
       $(this).addClass("p_s_p_pos");
     }
   });
-
+  
   function toggleAllCategories(status) {
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
@@ -31,6 +31,13 @@ $(document).ready(function () {
     }
     return true;
   }
+  function checkNegative(selling_price, profit_margin_buying_price) {
+    var mark_negative = '';
+    if ((Number(selling_price) != 0) && (Number(profit_margin_buying_price) < 0)) {
+      mark_negative = 'check_negative';
+    }
+    return mark_negative;
+  }
 
   var table = $('#example').DataTable({
       "processing": true,
@@ -38,7 +45,7 @@ $(document).ready(function () {
       "pageLength": 200,
       "deferRender": true,
       "fixedHeader": true,
-      "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
+      //"order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
       var selected_cats;
       var is_debter_checked = 0;
@@ -89,6 +96,11 @@ $(document).ready(function () {
           });
         enableBulkFunc();
         getCategoryBrand();
+        if(!$('input').hasClass('check_negative')) {
+          $('div#show_negative_sentance').css('display', 'none');
+        } else {
+          $('div#show_negative_sentance').css('display', 'block');
+        }
       },
       "columnDefs": [
             {
@@ -103,10 +115,7 @@ $(document).ready(function () {
             {
               "targets": [column_index["selling_price"]],
               "render": function ( data, type, row ) {
-                var mark_negative = '';
-                if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                  mark_negative = 'check_negative';
-                }
+                var mark_negative = checkNegative(data, row[column_index["profit_percentage"]]);
                 return '<input type="text" class="selling_price input_validate '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="sp_editable_column_'+row[column_index["product_id"]]+'" />';
               },
               "className": "editable_column sp_editable_column"
@@ -154,10 +163,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_100" id="db_sp_span_editable_column_100_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027100_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_100 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_100_'+product_id+'" />';
                 }
               },
@@ -171,10 +177,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_101" id="db_sp_span_editable_column_101_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027101_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_101 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_101_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -188,10 +191,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_102" id="db_sp_span_editable_column_102_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027102_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_102 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_102_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -206,10 +206,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_103" id="db_sp_span_editable_column_103_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027103_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_103 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_103_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -223,10 +220,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_104" id="db_sp_span_editable_column_104_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027104_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_104 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_104_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -240,10 +234,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_105" id="db_sp_span_editable_column_105_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027105_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_105 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_105_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -257,10 +248,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_106" id="db_sp_span_editable_column_106_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027106_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_106 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_106_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -274,10 +262,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_107" id="db_sp_span_editable_column_107_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027107_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_107 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_107_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -291,10 +276,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_108" id="db_sp_span_editable_column_108_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027108_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_108 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_108_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -308,10 +290,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_109" id="db_sp_span_editable_column_109_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027109_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_109 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_109_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -325,10 +304,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_110" id="db_sp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = '';
-                  if ((Number(data) != 0) && (Number(data) < Number(row[column_index["buying_price"]]))) {
-                    mark_negative = 'check_negative';
-                  }
+                  var mark_negative = checkNegative(data, row[column_index["group_4027110_margin_on_buying_price"]], );
                   return '<input type="text" class="db_sp input_validate db_sp_110 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_110_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -2911,7 +2887,8 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
             var resp_obj = jQuery.parseJSON(response_data);
             if(resp_obj["msg"]) {
                 table.ajax.reload( null, false );
-                
+                /* show_negative_sentance=0;
+                $("div#show_negative_sentance").css('display', 'none'); */
             }      
          }
       });
@@ -4310,8 +4287,7 @@ $("#flexCheckDefault").change(function () {
       }
     });
   }
-
-
+  
   function toggleAllCategories(status) {
     var any_disabled = false;
     $('a>i.sim-tree-checkbox').each(function (index) {
@@ -4565,5 +4541,48 @@ $('#sel_merk').on('change', function() {
   $('#a_filter_negative_margin').click(function() {
     $('#filter_with').val('13');
     $('#filter_with').trigger('change');
+  });
+
+
+  $("#chkbigshopper").change(function() {
+    var ischecked = $(this).is(':checked');
+    if(ischecked) {
+      var store_html = $("#showloader").find('span').html();
+      $("#showloader").find('span').html('Please wait......Calculating Bigshopper Difference in Percentages.');
+      $("#showloader").addClass("loader");
+      $(".loader_txt").show();
+      $.ajax({
+         url: document_root_url+'/scripts/process_data_price_management.php',
+         method:"POST",
+         data: ({
+                  type: 'get_bigshopper'
+               }),
+         success: function(response_data){
+            var resp_obj = jQuery.parseJSON(response_data);
+            if(resp_obj["msg"]) {
+                $("#showloader").removeClass("loader");
+                $(".loader_txt").hide();
+                $('.chbs').prop('checked', true);
+                table.ajax.reload( null, false );
+                table.column(column_index["bigshopper_lowest_price"]).visible(true);
+                table.column(column_index["bigshopper_highest_price"]).visible(true);
+                table.column(column_index["bigshopper_lowest_price_diff_percentage"]).visible(true);
+                table.column(column_index["bigshopper_highest_price_diff_percentage"]).visible(true);
+
+                $("table tr th").css({
+                  "width": "100px"
+                });
+                $("#example").width("100%");
+            }
+            $("#showloader").find('span').html(store_html)
+         }
+      });
+    } else {
+        table.column(column_index["bigshopper_lowest_price"]).visible(false);
+        table.column(column_index["bigshopper_highest_price"]).visible(false);
+        table.column(column_index["bigshopper_lowest_price_diff_percentage"]).visible(false);
+        table.column(column_index["bigshopper_highest_price_diff_percentage"]).visible(false);
+        $('.chbs').prop('checked', false);
+    }
   });
 });

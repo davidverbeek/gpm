@@ -134,19 +134,7 @@ if ($result = $conn->query($sql)) {
   }
 }
 
-$sql_negative_margin = "SELECT count(*) as total_negative_margin_products FROM price_management_data as pmd WHERE ";
-$table_cols = array();
-for($d=0;$d<=15;$d++) {
-  $debter_mbp_condition_1=array();
-  $cust_group = intval(4027100 + $d);
-  $debter_mbp_condition_1[] = "(CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) < CAST(pmd.buying_price AS DECIMAL(10,".$scale."))";
-  $debter_mbp_condition_1[] = "CAST(pmd.group_".$cust_group."_debter_selling_price AS DECIMAL(10,".$scale.")) != 0)";
-  $debter_mbp_condition[] = implode(' AND ', $debter_mbp_condition_1);
-}
-$extra_where = "(CAST(pmd.buying_price AS DECIMAL(10,".$scale.")) > pmd.selling_price AND CAST(pmd.selling_price AS DECIMAL(10,".$scale.")) != 0)  OR (".implode(' OR ', $debter_mbp_condition).")";
-$sql_negative_margin .= $extra_where;
-$result_negative_margin = $conn->query($sql_negative_margin);
-$count_negative_margin = $result_negative_margin->fetch_row();
+
 ?>
 <style>
 .loader
@@ -233,9 +221,9 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                     <div>
                         <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
-                    </div>
+                        <div style="float:right"><input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                         <div style="float:left;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
+                     </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->
                         <div class="row">
@@ -252,11 +240,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                 </div>
                             </div>
                         </div>
-
-                        <?php
-                        if($count_negative_margin[0] > 0) { ?>
-                            <div><a href="javascript: void(0);" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
-                        <?php } ?>
+                        <div id='show_negative_sentance' style="display:none;"><a href="javascript: void(0);" id="a_filter_negative_margin"><i class="fa fa-filter"></i><span>Show Negative Margin</span></a></div>
                     <!-- </form> -->
                     <!-- Data Length Filter -->
                     <!--
@@ -313,7 +297,6 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th>Cat Gem</th>
                                   <th>Merk Gem</th>
                                   <th>Cat Merk Gem</th>
-
                                   <th>WS Inkpr</th>
                                   <th>WS Verkpr</th>
                                   <th>Korting bruto vkpr</th>
@@ -331,7 +314,10 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th class="<?php echo $cust_group; ?>">Marge Verkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <?php }   ?>
-
+                                  <th>B.S. (L.P)</th>
+                                  <th>B.S. (H.P)</th>
+                                  <th>B.S. (L.P %)</th>
+                                  <th>B.S. (H.P %)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -369,7 +355,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th>Korting Brupr %</th>
                                   <th>Stijging %</th>
 
-                                  <?php for($d=0;$d<=10;$d++) { 
+                                  <?php for($d=0;$d<=10;$d++) {
                                     $cust_group = intval(4027100 + $d);
                                    ?> 
                                   <th class="<?php echo $cust_group; ?>">Verkpr<br>(<?php echo $cust_group; ?>)</th>
@@ -378,7 +364,10 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
 
                                   <?php }   ?>
-
+                                  <th>B.S. (L.P)</th>
+                                  <th>B.S. (H.P)</th>
+                                  <th>B.S. (L.P %)</th>
+                                  <th>B.S. (H.P %)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -594,6 +583,22 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                 <input type="checkbox" value="28" name="per_increase" class="show_cols open_by_default"><span>Stijging %</span>
                             </label>
 
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols  chbs"><span>B.S. (L.P)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols  chbs"><span>B.S. (H.P)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="75" name="bs_lower_price_percentage" class="show_cols chbs"><span>B.S. (L.P %)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="76" name="bs_higher_price_percentage" class="show_cols  chbs"><span>B.S. (H.P %)</span>
+                            </label>
+
                             <div style="clear:both;"></div>
 
                             
@@ -623,7 +628,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                             <div style="clear:both;"></div>
                             <?php 
                                 $deb_col_idx = 29;
-                            for($hc=0;$hc<=10;$hc++) { 
+                            for($hc=0;$hc<=10;$hc++) {
                                 $h_cust_group = intval(4027100 + $hc);
                             ?>
                             <label for="brand-a" class="col-6">
@@ -642,7 +647,7 @@ $count_negative_margin = $result_negative_margin->fetch_row();
                                 <input type="checkbox" value="<?php echo $deb_col_idx; ?>" name="<?php echo $h_cust_group; ?>" class="show_cols_ddgp show_deb_cols"><span>Discount GP (<?php echo $h_cust_group; ?>)</span>
                             </label>
 
-                            <?php $deb_col_idx++; } ?>    
+                            <?php $deb_col_idx++; } ?>
 
                             <!-- <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="24" name="update_logs" class="show_cols"><span>Update logs</span>
