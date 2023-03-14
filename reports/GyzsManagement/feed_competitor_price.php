@@ -7,31 +7,19 @@ include "define/constants.php";
   error_reporting(E_ALL);
   set_time_limit(500);
 
- 
-//('')
-//to read xml file ...have you done before..yes in ecp project
-/* $path = "bigshopper_price_data.xml";
-   $xmlfile = file_get_contents($path);
-   $new = simplexml_load_string($xmlfile);
-   $jsonfile = json_encode($new);
-   $myarray = json_decode($jsonfile, true);
-   $price_data = array_chunk($myarray, 10);
-   print_r($price_data[0]); */
-
    $xml=simplexml_load_file("bigshopper_price_data.xml") or die("Error: Cannot create object");
    
    $array = json_decode(json_encode($xml->children()), true);
-   $chunk_xml_data = array_chunk($array['item'], PMCHUNK);//, print_r($array);exit;
+   $chunk_xml_data = array_chunk($array['item'], PMCHUNK);
    $table_column_names = array('product_sku', 'lowest_price', 'highest_price');
    $current_rec = $valid_count = 0;
    $col_data = "";
    $progress_status["total_records"] = count($xml->children());
    $progress_file_path = $document_root_path."/import_export/progress_bigshopper_feed.txt";
    if(count($chunk_xml_data)) {
-      $sql = $last_part_sql = $sql_debters = $last_part_sql_debters = "";
-      list($sql, $last_part_sql) = makeSqlDependingOnXl($table_column_names);
-      //print_r(array_keys($chunk_xml_data));exit;
-		foreach($chunk_xml_data as $chunked_idx=>$chunked_xml_values) { //echo $chunked_idx;
+      $sql = "";
+      $sql = makeSqlDependingOnXl($table_column_names);
+		foreach($chunk_xml_data as $chunked_idx=>$chunked_xml_values) {
          $all_col_data[] = $updated_product_skus[] = array();
          foreach($chunked_xml_values as $products) {
             $col_data = "";
@@ -40,10 +28,7 @@ include "define/constants.php";
                $current_rec++; continue;
             }
             $valid_count++;
-           
-            //$all_col_data[] = calculateDiffPercentage($products['product_id'], $products['laagste_prijs_excl_verzending'], $products['hoogste_prijs_excl_verzending']);
-
-            $all_col_data[] = "('".$products['product_id']."', '".$products['laagste_prijs_excl_verzending']."', '".$products['hoogste_prijs_excl_verzending']."', NULL, NULL)";
+            $all_col_data[] = "('".$products['product_id']."', '".$products['laagste_prijs_excl_verzending']."', '".$products['hoogste_prijs_excl_verzending']."')";
             
             $updated_product_skus[] = $products['product_id'];
 
@@ -56,9 +41,18 @@ include "define/constants.php";
             usleep(50000);
          }
          if(count($all_col_data)) {
-            $chunk_sql = $sql.implode(",", array_filter($all_col_data)) . $last_part_sql;
+            $chunk_sql = $sql.implode(",", array_filter($all_col_data));
+            $msg = "Bulk Insert:";
+            if($chunked_idx == 0) {
+               $truncate_sql = "Truncate TABLE bigshopper_prices";
+               if($conn->query($truncate_sql)) {
+                $msg = "Truncated first then Bulk Insert:";
+               } else {
+                  $msg = "Failed to Truncate first But Bulk Insert:";
+               }
+            }
             if($conn->query($chunk_sql)) {
-               bulkInsertLog($chunked_idx,"Bulk Insert:".count($chunked_xml_values));
+               bulkInsertLog($chunked_idx,$msg.count($chunked_xml_values));
                //changeUpdateStatus($conn, implode("','", $updated_product_skus));
             } else {
                bulkInsertLog($chunked_idx,"Bulk Insert Error:".mysqli_error($conn)."\n".$chunk_sql);
@@ -69,15 +63,8 @@ include "define/constants.php";
    
 
 function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
-	$sql = "INSERT INTO bigshopper_prices (product_sku, lowest_price, highest_price, lp_diff_percentage, hp_diff_percentage";
-	$last_part_sql = " ON DUPLICATE KEY UPDATE";
-   $back_part_cols = " product_sku = VALUES(product_sku), lowest_price = VALUES(lowest_price), highest_price = VALUES(highest_price), lp_diff_percentage = VALUES(lp_diff_percentage), hp_diff_percentage=VALUES(hp_diff_percentage)";
-
-   $back_part_cols = rtrim($back_part_cols, ', ');
-   $last_part_sql .= $back_part_cols;
-   $sql .= ") VALUES ";
-
-	return array($sql, $last_part_sql);
+	$sql = "INSERT INTO bigshopper_prices (product_sku, lowest_price, highest_price) VALUES ";
+	return $sql;
 }//end makeSqlDependingOnXl();
 
 
