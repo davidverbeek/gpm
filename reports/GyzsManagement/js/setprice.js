@@ -4548,7 +4548,7 @@ $('#sel_merk').on('change', function() {
     var ischecked = $(this).is(':checked');
     if(ischecked) {
       var store_html = $("#showloader").find('span').html();
-      $("#showloader").find('span').html('Please wait......Calculating Bigshopper Difference in Percentages.');
+      $("#showloader").find('span').html('Please wait....Calculating Bigshopper Percentages.');
       $("#showloader").addClass("loader");
       $(".loader_txt").show();
       $.ajax({
