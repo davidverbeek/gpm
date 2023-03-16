@@ -4566,8 +4566,8 @@ $('#sel_merk').on('change', function() {
                 table.ajax.reload( null, false );
                 table.column(column_index["bigshopper_lowest_price"]).visible(true);
                 table.column(column_index["bigshopper_highest_price"]).visible(true);
-                table.column(column_index["bigshopper_lowest_price_diff_percentage"]).visible(true);
-                table.column(column_index["bigshopper_highest_price_diff_percentage"]).visible(true);
+                table.column(column_index["lp_diff_percentage"]).visible(true);
+                table.column(column_index["hp_diff_percentage"]).visible(true);
 
                 $("table tr th").css({
                   "width": "100px"
@@ -4580,8 +4580,8 @@ $('#sel_merk').on('change', function() {
     } else {
         table.column(column_index["bigshopper_lowest_price"]).visible(false);
         table.column(column_index["bigshopper_highest_price"]).visible(false);
-        table.column(column_index["bigshopper_lowest_price_diff_percentage"]).visible(false);
-        table.column(column_index["bigshopper_highest_price_diff_percentage"]).visible(false);
+        table.column(column_index["lp_diff_percentage"]).visible(false);
+        table.column(column_index["hp_diff_percentage"]).visible(false);
         $('.chbs').prop('checked', false);
     }
   });
