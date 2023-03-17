@@ -18,7 +18,7 @@ include "define/constants.php";
    $progress_file_path = $document_root_path."/import_export/progress_bigshopper_feed.txt";
    if(count($chunk_xml_data)) {
       $sql = "";
-      $sql = makeSqlDependingOnXl($table_column_names);
+      list($sql, $last_part_sql) = makeSqlDependingOnXl($table_column_names);
 		foreach($chunk_xml_data as $chunked_idx=>$chunked_xml_values) {
          $all_col_data[] = $updated_product_skus[] = array();
          foreach($chunked_xml_values as $products) {
@@ -41,12 +41,12 @@ include "define/constants.php";
             usleep(50000);
          }
          if(count($all_col_data)) {
-            $chunk_sql = $sql.implode(",", array_filter($all_col_data));
+            $chunk_sql = $sql.implode(",", array_filter($all_col_data)) . $last_part_sql;
             $msg = "Bulk Insert:";
             if($chunked_idx == 0) {
                $truncate_sql = "Truncate TABLE bigshopper_prices";
                if($conn->query($truncate_sql)) {
-                $msg = "Truncated first then Bulk Insert:";
+                  $msg = "Truncated first then Bulk Insert:";
                } else {
                   $msg = "Failed to Truncate first But Bulk Insert:";
                }
@@ -63,8 +63,15 @@ include "define/constants.php";
    
 
 function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
-	$sql = "INSERT INTO bigshopper_prices (product_sku, lowest_price, highest_price) VALUES ";
-	return $sql;
+   $sql = "INSERT INTO bigshopper_prices (product_sku, lowest_price, highest_price ";
+   $last_part_sql = " ON DUPLICATE KEY UPDATE";
+   $back_part_cols = " product_sku = VALUES(product_sku), lowest_price = VALUES(lowest_price), highest_price = VALUES(highest_price)";
+
+   $back_part_cols = rtrim($back_part_cols, ', ');
+   $last_part_sql .= $back_part_cols;
+   $sql .= ") VALUES ";
+
+   return array($sql, $last_part_sql);
 }//end makeSqlDependingOnXl();
 
 

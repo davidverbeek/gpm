@@ -217,12 +217,12 @@ if ($result = $conn->query($sql)) {
               <?php include "layout/top.php"; ?>
             <!-- End of Topbar --> 
                 <div class="table-filter d-flex align-items-center" id="data_filters">
-
                     <div>
-                        <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div style="float:left;">
+                            <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <div style="float:right"><input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                         <div style="float:left;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
+                        <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update</div>
+                         <div style="float:right;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
                      </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->
