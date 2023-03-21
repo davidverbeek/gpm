@@ -25,7 +25,7 @@ LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.
 
 LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'
 LEFT JOIN price_management_afzet_data AS pmaf ON pmaf.product_id = pmd.product_id
-LEFT JOIN bigshopper_prices AS mktpr ON mktpr.product_sku = pmd.sku";
+LEFT JOIN bigshopper_prices AS mktpr ON mktpr.product_id = pmd.product_id";
 
 //mcpev_grossprice
 //mcpev_netprice
