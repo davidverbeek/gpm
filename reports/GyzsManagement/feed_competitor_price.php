@@ -32,7 +32,7 @@ include "define/constants.php";
                continue;
             }
             $valid_count++;
-            $current_time = date("d-m-Y H:i:s");
+            $current_time = date("Y-m-d H:i:s");
             $all_col_data[] = "('".$products['product_id']."', '".$pmd_product_id."', '".$products['laagste_prijs_excl_verzending']."', '".$products['hoogste_prijs_excl_verzending']."', '".$current_time."')";
             
             $updated_product_skus[] = $products['product_id'];
