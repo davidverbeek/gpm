@@ -5,7 +5,7 @@ include "define/constants.php";
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
-  //set_time_limit(250);
+  //set_time_limit(1000);
 
    $xml=simplexml_load_file("bigshopper_price_data.xml") or die("Error: Cannot create object");
    
@@ -22,7 +22,8 @@ include "define/constants.php";
          $all_col_data[] = $updated_product_skus[] = array();
          foreach($chunked_xml_values as $products) {
             $col_data = "";
-            if((isset($products['product_id']) && !is_numeric($products['product_id'])) || (isset($products['laagste_prijs_excl_verzending']) && !is_numeric($products['laagste_prijs_excl_verzending'])) || (isset($products['hoogste_prijs_excl_verzending']) && !is_numeric($products['hoogste_prijs_excl_verzending'])) ) {
+            if(((isset($products['laagste_prijs_excl_verzending']) && !is_numeric($products['laagste_prijs_excl_verzending'])) || (isset($products['hoogste_prijs_excl_verzending']) && !is_numeric($products['hoogste_prijs_excl_verzending'])) )) {
+
                $progress_status['er_imp'][$current_rec] = "<div style='color:red;'><i class='fas fa-exclamation-triangle'></i>&nbsp; Row data not valid. (Row ".($current_rec).")</div>";
                $current_rec++; continue;
             }
@@ -59,7 +60,7 @@ include "define/constants.php";
             if($conn->query($chunk_sql)) {
                bulkInsertLog($chunked_idx,$msg.count($updated_product_skus));
                //if($chunked_idx == (count($chunk_xml_data)-1))
-               echo "{$progress_status['er_imp']["er_summary"]}";
+               echo "{$progress_status['er_imp']["er_summary"]}<br>";
             } else {
                bulkInsertLog($chunked_idx,"Bulk Insert Error:".mysqli_error($conn)."\n".$chunk_sql);
             }
@@ -144,11 +145,11 @@ function getPmdProductId($sku) {
    $sql = "SELECT pmd.product_id AS pmd_product_id
    FROM
    price_management_data AS pmd
-   WHERE pmd.sku = {$sku}";
+   WHERE pmd.sku = '{$sku}'";
 
    $result = $conn->query($sql);
    if (!$result) {
-      echo 'Could not run query to get pmd.product_id: ' . $conn->error;
+      echo 'Could not run query to get pmd.product_id: ' . $conn->error.'<br>';
       exit;
    }
 
