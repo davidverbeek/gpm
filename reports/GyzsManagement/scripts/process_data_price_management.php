@@ -1548,6 +1548,82 @@ case "get_bigshopper":
   updatePercentage($products_diff_percentage_info);
   $response_data['msg'] = "Success";
   break;
+
+
+case "bulk_bs_update_selling_price":
+$isAllChecked = $_REQUEST['isAllChecked'];
+if($isAllChecked == 1) {
+    // Check All ignore paging
+  $sql_chk_all = getChkAllSql();
+  $result_chk_all = $conn->query($sql_chk_all);//echo $sql_chk_all;exit;
+  $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
+//print_r($product_to_update_arr, true);exit;
+ //file_put_contents('jyoti.txt',print_r($product_to_update_arr, true),FILE_APPEND);
+  $from = "From Check All";
+} else {
+  $product_to_update_arr = $_REQUEST['sellingPrices'];
+  $from = "From Multiple Select";
+}
+
+//$chunk_data = array_chunk($product_to_update_arr,PMCHUNK);
+$product_to_update_arr = array_filter($product_to_update_arr);//echo count($product_to_update_arr);exit;
+if(count($product_to_update_arr)) {
+    $all_selected_data = $updated_product_ids =  array();
+
+  foreach($product_to_update_arr as $chunk_index=>$v) {
+    if($v["bigshopper_lowest_price"] == "---" || $v["bigshopper_highest_price"] == "---" || $v["bigshopper_lowest_price"] == 0.0000 || $v["bigshopper_lowest_price"] == 0.0000) {
+      continue;
+    }
+
+    $supplier_gross_price = ($v["supplier_gross_price"] == 0 ? 1:$v["supplier_gross_price"]);
+    $webshop_selling_price = $v["gyzs_selling_price"];
+
+    if ($_REQUEST['bs_price_option_checked'] == 'lowest_price') {
+     $new_selling_price = $v["bigshopper_lowest_price"];
+    } else {
+     $new_selling_price = $v["bigshopper_highest_price"];
+    }
+
+    $pmd_buying_price = $v["buying_price"];
+    $profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
+    $profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
+    $percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
+    $discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
+
+    $updated_product_ids[] = $v['product_id'];
+    $in_sku_arr[$v['sku']] = $v['sku'];
+
+    $all_selected_data[$v['product_id']]['selling_price'] = $new_selling_price;
+    $all_selected_data[$v['product_id']]['profit_margin_bp'] = $profit_margin;
+    $all_selected_data[$v['product_id']]['profit_margin_sp'] = $profit_margin_sp;
+    $all_selected_data[$v['product_id']]['discount_on_gross'] = $discount_percentage;
+    $all_selected_data[$v['product_id']]['percentage_increase'] = $percentage_increase;
+
+    // Create History Array //
+    $all_selected_data[$v["product_id"]]['product_id'] = $v["product_id"];
+    $all_selected_data[$v["product_id"]]['sku'] = $v["sku"];
+    $all_selected_data[$v['product_id']]['old_net_unit_price'] = $v['webshop_supplier_buying_price'];
+    $all_selected_data[$v['product_id']]['old_gross_unit_price'] = $v['webshop_supplier_gross_price'];
+    $all_selected_data[$v['product_id']]['old_idealeverpakking'] = $v['webshop_idealeverpakking'];
+    $all_selected_data[$v['product_id']]['old_afwijkenidealeverpakking'] = $v['webshop_afwijkenidealeverpakking'];
+    $all_selected_data[$v['product_id']]['old_buying_price'] = $v['webshop_supplier_buying_price'];
+    $all_selected_data[$v['product_id']]['old_selling_price'] = $v['gyzs_selling_price'];
+
+    $all_selected_data[$v['product_id']]['new_net_unit_price'] = $pmd_buying_price;
+    $all_selected_data[$v['product_id']]['new_gross_unit_price'] = $v['supplier_gross_price'];
+    $all_selected_data[$v['product_id']]['new_idealeverpakking'] = $v['idealeverpakking'];
+    $all_selected_data[$v['product_id']]['new_afwijkenidealeverpakking'] = $v['afwijkenidealeverpakking'];
+    $all_selected_data[$v['product_id']]['new_buying_price'] = $pmd_buying_price;
+    $all_selected_data[$v['product_id']]['new_selling_price'] = $new_selling_price;
+  }//one chunk is stored
+
+  // completed query
+  $updated_recs = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
+}//check count of chunk_data
+
+
+$response_data['msg'] = $updated_recs;
+break;
 }
 
 function getPreviousSellingPriceFromHistory($conn, $product_id) {
@@ -1922,11 +1998,11 @@ function bulkUpdateProducts($type,$data,$common_data,$log_type,$update_type) {
             $conn->query($history_sql);
             //Insert in history
 
-          bulkInsertLog($chunk_index,"Bulk Update ".$update_type." (".$log_type."):".count($chunk_values));
+        bulkInsertLog($chunk_index,"Bulk Update ".$update_type." (".$log_type."):".count($chunk_values));
           changeUpdateStatus($conn, implode(",", $updated_product_ids));
           $total_inserted_records[] = count($chunk_values);
         } else {
-          bulkInsertLog($chunk_index,"Bulk Update ".$update_type." Error (".$log_type."):".mysqli_error($conn));
+    bulkInsertLog($chunk_index,"Bulk Update ".$update_type." Error (".$log_type."):".mysqli_error($conn));
         }
 
 
@@ -1973,10 +2049,11 @@ function getChkAllSql() {
     }
   }
 
+
+
   return preg_replace($query_binding_search, $query_binding_replace, $query);
 
 }
-
 
 function calculateDiffPercentage() {
    global $conn, $scale;
@@ -2050,8 +2127,6 @@ function calculateDiffPercentage() {
     }
 
 }
-
-
 
 echo json_encode($response_data); 
 
