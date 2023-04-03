@@ -4590,6 +4590,12 @@ $('#sel_merk').on('change', function() {
 
   $('#bsmodalOk').on("click",function(e) {
         var bs_price_option = $("input[name=fav_BS]:checked").val();
+        var expression = Array();
+        if(bs_price_option == "percentage_bs") {
+           expression[0] = $('#bs_percent_text').val();
+            expression[1] = $('#bs_percent_type').val();
+            expression[2] = $('#bs_percent_price_type').val();
+        }
         var isAllChecked = 0;
         if($("#chkall").is(':checked')) {
           var isAllChecked = 1;
@@ -4598,6 +4604,7 @@ $('#sel_merk').on('change', function() {
         var sellingPrices = Array();
 
         var record_selected = table.rows('.selected').data().length;
+
         if(record_selected == 0) {
           alert("Please select record first!!");
           return false;
@@ -4620,7 +4627,8 @@ $('#sel_merk').on('change', function() {
                     "idealeverpakking": value[column_index["idealeverpakking"]],
                     "afwijkenidealeverpakking": value[column_index["afwijkenidealeverpakking"]],
                     "bigshopper_highest_price" : value[column_index["bigshopper_highest_price"]],
-                    "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]]
+                    "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]],
+                    "selling_price" :  value[column_index["selling_price"]]
                   }
                 });
       }
@@ -4629,19 +4637,27 @@ $('#sel_merk').on('change', function() {
             $.ajax({
               url: document_root_url+'/scripts/process_data_price_management.php',
               method:"POST",
-              data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked}),
+              data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression}),
                 success: function(response_data) {
                 var resp_obj = jQuery.parseJSON(response_data);
                   if(resp_obj["msg"]) {
-                      table.ajax.reload( null, false );
-                      $(".update_loader").hide();
+                    $(".update_loader").hide();
+                      $('input[name=fav_BS]').prop('checked', false);
                       $('#bspricemodal').modal('toggle');
-                      $('<div class="alert alert-success" role="alert"> Updated '+resp_obj["msg"]+' records.</div>').insertBefore("#data_filters");
-                      window.setTimeout(function() {
+
+                      if (resp_obj["msg"] == "duplicate") {
+                        var alert_mssage = "The selected record already has same data.";
+                      } else {
+                       var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).;'
+                       table.ajax.reload( null, false );
+                      }
+
+                      $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
+                        window.setTimeout(function() {
                         $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                            $(this).remove();
+                          $(this).remove();
                         });
-                    }, 4000);
+                        }, 4000);
                   }
                 }
               });

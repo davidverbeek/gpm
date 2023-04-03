@@ -1552,6 +1552,7 @@ case "get_bigshopper":
 
 case "bulk_bs_update_selling_price":
 $isAllChecked = $_REQUEST['isAllChecked'];
+//echo $_REQUEST['expression'][0];exit;
 if($isAllChecked == 1) {
     // Check All ignore paging
   $sql_chk_all = getChkAllSql();
@@ -1567,10 +1568,12 @@ if($isAllChecked == 1) {
 
 //$chunk_data = array_chunk($product_to_update_arr,PMCHUNK);
 $product_to_update_arr = array_filter($product_to_update_arr);//echo count($product_to_update_arr);exit;
+//print_r($product_to_update_arr);exit;
 if(count($product_to_update_arr)) {
     $all_selected_data = $updated_product_ids =  array();
 
   foreach($product_to_update_arr as $chunk_index=>$v) {
+    
     if($v["bigshopper_lowest_price"] == "---" || $v["bigshopper_highest_price"] == "---" || $v["bigshopper_lowest_price"] == 0.0000 || $v["bigshopper_lowest_price"] == 0.0000) {
       continue;
     }
@@ -1580,9 +1583,34 @@ if(count($product_to_update_arr)) {
 
     if ($_REQUEST['bs_price_option_checked'] == 'lowest_price') {
      $new_selling_price = $v["bigshopper_lowest_price"];
-    } else {
+    } elseif($_REQUEST['bs_price_option_checked'] == 'highest_price') {
      $new_selling_price = $v["bigshopper_highest_price"];
+    } elseif($_REQUEST['bs_price_option_checked'] == 'between_bs') {
+     $new_selling_price = ($v["bigshopper_highest_price"] + $v["bigshopper_lowest_price"])/2;
+    } else {
+      $expression = $_REQUEST['expression'];
+      $bs_percent = $expression[0];
+
+      $bs_more_less = $expression[1];
+      $bs_price_type = $expression[2];
+
+      if($bs_more_less == 'more' && $bs_price_type == 'bs_percent_hp') {
+        $new_selling_price = $v["bigshopper_highest_price"] + (($bs_percent * $v["bigshopper_highest_price"])/100);
+      } elseif($bs_more_less == 'more' && $bs_price_type == 'bs_percent_lp') {
+        $new_selling_price = $v["bigshopper_lowest_price"] - (($bs_percent * $v["bigshopper_lowest_price"])/100);
+      } elseif($bs_more_less == 'less' && $bs_price_type == 'bs_percent_lp') {
+        $new_selling_price = $v["bigshopper_lowest_price"] - (($bs_percent * $v["bigshopper_lowest_price"])/100);
+      } else {
+        $new_selling_price = $v["bigshopper_highest_price"] - (($bs_percent * $v["bigshopper_highest_price"])/100);
+      }
     }
+
+    //update if new SP is different
+    if($new_selling_price == $v["selling_price"]) {
+      continue;
+    }
+
+//echo $new_selling_price;exit;
 
     $pmd_buying_price = $v["buying_price"];
     $profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
@@ -1617,13 +1645,15 @@ if(count($product_to_update_arr)) {
     $all_selected_data[$v['product_id']]['new_selling_price'] = $new_selling_price;
   }//one chunk is stored
 
-  // completed query
-  $updated_recs = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
-}//check count of chunk_data
-
-
-$response_data['msg'] = $updated_recs;
-break;
+  if(count($all_selected_data)) {
+    // completed query
+    $updated_recs = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
+    $response_data['msg'] = $updated_recs;
+  } else {
+    $response_data['msg'] = "duplicate";
+  }
+  }//check count of chunk_data
+  break;
 }
 
 function getPreviousSellingPriceFromHistory($conn, $product_id) {
