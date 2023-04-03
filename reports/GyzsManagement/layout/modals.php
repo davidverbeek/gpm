@@ -459,16 +459,17 @@
                 <div style="font-size: 11px;">
               <input type="radio" class="form-check-input" value="percentage_bs" name="fav_BS">
               <div class="bs_expression">
-                <input type="text" id="bs_percent_text" name="bs_percent_text"><label for="bs_percent_text">%</label>
-              <select id="bs_percent_type" name="bs_percent_type">
-                <option value="more">More</option>
-                <option value="less">Less</option>
-              </select>
-              <label for="bs_percent_price_type">than</label>
-              <select id="bs_percent_price_type" name="bs_percent_price_type">
-                <option value="bs_percent_lp">LP</option>
-                <option value="bs_percent_hp">HP</option>
-              </select>
+                  <input type="number" id="bs_percent_text" name="bs_percent_text" style="width:10%;">
+                  <label for="bs_percent_text">%</label>
+                  <select id="bs_percent_type" name="bs_percent_type">
+                    <option value="more">More</option>
+                    <option value="less">Less</option>
+                  </select>
+                  <label for="bs_percent_price_type">than</label>
+                  <select id="bs_percent_price_type" name="bs_percent_price_type">
+                    <option value="bs_percent_lp">LP</option>
+                    <option value="bs_percent_hp">HP</option>
+                  </select>
               </div>
             </div>
               <!--</label>-->
