@@ -2789,7 +2789,7 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
 
   $('#example tbody').on("keyup",".selling_price",function(e) {
     var keyCode = e.keyCode || e.which;
-    if (keyCode == 9) {  
+    if (keyCode == 9) {
        $('#example tbody tr').eq($(this).closest('tr').index()).addClass("selected");
     }
 
@@ -2797,7 +2797,6 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
       var ischecked = $("#chkbulkupdates").is(':checked');
       if(ischecked) {
         // Bulk Update Feature
-
           var record_selected = table.rows('.selected').data().length;
           var multipleSellingPrices = Array();
           $.each( table.rows('.selected').data(), function( key, value ) {
@@ -2818,7 +2817,7 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
                   "afwijkenidealeverpakking": value[column_index["afwijkenidealeverpakking"]],
                   "selling_price": $("#sp_editable_column_"+value[column_index["product_id"]]).val() 
               };
-            } 
+            }
           });
 
           if(parseInt(multipleSellingPrices.filter(String).length) > 0) {
@@ -2827,7 +2826,7 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
                  url: document_root_url+'/scripts/process_data_price_management.php',
                  method:"POST",
                  data: ({ multipleSellingPrices: multipleSellingPrices, type: 'update_multiple_selling_prices'}),
-                 success: function(response_data){
+                 success: function(response_data) {
                     var resp_obj = jQuery.parseJSON(response_data);
                     if(resp_obj["msg"]) {
                         table.ajax.reload( null, false );
@@ -2843,7 +2842,7 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
             }
           }
         // Bulk Update Feature
-      } else {
+        } else {
        var index = $(this).closest('tr').index();
        var product_id = table.cells({ row: index, column: column_index["product_id"] }).data()[0];
        var product_price = parseFloat($(this).val());
@@ -2884,7 +2883,7 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
                   idealeverpakking: idealeverpakking,
                   afwijkenidealeverpakking : afwijkenidealeverpakking
                }),
-         success: function(response_data){
+         success: function(response_data) {
             var resp_obj = jQuery.parseJSON(response_data);
             if(resp_obj["msg"]) {
                 table.ajax.reload( null, false );
@@ -3243,7 +3242,7 @@ $('#example tbody').on("keyup",".profit_margin_sp",function(e) {
   } 
 });
 
- $('#btnsellingprice, #btnprofitmargin, #btndiscount, #btnprofitmarginsp').click( function () {
+ $('#btnsellingprice, #btnprofitmargin, #btndiscount, #btnprofitmarginsp, #btnbigshopperprices').click( function () {
     var record_selected = table.rows('.selected').data().length;
     $('#setsellingprice').val("");
     $('#setprofitmargin').val("");
@@ -3263,6 +3262,8 @@ $('#example tbody').on("keyup",".profit_margin_sp",function(e) {
         $('#ProfitMarginSPModal').modal('toggle');
       } else if($(this).attr("id") == "btndiscount") {
         $('#DiscountModal').modal('toggle');
+      } else if($(this).attr("id") == "btnbigshopperprices") {
+        $('#bspricemodal').modal('toggle');
       }
     }
   });
@@ -3309,7 +3310,7 @@ $('#example tbody').on("keyup",".profit_margin_sp",function(e) {
     });
  });
 
-$('#SellingPriceModal, #ProfitMarginModal, #DiscountModal, #modalHistory, #DebterModal').draggable({
+$('#SellingPriceModal, #ProfitMarginModal, #DiscountModal, #modalHistory, #DebterModal, #bspricemodal').draggable({
         handle: ".modal-header"
  });
 
@@ -4586,4 +4587,80 @@ $('#sel_merk').on('change', function() {
         $('.chbs').prop('checked', false);
     }
   });
+
+  $('#bsmodalOk').on("click",function(e) {
+        var bs_price_option = $("input[name=fav_BS]:checked").val();
+        var expression = Array();
+        if(bs_price_option == "percentage_bs") {
+           expression[0] = $('#bs_percent_text').val();
+            expression[1] = $('#bs_percent_type').val();
+            expression[2] = $('#bs_percent_price_type').val();
+        }
+        var isAllChecked = 0;
+        if($("#chkall").is(':checked')) {
+          var isAllChecked = 1;
+        }
+
+        var sellingPrices = Array();
+
+        var record_selected = table.rows('.selected').data().length;
+
+        if(record_selected == 0) {
+          alert("Please select record first!!");
+          return false;
+        }
+
+        if(isAllChecked == 0) {
+          $.each( table.rows('.selected').data(), function( key, value ) {
+            sellingPrices[key] = {
+                    "product_id": value[column_index["product_id"]],
+                    "sku": value[column_index["sku"]],
+
+                    "webshop_supplier_buying_price": value[column_index["webshop_supplier_buying_price"]],
+                    "webshop_supplier_gross_price": value[column_index["webshop_supplier_gross_price"]],
+                    "webshop_idealeverpakking": value[column_index["webshop_idealeverpakking"]],
+                    "webshop_afwijkenidealeverpakking": value[column_index["webshop_afwijkenidealeverpakking"]],
+                    "gyzs_selling_price": value[column_index["gyzs_selling_price"]],
+
+                    "buying_price": value[column_index["buying_price"]],
+                    "supplier_gross_price": value[column_index["supplier_gross_price"]],
+                    "idealeverpakking": value[column_index["idealeverpakking"]],
+                    "afwijkenidealeverpakking": value[column_index["afwijkenidealeverpakking"]],
+                    "bigshopper_highest_price" : value[column_index["bigshopper_highest_price"]],
+                    "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]],
+                    "selling_price" :  value[column_index["selling_price"]]
+                  }
+                });
+      }
+
+            $(".update_loader").show();
+            $.ajax({
+              url: document_root_url+'/scripts/process_data_price_management.php',
+              method:"POST",
+              data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression}),
+                success: function(response_data) {
+                var resp_obj = jQuery.parseJSON(response_data);
+                  if(resp_obj["msg"]) {
+                    $(".update_loader").hide();
+                      $('input[name=fav_BS]').prop('checked', false);
+                      $('#bspricemodal').modal('toggle');
+
+                      if (resp_obj["msg"] == "duplicate") {
+                        var alert_mssage = "The selected record already has same data.";
+                      } else {
+                       var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).;'
+                       table.ajax.reload( null, false );
+                      }
+
+                      $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
+                        window.setTimeout(function() {
+                        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                          $(this).remove();
+                        });
+                        }, 4000);
+                  }
+                }
+              });
+  });//end $('#bsmodalOk').on("click",function(e)
+
 });

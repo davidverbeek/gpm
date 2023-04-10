@@ -411,6 +411,11 @@ if ($result = $conn->query($sql)) {
                             <button class="btn btn-purple btn-sm col-5" type="button" id="btndiscount">
                                 <i class="fas fa-euro-sign"></i>Discount On GP
                             </button>
+
+                             <div>&nbsp;</div>
+                             <button class="btn btn-purple btn-sm col-5" type="button" id="btnbigshopperprices">
+                                <i class="fas fa-euro-sign"></i>Update to B.S. Price
+                            </button>
                         </div>
 
                             

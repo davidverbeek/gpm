@@ -429,3 +429,57 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="bspricemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="exampleModalLabel">Bulk Update to B.S. Price</h6><div class="update_loader">(Please wait...<span class="loading-img-update" style="display: inline-block;"></span>)</div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div style="margin-bottom:10px;">
+              <div class="form-check">
+              <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="highest_price" name="fav_BS">B.S (H.P)
+              </label>
+              </div>
+              <div class="form-check">
+              <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="lowest_price" name="fav_BS">B.S (L.P)
+              </label>
+              </div>
+              <div class="form-check">
+              <label class="form-check-label">
+              <input type="radio" class="form-check-input" value="between_bs" name="fav_BS">Betwee LP and HP
+              </label>
+              </div>
+              <div class="form-check">
+              <!--<label class="form-check-label">-->
+                <div style="font-size: 11px;">
+              <input type="radio" class="form-check-input" value="percentage_bs" name="fav_BS">
+              <div class="bs_expression">
+                  <input type="number" id="bs_percent_text" name="bs_percent_text" style="width:10%;">
+                  <label for="bs_percent_text">%</label>
+                  <select id="bs_percent_type" name="bs_percent_type">
+                    <option value="more">More</option>
+                    <option value="less">Less</option>
+                  </select>
+                  <label for="bs_percent_price_type">than</label>
+                  <select id="bs_percent_price_type" name="bs_percent_price_type">
+                    <option value="bs_percent_lp">LP</option>
+                    <option value="bs_percent_hp">HP</option>
+                  </select>
+              </div>
+            </div>
+              <!--</label>-->
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="bsmodalOk">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
