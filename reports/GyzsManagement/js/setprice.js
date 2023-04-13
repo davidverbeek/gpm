@@ -4589,6 +4589,19 @@ $('#sel_merk').on('change', function() {
   });
 
   $('#bsmodalOk').on("click",function(e) {
+        var record_selected = table.rows('.selected').data().length;
+
+        if(record_selected == 0) {
+          alert("Please select record first!!");
+          return false;
+        }
+
+
+        if(!$("input[name=fav_BS]:checked").val()) {
+          alert("Please select BS option!!");
+          return false;
+        }
+
         var bs_price_option = $("input[name=fav_BS]:checked").val();
         var expression = Array();
         if(bs_price_option == "percentage_bs") {
@@ -4603,10 +4616,8 @@ $('#sel_merk').on('change', function() {
 
         var sellingPrices = Array();
 
-        var record_selected = table.rows('.selected').data().length;
-
-        if(record_selected == 0) {
-          alert("Please select record first!!");
+        if(bs_price_option == 0) {
+          alert("Please select update option!!");
           return false;
         }
 
@@ -4642,7 +4653,13 @@ $('#sel_merk').on('change', function() {
                 var resp_obj = jQuery.parseJSON(response_data);
                   if(resp_obj["msg"]) {
                     $(".update_loader").hide();
+
+                    // Reset expression fields
+                      $('input#bs_percent_text').val('');
+                      $('select#bs_percent_type').val('more');
+                      $('select#bs_percent_price_type').val('bs_percent_lp');
                       $('input[name=fav_BS]').prop('checked', false);
+
                       $('#bspricemodal').modal('toggle');
 
                       if (resp_obj["msg"] == "duplicate") {
