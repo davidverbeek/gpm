@@ -4596,7 +4596,6 @@ $('#sel_merk').on('change', function() {
           return false;
         }
 
-
         if(!$("input[name=fav_BS]:checked").val()) {
           alert("Please select BS option!!");
           return false;
@@ -4605,21 +4604,22 @@ $('#sel_merk').on('change', function() {
         var bs_price_option = $("input[name=fav_BS]:checked").val();
         var expression = Array();
         if(bs_price_option == "percentage_bs") {
-           expression[0] = $('#bs_percent_text').val();
-            expression[1] = $('#bs_percent_type').val();
-            expression[2] = $('#bs_percent_price_type').val();
+          if($('#bs_percent_text').val() == '') {
+            alert("Percentage textbox is blank!!");
+            $('#bs_percent_text').focus();
+            return false;
+          }
+          expression[0] = $('#bs_percent_text').val();
+          expression[1] = $('#bs_percent_type').val();
+          expression[2] = $('#bs_percent_price_type').val();
         }
+
         var isAllChecked = 0;
         if($("#chkall").is(':checked')) {
           var isAllChecked = 1;
         }
 
         var sellingPrices = Array();
-
-        if(bs_price_option == 0) {
-          alert("Please select update option!!");
-          return false;
-        }
 
         if(isAllChecked == 0) {
           $.each( table.rows('.selected').data(), function( key, value ) {
@@ -4650,34 +4650,37 @@ $('#sel_merk').on('change', function() {
               method:"POST",
               data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression}),
                 success: function(response_data) {
-                var resp_obj = jQuery.parseJSON(response_data);
+                  $(".update_loader").hide();
+
+                  // Reset expression fields
+                  $('input#bs_percent_text').val('');
+                  $('select#bs_percent_type').val('more');
+                  $('select#bs_percent_price_type').val('bs_percent_lp');
+                  $('input[name=fav_BS]').prop('checked', false);
+
+                  $('#bspricemodal').modal('toggle');
+                  var resp_obj = jQuery.parseJSON(response_data);
+
                   if(resp_obj["msg"]) {
-                    $(".update_loader").hide();
 
-                    // Reset expression fields
-                      $('input#bs_percent_text').val('');
-                      $('select#bs_percent_type').val('more');
-                      $('select#bs_percent_price_type').val('bs_percent_lp');
-                      $('input[name=fav_BS]').prop('checked', false);
+                    if (resp_obj["msg"] == "duplicate") {
+                      var alert_mssage = "The selected record already has same data.";
+                    } else if (resp_obj["msg"] == "blank") {
+                      var alert_mssage = "Zero data cannot be updated.";
+                    } else {
+                      var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).;'
+                      table.ajax.reload( null, false );
+                    }
 
-                      $('#bspricemodal').modal('toggle');
-
-                      if (resp_obj["msg"] == "duplicate") {
-                        var alert_mssage = "The selected record already has same data.";
-                      } else {
-                       var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).;'
-                       table.ajax.reload( null, false );
-                      }
-
-                      $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
-                        window.setTimeout(function() {
-                        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                          $(this).remove();
-                        });
-                        }, 4000);
+                    $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
+                      window.setTimeout(function() {
+                      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                        $(this).remove();
+                      });
+                    }, 4000);
                   }
                 }
               });
-  });//end $('#bsmodalOk').on("click",function(e)
+  });//end
 
 });
