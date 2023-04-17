@@ -1618,7 +1618,7 @@ if(count($product_to_update_arr)) {
       if($bs_more_less == 'more' && $bs_price_type == 'bs_percent_hp') {
         $new_selling_price = $v["bigshopper_highest_price"] + (($bs_percent * $v["bigshopper_highest_price"])/100);
       } elseif($bs_more_less == 'more' && $bs_price_type == 'bs_percent_lp') {
-        $new_selling_price = $v["bigshopper_lowest_price"] - (($bs_percent * $v["bigshopper_lowest_price"])/100);
+        $new_selling_price = $v["bigshopper_lowest_price"] + (($bs_percent * $v["bigshopper_lowest_price"])/100);
       } elseif($bs_more_less == 'less' && $bs_price_type == 'bs_percent_lp') {
         $new_selling_price = $v["bigshopper_lowest_price"] - (($bs_percent * $v["bigshopper_lowest_price"])/100);
       } else {
@@ -2128,7 +2128,7 @@ function calculateDiffPercentage() {
         $selling_price = $row['selling_price'];
         $sku = $row['sku'];
 
-        $bigshopper_lp_diff_percent = roundValue((($selling_price-$bigshopper_lp)/$selling_price)*100);
+        $bigshopper_lp_diff_percent = roundValue((($bigshopper_lp-$selling_price)/$selling_price)*100);
         $bigshopper_hp_diff_percent = roundValue((($bigshopper_hp-$selling_price)/$selling_price)*100);
 
         $col_data[$sku]['lp_diff_percentage'] = $bigshopper_lp_diff_percent;
