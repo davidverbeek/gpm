@@ -4668,7 +4668,7 @@ $('#sel_merk').on('change', function() {
                     } else if (resp_obj["msg"] == "blank") {
                       var alert_mssage = "Zero data cannot be updated.";
                     } else {
-                      var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).;'
+                      var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).'
                       table.ajax.reload( null, false );
                     }
 
