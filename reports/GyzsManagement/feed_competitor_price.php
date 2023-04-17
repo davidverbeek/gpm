@@ -1,5 +1,15 @@
 <?php
-ini_set('memory_limit', '1024M');
+
+session_start();
+require_once("../../app/Mage.php");
+umask(0);
+Mage::app();
+
+if(!isset($_SESSION["price_id"])) {
+  header("Location:index.php");
+}
+
+//ini_set('memory_limit', '1024M');
 include "config/dbconfig.php";
 include "define/constants.php";
   ini_set('display_errors', 1);

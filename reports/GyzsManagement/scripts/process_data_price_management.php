@@ -1571,11 +1571,32 @@ $product_to_update_arr = array_filter($product_to_update_arr);//echo count($prod
 //print_r($product_to_update_arr);exit;
 if(count($product_to_update_arr)) {
     $all_selected_data = $updated_product_ids =  array();
+    $check_continue_1 = 0;
+    $check_continue_2 = 0;
 
   foreach($product_to_update_arr as $chunk_index=>$v) {
     
-    if($v["bigshopper_lowest_price"] == "---" || $v["bigshopper_highest_price"] == "---" || $v["bigshopper_lowest_price"] == 0.0000 || $v["bigshopper_lowest_price"] == 0.0000) {
+    if($_REQUEST['bs_price_option_checked'] == 'lowest_price' && ($v["bigshopper_lowest_price"] == "---" || $v["bigshopper_lowest_price"] == 0.0000)) {
+      $check_continue_1 = 1;
       continue;
+    } elseif($_REQUEST['bs_price_option_checked'] == 'highest_price' && ($v["bigshopper_highest_price"] == "---" || $v["bigshopper_highest_price"] == 0.0000)) {
+      $check_continue_1 = 1;
+     continue;
+    } elseif($_REQUEST['bs_price_option_checked'] == 'between_bs' && ($v["bigshopper_lowest_price"] == "---" || $v["bigshopper_lowest_price"] == 0.0000) && ($v["bigshopper_highest_price"] == "---" || $v["bigshopper_highest_price"] == 0.0000)) {
+      $check_continue_1 = 1;
+      continue;
+    } else {
+      $expression = $_REQUEST['expression'];
+      $bs_price_type = $expression[2];
+      if($bs_price_type == 'bs_percent_hp' && ($v["bigshopper_highest_price"] == "---" || $v["bigshopper_highest_price"] == 0.0000)) {
+        $check_continue_1 = 1;
+        continue;
+      }
+
+      if($bs_price_type == 'bs_percent_lp' && ($v["bigshopper_lowest_price"] == "---" || $v["bigshopper_lowest_price"] == 0.0000)) {
+        $check_continue_1 = 1;
+        continue;
+      }
     }
 
     $supplier_gross_price = ($v["supplier_gross_price"] == 0 ? 1:$v["supplier_gross_price"]);
@@ -1607,6 +1628,7 @@ if(count($product_to_update_arr)) {
 
     //update if new SP is different
     if($new_selling_price == $v["selling_price"]) {
+      $check_continue_2 = 1;
       continue;
     }
 
@@ -1650,6 +1672,10 @@ if(count($product_to_update_arr)) {
     $updated_recs = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
     $response_data['msg'] = $updated_recs;
   } else {
+    if($check_continue_1 == 1)
+    $response_data['msg'] = "blank";
+
+    if($check_continue_2 == 1)
     $response_data['msg'] = "duplicate";
   }
   }//check count of chunk_data
@@ -2119,7 +2145,7 @@ function calculateDiffPercentage() {
     $result = $conn->query($sql);
     $all_skus = $result->fetch_all();
 
-    $get_chunks = array_chunk($all_skus,10,true);
+    $get_chunks = array_chunk($all_skus,PMCHUNK,true);
 
 
     foreach($get_chunks as $c_k=>$c_d) {
