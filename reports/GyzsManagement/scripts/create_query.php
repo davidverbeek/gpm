@@ -41,8 +41,7 @@ if($_POST['categories']) {
   $extra_where = "mccp.category_id IN (".$_POST['categories'].")";
 } else {
    //$extra_where = "mccp.category_id IN ('')";
-  //$extra_where = "";
-  //$extra_where = "pmd.product_id = 80938";
+  $extra_where = "";
 }
 
 if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {

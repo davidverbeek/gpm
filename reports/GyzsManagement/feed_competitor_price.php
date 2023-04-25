@@ -15,7 +15,6 @@ include "define/constants.php";
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
-  set_time_limit(1000);
 
   function convert($array) {
     return (count($array) === 0) ? 0.0000 : $array;
