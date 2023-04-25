@@ -20,7 +20,7 @@ include "define/constants.php";
     return (count($array) === 0) ? 0.0000 : $array;
 }
 
-   $xml=simplexml_load_file("bigshopper_price_data.xml", "SimpleXMLElement", LIBXML_NOCDATA) or die("Error: Cannot create object");
+   $xml=simplexml_load_file("bigshopper_price_data.xml") or die("Error: Cannot create object");
    
    $array = json_decode(json_encode($xml->children()), true);
    $chunk_xml_data = array_chunk($array['item'], PMCHUNK);
