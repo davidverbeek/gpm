@@ -9,7 +9,7 @@ if(!isset($_SESSION["price_id"])) {
   header("Location:index.php");
 }
 
-ini_set('memory_limit', '1024M');
+//ini_set('memory_limit', '1024M');
 include "config/dbconfig.php";
 include "define/constants.php";
   ini_set('display_errors', 1);
