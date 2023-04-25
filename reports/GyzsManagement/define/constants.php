@@ -94,13 +94,20 @@ $column_index = array(
   "group_4027110_margin_on_buying_price" => 70,
   "group_4027110_margin_on_selling_price" => 71,
   "group_4027110_discount_on_grossprice_b_on_deb_selling_price" => 72,
+
   "bigshopper_lowest_price"  => 73,
   "bigshopper_highest_price"  => 74,
   "lp_diff_percentage" => 75,
   "hp_diff_percentage" => 76,
-  "is_updated" => 77,
-  "is_activated" => 78,
-  "mag_updated_product_cnt" => 79,
+  "price_competition_score" => 77,
+  "position" => 78,
+  "number_competitors" => 79,
+  "productset_incl_dispatch" => 80,
+  "price_of_the_next_excl_shipping" => 81,
+
+  "is_updated" => 82,
+  "is_activated" => 83,
+  "mag_updated_product_cnt" => 84,
  );
 /* Column Mappings */
 

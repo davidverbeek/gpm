@@ -9,15 +9,19 @@ if(!isset($_SESSION["price_id"])) {
   header("Location:index.php");
 }
 
-//ini_set('memory_limit', '1024M');
+ini_set('memory_limit', '1024M');
 include "config/dbconfig.php";
 include "define/constants.php";
   ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
-  //set_time_limit(1000);
+  set_time_limit(1000);
 
-   $xml=simplexml_load_file("bigshopper_price_data.xml") or die("Error: Cannot create object");
+  function convert($array) {
+    return (count($array) === 0) ? 0.0000 : $array;
+}
+
+   $xml=simplexml_load_file("bigshopper_price_data.xml", "SimpleXMLElement", LIBXML_NOCDATA) or die("Error: Cannot create object");
    
    $array = json_decode(json_encode($xml->children()), true);
    $chunk_xml_data = array_chunk($array['item'], PMCHUNK);
@@ -32,7 +36,7 @@ include "define/constants.php";
          $all_col_data[] = $updated_product_skus[] = array();
          foreach($chunked_xml_values as $products) {
             $col_data = "";
-            if(((isset($products['laagste_prijs_excl_verzending']) && !is_numeric($products['laagste_prijs_excl_verzending'])) || (isset($products['hoogste_prijs_excl_verzending']) && !is_numeric($products['hoogste_prijs_excl_verzending'])) )) {
+            if(((isset($products['laagste_prijs_excl_verzending']) && !is_numeric($products['laagste_prijs_excl_verzending'])) || (isset($products['hoogste_prijs_excl_verzending']) && !is_numeric($products['hoogste_prijs_excl_verzending'])) || (isset($products['positie']) && !is_numeric($products['positie'])) || (isset($products['number_competitors']) && !is_numeric($products['number_competitors'])) )) {
 
                $progress_status['er_imp'][$current_rec] = "<div style='color:red;'><i class='fas fa-exclamation-triangle'></i>&nbsp; Row data not valid. (Row ".($current_rec).")</div>";
                $current_rec++; continue;
@@ -44,13 +48,19 @@ include "define/constants.php";
             }
             $valid_count++;
             $current_time = date("Y-m-d H:i:s");
-            $all_col_data[] = "('".$products['product_id']."', '".$pmd_product_id."', '".$products['laagste_prijs_excl_verzending']."', '".$products['hoogste_prijs_excl_verzending']."', '".$current_time."')";
+
+
+            $all_col_data_str = "('".$products['product_id']."', '".$pmd_product_id."', '".$products['laagste_prijs_excl_verzending']."', '".$products['hoogste_prijs_excl_verzending']."', '".$current_time."'";
+
+            $all_col_data_str .= ", '".convert($products['prijsconcurrentiescore'])."', '".convert($products['positie'])."', '".convert($products['aantal_concurrenten'])."', '".convert($products['productset_incl_verzendk'])."', ".convert($products['prijs_van_de_eerstvolgende_excl_verzending']).")";
+
+            $all_col_data[] = $all_col_data_str;
             
             $updated_product_skus[] = $products['product_id'];
 
             $progress_status["current_record"] = $current_rec;
             $progress_status["percentage"] = intval($current_rec/$progress_status["total_records"] * 100);
-            $progress_status['er_imp']["er_summary"] = "<b>Imported ".$valid_count." Out Of ".($progress_status["total_records"]-1)."</b>";
+            $progress_status['er_imp']["er_summary"] = "<b>Imported ".$valid_count." Out Of ".($progress_status["total_records"])."</b>";
 
             file_put_contents($progress_file_path, json_encode($progress_status));
             $current_rec++;
@@ -81,8 +91,10 @@ include "define/constants.php";
 
 function makeSqlDependingOnXl() {
    $sql = "INSERT INTO bigshopper_prices (product_sku, product_id, lowest_price, highest_price, created_at ";
+      $sql .= ", price_competition_score, position, number_competitors, productset_incl_dispatch, price_of_the_next_excl_shipping";
    $last_part_sql = " ON DUPLICATE KEY UPDATE ";
    $back_part_cols = "lowest_price = VALUES(lowest_price), highest_price = VALUES(highest_price), created_at =  VALUES(created_at)";
+   $back_part_cols .= ", price_competition_score = VALUES(price_competition_score), position = VALUES(position), number_competitors = VALUES(number_competitors), productset_incl_dispatch = VALUES(productset_incl_dispatch), price_of_the_next_excl_shipping = VALUES(price_of_the_next_excl_shipping)";
 
    $back_part_cols = rtrim($back_part_cols, ', ');
    $last_part_sql .= $back_part_cols;
@@ -94,7 +106,7 @@ function makeSqlDependingOnXl() {
 
 function bulkInsertLog($chunk_index,$chunk_msg) {
    $file_pricechunks_log = "pm_logs/import_bigshopper_prices.txt";
-   file_put_contents($file_pricechunks_log,"".date("d-m-Y H:i:s")." Inserted bigshopper xml (".$chunk_index."):-".$chunk_msg."\n",FILE_APPEND);
+   file_put_contents($file_pricechunks_log,"".date("d-m-Y H:i:s")." Inserted bigshopper xml (".$chunk_index."):".$chunk_msg."\n",FILE_APPEND);
  }
 
  function changeUpdateStatus($conn,$product_sku) {
