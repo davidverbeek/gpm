@@ -1545,7 +1545,7 @@ break;
 
 case "get_bigshopper":
   $products_diff_percentage_info = calculateDiffPercentage();
-  $read_error_insertion = updatePercentage($products_diff_percentage_info);
+  $read_insertion_error = updatePercentage($products_diff_percentage_info);
   if(!$read_insertion_error) {
     $response_data['msg'] = "Success";
   } else {
