@@ -1545,8 +1545,12 @@ break;
 
 case "get_bigshopper":
   $products_diff_percentage_info = calculateDiffPercentage();
-  updatePercentage($products_diff_percentage_info);
-  $response_data['msg'] = "Success";
+  $read_error_insertion = updatePercentage($products_diff_percentage_info);
+  if(!$read_insertion_error) {
+    $response_data['msg'] = "Success";
+  } else {
+    $response_data['msg'] = $read_insertion_error;
+  }
   break;
 
 
@@ -2113,7 +2117,7 @@ function getChkAllSql() {
 
 function calculateDiffPercentage() {
    global $conn, $scale;
-   $sql_bigshopper = "SELECT bs.lowest_price, bs.highest_price, bs.product_sku, pmd.selling_price, pmd.sku FROM price_management_data AS pmd INNER JOIN bigshopper_prices AS bs ON pmd.sku=bs.product_sku";
+   $sql_bigshopper = "SELECT bs.lowest_price, bs.highest_price, bs.product_sku, pmd.selling_price, pmd.sku FROM price_management_data AS pmd INNER JOIN bigshopper_prices AS bs ON pmd.sku=bs.product_sku WHERE pmd.selling_price > 0";
 
    $result = $conn->query($sql_bigshopper);
    if (!$result) {
@@ -2141,25 +2145,26 @@ function calculateDiffPercentage() {
 
  function updatePercentage($products_diff_percentage_info) {
     global $conn;
-    $sql = "SELECT bs.product_sku FROM price_management_data AS pmd INNER JOIN bigshopper_prices AS bs ON pmd.sku=bs.product_sku";
+    $sql = "SELECT bs.product_sku FROM price_management_data AS pmd INNER JOIN bigshopper_prices AS bs ON pmd.sku=bs.product_sku WHERE pmd.selling_price > 0";
     $result = $conn->query($sql);
     $all_skus = $result->fetch_all();
 
-    $get_chunks = array_chunk($all_skus,PMCHUNK,true);
 
+    $get_chunks = array_chunk($all_skus,PMCHUNK);
+    $pass_err = [];
 
     foreach($get_chunks as $c_k=>$c_d) {
       $update_bulk_sql = "UPDATE bigshopper_prices SET ";
       $col_1 = "lp_diff_percentage = (CASE product_sku ";
       $col_2 = "hp_diff_percentage = (CASE product_sku ";
-      $col_3 = "modified_at='".date('Y-m-d H:i:s')."'";
+      $col_3 = "created_at='".date('Y-m-d H:i:s')."'";
       $in_part = " WHERE product_sku IN(";
       $update_sku_list = [];
       foreach($c_d as $key_avg=>$data_avg) {
-        $get_product_sku = $data_avg[0];
+        $get_product_sku = trim($data_avg[0]);
         if(isset($products_diff_percentage_info[$get_product_sku])) {
-          $col_1 .=  " WHEN {$get_product_sku} THEN {$products_diff_percentage_info[$get_product_sku]['lp_diff_percentage']}";
-          $col_2 .=  " WHEN {$get_product_sku} THEN {$products_diff_percentage_info[$get_product_sku]['hp_diff_percentage']}";
+          $col_1 .=  " WHEN '{$get_product_sku}' THEN '{$products_diff_percentage_info[$get_product_sku]['lp_diff_percentage']}'";
+          $col_2 .=  " WHEN '{$get_product_sku}' THEN '{$products_diff_percentage_info[$get_product_sku]['hp_diff_percentage']}'";
           $update_sku_list[] = $get_product_sku;
         }
       }
@@ -2176,12 +2181,14 @@ function calculateDiffPercentage() {
       if($conn->query($update_bulk_sql)) {
         file_put_contents($file_update_bs_percentages,"".date("d-m-Y H:i:s")." Inserted Percentage Bigshopper Chunk (".count($c_d)."):".$c_k."\n",FILE_APPEND);
       } else {
-        $err = "Error in Bigshopper percentage chunk  insertion:- ".mysqli_error($conn);
-        file_put_contents($file_update_bs_percentages,"".date("d-m-Y H:i:s").$err."\n".$update_bulk_sql,FILE_APPEND);
+        $err = "Error in Bigshopper percentage insertion for chunk number ".$c_k." :- ".mysqli_error($conn);
+        $pass_err[] = mysqli_error($conn);
+        file_put_contents($file_update_bs_percentages,"".date("d-m-Y H:i:s")." ".$err."\n".$update_bulk_sql,FILE_APPEND);
       }
 
     }
 
+    return(implode('\n', $pass_err));
 }
 
 echo json_encode($response_data); 
