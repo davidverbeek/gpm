@@ -96,6 +96,7 @@ $(document).ready(function () {
           });
         enableBulkFunc();
         getCategoryBrand();
+        getProductset();
         if(!$('input').hasClass('check_negative')) {
           $('div#show_negative_sentance').css('display', 'none');
         } else {
@@ -973,16 +974,48 @@ $(document).ready(function () {
                             }
                             $("#hdn_filters").val(that[0][0]+'task-all-numbers-filterable');
                           });
-                    } else if(that[0][0] != column_index["brand"] && (that[0][0] == column_index["afwijkenidealeverpakking"] || column_index["webshop_afwijkenidealeverpakking"])) { // this is of sku , nam, afw
-                $( 'input', this.footer() ).on('keyup change clear', function () {
-                    if ( that.search() !== this.value ) {
-                        if(that[0][0] != column_index["is_updated"]) {
-                          that
-                            .search( this.value )
-                            .draw();
+                    } else if(that[0][0] == column_index["productset_incl_dispatch"] ) {
+                      var column = this;
+                       var select = $('<select id="productset" class="search_productset selectpicker show-tick" title="" ></select>')
+                      .appendTo( $(column.footer()).empty() )
+                      .on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        brand_str = "2";
+                        if ($(this).val() != '') {
+                          var brands = $('#productset option:selected');
+                          var selected = [];
+                          $(brands).each(function (index, brand) {
+                            selected.push([$(this).val()]);
+                          });
+                          $("#hdn_selectedproductset").val(selected);
+                          brand_str = selected;
+                        } else {
+                          $("#hdn_selectedproductset").val('');
                         }
-                    }
-                });
+                        $("#chkall").prop('checked', false);
+                        $("#check_all_cnt").html(0);
+                      }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        $(this).selectpicker('selectAll').addClass('show-tick');
+                        brand_str = changed_brand_str = "0";
+                      }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+                        if(brand_str != "0" && changed_brand_str != brand_str) {
+                          flag = 1;
+                          column
+                          .search($("#hdn_selectedproductset").val(), true, false)
+                          .draw();
+                        }
+                      }).on('show.bs.select', function() {
+                        changed_brand_str = brand_str;
+                      });
+                      }else if(that[0][0] != column_index["brand"] && (that[0][0] == column_index["afwijkenidealeverpakking"] || column_index["webshop_afwijkenidealeverpakking"])) { // this is of sku , nam, afw
+                    $( 'input', this.footer() ).on('keyup change clear', function () {
+                        if ( that.search() !== this.value ) {
+                            if(that[0][0] != column_index["is_updated"]) {
+                              that
+                                .search( this.value )
+                                .draw();
+                            }
+                        }
+                    });
               } else {
                   var column = this;
                   var select = $('<select id="brand" class="search_brand selectpicker" data-width="105%" style="margin-top:-30px; margin-left:-63px; position:absolute;" multiple data-selected-text-format="count > 3" title="Please Select" data-actions-box="true" data-live-search="true"></select>')
@@ -4680,5 +4713,34 @@ $('#sel_merk').on('change', function() {
                 }
               });
   });//end
+
+  function getProductset() {
+    $.ajax({
+      method: "GET",
+      url: document_root_url+'/scripts/process_data_price_management.php',
+      data: { type: "get_productset_options"},
+      success: function(response_data) {
+         $('#productset').empty();
+         $('#productset').append('<option value="">All</option>');
+          var resp_obj = jQuery.parseJSON(response_data);
+        var selected_opt = $("#hdn_selectedproductset").val();
+        var brand_id_arr = selected_opt.split(',');
+        $.each(resp_obj["msg"], function (key, value) {
+          var selected_str = "";
+          if (brand_id_arr.includes(key)) {
+            selected_str = "selected";
+          }
+          $('#productset').append('<option value="' + key + '" ' + selected_str + '>' + value + '</option>');
+        });
+
+        $('#productset').selectpicker('refresh');
+
+        var check = $("#productset option:selected").length;
+        if(check == 0){
+          $('#productset').selectpicker('selectAll');
+        }
+        }
+      });
+  }//end getProductset()
 
 });
