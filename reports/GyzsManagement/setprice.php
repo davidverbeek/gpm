@@ -200,6 +200,11 @@ if ($result = $conn->query($sql)) {
     color: red;
 }
 
+.search_productset {
+  margin-top:-30px; margin-left:-63px; position:relative;
+  display:inline!important;
+}
+
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -705,6 +710,7 @@ if ($result = $conn->query($sql)) {
           <input type="hidden" name="hdn_selectedcategories" id="hdn_selectedcategories" />
           <input type="hidden" name="hdn_selectedbrand" id="hdn_selectedbrand" />
           <input type="hidden" name="hdn_selectedbol_price" id="hdn_selectedbol_price" />
+           <input type="hidden" name="hdn_selectedproductset" id="hdn_selectedproductset" />
           
           <input type="hidden" name="hdn_processfilename_n" id="hdn_processfilename_n" value="" />
           <input type="hidden" name="hdn_filters" id="hdn_filters" />

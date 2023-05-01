@@ -1342,8 +1342,21 @@ if ($result = $conn->query($sql)) {
 }
 $response_data['msg'] = $brands;
 break;
+case 'get_productset_options':
+  $brands = array();
+  $sql = "SELECT bs.id, bs.productset_incl_dispatch as productset FROM price_management_data AS pmd INNER JOIN bigshopper_prices AS bs ON pmd.sku=bs.product_sku WHERE pmd.selling_price > 0";
 
-
+  $product_count = array();
+  if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_assoc()) {
+      $brand = trim(mb_convert_encoding($row['productset'], 'UTF-8', 'UTF-8'));
+      if($brand !== NULL && $brand != "") {
+        $brands[$brand] = $brand;
+      }
+   }
+  }
+  $response_data['msg'] = $brands;
+break;
 
 case "get_history":
 $product_id = $_REQUEST['product_id'];
