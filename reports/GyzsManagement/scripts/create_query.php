@@ -161,6 +161,16 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $db_column_name = 'mktpr.lp_diff_percentage';
       } elseif($db_column_name == 'hp_diff_percentage') {
         $db_column_name = 'mktpr.hp_diff_percentage';
+      } elseif($db_column_name == 'price_competition_score') {
+        $db_column_name = 'mktpr.price_competition_score';
+      } elseif($db_column_name == 'position') {
+        $db_column_name = 'mktpr.position';
+      } elseif($db_column_name == 'number_competitors') {
+        $db_column_name = 'mktpr.number_competitors';
+      } elseif($db_column_name == 'productset_incl_dispatch') {
+        $db_column_name = 'mktpr.productset_incl_dispatch';
+      } elseif($db_column_name == 'price_of_the_next_excl_shipping') {
+        $db_column_name = 'mktpr.price_of_the_next_excl_shipping';
       } else {
         $db_column_name = 'pmd.'.$db_column_name;
       }
@@ -289,6 +299,13 @@ $columns = array(
   array( 'db' => 'CASE WHEN mktpr.highest_price IS NOT NULL THEN mktpr.highest_price ELSE "---" END AS bigshopper_highest_price',  'dt' => $column_index["bigshopper_highest_price"]),
   array('db' => 'CASE WHEN mktpr.lp_diff_percentage IS NOT NULL THEN mktpr.lp_diff_percentage ELSE "---" END AS lp_diff_percentage', 'dt' => $column_index["lp_diff_percentage"]),
   array('db' => 'CASE WHEN mktpr.hp_diff_percentage IS NOT NULL THEN mktpr.hp_diff_percentage ELSE "---" END AS hp_diff_percentage', 'dt' => $column_index["hp_diff_percentage"]),
+
+   array('db' => 'CASE WHEN mktpr.price_competition_score IS NOT NULL THEN mktpr.price_competition_score ELSE "---" END AS price_competition_score', 'dt' => $column_index["price_competition_score"]),
+    array('db' => 'CASE WHEN mktpr.position IS NOT NULL THEN mktpr.position ELSE "---" END AS position', 'dt' => $column_index["position"]),
+     array('db' => 'CASE WHEN mktpr.number_competitors IS NOT NULL THEN mktpr.number_competitors ELSE "---" END AS number_competitors', 'dt' => $column_index["number_competitors"]),
+      array('db' => 'CASE WHEN mktpr.productset_incl_dispatch IS NOT NULL THEN mktpr.productset_incl_dispatch ELSE "---" END AS productset_incl_dispatch', 'dt' => $column_index["productset_incl_dispatch"]),
+       array('db' => 'CASE WHEN mktpr.price_of_the_next_excl_shipping IS NOT NULL THEN mktpr.price_of_the_next_excl_shipping ELSE "---" END AS price_of_the_next_excl_shipping', 'dt' => $column_index["price_of_the_next_excl_shipping"]),
+
   array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])
   /*array( 'db' => 'CAST((SELECT COUNT(*) AS updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and buying_price_changed = "1" and is_synced = "No") AS UNSIGNED) AS updated_product_cnt',  'dt' => $column_index["updated_product_cnt"]), */
 );

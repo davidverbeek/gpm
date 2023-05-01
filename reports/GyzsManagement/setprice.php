@@ -314,10 +314,18 @@ if ($result = $conn->query($sql)) {
                                   <th class="<?php echo $cust_group; ?>">Marge Verkpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <th class="<?php echo $cust_group; ?>">Korting Brutpr %<br>(<?php echo $cust_group; ?>)</th>
                                   <?php }   ?>
+
                                   <th>B.S. (L.P)</th>
                                   <th>B.S. (H.P)</th>
                                   <th>B.S. (L.P %)</th>
                                   <th>B.S. (H.P %)</th>
+
+                                  <th>PCS</th>
+                                  <th>Positie</th>
+                                  <th>Aantal CC</th>
+                                  <th>Productset</th>
+                                  <th>Next price</th>
+
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -368,6 +376,13 @@ if ($result = $conn->query($sql)) {
                                   <th>B.S. (H.P)</th>
                                   <th>B.S. (L.P %)</th>
                                   <th>B.S. (H.P %)</th>
+
+                                  <th>PCS</th>
+                                  <th>Positie</th>
+                                  <th>Aantal CC</th>
+                                  <th>Productset</th>
+                                  <th>Next price</th>
+
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -602,6 +617,26 @@ if ($result = $conn->query($sql)) {
 
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="76" name="bs_higher_price_percentage" class="show_cols  chbs"><span>B.S. (H.P %)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="77" name="bs_concurrent_score" class="show_cols  chbs"><span>PCS</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="78" name="bs_position" class="show_cols  chbs"><span>Positie</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="79" name="bs_number_competitor" class="show_cols  chbs"><span>Aantal CC</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="80" name="bs_incl_dispatch" class="show_cols  chbs"><span>Productset</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="81" name="price_of_the_next_excl_shipping" class="show_cols chbs"><span>Next price</span>
                             </label>
 
                             <div style="clear:both;"></div>
