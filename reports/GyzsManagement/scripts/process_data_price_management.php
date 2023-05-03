@@ -1697,6 +1697,80 @@ if(count($product_to_update_arr)) {
   }
   }//check count of chunk_data
   break;
+
+  case "bulk_update_to_next_price":
+    $isAllChecked = $_REQUEST['isAllChecked'];
+    if($isAllChecked == 1) {
+      // Check All ignore paging
+      $sql_chk_all = getChkAllSql();
+      $result_chk_all = $conn->query($sql_chk_all);
+      $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
+      $from = "From Check All";
+    } else {
+      $product_to_update_arr = $_REQUEST['sellingPrices'];
+      $from = "From Multiple Select";
+    }
+
+  $product_to_update_arr = array_filter($product_to_update_arr);
+  if(count($product_to_update_arr)) {
+    $all_selected_data = $updated_product_ids = array();
+    $check_continue_1 = 0;
+
+    foreach($product_to_update_arr as $row_index=>$row) {
+
+      if($row["next_price"] != "---" && $row["next_price"] != 0.0000 && $row['next_price'] != $row['selling_price']) {
+
+        $supplier_gross_price = ($row["supplier_gross_price"] == 0 ? 1:$row["supplier_gross_price"]);
+        $webshop_selling_price = $row["gyzs_selling_price"];
+        $new_selling_price = $row['next_price'];
+        $pmd_buying_price  = $row["buying_price"];
+
+        $profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
+        $profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
+        $percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
+        $discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
+
+        $all_selected_data[$row['product_id']]['selling_price']       = $new_selling_price;
+        $all_selected_data[$row['product_id']]['profit_margin_bp']    = $profit_margin;
+        $all_selected_data[$row['product_id']]['profit_margin_sp']    = $profit_margin_sp;
+        $all_selected_data[$row['product_id']]['discount_on_gross']   = $discount_percentage;
+        $all_selected_data[$row['product_id']]['percentage_increase'] = $percentage_increase;
+
+        // Create History Array //
+        $all_selected_data[$row["product_id"]]['product_id'] = $row["product_id"];
+        $all_selected_data[$row["product_id"]]['sku'] = $row["sku"];
+        $all_selected_data[$row['product_id']]['old_net_unit_price'] = $row['webshop_supplier_buying_price'];
+        $all_selected_data[$row['product_id']]['old_gross_unit_price'] = $row['webshop_supplier_gross_price'];
+        $all_selected_data[$row['product_id']]['old_idealeverpakking'] = $row['webshop_idealeverpakking'];
+      $all_selected_data[$row['product_id']]['old_afwijkenidealeverpakking'] = $row['webshop_afwijkenidealeverpakking'];
+        $all_selected_data[$row['product_id']]['old_buying_price'] = $row['webshop_supplier_buying_price'];
+        $all_selected_data[$row['product_id']]['old_selling_price'] = $row['gyzs_selling_price'];
+
+        $all_selected_data[$row['product_id']]['new_net_unit_price'] = $pmd_buying_price;
+        $all_selected_data[$row['product_id']]['new_gross_unit_price'] = $row['supplier_gross_price'];
+        $all_selected_data[$row['product_id']]['new_idealeverpakking'] = $row['idealeverpakking'];
+        $all_selected_data[$row['product_id']]['new_afwijkenidealeverpakking'] = $row['afwijkenidealeverpakking'];
+        $all_selected_data[$row['product_id']]['new_buying_price'] = $pmd_buying_price;
+        $all_selected_data[$row['product_id']]['new_selling_price'] = $new_selling_price;
+      } else {
+        $check_continue_1 = 1;
+        continue;
+      }
+
+    }//end foreach()
+
+     if(count($all_selected_data)) {
+        // completed query
+        $updated_recs = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
+        $response_data['msg'] = $updated_recs;
+      } else {
+        if($check_continue_1 == 1)
+        $response_data['msg'] = "duplicate";
+      }
+  }
+
+  $response_data['msg'] = count($all_selected_data);
+  break;
 }
 
 function getPreviousSellingPriceFromHistory($conn, $product_id) {
@@ -2065,17 +2139,16 @@ function bulkUpdateProducts($type,$data,$common_data,$log_type,$update_type) {
         $sql .= implode(",", $all_col_data) . " ON DUPLICATE KEY UPDATE selling_price = VALUES(selling_price),profit_percentage_buying_price = VALUES(profit_percentage_buying_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross)";
 
         if($conn->query($sql)) {
-            
-            //Insert in history
-            $history_sql .= implode(",", $all_history_data);
-            $conn->query($history_sql);
-            //Insert in history
+          //Insert in history
+          $history_sql .= implode(",", $all_history_data);
+          $conn->query($history_sql);
+          //Insert in history
 
-        bulkInsertLog($chunk_index,"Bulk Update ".$update_type." (".$log_type."):".count($chunk_values));
+          bulkInsertLog($chunk_index,"Bulk Update ".$update_type." (".$log_type."):".count($chunk_values));
           changeUpdateStatus($conn, implode(",", $updated_product_ids));
           $total_inserted_records[] = count($chunk_values);
         } else {
-    bulkInsertLog($chunk_index,"Bulk Update ".$update_type." Error (".$log_type."):".mysqli_error($conn));
+          bulkInsertLog($chunk_index,"Bulk Update ".$update_type." Error (".$log_type."):".mysqli_error($conn));
         }
 
 
