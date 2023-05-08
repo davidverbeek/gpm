@@ -45,7 +45,7 @@ $(document).ready(function () {
       "pageLength": 200,
       "deferRender": true,
       "fixedHeader": true,
-      //"order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
+      "order": [[ column_index["mag_updated_product_cnt"], 'desc' ]],
       "drawCallback": function( settings ) {
       var selected_cats;
       var is_debter_checked = 0;
@@ -305,7 +305,7 @@ $(document).ready(function () {
                 if (product_status == 'no') {
                   return '<span class="db_sp_span striped_span db_sp_span_110" id="db_sp_span_editable_column_110_'+product_id+'" >'+data+'</span>';
                 } else {
-                  var mark_negative = checkNegative(data, row[column_index["group_4027110_margin_on_buying_price"]], );
+                  var mark_negative = checkNegative(data, row[column_index["group_4027110_margin_on_buying_price"]]);
                   return '<input type="text" class="db_sp input_validate db_sp_110 '+mark_negative+'" default-value="'+data+'" value="'+data+'" id="db_sp_editable_column_110_'+row[column_index["product_id"]]+'" />';
                 }
               },
@@ -854,7 +854,7 @@ $(document).ready(function () {
                 });
 
               if(that[0][0] == column_index["supplier_type"]) {
-                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true" data-live-search="true"><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option></select>')
+                  var select = $('<select id="supplier_type" class="search_supplier" style="margin-top:-30px; margin-left:-23px; position:absolute;" multiple title="Please Select" data-width="fit" data-selected-text-format="count > 2" data-actions-box="true" data-live-search="true"><option value="Mavis">Mavis</option><option value="Gyzs">Gyzs</option><option value="Transferro">Transferro</option><option value="Polvo">Polvo</option></select>')
                       .appendTo( $(that.footer()).empty())
                     .on('changed.bs.select', function () {
                        suppliers_str = '-1';
@@ -2653,7 +2653,7 @@ $('#example tbody').on("keyup",".db_m_sp",function(e) {
       var multipledebprofitMarginsOnSP = Array();
 
       $.each( table.rows('.selected').data(), function( key, value ) {
-        if(parseInt(value[column_index["group_"+debter_number+"_margin_on_selling_price"]]) != parseInt($("#db_m_sp_editable_column_"+debter_digit+"_"+value[column_index["product_id"]]).val())) {
+        if(parseFloat(value[column_index["group_"+debter_number+"_margin_on_selling_price"]]) != parseFloat($("#db_m_sp_editable_column_"+debter_digit+"_"+value[column_index["product_id"]]).val())) {
          multipledebprofitMarginsOnSP[key] = {
               "product_id": value[column_index["product_id"]],
               "sku": value[column_index["sku"]],
@@ -2743,7 +2743,7 @@ $('#example tbody').on("keyup",".db_d_gp",function(e) {
 
 
       $.each( table.rows('.selected').data(), function( key, value ) {
-        if(parseInt(value[column_index["group_"+debter_number+"_discount_on_grossprice_b_on_deb_selling_price"]]) != parseInt($("#db_d_gp_editable_column_"+debter_digit+"_"+value[column_index["product_id"]]).val())) {
+        if(parseFloat(value[column_index["group_"+debter_number+"_discount_on_grossprice_b_on_deb_selling_price"]]) != parseFloat($("#db_d_gp_editable_column_"+debter_digit+"_"+value[column_index["product_id"]]).val())) {
          multipledebDiscountOnGP[key] = {
               "product_id": value[column_index["product_id"]],
               "sku": value[column_index["sku"]],
@@ -4714,6 +4714,69 @@ $('#sel_merk').on('change', function() {
               });
   });//end
 
+
+  $( "#btn_next_price" ).on( "click", function() {
+    var isAllChecked = 0;
+    if($("#chkall").is(':checked')) {
+      var isAllChecked = 1;
+    }
+
+    var sellingPrices = Array();
+
+        if(isAllChecked == 0) {
+          if(table.rows('.selected').data().length == 0) {
+            alert("Please select record first!!");
+            return false;
+          }
+
+          $.each( table.rows('.selected').data(), function( key, value ) {
+            sellingPrices[key] = {
+                    "product_id": value[column_index["product_id"]],
+                    "sku": value[column_index["sku"]],
+
+                    "webshop_supplier_buying_price": value[column_index["webshop_supplier_buying_price"]],
+                    "webshop_supplier_gross_price": value[column_index["webshop_supplier_gross_price"]],
+                    "webshop_idealeverpakking": value[column_index["webshop_idealeverpakking"]],
+                    "webshop_afwijkenidealeverpakking": value[column_index["webshop_afwijkenidealeverpakking"]],
+                    "gyzs_selling_price": value[column_index["gyzs_selling_price"]],
+
+                    "buying_price": value[column_index["buying_price"]],
+                    "supplier_gross_price": value[column_index["supplier_gross_price"]],
+                    "idealeverpakking": value[column_index["idealeverpakking"]],
+                    "afwijkenidealeverpakking": value[column_index["afwijkenidealeverpakking"]],
+                    "next_price" : value[column_index["price_of_the_next_excl_shipping"]],
+                    "selling_price" :  value[column_index["selling_price"]]
+                  }
+                });
+      }
+
+    //fire ajax
+    $("#showloader").addClass("loader");
+    $(".loader_txt").show();
+    $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked}, function(response_data) {
+      var resp_obj = jQuery.parseJSON(response_data);
+      $("#showloader").removeClass("loader");
+      $(".loader_txt").hide();
+      if(resp_obj["msg"]) {
+          if (resp_obj["msg"] == "duplicate") {
+            var alert_mssage = "The selected record already has same data.";
+          } else if (resp_obj["msg"] == "blank") {
+            var alert_mssage = "Zero Next price cannot be updated.";
+          } else {
+            var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).'
+            table.ajax.reload( null, false );
+          }
+      } else {
+        var alert_mssage = "No records availiable to update";
+      }
+      $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
+        window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+        });
+      }, 4000);
+    })
+  });
   function getProductset() {
     $.ajax({
       method: "GET",
