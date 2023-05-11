@@ -96,7 +96,6 @@ $(document).ready(function () {
           });
         enableBulkFunc();
         getCategoryBrand();
-        getProductset();
         if(!$('input').hasClass('check_negative')) {
           $('div#show_negative_sentance').css('display', 'none');
         } else {
@@ -2123,7 +2122,7 @@ $(".show_cols").change(function() {
   if(ischecked) {
     table.column(checkedval).visible(true);
     cols_selected.push(checkedval);
-    if(checkedval == '80')
+    if(checkedval == column_index['productset_incl_dispatch'])
       getProductset();
   } else {
     table.column(checkedval).visible(false);
