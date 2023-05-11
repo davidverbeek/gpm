@@ -641,8 +641,9 @@ if ($result = $conn->query($sql)) {
                                 <input type="checkbox" value="79" name="bs_number_competitor" class="show_cols  chbs"><span>Aantal CC</span>
                             </label>
 
-                            <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="80" name="bs_incl_dispatch" class="show_cols  chbs"><span>Productset</span>
+                            <label  class="col-6">
+                                <input type="checkbox" value="80" name="bs_incl_dispatch" class="show_cols" id="productset_checkbox">
+                                <span>Productset</span>
                             </label>
 
                             <label for="brand-a" class="col-6">

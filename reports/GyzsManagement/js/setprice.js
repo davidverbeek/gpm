@@ -994,11 +994,9 @@ $(document).ready(function () {
                         $("#chkall").prop('checked', false);
                         $("#check_all_cnt").html(0);
                       }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-                        $(this).selectpicker('selectAll').addClass('show-tick');
                         brand_str = changed_brand_str = "0";
                       }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         if(brand_str != "0" && changed_brand_str != brand_str) {
-                          flag = 1;
                           column
                           .search($("#hdn_selectedproductset").val(), true, false)
                           .draw();
@@ -1043,7 +1041,6 @@ $(document).ready(function () {
                         brand_str = changed_brand_str = "0";
                       }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         if(brand_str != "0" && changed_brand_str != brand_str) {
-                          flag = 1;
                           column
                           .search($("#hdn_selectedbrand").val(), true, false)
                           .draw();
@@ -2126,6 +2123,8 @@ $(".show_cols").change(function() {
   if(ischecked) {
     table.column(checkedval).visible(true);
     cols_selected.push(checkedval);
+    if(checkedval == '80')
+      getProductset();
   } else {
     table.column(checkedval).visible(false);
   }
