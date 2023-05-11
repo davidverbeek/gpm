@@ -4727,6 +4727,9 @@ $('#sel_merk').on('change', function() {
             return false;
           }
 
+          if(!confirm("Are you sure to update selling price")) {
+            return false;
+          }
           $.each( table.rows('.selected').data(), function( key, value ) {
             sellingPrices[key] = {
                     "product_id": value[column_index["product_id"]],
