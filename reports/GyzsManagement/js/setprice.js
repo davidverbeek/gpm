@@ -962,6 +962,7 @@ $(document).ready(function () {
                             $('#from_debter_price').val('');
                             $('#hdn_parent_debter_selected').val($(this).val());     
                             $('#searchDebterPriceModal').modal('show');
+                            $('#searchDebterPriceModal').find('.modal-title').html('Search By '+label_display);
                             $('#searchDebterPriceModal').draggable();
                             $('#hdn_parent_debter_expression').val(make_expression);
                             if($(this).val() == '3') {
@@ -4727,7 +4728,7 @@ $('#sel_merk').on('change', function() {
             return false;
           }
 
-          if(!confirm("Are you sure to update selling price")) {
+          if(!confirm("Are you sure to update Selling Price to Next Price")) {
             return false;
           }
           $.each( table.rows('.selected').data(), function( key, value ) {
@@ -4753,11 +4754,14 @@ $('#sel_merk').on('change', function() {
 
     //fire ajax
     $("#showloader").addClass("loader");
+    var store_html = $("#showloader").find('span').html();
+    $("#showloader").find('span').html('Please wait....updating to Next Price.');
     $(".loader_txt").show();
     $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked}, function(response_data) {
       var resp_obj = jQuery.parseJSON(response_data);
       $("#showloader").removeClass("loader");
       $(".loader_txt").hide();
+      $("#showloader").find('span').html(store_html)
       if(resp_obj["msg"]) {
           if (resp_obj["msg"] == "duplicate") {
             var alert_mssage = "The selected record already has same data.";
