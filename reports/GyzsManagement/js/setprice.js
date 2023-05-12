@@ -96,7 +96,6 @@ $(document).ready(function () {
           });
         enableBulkFunc();
         getCategoryBrand();
-        getProductset();
         if(!$('input').hasClass('check_negative')) {
           $('div#show_negative_sentance').css('display', 'none');
         } else {
@@ -994,11 +993,9 @@ $(document).ready(function () {
                         $("#chkall").prop('checked', false);
                         $("#check_all_cnt").html(0);
                       }).on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-                        $(this).selectpicker('selectAll').addClass('show-tick');
                         brand_str = changed_brand_str = "0";
                       }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         if(brand_str != "0" && changed_brand_str != brand_str) {
-                          flag = 1;
                           column
                           .search($("#hdn_selectedproductset").val(), true, false)
                           .draw();
@@ -1043,7 +1040,6 @@ $(document).ready(function () {
                         brand_str = changed_brand_str = "0";
                       }).on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
                         if(brand_str != "0" && changed_brand_str != brand_str) {
-                          flag = 1;
                           column
                           .search($("#hdn_selectedbrand").val(), true, false)
                           .draw();
@@ -2126,6 +2122,8 @@ $(".show_cols").change(function() {
   if(ischecked) {
     table.column(checkedval).visible(true);
     cols_selected.push(checkedval);
+    if(checkedval == column_index['productset_incl_dispatch'])
+      getProductset();
   } else {
     table.column(checkedval).visible(false);
   }
@@ -4729,6 +4727,9 @@ $('#sel_merk').on('change', function() {
             return false;
           }
 
+          if(!confirm("Are you sure to update selling price")) {
+            return false;
+          }
           $.each( table.rows('.selected').data(), function( key, value ) {
             sellingPrices[key] = {
                     "product_id": value[column_index["product_id"]],

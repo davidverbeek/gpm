@@ -175,7 +175,9 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $db_column_name = 'pmd.'.$db_column_name;
       }
       $hdn_search_exp = $_POST['hdn_group_search_text'];
+      if($hdn_search_exp)
       $extra_where .= ' AND '.str_replace('pmd.db_column', $db_column_name, $hdn_search_exp);
+
     break;
   }
 }
