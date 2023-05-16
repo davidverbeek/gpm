@@ -434,7 +434,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="exampleModalLabel">Bulk Update to B.S. Price</h6><div class="update_loader">(Please wait...<span class="loading-img-update" style="display: inline-block;"></span>)</div>
+        <h6 class="modal-title" id="exampleModalLabel">Bulk Update Selling Price to B.S. Price</h6><div class="update_loader">(Please wait...<span class="loading-img-update" style="display: inline-block;"></span>)</div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -459,7 +459,7 @@
                 <div style="font-size: 11px;">
               <input type="radio" class="form-check-input" value="percentage_bs" name="fav_BS">
               <div class="bs_expression">
-                  <input type="number" id="bs_percent_text" name="bs_percent_text" style="width:10%;">
+                  <input type="number" id="bs_percent_text" name="bs_percent_text" style="width:10%;" value="0.01">
                   <label for="bs_percent_text">%</label>
                   <select id="bs_percent_type" name="bs_percent_type">
                     <option value="more">More</option>
@@ -474,6 +474,29 @@
             </div>
               <!--</label>-->
               </div>
+              <!--next price radio button -->
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="fav_BS" value="equal_to_next_price">Next Price
+                </label>
+              </div>
+
+              <!--next price perce-->
+              <div class="form-check">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="fav_BS" value="percent_next_price">
+                <input type="number" id="bs_np_percent_text" name="bs_np_percent_text" style="width:18%;" step="0.01" value="0.01">
+                <label for="bs_np_percent_text">%</label>
+                <select id="bs_np_percent_type" name="bs_np_percent_type">
+                  <option value="more">More</option>
+                  <option value="less">Less</option>
+                </select>
+                <label for="bs_np_percent_price_type">than Next Price</label>
+              </label>
+            </div>
+
+
+
           </div>
       </div>
       <div class="modal-footer">
