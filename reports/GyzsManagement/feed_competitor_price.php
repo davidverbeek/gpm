@@ -16,8 +16,8 @@ include "define/constants.php";
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);
 
-  function convert($array) {
-    return (count($array) === 0) ? 0.0000 : $array;
+function convert($array) {
+   return (count($array) === 0) ? 0.0000 : $array;
 }
 
    $xml=simplexml_load_file("bigshopper_price_data.xml") or die("Error: Cannot create object");
@@ -49,9 +49,11 @@ include "define/constants.php";
             $current_time = date("Y-m-d H:i:s");
 
 
-            $all_col_data_str = "('".$products['product_id']."', '".$pmd_product_id."', '".$products['laagste_prijs_excl_verzending']."', '".$products['hoogste_prijs_excl_verzending']."', '".$current_time."'";
+            $all_col_data_str = "('".$products['product_id']."', '".$pmd_product_id."', '".round(($products['laagste_prijs_excl_verzending']/1.21),$scale)."', '".round(($products['hoogste_prijs_excl_verzending']/1.21),$scale)."', '".$current_time."'";
+            $next_price_excluding_tax = convert($products['prijs_van_de_eerstvolgende_excl_verzending']);
+            $next_price_excluding_tax = round(($next_price_excluding_tax/1.21), $scale);
 
-            $all_col_data_str .= ", '".convert($products['prijsconcurrentiescore'])."', '".convert($products['positie'])."', '".convert($products['aantal_concurrenten'])."', '".convert($products['productset_incl_verzendk'])."', ".convert($products['prijs_van_de_eerstvolgende_excl_verzending']).")";
+            $all_col_data_str .= ", '".convert($products['prijsconcurrentiescore'])."', '".convert($products['positie'])."', '".convert($products['aantal_concurrenten'])."', '".convert($products['productset_incl_verzendk'])."', ".$next_price_excluding_tax.")";
 
             $all_col_data[] = $all_col_data_str;
             
@@ -61,7 +63,7 @@ include "define/constants.php";
             $progress_status["percentage"] = intval($current_rec/$progress_status["total_records"] * 100);
             $progress_status['er_imp']["er_summary"] = "<b>Imported ".$valid_count." Out Of ".($progress_status["total_records"])."</b>";
 
-            file_put_contents($progress_file_path, json_encode($progress_status));
+            file_put_contents($progress_file_path, date('Y-m-d').json_encode($progress_status));
             $current_rec++;
             usleep(50000);
          }
@@ -166,7 +168,7 @@ function getPmdProductId($sku) {
    $sql = "SELECT pmd.product_id AS pmd_product_id
    FROM
    price_management_data AS pmd
-   WHERE pmd.sku = '{$sku}'";
+   WHERE pmd.sku = '".$sku."'";
 
    $result = $conn->query($sql);
    if (!$result) {
