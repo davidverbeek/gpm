@@ -4635,7 +4635,7 @@ $('#sel_merk').on('change', function() {
         var expression = Array();
         if(bs_price_option == "percentage_bs") {
           if($('#bs_percent_text').val() == '') {
-            alert("Percentage textbox is blank!!");
+            alert("Percentage textbox is blank..");
             $('#bs_percent_text').focus();
             return false;
           }
@@ -4644,35 +4644,37 @@ $('#sel_merk').on('change', function() {
           expression[2] = $('#bs_percent_price_type').val();
         }
 
-        var isAllChecked = 0;
-        if($("#chkall").is(':checked')) {
-          var isAllChecked = 1;
-        }
+        if(bs_price_option == "between_bs" || bs_price_option == "lowest_price" || bs_price_option == "highest_price" || bs_price_option == "percentage_bs") {
 
-        var sellingPrices = Array();
+          var isAllChecked = 0;
+          if($("#chkall").is(':checked')) {
+            var isAllChecked = 1;
+          }
 
-        if(isAllChecked == 0) {
-          $.each( table.rows('.selected').data(), function( key, value ) {
-            sellingPrices[key] = {
-                    "product_id": value[column_index["product_id"]],
-                    "sku": value[column_index["sku"]],
+          var sellingPrices = Array();
 
-                    "webshop_supplier_buying_price": value[column_index["webshop_supplier_buying_price"]],
-                    "webshop_supplier_gross_price": value[column_index["webshop_supplier_gross_price"]],
-                    "webshop_idealeverpakking": value[column_index["webshop_idealeverpakking"]],
-                    "webshop_afwijkenidealeverpakking": value[column_index["webshop_afwijkenidealeverpakking"]],
-                    "gyzs_selling_price": value[column_index["gyzs_selling_price"]],
+          if(isAllChecked == 0) {
+            $.each( table.rows('.selected').data(), function( key, value ) {
+              sellingPrices[key] = {
+                "product_id": value[column_index["product_id"]],
+                "sku": value[column_index["sku"]],
 
-                    "buying_price": value[column_index["buying_price"]],
-                    "supplier_gross_price": value[column_index["supplier_gross_price"]],
-                    "idealeverpakking": value[column_index["idealeverpakking"]],
-                    "afwijkenidealeverpakking": value[column_index["afwijkenidealeverpakking"]],
-                    "bigshopper_highest_price" : value[column_index["bigshopper_highest_price"]],
-                    "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]],
-                    "selling_price" :  value[column_index["selling_price"]]
-                  }
-                });
-      }
+                "webshop_supplier_buying_price": value[column_index["webshop_supplier_buying_price"]],
+                "webshop_supplier_gross_price": value[column_index["webshop_supplier_gross_price"]],
+                "webshop_idealeverpakking": value[column_index["webshop_idealeverpakking"]],
+                "webshop_afwijkenidealeverpakking": value[column_index["webshop_afwijkenidealeverpakking"]],
+                "gyzs_selling_price": value[column_index["gyzs_selling_price"]],
+
+                "buying_price": value[column_index["buying_price"]],
+                "supplier_gross_price": value[column_index["supplier_gross_price"]],
+                "idealeverpakking": value[column_index["idealeverpakking"]],
+                "afwijkenidealeverpakking": value[column_index["afwijkenidealeverpakking"]],
+                "bigshopper_highest_price" : value[column_index["bigshopper_highest_price"]],
+                "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]],
+                "selling_price" :  value[column_index["selling_price"]]
+              }
+            });
+          }
 
             $(".update_loader").show();
             $.ajax({
@@ -4686,9 +4688,6 @@ $('#sel_merk').on('change', function() {
                   $('input#bs_percent_text').val('');
                   $('select#bs_percent_type').val('more');
                   $('select#bs_percent_price_type').val('bs_percent_lp');
-                  $('input[name=fav_BS]').prop('checked', false);
-
-                  $('#bspricemodal').modal('toggle');
                   var resp_obj = jQuery.parseJSON(response_data);
 
                   if(resp_obj["msg"]) {
@@ -4701,20 +4700,33 @@ $('#sel_merk').on('change', function() {
                       var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).'
                       table.ajax.reload( null, false );
                     }
-
-                    $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
-                      window.setTimeout(function() {
-                      $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                        $(this).remove();
-                      });
-                    }, 4000);
+                  } else {
+                    var alert_mssage = "No records availiable to update";
                   }
+                  $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
+                    window.setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                      $(this).remove();
+                    });
+                  }, 4000);
                 }
               });
+            } else if(bs_price_option == 'equal_to_next_price') {
+              btnNextPrice('equal_to_next_price');
+            } else if(bs_price_option == 'percent_next_price') {
+              if($('#bs_np_percent_text').val() == '') {
+                alert("Next price percentage textbox is blank..");
+                $('#bs_np_percent_text').focus();
+                return false;
+              }
+              btnNextPrice('percent_next_price');
+            }
+            $('input[name=fav_BS]').prop('checked', false);
+            $('#bspricemodal').modal('toggle');
   });//end
 
 
-  $( "#btn_next_price" ).on( "click", function() {
+function btnNextPrice(next_price) {
     var isAllChecked = 0;
     if($("#chkall").is(':checked')) {
       var isAllChecked = 1;
@@ -4750,18 +4762,18 @@ $('#sel_merk').on('change', function() {
                     "selling_price" :  value[column_index["selling_price"]]
                   }
                 });
-      }
+        }
 
     //fire ajax
     $("#showloader").addClass("loader");
     var store_html = $("#showloader").find('span').html();
     $("#showloader").find('span').html('Please wait....updating to Next Price.');
     $(".loader_txt").show();
-    $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked}, function(response_data) {
+    $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked,subtype:next_price, more_or_less: $('#bs_percent_type').val(), percentage_of_np: $('#bs_np_percent_text').val()}, function(response_data) {
       var resp_obj = jQuery.parseJSON(response_data);
       $("#showloader").removeClass("loader");
       $(".loader_txt").hide();
-      $("#showloader").find('span').html(store_html)
+      $("#showloader").find('span').html(store_html);
       if(resp_obj["msg"]) {
           if (resp_obj["msg"] == "duplicate") {
             var alert_mssage = "The selected record already has same data.";
@@ -4781,7 +4793,8 @@ $('#sel_merk').on('change', function() {
         });
       }, 4000);
     })
-  });
+  }//end btnNextPrice()
+
   function getProductset() {
     $.ajax({
       method: "GET",

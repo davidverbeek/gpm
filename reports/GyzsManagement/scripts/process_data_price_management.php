@@ -1718,11 +1718,27 @@ if(count($product_to_update_arr)) {
 
     foreach($product_to_update_arr as $row_index=>$row) {
 
-      if($row["next_price"] != "---" && $row["next_price"] != 0.0000 && $row['next_price'] != $row['selling_price']) {
+      if($row["next_price"] != "---" && $row["next_price"] != 0.0000) {
 
         $supplier_gross_price = ($row["supplier_gross_price"] == 0 ? 1:$row["supplier_gross_price"]);
         $webshop_selling_price = $row["gyzs_selling_price"];
-        $new_selling_price = $row['next_price'];
+
+        if($_REQUEST['subtype'] == 'equal_to_next_price'  && $row['next_price'] != $row['selling_price']) {
+          $new_selling_price = (float)$row['next_price'];
+        } elseif($_REQUEST['subtype'] == 'percent_next_price') {
+          $calculate_percentage_np = round(((float)$row['next_price'] * $_REQUEST['percentage_of_np'])/100, 2);
+          if($_REQUEST['more_or_less'] == 'more') {
+              $new_selling_price  = $row['next_price'] + $calculate_percentage_np;
+          } else {
+              $new_selling_price  = $row['next_price'] - $calculate_percentage_np;
+          }
+        } else {
+          continue;
+        }
+
+        if($new_selling_price == $row['selling_price']) {
+          continue;
+        }
         $pmd_buying_price  = $row["buying_price"];
 
         $profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
