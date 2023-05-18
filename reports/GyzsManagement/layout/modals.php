@@ -459,7 +459,7 @@
                 <div style="font-size: 11px;">
               <input type="radio" class="form-check-input" value="percentage_bs" name="fav_BS">
               <div class="bs_expression">
-                  <input type="number" id="bs_percent_text" name="bs_percent_text" style="width:10%;" value="0.01">
+                  <input type="number" id="bs_percent_text" name="bs_percent_text" style="width:10%;">
                   <label for="bs_percent_text">%</label>
                   <select id="bs_percent_type" name="bs_percent_type">
                     <option value="more">More</option>
