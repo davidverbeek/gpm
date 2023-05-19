@@ -1726,11 +1726,11 @@ if(count($product_to_update_arr)) {
         if($_REQUEST['subtype'] == 'equal_to_next_price'  && $row['next_price'] != $row['selling_price']) {
           $new_selling_price = (float)$row['next_price'];
         } elseif($_REQUEST['subtype'] == 'percent_next_price') {
-          $calculate_percentage_np = round(((float)$row['next_price'] * $_REQUEST['percentage_of_np'])/100, 2);
+          $calculate_percentage_np = ((float)$row['next_price'] * $_REQUEST['percentage_of_np'])/100;
           if($_REQUEST['more_or_less'] == 'more') {
-              $new_selling_price  = $row['next_price'] + $calculate_percentage_np;
+              $new_selling_price  = roundValue($row['next_price'] + $calculate_percentage_np);
           } else {
-              $new_selling_price  = $row['next_price'] - $calculate_percentage_np;
+              $new_selling_price  = roundValue($row['next_price'] - $calculate_percentage_np);
           }
         } else {
           continue;
