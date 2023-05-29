@@ -105,9 +105,12 @@ $column_index = array(
   "productset_incl_dispatch" => 80,
   "price_of_the_next_excl_shipping" => 81,
 
-  "is_updated" => 82,
-  "is_activated" => 83,
-  "mag_updated_product_cnt" => 84,
+  "pmvkpr_per_piece" => 82,
+  "diff_pmvkpr_pp_bslp" => 83,
+
+  "is_updated" => 84,
+  "is_activated" => 85,
+  "mag_updated_product_cnt" => 86,
  );
 /* Column Mappings */
 

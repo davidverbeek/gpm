@@ -4601,6 +4601,14 @@ $('#sel_merk').on('change', function() {
                 table.column(column_index["lp_diff_percentage"]).visible(true);
                 table.column(column_index["hp_diff_percentage"]).visible(true);
 
+                table.column(column_index["price_competition_score"]).visible(true);
+                table.column(column_index["position"]).visible(true);
+                table.column(column_index["number_competitors"]).visible(true);
+                table.column(column_index["productset_incl_dispatch"]).visible(true);
+                table.column(column_index["price_of_the_next_excl_shipping"]).visible(true);
+                table.column(column_index["pmvkpr_per_piece"]).visible(true);
+                table.column(column_index["diff_pmvkpr_pp_bslp"]).visible(true);
+
                 $("table tr th").css({
                   "width": "100px"
                 });
@@ -4615,6 +4623,14 @@ $('#sel_merk').on('change', function() {
         table.column(column_index["lp_diff_percentage"]).visible(false);
         table.column(column_index["hp_diff_percentage"]).visible(false);
         $('.chbs').prop('checked', false);
+
+        table.column(column_index["price_competition_score"]).visible(false);
+        table.column(column_index["position"]).visible(false);
+        table.column(column_index["number_competitors"]).visible(false);
+        table.column(column_index["productset_incl_dispatch"]).visible(false);
+        table.column(column_index["price_of_the_next_excl_shipping"]).visible(false);
+        table.column(column_index["pmvkpr_per_piece"]).visible(false);
+        table.column(column_index["diff_pmvkpr_pp_bslp"]).visible(false);
     }
   });
 

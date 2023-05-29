@@ -330,7 +330,8 @@ if ($result = $conn->query($sql)) {
                                   <th>Aantal CC</th>
                                   <th>Productset</th>
                                   <th>Next price</th>
-
+                                  <th>PM Vkpr (per piece)</th>
+                                  <th>DIFF (PM Vkpr|BS LP)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -387,6 +388,8 @@ if ($result = $conn->query($sql)) {
                                   <th>Aantal CC</th>
                                   <th>Productset</th>
                                   <th>Next price</th>
+                                  <th>PM Vkpr (per piece)</th>
+                                  <th>DIFF (PM Vkpr|BS LP)</th>
 
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
@@ -609,11 +612,11 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols  chbs"><span>B.S. (L.P)</span>
+                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols chbs"><span>B.S. (L.P)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols  chbs"><span>B.S. (H.P)</span>
+                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols chbs"><span>B.S. (H.P)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
@@ -637,12 +640,20 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <label  class="col-6">
-                                <input type="checkbox" value="80" name="bs_incl_dispatch" class="show_cols" id="productset_checkbox">
+                                <input type="checkbox" value="80" name="bs_incl_dispatch" class="show_cols chbs" id="productset_checkbox">
                                 <span>Productset</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="81" name="price_of_the_next_excl_shipping" class="show_cols chbs"><span>Next price</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="82" name="pm_vkpr_per_piece" class="show_cols chbs"><span>PM Vkpr(per piece)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="83" name="diff_pm_vkpr_bslp" class="show_cols chbs"><span>DIFF (PM Vkpr|BS LP)</span>
                             </label>
 
                             <div style="clear:both;"></div>
