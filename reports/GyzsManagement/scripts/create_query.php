@@ -64,7 +64,7 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
     break;
     
     case "4":
-      for($deb=0;$deb<=10;$deb++) { 
+      for($deb=0;$deb<=10;$deb++) {
         $debt_number = intval(4027100 + $deb);
         $deb_col_margin_on_selling_price = "pmd.group_".$debt_number."_margin_on_selling_price";
         $extra_where .= "(".$deb_col_margin_on_selling_price." < 40) OR "; 
@@ -171,12 +171,19 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $db_column_name = 'mktpr.productset_incl_dispatch';
       } elseif($db_column_name == 'price_of_the_next_excl_shipping') {
         $db_column_name = 'mktpr.price_of_the_next_excl_shipping';
+      } elseif($db_column_name == 'pmvkpr_per_piece') {
+        $db_column_name = 'CAST(CASE WHEN (pmd.afwijkenidealeverpakking = "0") THEN (pmd.selling_price/pmd.idealeverpakking) ELSE pmd.selling_price END AS DECIMAL(10,'.$scale.'))';
+      } elseif($db_column_name == 'diff_pmvkpr_pp_bslp') {
+        $get_per_piece = '(pmd.selling_price/pmd.idealeverpakking)';
+        $top_part = $get_per_piece.' - mktpr.lowest_price';
+        $top_part_2 = 'pmd.selling_price - mktpr.lowest_price';
+        $db_column_name = '(CASE WHEN (pmd.afwijkenidealeverpakking = "0" AND mktpr.lowest_price IS NOT NULL ) THEN ((('.$top_part.')/mktpr.lowest_price) * 100) WHEN (pmd.afwijkenidealeverpakking = "1" AND mktpr.lowest_price IS NOT NULL ) THEN ((('.$top_part_2.')/mktpr.lowest_price) * 100) ELSE 0 END)';
       } else {
         $db_column_name = 'pmd.'.$db_column_name;
       }
       $hdn_search_exp = $_POST['hdn_group_search_text'];
       if($hdn_search_exp)
-      $extra_where .= ' AND '.str_replace('pmd.db_column', $db_column_name, $hdn_search_exp);
+      $extra_where .= ' AND ('.str_replace('pmd.db_column', $db_column_name, $hdn_search_exp).')';
 
     break;
   }
@@ -307,6 +314,10 @@ $columns = array(
      array('db' => 'CASE WHEN mktpr.number_competitors IS NOT NULL THEN mktpr.number_competitors ELSE "---" END AS number_competitors', 'dt' => $column_index["number_competitors"]),
       array('db' => 'CASE WHEN mktpr.productset_incl_dispatch IS NOT NULL THEN mktpr.productset_incl_dispatch ELSE "---" END AS productset_incl_dispatch', 'dt' => $column_index["productset_incl_dispatch"]),
        array('db' => 'CASE WHEN mktpr.price_of_the_next_excl_shipping IS NOT NULL THEN mktpr.price_of_the_next_excl_shipping ELSE "---" END AS price_of_the_next_excl_shipping', 'dt' => $column_index["price_of_the_next_excl_shipping"]),
+       array('db' => 'CAST(CASE WHEN pmd.afwijkenidealeverpakking = "0" THEN (pmd.selling_price/pmd.idealeverpakking)ELSE pmd.selling_price END AS DECIMAL (10 , '.$scale.')) AS pm_vkpr_per_piece', 'dt' => $column_index["pmvkpr_per_piece"]),
+       array('db' => 'CASE WHEN (pmd.afwijkenidealeverpakking = "0") AND mktpr.lowest_price IS NOT NULL THEN CAST(((((pmd.selling_price/pmd.idealeverpakking) - mktpr.lowest_price)/mktpr.lowest_price)*100) AS DECIMAL(10, '.
+        $scale.'))
+          WHEN (pmd.afwijkenidealeverpakking = "1") AND mktpr.lowest_price IS NOT NULL THEN CAST((((pmd.selling_price - mktpr.lowest_price)/mktpr.lowest_price)*100) AS DECIMAL (10 , '.$scale.')) ELSE "---" END  AS diff_pm_vkpr_per_piece_bslp', 'dt' => $column_index["diff_pmvkpr_pp_bslp"]),
 
   array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])
   /*array( 'db' => 'CAST((SELECT COUNT(*) AS updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and buying_price_changed = "1" and is_synced = "No") AS UNSIGNED) AS updated_product_cnt',  'dt' => $column_index["updated_product_cnt"]), */

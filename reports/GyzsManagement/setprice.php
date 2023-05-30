@@ -134,7 +134,12 @@ if ($result = $conn->query($sql)) {
   }
 }
 
-
+$sql = "SELECT bigshopper_xml_import_date FROM bigshopper_prices LIMIT 1";
+$xml_imported_at = "";
+if ($result = $conn->query($sql)) {
+    $row = $result->fetch_assoc();
+    $xml_imported_at = $row['bigshopper_xml_import_date'];
+}
 ?>
 <style>
 .loader
@@ -227,7 +232,7 @@ if ($result = $conn->query($sql)) {
                             <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update</div>
-                         <div style="float:right;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
+                         <div style="float:right;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%) <?php if($xml_imported_at)?>[<span title="Bigshopper Data on.." style="color:DodgerBlue;"><?php echo $xml_imported_at ?></span>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
                      </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->
@@ -330,7 +335,8 @@ if ($result = $conn->query($sql)) {
                                   <th>Aantal CC</th>
                                   <th>Productset</th>
                                   <th>Next price</th>
-
+                                  <th>PM Vkpr (per piece)</th>
+                                  <th>DIFF (PM Vkpr|BS LP)</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -387,6 +393,8 @@ if ($result = $conn->query($sql)) {
                                   <th>Aantal CC</th>
                                   <th>Productset</th>
                                   <th>Next price</th>
+                                  <th>PM Vkpr (per piece)</th>
+                                  <th>DIFF (PM Vkpr|BS LP)</th>
 
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
@@ -609,11 +617,11 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols  chbs"><span>B.S. (L.P)</span>
+                                <input type="checkbox" value="73" name="bs_lower_price" class="show_cols chbs"><span>B.S. (L.P)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols  chbs"><span>B.S. (H.P)</span>
+                                <input type="checkbox" value="74" name="bs_higher_price" class="show_cols chbs"><span>B.S. (H.P)</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
@@ -637,12 +645,20 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                             <label  class="col-6">
-                                <input type="checkbox" value="80" name="bs_incl_dispatch" class="show_cols" id="productset_checkbox">
+                                <input type="checkbox" value="80" name="bs_incl_dispatch" class="show_cols chbs" id="productset_checkbox">
                                 <span>Productset</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="81" name="price_of_the_next_excl_shipping" class="show_cols chbs"><span>Next price</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="82" name="pm_vkpr_per_piece" class="show_cols chbs"><span>PM Vkpr(per piece)</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="83" name="diff_pm_vkpr_bslp" class="show_cols chbs"><span>DIFF (PM Vkpr|BS LP)</span>
                             </label>
 
                             <div style="clear:both;"></div>
