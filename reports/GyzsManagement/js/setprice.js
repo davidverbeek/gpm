@@ -4775,7 +4775,7 @@ function btnNextPrice(next_price) {
                     "supplier_gross_price": value[column_index["supplier_gross_price"]],
                     "idealeverpakking": value[column_index["idealeverpakking"]],
                     "afwijkenidealeverpakking": value[column_index["afwijkenidealeverpakking"]],
-                    "next_price" : value[column_index["price_of_the_next_excl_shipping"]],
+                    "price_of_the_next_excl_shipping" : value[column_index["price_of_the_next_excl_shipping"]],
                     "selling_price" :  value[column_index["selling_price"]]
                   }
                 });
@@ -4786,19 +4786,25 @@ function btnNextPrice(next_price) {
     var store_html = $("#showloader").find('span').html();
     $("#showloader").find('span').html('Please wait....updating to Next Price.');
     $(".loader_txt").show();
-    $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked,subtype:next_price, more_or_less: $('#bs_percent_type').val(), percentage_of_np: $('#bs_np_percent_text').val()}, function(response_data) {
+    $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked,subtype:next_price, more_or_less: $('#bs_np_percent_type').val(), percentage_of_np: $('#bs_np_percent_text').val()}, function(response_data) {
       var resp_obj = jQuery.parseJSON(response_data);
       $("#showloader").removeClass("loader");
       $(".loader_txt").hide();
       $("#showloader").find('span').html(store_html);
       if(resp_obj["msg"]) {
           if (resp_obj["msg"] == "duplicate") {
-            var alert_mssage = "The selected record already has same data.";
-          } else if (resp_obj["msg"] == "blank") {
-            var alert_mssage = "Zero Next price cannot be updated.";
+            var alert_mssage = "<p style='color:red'>Zero Next price cannot be updated.</p>";
+          } else if (resp_obj["msg"].includes("Notify")) {
+            let arr = resp_obj["msg"].split('_');
+            var alert_mssage = "<p style='color:red'>Not Updated as all records(<b>"+arr[1]+"</b>) have more Buying Price than given Next price percentage.</p>"
           } else {
-            var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).'
-            table.ajax.reload( null, false );
+             if (resp_obj["msg"].includes("_")) {
+              let arr = resp_obj["msg"].split('_');
+              var alert_mssage = 'Updated <b>'+arr[0]+'</b> records and Skipped <b style="color:red;">'+arr[1] +'</b> record(s) as they have more buying price than given Next price percentage'
+            } else {
+              var alert_mssage = 'Updated All <b>'+resp_obj["msg"]+'</b> records.'
+             }
+             table.ajax.reload( null, false );
           }
       } else {
         var alert_mssage = "No records availiable to update";
