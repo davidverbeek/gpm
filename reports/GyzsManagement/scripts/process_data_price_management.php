@@ -1712,25 +1712,25 @@ if(count($product_to_update_arr)) {
     }
 
   $product_to_update_arr = array_filter($product_to_update_arr);
+  $response_data['msg'] = count($product_to_update_arr);
   if(count($product_to_update_arr)) {
     $all_selected_data = $updated_product_ids = array();
-    $check_continue_1 = 0;
-
+    $check_continue_1 = $notify_this = 0;
     foreach($product_to_update_arr as $row_index=>$row) {
 
-      if($row["next_price"] != "---" && $row["next_price"] != 0.0000) {
+      if($row['price_of_the_next_excl_shipping'] != "---" && $row['price_of_the_next_excl_shipping'] != 0.0000) {
 
         $supplier_gross_price = ($row["supplier_gross_price"] == 0 ? 1:$row["supplier_gross_price"]);
         $webshop_selling_price = $row["gyzs_selling_price"];
 
-        if($_REQUEST['subtype'] == 'equal_to_next_price'  && $row['next_price'] != $row['selling_price']) {
-          $new_selling_price = (float)$row['next_price'];
+        if($_REQUEST['subtype'] == 'equal_to_next_price'  && $row['price_of_the_next_excl_shipping'] != $row['selling_price']) {
+          $new_selling_price = (float)$row['price_of_the_next_excl_shipping'];
         } elseif($_REQUEST['subtype'] == 'percent_next_price') {
-          $calculate_percentage_np = ((float)$row['next_price'] * $_REQUEST['percentage_of_np'])/100;
+          $calculate_percentage_np = ((float)$row['price_of_the_next_excl_shipping'] * $_REQUEST['percentage_of_np'])/100;
           if($_REQUEST['more_or_less'] == 'more') {
-              $new_selling_price  = roundValue($row['next_price'] + $calculate_percentage_np);
+              $new_selling_price  = roundValue($row['price_of_the_next_excl_shipping'] + $calculate_percentage_np);
           } else {
-              $new_selling_price  = roundValue($row['next_price'] - $calculate_percentage_np);
+              $new_selling_price  = roundValue($row['price_of_the_next_excl_shipping'] - $calculate_percentage_np);
           }
         } else {
           continue;
@@ -1739,6 +1739,12 @@ if(count($product_to_update_arr)) {
         if($new_selling_price == $row['selling_price']) {
           continue;
         }
+
+        if($new_selling_price <= $row['buying_price']) {
+          $notify_this++;
+          continue;
+        }
+
         $pmd_buying_price  = $row["buying_price"];
 
         $profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
@@ -1769,23 +1775,28 @@ if(count($product_to_update_arr)) {
         $all_selected_data[$row['product_id']]['new_buying_price'] = $pmd_buying_price;
         $all_selected_data[$row['product_id']]['new_selling_price'] = $new_selling_price;
       } else {
-        $check_continue_1 = 1;
+        $check_continue_1++;
         continue;
       }
 
     }//end foreach()
 
+
      if(count($all_selected_data)) {
         // completed query
-        $updated_recs = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
-        $response_data['msg'] = $updated_recs;
-      } else {
-        if($check_continue_1 == 1)
+        $updated_recs[] = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
+        if($notify_this) {
+          $updated_recs[] = $notify_this;
+          $response_data['msg'] = implode('_', $updated_recs);
+        } else {
+           $response_data['msg'] = $updated_recs[0];
+        }
+      } elseif($check_continue_1 > 0) {
         $response_data['msg'] = "duplicate";
+      } else {
+        $response_data['msg'] = "Notify_{$notify_this}";
       }
   }
-
-  $response_data['msg'] = count($all_selected_data);
   break;
 }
 
@@ -2153,6 +2164,7 @@ function bulkUpdateProducts($type,$data,$common_data,$log_type,$update_type) {
 
       if($type == "webshopprice") {
         $sql .= implode(",", $all_col_data) . " ON DUPLICATE KEY UPDATE selling_price = VALUES(selling_price),profit_percentage_buying_price = VALUES(profit_percentage_buying_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross)";
+
 
         if($conn->query($sql)) {
           //Insert in history
