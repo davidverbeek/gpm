@@ -4794,17 +4794,17 @@ function btnNextPrice(next_price) {
       if(resp_obj["msg"]) {
           if (resp_obj["msg"] == "duplicate") {
             var alert_mssage = "<p style='color:red'>Zero Next price cannot be updated.</p>";
-          } else if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("Notify")) {
+          } else if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("Notify") !== -1) {
             let arr = resp_obj["msg"].split('_');
             var alert_mssage = "<p style='color:red'>Not Updated as all records(<b>"+arr[1]+"</b>) have more Buying Price than given Next price percentage.</p>"
           } else {
-             if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("_")) {
+             if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("_") !== -1) {
               let arr = resp_obj["msg"].split('_');
-              var alert_mssage = 'Updated <b>'+arr[0]+'</b> records and Skipped <b style="color:red;">'+arr[1] +'</b> record(s) as they have more buying price than given Next price percentage'
+              var alert_mssage = 'Updated <b>'+arr[0]+'</b> records and Skipped <b style="color:red;">'+arr[1] +'</b> records as calculated price is coming less than buying price'
             } else {
               var alert_mssage = 'Updated All records(<b>'+resp_obj["msg"]+'</b>).'
-             }
-             table.ajax.reload( null, false );
+            }
+            table.ajax.reload( null, false );
           }
           $('#bs_np_percent_text').val('0.01');
       } else {
