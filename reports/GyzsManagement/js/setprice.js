@@ -914,16 +914,48 @@ $(document).ready(function () {
                           select.appendTo( $(that.footer()).empty())
                           .on( 'change', function () {
                             let action_dd = $(this).attr('id');
+                            var diff_index_value = "group_indx_"+column_index['diff_pmvkpr_pp_bslp'];
+                            var ideal_index_value = "group_indx_"+column_index['idealeverpakking'];
+
                             $( ".search_group_dd" ).each(function() {
                               let reset_dd = $(this).attr('id');
-                              if($(this).val() != "0" && reset_dd != action_dd) {
-                                $('#'+reset_dd).val('0');
-                                $('#'+reset_dd+' option[value="4"]').remove();
-                                $('select'+'#'+reset_dd).removeAttr('title');
+                              if($(this).val() != "0" && reset_dd != action_dd ) {
+
+                                //if(action_dd != "group_indx_83" && action_dd != "group_indx_12") {
+                                if(action_dd != diff_index_value && action_dd != ideal_index_value) {
+                                  $('#'+reset_dd).val('0');
+                                  $('#'+reset_dd+' option[value="4"]').remove();
+                                  $('select'+'#'+reset_dd).removeAttr('title');
+
+
+                                } else {
+
+                                  if(reset_dd != ideal_index_value &&  reset_dd != diff_index_value)  {
+                                    $('#'+reset_dd).val('0');
+                                    $('#'+reset_dd+' option[value="4"]').remove();
+                                    $('select'+'#'+reset_dd).removeAttr('title');
+                                  }
+
+                                }
                               }
                             });
                             if($(this).val() == 0) {
-                              $("#hdn_filters").val('');
+                              // only if action_dd is 83 then if reset dd is null, for other action dd
+                             // if(action_dd != "group_indx_83" && action_dd != "group_indx_12") {
+                              if(action_dd != diff_index_value && action_dd != ideal_index_value) {
+                                $("#hdn_filters").val('');
+                             // } else if(action_dd == "group_indx_12" &&  ($('select'+'#'+'group_indx_83').val() == "0")) {
+                              } else if(action_dd == ideal_index_value &&  ($('select'+'#'+diff_index_value).val() == "0")) {
+                                 $("#hdn_filters").val('');
+                              //} else if(action_dd == "group_indx_83" && ($('select'+'#'+'group_indx_12').val() == "0") ) {
+                              } else if(action_dd == diff_index_value && ($('select'+'#'+ ideal_index_value).val() == "0") ) {
+                                 $("#hdn_filters").val('');
+                              } else {
+                                  $("#hdn_group_search_text").val('');
+                                  $("#hdn_filters").val(that[0][0]+'task-all-numbers-filterable');
+                                  combineDiffIdealevpExpression(that[0][0]);
+                              }
+
                               let clicked_dd = $(this).attr('id');
                               $('#'+clicked_dd+' option[value="4"]').remove();
                               $('select'+'#'+clicked_dd).removeAttr('title');
@@ -1123,7 +1155,8 @@ $(document).ready(function () {
             d.showupdated = $('#hdn_showupdated').val(),
             d.hdn_filters = $('#hdn_filters').val(),
             d.hdn_stijging_text = $('#hdn_stijging_text').val(),
-            d.hdn_group_search_text = $('#hdn_group_search_text').val()
+            d.hdn_group_search_text = $('#hdn_group_search_text').val(),
+            d.diff_column_exp = $('#hdn_two_cols_combine').val()
         }
       }
   });
@@ -4403,6 +4436,8 @@ $("#flexCheckDefault").change(function () {
     $('#'+make_id).append($('<option>', { value : 4 }).text(new_option_text));
     $('select'+'#'+make_id).val("4").change();
     $('select'+'#'+make_id).attr('title', new_option_text);
+
+    combineDiffIdealevpExpression(clicked_col_indx);
     table.draw();
     return true;
   });
@@ -4847,5 +4882,38 @@ function btnNextPrice(next_price) {
         }
       });
   }//end getProductset()
+
+
+  function combineDiffIdealevpExpression(clicked_col_indx) {
+    let ideal_index_value = column_index['idealeverpakking'];//12
+    read_other_col_index = 'group_indx_'+ ideal_index_value;
+    if(clicked_col_indx == ideal_index_value) {
+      read_other_col_index = 'group_indx_'+column_index['diff_pmvkpr_pp_bslp'];//83
+    }
+    let othercol_expression = $("#"+read_other_col_index+" option:selected").text();
+    var make_statement = '';
+    if(othercol_expression != 'All') {
+      $("#"+read_other_col_index+" option").each(function() {
+
+        if(othercol_expression.indexOf($(this).text()) !== -1) {
+          if($(this).val() == '1') {
+            make_statement = read_other_col_index+' '+othercol_expression.replace('Less than OR Equal to', ' <= ');
+            return false;
+          } else if($(this).val() == '2') {
+            make_statement = read_other_col_index+' '+othercol_expression.replace('Greater than OR Equal to', ' >= ');
+            return false;
+          }  else if($(this).val() == '3') {
+            make_statement = read_other_col_index+' '+othercol_expression;
+            return false;
+          } else {
+            make_statement = '';
+            return false;
+          }
+        }
+
+      });
+    }
+    $('#hdn_two_cols_combine').val(make_statement);
+  }//combineDiffIdealevpExpression()
 
 });

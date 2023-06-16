@@ -3,7 +3,7 @@
 
  include "../define/constants.php";
  include "../config/dbconfig.php";
- 
+
 $table = "mage_catalog_product_entity AS mcpe
 INNER JOIN mage_catalog_category_product AS mccp ON mccp.product_id = mcpe.entity_id
 INNER JOIN price_management_data AS pmd ON pmd.product_id = mcpe.entity_id
@@ -42,6 +42,14 @@ if($_POST['categories']) {
 } else {
    //$extra_where = "mccp.category_id IN ('')";
   $extra_where = "";
+}
+
+function diff_col_generation() {
+  $get_per_piece = '(pmd.selling_price/pmd.idealeverpakking)';
+  $top_part = $get_per_piece.' - mktpr.lowest_price';
+  $top_part_2 = 'pmd.selling_price - mktpr.lowest_price';
+  $db_column_name = '(CASE WHEN (pmd.afwijkenidealeverpakking = "0" AND mktpr.lowest_price IS NOT NULL ) THEN ((('.$top_part.')/mktpr.lowest_price) * 100) WHEN (pmd.afwijkenidealeverpakking = "1" AND mktpr.lowest_price IS NOT NULL ) THEN ((('.$top_part_2.')/mktpr.lowest_price) * 100) ELSE 0 END)';
+  return $db_column_name;
 }
 
 if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
@@ -178,13 +186,34 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $top_part = $get_per_piece.' - mktpr.lowest_price';
         $top_part_2 = 'pmd.selling_price - mktpr.lowest_price';
         $db_column_name = '(CASE WHEN (pmd.afwijkenidealeverpakking = "0" AND mktpr.lowest_price IS NOT NULL ) THEN ((('.$top_part.')/mktpr.lowest_price) * 100) WHEN (pmd.afwijkenidealeverpakking = "1" AND mktpr.lowest_price IS NOT NULL ) THEN ((('.$top_part_2.')/mktpr.lowest_price) * 100) ELSE 0 END)';
+
+        // check diff_col_combine is there or not
+        $also_and_column = $_POST['diff_column_exp'];
+        if(strpos($also_and_column,"group_indx_") !== FALSE) {
+          $column_to_search = trim(str_replace("group_indx_","",$_POST['diff_column_exp']));
+          $db_column_name_combine = array_search($column_to_search, $column_index);
+
+          $db_column_name_combine = 'pmd.'.$db_column_name_combine;
+          $to_replace = 'group_indx_'.$column_index['idealeverpakking'];
+          $extra_where .= ' AND ('.str_replace($to_replace, $db_column_name_combine, $also_and_column).')';
+          //$extra_where .= ' AND ('.str_replace('group_indx_12', $db_column_name_combine, $also_and_column).')';
+        }
+      } elseif($db_column_name == 'idealeverpakking') {
+        $db_column_name = 'pmd.'.$db_column_name;
+        $also_and_column = $_POST['diff_column_exp'];
+        if(strpos($also_and_column,"group_indx_") !== FALSE) {
+            $diff_column_generated = diff_col_generation();
+            $to_replace = 'group_indx_'.$column_index['diff_pmvkpr_pp_bslp'];
+            $extra_where .= ' AND ('.str_replace($to_replace, $diff_column_generated, $also_and_column).')';
+            //$extra_where .= ' AND ('.str_replace('group_indx_83', $diff_column_generated, $also_and_column).')';
+        }
+
       } else {
         $db_column_name = 'pmd.'.$db_column_name;
       }
       $hdn_search_exp = $_POST['hdn_group_search_text'];
       if($hdn_search_exp)
       $extra_where .= ' AND ('.str_replace('pmd.db_column', $db_column_name, $hdn_search_exp).')';
-
     break;
   }
 }
