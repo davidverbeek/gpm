@@ -739,6 +739,7 @@ if ($result = $conn->query($sql)) {
           <input type="hidden" name="hdn_group_search_text" id="hdn_group_search_text" />
 
           <input type="hidden" name="hdn_brandfiltercats" id="hdn_brandfiltercats" />
+          <input type="hidden" name="hdn_two_cols_combine" id="hdn_two_cols_combine" />
 
         </div>
         <!-- End of Hiddens -->
