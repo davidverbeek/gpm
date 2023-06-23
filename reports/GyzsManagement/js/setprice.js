@@ -4707,6 +4707,7 @@ $('#sel_merk').on('change', function() {
 
           if(isAllChecked == 0) {
             $.each( table.rows('.selected').data(), function( key, value ) {
+
               sellingPrices[key] = {
                 "product_id": value[column_index["product_id"]],
                 "sku": value[column_index["sku"]],
@@ -4729,10 +4730,14 @@ $('#sel_merk').on('change', function() {
           }
 
             $(".update_loader").show();
+            var check_clicked_button = 'bulk_bs_update_selling_price';
+            if($('#hdn_preview_or_update').val() != '') {
+              check_clicked_button = 'bulk_bs_preview_stiging';
+            }
             $.ajax({
               url: document_root_url+'/scripts/process_data_price_management.php',
               method:"POST",
-              data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression}),
+              data: ({ sellingPrices: sellingPrices, type: check_clicked_button, bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression}),
                 success: function(response_data) {
                   $(".update_loader").hide();
 
@@ -4879,8 +4884,8 @@ function btnNextPrice(next_price) {
         if(check == 0){
           $('#productset').selectpicker('selectAll');
         }
-        }
-      });
+      }
+    });
   }//end getProductset()
 
 
@@ -4916,4 +4921,105 @@ function btnNextPrice(next_price) {
     $('#hdn_two_cols_combine').val(make_statement);
   }//combineDiffIdealevpExpression()
 
+
+function reset_bs_modal() {
+  $('input[name=fav_BS]').prop('checked', false);
+  $('input#bs_percent_text').val('');
+  $('select#bs_percent_type').val('more');
+  $('select#bs_percent_price_type').val('bs_percent_lp');
+  $('#bs_np_percent_text').val('0.01');
+}
+
+
+  $('#bsmodalPreview').on( "click", {},function() {
+
+    var record_selected = table.rows('.selected').data().length;
+
+        if(record_selected == 0) {
+          alert("Please select record first!!");
+          return false;
+        }
+
+        if(!$("input[name=fav_BS]:checked").val()) {
+          alert("Please select BS option!!");
+          return false;
+        }
+
+        var bs_price_option = $("input[name=fav_BS]:checked").val();
+        var expression = Array();
+        if(bs_price_option == "percentage_bs") {
+          if($('#bs_percent_text').val() == '') {
+            alert("Percentage textbox is blank..");
+            $('#bs_percent_text').focus();
+            return false;
+          }
+          expression[0] = $('#bs_percent_text').val();
+          expression[1] = $('#bs_percent_type').val();
+          expression[2] = $('#bs_percent_price_type').val();
+        }
+
+        if(bs_price_option == "percent_next_price") {
+          if($('#bs_np_percent_text').val() == '') {
+            alert("Percentage textbox is blank..");
+            $('#bs_np_percent_text').focus();
+            return false;
+          }
+          expression[0] = $('#bs_np_percent_text').val();
+          expression[1] = $('#bs_np_percent_type').val();
+          expression[2] = 'next_price';
+        }
+
+          // create these rows
+          var isAllChecked = 0;
+          if($("#chkall").is(':checked')) {
+            var isAllChecked = 1;
+          }
+
+          var sellingPrices = Array();
+
+          $("#showloader").addClass("loader");
+          var store_html = $("#showloader").find('span').html();
+          $("#showloader").find('span').html('Please wait....Calculating Preview Stijging.');
+          $(".loader_txt").show();
+
+          $.each(table.rows('.selected').data(), function( key, value ) {
+              sellingPrices[key] = {
+                "product_id": value[column_index["product_id"]],
+                "sku": value[column_index["sku"]],
+                "gyzs_selling_price": value[column_index["gyzs_selling_price"]],
+                "buying_price": value[column_index["buying_price"]],
+                "bigshopper_highest_price" : value[column_index["bigshopper_highest_price"]],
+                "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]],
+                "selling_price" :  value[column_index["selling_price"]],
+                "price_of_the_next_excl_shipping" : value[column_index["price_of_the_next_excl_shipping"]],
+              }
+            });
+
+
+            // create ajax
+            $.ajax({
+              method: "POST",
+              url:  document_root_url+'/scripts/process_data_price_management.php',
+              data: { sellingPrices: sellingPrices, type: "bulk_bs_preview_stiging",  bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked,expression: expression}
+            })
+            .done(function( response_data ) {
+              reset_bs_modal();
+              $('#bspricemodal').modal('toggle');
+              var resp_obj = jQuery.parseJSON(response_data);
+
+              $("#showloader").removeClass("loader");
+              $(".loader_txt").hide();
+              $("#showloader").find('span').html(store_html);
+
+              table.ajax.reload( null, false );
+
+              $('<div class="alert alert-success" role="alert"> '+resp_obj['msg']+'</div>').insertBefore("#data_filters");
+              window.setTimeout(function() {
+              $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+              });
+              }, 4000);
+            });
+
+  })//end bsmodalPreview()
 });

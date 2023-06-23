@@ -337,6 +337,7 @@ if ($result = $conn->query($sql)) {
                                   <th>Next price</th>
                                   <th>PM Vkpr (per piece)</th>
                                   <th>DIFF (PM Vkpr|BS LP)</th>
+                                  <th>Preview Stijging %</th>
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -395,6 +396,7 @@ if ($result = $conn->query($sql)) {
                                   <th>Next price</th>
                                   <th>PM Vkpr (per piece)</th>
                                   <th>DIFF (PM Vkpr|BS LP)</th>
+                                  <th>Preview Stijging %</th>
 
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
@@ -659,6 +661,10 @@ if ($result = $conn->query($sql)) {
 
                             <label for="brand-a" class="col-6">
                                 <input type="checkbox" value="83" name="diff_pm_vkpr_bslp" class="show_cols chbs"><span>DIFF (PM Vkpr|BS LP)</span>
+                            </label>
+
+                             <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="84" name="preview_stijging" class="show_cols chbs"><span>Preview Stijging %</span>
                             </label>
 
                             <div style="clear:both;"></div>
