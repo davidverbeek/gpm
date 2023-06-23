@@ -4999,7 +4999,7 @@ function reset_bs_modal() {
               data: { sellingPrices: sellingPrices, type: "bulk_bs_preview_stiging",  bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked,expression: expression}
             })
             .done(function( response_data ) {
-              reset_bs_modal();
+              //reset_bs_modal();
               $('#bspricemodal').modal('toggle');
               var resp_obj = jQuery.parseJSON(response_data);
 
