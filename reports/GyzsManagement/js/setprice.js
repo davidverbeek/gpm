@@ -4730,14 +4730,10 @@ $('#sel_merk').on('change', function() {
           }
 
             $(".update_loader").show();
-            var check_clicked_button = 'bulk_bs_update_selling_price';
-            if($('#hdn_preview_or_update').val() != '') {
-              check_clicked_button = 'bulk_bs_preview_stiging';
-            }
             $.ajax({
               url: document_root_url+'/scripts/process_data_price_management.php',
               method:"POST",
-              data: ({ sellingPrices: sellingPrices, type: check_clicked_button, bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression}),
+              data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression}),
                 success: function(response_data) {
                   $(".update_loader").hide();
 
