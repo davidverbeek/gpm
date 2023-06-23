@@ -5015,6 +5015,8 @@ function reset_bs_modal() {
                 $(this).remove();
               });
               }, 4000);
+
+              $("input[name='preview_stijging']").trigger('click');
             });
 
   })//end bsmodalPreview()
