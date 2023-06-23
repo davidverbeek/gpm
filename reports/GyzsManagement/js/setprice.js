@@ -5016,7 +5016,7 @@ function reset_bs_modal() {
               });
               }, 4000);
 
-              $("input[name='preview_stijging']").trigger('click');
+              table.column(column_index["preview_stijging"]).visible(true);
             });
 
   })//end bsmodalPreview()
