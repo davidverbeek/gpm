@@ -107,10 +107,11 @@ $column_index = array(
 
   "pmvkpr_per_piece" => 82,
   "diff_pmvkpr_pp_bslp" => 83,
+  "preview_stijging" => 84,
 
-  "is_updated" => 84,
-  "is_activated" => 85,
-  "mag_updated_product_cnt" => 86,
+  "is_updated" => 85,
+  "is_activated" => 86,
+  "mag_updated_product_cnt" => 87,
  );
 /* Column Mappings */
 
