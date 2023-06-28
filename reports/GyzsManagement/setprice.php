@@ -747,6 +747,8 @@ if ($result = $conn->query($sql)) {
           <input type="hidden" name="hdn_brandfiltercats" id="hdn_brandfiltercats" />
           <input type="hidden" name="hdn_two_cols_combine" id="hdn_two_cols_combine" />
 
+            <input type="hidden" name="hdn_preview_stijging" id="hdn_preview_stijging" />
+
         </div>
         <!-- End of Hiddens -->
 
