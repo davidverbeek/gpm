@@ -1121,14 +1121,7 @@ $(document).ready(function () {
         } else {
           $(row).removeClass("selected");
         }
-     
-        /*let current_sku = data[column_index["sku"]];
-        var preview_skus = $('#hdn_preview_stijging').val();
-          if((preview_skus !== '') && (preview_skus.indexOf(current_sku) === -1) ) {
-            $node = this.api().row(row).nodes().to$();
-            $node.css('display','none');
-          }*/
-        },
+      },
 
       "ajax": {
         "url": document_root_url+"/scripts/create_query.php",
