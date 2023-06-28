@@ -1122,12 +1122,12 @@ $(document).ready(function () {
           $(row).removeClass("selected");
         }
      
-        let current_sku = data[column_index["sku"]];
+        /*let current_sku = data[column_index["sku"]];
         var preview_skus = $('#hdn_preview_stijging').val();
           if((preview_skus !== '') && (preview_skus.indexOf(current_sku) === -1) ) {
             $node = this.api().row(row).nodes().to$();
             $node.css('display','none');
-          }
+          }*/
         },
 
       "ajax": {
@@ -4309,7 +4309,6 @@ $("#flexCheckDefault").change(function () {
     $('#filter_with').val('');
     $('#hdn_selectedbrand').val('');
     $('#hdn_filters').val('');
-    $('#hdn_preview_stijging').val('');
     table.search('').columns().search('').draw();
   });
 
@@ -4937,8 +4936,6 @@ function reset_bs_modal() {
 
   $('#bsmodalPreview').on( "click", {},function() {
 
-  
-    $('#hdn_preview_stijging').val('');
     var record_selected = table.rows('.selected').data().length;   
 
         if(record_selected == 0) {
@@ -4982,7 +4979,6 @@ function reset_bs_modal() {
           }
 
           var sellingPrices = Array();
-          var make_sku_array = Array();
 
           $("#showloader").addClass("loader");
           var store_html = $("#showloader").find('span').html();
@@ -4990,7 +4986,6 @@ function reset_bs_modal() {
           $(".loader_txt").show();
 
           $.each(table.rows('.selected').data(), function( key, value ) {
-            make_sku_array.push(value[column_index["sku"]]);
 
             sellingPrices[key] = {
                 "product_id": value[column_index["product_id"]],
@@ -5004,8 +4999,6 @@ function reset_bs_modal() {
               }
             });
 
-           $('#hdn_preview_stijging').val(make_sku_array.slice());
-
             // create ajax
             $.ajax({
               method: "POST",
@@ -5013,14 +5006,18 @@ function reset_bs_modal() {
               data: { sellingPrices: sellingPrices, type: "bulk_bs_preview_stiging",  bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked,expression: expression}
             })
             .done(function( response_data ) {
-              //reset_bs_modal();
               $('#bspricemodal').modal('toggle');
               var resp_obj = jQuery.parseJSON(response_data);
 
               $("#showloader").removeClass("loader");
               $(".loader_txt").hide();
               $("#showloader").find('span').html(store_html);
+
+              // filter by preview_stijging column is not NULL
+              $("#hdn_filters").val(column_index["preview_stijging"]+'task-all-numbers-filterable');
+              $("#hdn_group_search_text").val("pmd.db_column IS NOT NULL");
               table.ajax.reload( null, false );
+
 
               $('<div class="alert alert-success" role="alert"> '+resp_obj['msg']+'</div>').insertBefore("#data_filters");
               window.setTimeout(function() {
