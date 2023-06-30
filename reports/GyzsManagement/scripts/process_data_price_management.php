@@ -1864,9 +1864,9 @@ if(count($product_to_update_arr)) {
           }
         }
 
-        if($new_selling_price == $row['selling_price']) {
+        /*if($new_selling_price == $row['selling_price']) {
           continue;
-        }
+        }*/
 
         if($new_selling_price <= $row['buying_price']) {
           $notify_this++;
