@@ -1798,18 +1798,14 @@ if(count($product_to_update_arr)) {
   break;
 
   case "bulk_bs_preview_stiging":
-    // empty preview_stiging column
-    $sql = "UPDATE price_management_data SET preview_stijging = NULL WHERE 1 = 1";
-    $result_chk_all = $conn->query($sql);
-    $isAllChecked = $_REQUEST['isAllChecked'];
-    //echo $_REQUEST['expression'][0];exit;
+  $isAllChecked = $_REQUEST['isAllChecked'];
     if($isAllChecked == 1) {
       // Check All ignore paging
       $sql_chk_all = getChkAllSql();
       $result_chk_all = $conn->query($sql_chk_all);//echo $sql_chk_all;exit;
       $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
       //print_r($product_to_update_arr, true);exit;
-      //file_put_contents('jyoti.txt',print_r($product_to_update_arr, true),FILE_APPEND);
+      //file_put_contents('test.txt',print_r($product_to_update_arr, true),FILE_APPEND);
       $from = "From Check All";
     } else {
       $product_to_update_arr = $_REQUEST['sellingPrices'];
@@ -1890,8 +1886,12 @@ if(count($product_to_update_arr)) {
       }//end foreach loop
 
       if(count($all_selected_data)) {
+         // empty preview_stiging column
+        $sql = "UPDATE price_management_data SET preview_stijging = NULL";
+        $result_chk_all = $conn->query($sql);
+
         $updated_recs = bulkUpdatePreviewStiging("webshopprice",$all_selected_data,array(),$from,"Preview Stiging");
-        $response_data['msg'] = "Preview Stiging calculated: " . $updated_recs;
+        $response_data['msg'] = "Preview Stiging calculated: " . $updated_recs. " records.";
       } else {
         if($notify_this > 0)
         $response_data['msg'] = "Unable to calculate: Buying Price becomes more than New selling price ". $notify_this;
