@@ -1586,6 +1586,7 @@ if($isAllChecked == 1) {
 //$chunk_data = array_chunk($product_to_update_arr,PMCHUNK);
 $product_to_update_arr = array_filter($product_to_update_arr);//echo count($product_to_update_arr);exit;
 //print_r($product_to_update_arr);exit;
+$response_data['msg'] = 'No records available to update';
 if(count($product_to_update_arr)) {
     $all_selected_data = $updated_product_ids =  array();
     $check_continue_1 = 0;
@@ -1644,8 +1645,13 @@ if(count($product_to_update_arr)) {
     }
 
     //update if new SP is different
-    if($new_selling_price == $v["selling_price"]) {
+    /*if($new_selling_price == $v["selling_price"]) {
       $check_continue_2 = 1;
+      continue;
+    }*/
+
+    if($new_selling_price <= $v['buying_price']) {
+      $notify_this++;
       continue;
     }
 
@@ -1682,17 +1688,21 @@ if(count($product_to_update_arr)) {
     $all_selected_data[$v['product_id']]['new_selling_price'] = $new_selling_price;
   }//one chunk is stored
 
-    if(count($all_selected_data)) {
+    
+   if(count($all_selected_data)) {
       // completed query
-      $updated_recs = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
-      $response_data['msg'] = $updated_recs;
-    } else {
-      if($check_continue_1 == 1)
-      $response_data['msg'] = "blank";
-
-      if($check_continue_2 == 1)
-      $response_data['msg'] = "duplicate";
+      $updated_recs[] = bulkUpdateProducts("webshopprice",$all_selected_data,array(),$from,"Selling Price");
+      if($notify_this) {
+        $updated_recs[] = $notify_this;
+        $response_data['msg'] = implode('_', $updated_recs);
+      } else {
+         $response_data['msg'] = 'Updated All records : <b>'.$updated_recs[0].'</b>';
+      }
+    } elseif($notify_this > 0) {
+      $response_data['msg'] = "Notify_{$notify_this}";
     }
+
+
   }//check count of chunk_data
   break;
 
@@ -1710,7 +1720,8 @@ if(count($product_to_update_arr)) {
     }
 
     $product_to_update_arr = array_filter($product_to_update_arr);
-    $response_data['msg'] = count($product_to_update_arr);
+    $response_data['msg'] = "No records available to update";
+    $notify_this = 0;
     if(count($product_to_update_arr)) {
       $all_selected_data = $updated_product_ids = array();
       $check_continue_1 = $notify_this = 0;
@@ -1787,13 +1798,12 @@ if(count($product_to_update_arr)) {
             $updated_recs[] = $notify_this;
             $response_data['msg'] = implode('_', $updated_recs);
           } else {
-             $response_data['msg'] = $updated_recs[0];
+             $response_data['msg'] = "Updated All records : <b>".$updated_recs[0]."</b>.";
           }
-        } elseif($check_continue_1 > 0) {
-          $response_data['msg'] = "duplicate";
-        } else {
+        } elseif($notify_this > 0) {
           $response_data['msg'] = "Notify_{$notify_this}";
         }
+
       }
   break;
 
@@ -1864,9 +1874,9 @@ if(count($product_to_update_arr)) {
           }
         }
 
-        if($new_selling_price == $row['selling_price']) {
+        /*if($new_selling_price == $row['selling_price']) {
           continue;
-        }
+        }*/
 
         if($new_selling_price <= $row['buying_price']) {
           $notify_this++;
@@ -1894,7 +1904,7 @@ if(count($product_to_update_arr)) {
         $response_data['msg'] = "Preview Stiging calculated: " . $updated_recs. " records.";
       } else {
         if($notify_this > 0)
-        $response_data['msg'] = "Unable to calculate: Buying Price becomes more than New selling price ". $notify_this;
+        $response_data['msg'] = "No Update: Buying Price becomes more than New selling price ". $notify_this;
       }
     }
   break;

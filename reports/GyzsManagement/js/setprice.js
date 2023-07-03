@@ -4743,26 +4743,29 @@ $('#sel_merk').on('change', function() {
                   $('select#bs_percent_price_type').val('bs_percent_lp');
                   var resp_obj = jQuery.parseJSON(response_data);
 
-                  if(resp_obj["msg"]) {
-
-                    if (resp_obj["msg"] == "duplicate") {
-                      var alert_mssage = "The selected record already has same data.";
-                    } else if (resp_obj["msg"] == "blank") {
-                      var alert_mssage = "Zero data cannot be updated.";
+                    if(resp_obj["msg"]) {
+                      if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("Notify") !== -1) {
+                        let arr = resp_obj["msg"].split('_');
+                        var alert_mssage = "<p style='color:red'>Not Updated : New Selling Price is less than Buying Price. (<b>"+arr[1]+"</b>)</p>"
+                      } else {
+                        if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("_") !== -1) {
+                        let arr = resp_obj["msg"].split('_');
+                        var alert_mssage = 'Updated <b>'+arr[0]+'</b> records & Skipped <b style="color:red;">'+arr[1] +'</b> : New Selling Price is less than Buying Price'
+                      } else {
+                        var alert_mssage = resp_obj["msg"];
+                      }
+                        table.ajax.reload( null, false );               
+                      }
                     } else {
-                      var alert_mssage = 'Updated '+resp_obj["msg"]+' record(s).'
-                      table.ajax.reload( null, false );
-                    }
-                  } else {
                     var alert_mssage = "No records availiable to update";
+                    }
+                    $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
+                      window.setTimeout(function() {
+                      $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                        $(this).remove();
+                      });
+                    }, 4000);
                   }
-                  $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
-                    window.setTimeout(function() {
-                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                      $(this).remove();
-                    });
-                  }, 4000);
-                }
               });
             } else if(bs_price_option == 'equal_to_next_price') {
               btnNextPrice('equal_to_next_price');
@@ -4828,23 +4831,19 @@ function btnNextPrice(next_price) {
       $(".loader_txt").hide();
       $("#showloader").find('span').html(store_html);
       if(resp_obj["msg"]) {
-          if (resp_obj["msg"] == "duplicate") {
-            var alert_mssage = "<p style='color:red'>Zero Next price cannot be updated.</p>";
-          } else if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("Notify") !== -1) {
+          if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("Notify") !== -1) {
             let arr = resp_obj["msg"].split('_');
-            var alert_mssage = "<p style='color:red'>Not Updated as all records(<b>"+arr[1]+"</b>) have more Buying Price than given Next price percentage.</p>"
+            var alert_mssage = "<p style='color:red'>Not Updated : New Selling Price is coming less than Buying Price (<b>"+arr[1]+"</b>).</p>"
           } else {
              if (typeof(resp_obj["msg"]) == 'string' && resp_obj["msg"].indexOf("_") !== -1) {
               let arr = resp_obj["msg"].split('_');
-              var alert_mssage = 'Updated <b>'+arr[0]+'</b> records and Skipped <b style="color:red;">'+arr[1] +'</b> records as calculated price is coming less than buying price'
+              var alert_mssage = 'Updated <b>'+arr[0]+'</b> records & Skipped <b style="color:red;">'+arr[1] +'</b> records : New Selling Price is coming less than Buying Price'
             } else {
-              var alert_mssage = 'Updated All records(<b>'+resp_obj["msg"]+'</b>).'
+              var alert_mssage = resp_obj["msg"];
             }
             table.ajax.reload( null, false );
           }
           $('#bs_np_percent_text').val('0.01');
-      } else {
-        var alert_mssage = "No records available to update";
       }
       $('<div class="alert alert-success" role="alert"> '+alert_mssage+'</div>').insertBefore("#data_filters");
         window.setTimeout(function() {
