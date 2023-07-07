@@ -1569,6 +1569,7 @@ case "get_bigshopper":
 
 case "bulk_bs_update_selling_price":
 $isAllChecked = $_REQUEST['isAllChecked'];
+$response_data['msg'] = 'No records available to update';
 if($isAllChecked == 1) {
     // Check All ignore paging
   $sql_chk_all = getChkAllSql();
@@ -1578,14 +1579,24 @@ if($isAllChecked == 1) {
  //file_put_contents('jyoti.txt',print_r($product_to_update_arr, true),FILE_APPEND);
   $from = "From Check All";
 } else {
-  $product_to_update_arr = $_REQUEST['sellingPrices'];
-  $from = "From Multiple Select";
+  if($_REQUEST['update_excluding']) {
+    $excluding_rows = $_REQUEST['sellingPrices'];
+    $excluding_skus = array_column($excluding_rows, 'sku');
+    $sql_chk_all = getChkAllSql();
+    $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN (".implode(",",$excluding_skus)."))";
+    $result_chk_all = $conn->query($sql_chk_all);
+    $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
+    if(count($product_to_update_arr) == 0) {
+      $response_data['msg'] = "Cannot select All Rows when Update vice-versa..";
+    }
+    $from = "From Multiselect and Update vice-versa";
+  } else {
+    $product_to_update_arr = $_REQUEST['sellingPrices'];
+    $from = "From Multiple Select";
+  }
 }
 
-//$chunk_data = array_chunk($product_to_update_arr,PMCHUNK);
-$product_to_update_arr = array_filter($product_to_update_arr);//echo count($product_to_update_arr);exit;
-//print_r($product_to_update_arr);exit;
-$response_data['msg'] = 'No records available to update';
+$product_to_update_arr = array_filter($product_to_update_arr);
 if(count($product_to_update_arr)) {
     $all_selected_data = $updated_product_ids =  array();
     $check_continue_1 = $notify_this = 0;
@@ -1713,8 +1724,22 @@ if(count($product_to_update_arr)) {
       $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
       $from = "From Check All";
     } else {
-      $product_to_update_arr = $_REQUEST['sellingPrices'];
-      $from = "From Multiple Select";
+      if($_REQUEST['update_excluding']) {
+        $excluding_rows = $_REQUEST['sellingPrices'];
+        $excluding_skus = array_column($excluding_rows, 'sku');
+        $sql_chk_all = getChkAllSql();
+        $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN (".implode(",",$excluding_skus)."))";
+        $result_chk_all = $conn->query($sql_chk_all);
+        file_put_contents('hello_jyoti.txt', $sql_chk_all);
+        $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
+        if(count($excluding_rows) == count($product_to_update_arr)) {
+          return $response_data['msg'] = "Cannot select All Rows when Update vice-versa..";
+        }
+        $from = "From Multiselect and Update vice-versa";
+      } else {
+        $product_to_update_arr = $_REQUEST['sellingPrices'];
+        $from = "From Multiple Select";
+      }
     }
 
     $product_to_update_arr = array_filter($product_to_update_arr);
@@ -1900,7 +1925,7 @@ if(count($product_to_update_arr)) {
         $response_data['msg'] = "No Update: Buying Price becomes more than New selling price ". $notify_this;
       }
     }
-  break;
+  break;  
 }
 
 function getPreviousSellingPriceFromHistory($conn, $product_id) {
@@ -2325,11 +2350,7 @@ function getChkAllSql() {
       $query_binding_replace[] = "'".$b_v["val"]."'";
     }
   }
-
-
-
   return preg_replace($query_binding_search, $query_binding_replace, $query);
-
 }
 
 function calculateDiffPercentage() {
@@ -2470,7 +2491,9 @@ function calculate_expression_sp($expression, $v, $subtype = 'bigshopper') {
       $new_selling_price  = roundValue($v['price_of_the_next_excl_shipping'] - $calculate_percentage_np);
     }
   }
+
+
+
   return $new_selling_price;
 }
-
 echo json_encode($response_data);
