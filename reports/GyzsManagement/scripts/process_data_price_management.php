@@ -1571,12 +1571,24 @@ case "bulk_bs_update_selling_price":
 $isAllChecked = $_REQUEST['isAllChecked'];
 $response_data['msg'] = 'No records available to update';
 if($isAllChecked == 1) {
+  if($_REQUEST['update_excluding']) {
+    $excluding_rows = $_REQUEST['sellingPrices'];
+    $excluding_skus = array_column($excluding_rows, 'sku');
+    $sql_chk_all = getChkAllSql();
+    $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN ("."'".implode("', '",$excluding_skus)."'"."))";
+  } else {
     // Check All ignore paging
-  $sql_chk_all = getChkAllSql();
-  $result_chk_all = $conn->query($sql_chk_all);//echo $sql_chk_all;exit;
+    $sql_chk_all = getChkAllSql();
+  }
+  file_put_contents('update_bs_sql.txt',$sql_chk_all);
+
+  $result_chk_all = $conn->query($sql_chk_all);
   $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
-//print_r($product_to_update_arr, true);exit;
- //file_put_contents('jyoti.txt',print_r($product_to_update_arr, true),FILE_APPEND);
+  //print_r($product_to_update_arr, true);exit;
+
+  if(count($product_to_update_arr) == 0) {
+    $response_data['msg'] = "Cannot select All Rows when Update vice-versa..";
+  }
   $from = "From Check All";
 } else {
   if($_REQUEST['update_excluding']) {
@@ -1718,8 +1730,16 @@ if(count($product_to_update_arr)) {
   case "bulk_update_to_next_price":
     $isAllChecked = $_REQUEST['isAllChecked'];
     if($isAllChecked == 1) {
-      // Check All ignore paging
-      $sql_chk_all = getChkAllSql();
+      if($_REQUEST['update_excluding']) {
+        $excluding_rows = $_REQUEST['sellingPrices'];
+        $excluding_skus = array_column($excluding_rows, 'sku');
+        $sql_chk_all = getChkAllSql();
+        $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN ("."'".implode("', '",$excluding_skus)."'"."))";
+      } else {
+        // Check All ignore paging
+        $sql_chk_all = getChkAllSql();
+      }
+      file_put_contents('update_bs_sql.txt', $sql_chk_all);
       $result_chk_all = $conn->query($sql_chk_all);
       $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
       $from = "From Check All";
@@ -1729,11 +1749,12 @@ if(count($product_to_update_arr)) {
         $excluding_skus = array_column($excluding_rows, 'sku');
         $sql_chk_all = getChkAllSql();
         $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN (".implode(",",$excluding_skus)."))";
+
+        file_put_contents('update_bs_sql.txt', $sql_chk_all);
         $result_chk_all = $conn->query($sql_chk_all);
-        file_put_contents('hello_jyoti.txt', $sql_chk_all);
         $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
-        if(count($excluding_rows) == count($product_to_update_arr)) {
-          return $response_data['msg'] = "Cannot select All Rows when Update vice-versa..";
+        if(count($product_to_update_arr) == 0) {
+          $response_data['msg'] = "Cannot select All Rows when Update vice-versa..";
         }
         $from = "From Multiselect and Update vice-versa";
       } else {

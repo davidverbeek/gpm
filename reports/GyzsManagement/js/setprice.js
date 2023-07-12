@@ -4688,8 +4688,8 @@ $('#sel_merk').on('change', function() {
       }
 
       var sellingPrices = Array();
-
-      if(isAllChecked == 0) {
+      let update_vice_versa = $('#is_update_vice_versa').val();
+      if(isAllChecked == 0 || update_vice_versa) {
         $.each( table.rows('.selected').data(), function( key, value ) {
 
           sellingPrices[key] = {
@@ -4712,14 +4712,19 @@ $('#sel_merk').on('change', function() {
           }
         });
       }
-
+             $("#showloader").addClass("loader");
+              var store_html = $("#showloader").find('span').html();
+              $("#showloader").find('span').html('Please wait....updating Selling Price.');
+              $(".loader_txt").show();
             $(".update_loader").show();
-            let update_vice_versa = $('#is_update_vice_versa').val();
             $.ajax({
               url: document_root_url+'/scripts/process_data_price_management.php',
               method:"POST",
               data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression, update_excluding: update_vice_versa}),
                 success: function(response_data) {
+                  $("#showloader").removeClass("loader");
+                  $(".loader_txt").hide();
+                  $("#showloader").find('span').html(store_html);
                   $(".update_loader").hide();
 
                   // Reset expression fields
@@ -4772,10 +4777,10 @@ function btnNextPrice(next_price) {
     if($("#chkall").is(':checked')) {
       isAllChecked = 1;
     }
-
+    let update_vice_versa = $('#is_update_vice_versa').val();
     var sellingPrices = Array();
 
-        if(isAllChecked == 0) {
+        if(isAllChecked == 0 || update_vice_versa) {
 
           if(!confirm("Are you sure to update Selling Price to Next Price")) {
             return false;
@@ -4807,7 +4812,6 @@ function btnNextPrice(next_price) {
     $("#showloader").find('span').html('Please wait....updating to Next Price.');
     $(".loader_txt").show();
 
-    let update_vice_versa = $('#is_update_vice_versa').val();
     $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked,subtype:next_price, more_or_less: $('#bs_np_percent_type').val(), percentage_of_np: $('#bs_np_percent_text').val(), update_excluding: update_vice_versa}, function(response_data) {
 
       var resp_obj = jQuery.parseJSON(response_data);
