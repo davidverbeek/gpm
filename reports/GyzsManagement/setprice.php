@@ -746,6 +746,7 @@ if ($result = $conn->query($sql)) {
 
           <input type="hidden" name="hdn_brandfiltercats" id="hdn_brandfiltercats" />
           <input type="hidden" name="hdn_two_cols_combine" id="hdn_two_cols_combine" />
+          <input type="hidden" name="is_update_vice_versa" id="is_update_vice_versa" value='0' />
 
         </div>
         <!-- End of Hiddens -->

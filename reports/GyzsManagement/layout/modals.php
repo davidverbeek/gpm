@@ -495,10 +495,10 @@
       </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="bsmodalOk">Update</button>
-        <button type="button" class="btn btn-success" id="bsmodalPreview">Preview</button>
-      </div>
-    </div>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary btn-sm" id="btn_vice_versa" style="color:#fff">Update ( Selection Excl. )</button>
+          <button type="button" class="btn btn-primary btn-sm" id="bsmodalOk">Update</button>
+          <button type="button" class="btn btn-success btn-sm" id="bsmodalPreview">Preview</button>
+        </div>
   </div>
 </div>
