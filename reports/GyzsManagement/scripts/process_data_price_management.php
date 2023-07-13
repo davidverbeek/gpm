@@ -1595,7 +1595,7 @@ if($isAllChecked == 1) {
     $excluding_rows = $_REQUEST['sellingPrices'];
     $excluding_skus = array_column($excluding_rows, 'sku');
     $sql_chk_all = getChkAllSql();
-    $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN (".implode(",",$excluding_skus)."))";
+    $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN ("."'".implode("', '",$excluding_skus)."'"."))";
     $result_chk_all = $conn->query($sql_chk_all);
     $product_to_update_arr = $result_chk_all->fetch_all(MYSQLI_ASSOC);
     if(count($product_to_update_arr) == 0) {
@@ -1748,7 +1748,7 @@ if(count($product_to_update_arr)) {
         $excluding_rows = $_REQUEST['sellingPrices'];
         $excluding_skus = array_column($excluding_rows, 'sku');
         $sql_chk_all = getChkAllSql();
-        $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN (".implode(",",$excluding_skus)."))";
+        $sql_chk_all = $sql_chk_all." AND (pmd.sku NOT IN ("."'".implode("', '",$excluding_skus)."'"."))";
 
         file_put_contents('update_bs_sql.txt', $sql_chk_all);
         $result_chk_all = $conn->query($sql_chk_all);
