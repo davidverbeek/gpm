@@ -1924,7 +1924,18 @@ if(count($product_to_update_arr)) {
 
         $webshop_selling_price = $row["gyzs_selling_price"];
         $pmd_buying_price = $row["buying_price"];
+        $supplier_gross_price = ($row["supplier_gross_price"] == 0 ? 1:$row["supplier_gross_price"]);
+
         $percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
+        $profit_margin = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
+        $profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
+        $discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
+
+          $all_selected_data[$row['product_id']]['selling_price']       = $new_selling_price;
+          $all_selected_data[$row['product_id']]['profit_margin_bp']    = $profit_margin;
+          $all_selected_data[$row['product_id']]['profit_margin_sp']    = $profit_margin_sp;
+          $all_selected_data[$row['product_id']]['discount_on_gross']   = $discount_percentage;
+          $all_selected_data[$row['product_id']]['percentage_increase'] = $percentage_increase;
 
         $updated_product_ids[] = $row['product_id'];
         $in_sku_arr[$row['sku']] = $row['sku'];
@@ -1936,14 +1947,14 @@ if(count($product_to_update_arr)) {
 
       if(count($all_selected_data)) {
          // empty preview_stiging column
-        $sql = "UPDATE price_management_data SET preview_stijging = NULL";
+        $sql = "UPDATE price_management_data SET preview_stijging = NULL, preview_profit_percentage_bp = NULL, preview_profit_percentage_sp = NULL, preview_discount_on_gross = NULL";
         $result_chk_all = $conn->query($sql);
 
         $updated_recs = bulkUpdatePreviewStiging("webshopprice",$all_selected_data,array(),$from,"Preview Stiging");
-        $response_data['msg'] = "Preview Stiging calculated: " . $updated_recs. " records.";
+        $response_data['msg'] = "Preview Data calculated for : " . $updated_recs. " records.";
       } else {
         if($notify_this > 0)
-        $response_data['msg'] = "No Update: Buying Price becomes more than New selling price ". $notify_this;
+        $response_data['msg'] = "Preview Not calculated because: New Selling Price is less than Buying Price ". $notify_this;
       }
     }
   break;  
@@ -2464,14 +2475,14 @@ function bulkUpdatePreviewStiging($type,$data,$common_data,$log_type,$update_typ
       $all_history_data = array();
 
       if($type == "webshopprice") {
-        $sql = "INSERT INTO price_management_data (product_id, sku, preview_stijging) VALUES ";
+        $sql = "INSERT INTO price_management_data (product_id, sku, preview_stijging, preview_profit_percentage_bp, preview_profit_percentage_sp, preview_discount_on_gross) VALUES ";
 
         foreach($chunk_values as $key=>$chunk_value) {
-            $all_col_data[] = "('".$chunk_value['product_id']."', '".$chunk_value['sku']."', '".$chunk_value['percentage_increase']."')";
+            $all_col_data[] = "('".$chunk_value['product_id']."', '".$chunk_value['sku']."', '".$chunk_value['percentage_increase']."', '".$chunk_value['profit_margin_bp']."', '".$chunk_value['profit_margin_sp']."', '".$chunk_value['discount_on_gross']."')";
             $updated_product_ids[] = $chunk_value["product_id"];
         }
 
-        $sql .= implode(",", $all_col_data) . " ON DUPLICATE KEY UPDATE preview_stijging = VALUES(preview_stijging)";
+        $sql .= implode(",", $all_col_data) . " ON DUPLICATE KEY UPDATE preview_stijging = VALUES(preview_stijging), preview_profit_percentage_bp = VALUES(preview_profit_percentage_bp), preview_profit_percentage_sp = VALUES(preview_profit_percentage_sp), preview_discount_on_gross = VALUES(preview_discount_on_gross)";
 
         if($conn->query($sql)) {
           bulkInsertLog($chunk_index,"Bulk Update ".$update_type." (".$log_type."):".count($chunk_values));
@@ -2505,6 +2516,7 @@ function calculate_expression_sp($expression, $v, $subtype = 'bigshopper') {
         $new_selling_price = $v["bigshopper_highest_price"] - (($bs_percent * $v["bigshopper_highest_price"])/100);
       }
   } else {
+
     $calculate_percentage_np = ((float)$v['price_of_the_next_excl_shipping'] * $bs_percent)/100;
     if($bs_more_less == 'more') {
       $new_selling_price  = roundValue($v['price_of_the_next_excl_shipping'] + $calculate_percentage_np);

@@ -1,6 +1,5 @@
 <?php
 
-  
 // Get the image and convert into string
 //$img = file_get_contents('https://cdn.gyzs.nl/media/catalog/product/cache/3/image/700x700/9df78eab33525d08d6e5fb8d27136e95/1/0/1091125.png');
   
@@ -106,6 +105,7 @@ Mage::app();
 if(!isset($_SESSION["price_id"])) {
   header("Location:index.php");
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -210,6 +210,10 @@ if ($result = $conn->query($sql)) {
   display:inline!important;
 }
 
+.increase_width {
+    white-space: break-spaces!important;
+}
+
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
@@ -225,7 +229,8 @@ if ($result = $conn->query($sql)) {
 
             <!-- Topbar -->
               <?php include "layout/top.php"; ?>
-            <!-- End of Topbar --> 
+            <!-- End of Topbar -->
+           
                 <div class="table-filter d-flex align-items-center" id="data_filters">
                     <div>
                         <div style="float:left;">
@@ -337,7 +342,12 @@ if ($result = $conn->query($sql)) {
                                   <th>Next price</th>
                                   <th>PM Vkpr (per piece)</th>
                                   <th>DIFF (PM Vkpr|BS LP)</th>
-                                  <th>Preview Stijging %</th>
+
+                                  <th class="increase_width">Preview Marge Inkpr %</th>
+                                  <th class="increase_width">Preview Marge Verkpr %</th>
+                                  <th class="increase_width">Preview Korting Brupr %</th>
+                                  <th class="increase_width">Preview Stijging %</th>
+
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -375,6 +385,7 @@ if ($result = $conn->query($sql)) {
                                   <th>Korting Brupr %</th>
                                   <th>Stijging %</th>
 
+
                                   <?php for($d=0;$d<=10;$d++) {
                                     $cust_group = intval(4027100 + $d);
                                    ?> 
@@ -396,7 +407,11 @@ if ($result = $conn->query($sql)) {
                                   <th>Next price</th>
                                   <th>PM Vkpr (per piece)</th>
                                   <th>DIFF (PM Vkpr|BS LP)</th>
-                                  <th>Preview Stijging %</th>
+
+                                  <th class="increase_width">Preview Marge Inkpr %</th>
+                                  <th class="increase_width">Preview Marge Verkpr %</th>
+                                  <th class="increase_width">Preview Korting Brupr %</th>
+                                  <th class="increase_width">Preview Stijging %</th>
 
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
@@ -664,7 +679,19 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                              <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="84" name="preview_stijging" class="show_cols chbs"><span>Preview Stijging %</span>
+                                <input type="checkbox" value="84" name="preview_marge_inkpr" class="show_cols chbs"><span>Preview Marge Inkpr %</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="85" name="preview_marge_verkpr" class="show_cols chbs"><span>Preview Marge Verkpr %</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="86" name="preview_korting_brupr" class="show_cols chbs"><span>Preview Korting Brupr %</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="87" name="preview_stijging" class="show_cols chbs"><span>Preview Stijging %</span>
                             </label>
 
                             <div style="clear:both;"></div>

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
   $("#p_s_p").click(function () {
     if ($(this).html() == "+") {
       $(this).html("-");
@@ -4916,6 +4917,7 @@ function reset_bs_modal() {
 }
 
 
+
 $('#bsmodalPreview').on( "click",function() {
 
         var expression = Array();
@@ -4946,6 +4948,7 @@ $('#bsmodalPreview').on( "click",function() {
                 "sku": value[column_index["sku"]],
                 "gyzs_selling_price": value[column_index["gyzs_selling_price"]],
                 "buying_price": value[column_index["buying_price"]],
+                "supplier_gross_price": value[column_index["supplier_gross_price"]],
                 "bigshopper_highest_price" : value[column_index["bigshopper_highest_price"]],
                 "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]],
                 "selling_price" :  value[column_index["selling_price"]],
@@ -4981,6 +4984,10 @@ $('#bsmodalPreview').on( "click",function() {
               }, 4000);
 
               table.column(column_index["preview_stijging"]).visible(true);
+              table.column(column_index["preview_profit_percentage_bp"]).visible(true);
+              table.column(column_index["preview_profit_percentage_sp"]).visible(true);
+              table.column(column_index["preview_discount_on_gross"]).visible(true);
+
             });
 
   })//end bsmodalPreview()
@@ -5023,4 +5030,4 @@ $('#bsmodalPreview').on( "click",function() {
       $("#bsmodalOk").trigger('click');
       $('#is_update_vice_versa').val('0');
    });
-});
+ })

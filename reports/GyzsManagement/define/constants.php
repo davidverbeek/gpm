@@ -107,11 +107,15 @@ $column_index = array(
 
   "pmvkpr_per_piece" => 82,
   "diff_pmvkpr_pp_bslp" => 83,
-  "preview_stijging" => 84,
 
-  "is_updated" => 85,
-  "is_activated" => 86,
-  "mag_updated_product_cnt" => 87,
+  "preview_profit_percentage_bp" => 84,
+  "preview_profit_percentage_sp" => 85,
+  "preview_discount_on_gross" => 86,
+  "preview_stijging" => 87,
+
+  "is_updated" => 88,
+  "is_activated" => 89,
+  "mag_updated_product_cnt" =>90
  );
 /* Column Mappings */
 

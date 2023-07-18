@@ -345,6 +345,10 @@ $columns = array(
        array('db' => 'CASE WHEN mktpr.price_of_the_next_excl_shipping IS NOT NULL THEN mktpr.price_of_the_next_excl_shipping ELSE "---" END AS price_of_the_next_excl_shipping', 'dt' => $column_index["price_of_the_next_excl_shipping"]),
        array('db' => 'CAST(CASE WHEN pmd.afwijkenidealeverpakking = "0" THEN (pmd.selling_price/pmd.idealeverpakking)ELSE pmd.selling_price END AS DECIMAL (10 , '.$scale.')) AS pm_vkpr_per_piece', 'dt' => $column_index["pmvkpr_per_piece"]),
        array('db' => 'CAST(CASE WHEN (pmd.afwijkenidealeverpakking = "0") AND mktpr.lowest_price IS NOT NULL THEN ((((pmd.selling_price/pmd.idealeverpakking) - mktpr.lowest_price)/mktpr.lowest_price)*100) WHEN (pmd.afwijkenidealeverpakking = "1") AND mktpr.lowest_price IS NOT NULL THEN (((pmd.selling_price - mktpr.lowest_price)/mktpr.lowest_price)*100) ELSE 0 END AS DECIMAL(10, '.$scale.')) AS diff_pm_vkpr_per_piece_bslp', 'dt' => $column_index["diff_pmvkpr_pp_bslp"]),
+
+        array( 'db' => 'pmd.preview_profit_percentage_bp AS preview_pp_bp', 'dt' => $column_index["preview_profit_percentage_bp"]),
+        array( 'db' => 'pmd.preview_profit_percentage_sp AS preview_pp_sp', 'dt' => $column_index["preview_profit_percentage_sp"]),
+        array( 'db' => 'pmd.preview_discount_on_gross AS preview_discount_gp', 'dt' => $column_index["preview_discount_on_gross"]),
         array( 'db' => 'pmd.preview_stijging AS preview_stijging',  'dt' => $column_index["preview_stijging"]),
 
   array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])
