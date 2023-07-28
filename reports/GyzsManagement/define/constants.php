@@ -113,9 +113,14 @@ $column_index = array(
   "preview_discount_on_gross" => 86,
   "preview_stijging" => 87,
 
-  "is_updated" => 88,
-  "is_activated" => 89,
-  "mag_updated_product_cnt" =>90
+  "precentage_revenue" => 88,
+  "compare_revenue_60" => 89,
+  "last_year_percentage_revenue" => 90,
+  "compare_revenue_year" => 91,
+
+  "is_updated" => 92,
+  "is_activated" => 93,
+  "mag_updated_product_cnt" =>94
  );
 /* Column Mappings */
 

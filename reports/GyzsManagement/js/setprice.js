@@ -906,6 +906,8 @@ $(document).ready(function () {
                     && that[0][0] != column_index["ean"] && that[0][0] != column_index["brand"]
                     && that[0][0] != column_index["afwijkenidealeverpakking"] && that[0][0] != column_index["webshop_afwijkenidealeverpakking"]
                     && that[0][0] != column_index["productset_incl_dispatch"]
+                    && that[0][0] != column_index["compare_revenue_60"]
+                    && that[0][0] != column_index["compare_revenue_year"]
                     )) {
                       if(that[0][0] == column_index["minimum_bol_percentage"]) {
                         var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="'+default_bol_percentage+'">Default Percentage ("'+default_bol_percentage+'")</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')

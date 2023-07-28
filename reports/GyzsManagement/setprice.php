@@ -106,6 +106,9 @@ if(!isset($_SESSION["price_id"])) {
   header("Location:index.php");
 }
 
+$last_year = date('Y',strtotime("-1 year", time()));
+$current_year = date('Y');
+
 ?>
 
 <!DOCTYPE html>
@@ -212,6 +215,11 @@ if ($result = $conn->query($sql)) {
 
 .increase_width {
     white-space: break-spaces!important;
+}
+
+.more_width {
+    width:142px!important;
+    white-space: nowrap!important;
 }
 
 </style>
@@ -348,6 +356,11 @@ if ($result = $conn->query($sql)) {
                                   <th class="increase_width">Preview Korting Brupr %</th>
                                   <th class="increase_width">Preview Stijging %</th>
 
+                                  <th class="more_width">%Revenue(60[<?php echo $current_year ?>])</th>
+                                  <th class="more_width">Revenue(60[<?php echo $current_year ?>])</th>
+                                  <th class=" more_width">%Revenue(60[<?php echo $last_year;?>])</th>
+                                  <th class=" more_width">Revenue(60[<?php echo $last_year;?>])</th>
+
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
                                   <th>Magento Updated</th>
@@ -412,6 +425,11 @@ if ($result = $conn->query($sql)) {
                                   <th class="increase_width">Preview Marge Verkpr %</th>
                                   <th class="increase_width">Preview Korting Brupr %</th>
                                   <th class="increase_width">Preview Stijging %</th>
+
+                                  <th class=" more_width">%Revenue(60<?php echo $current_year ?>)</th>
+                                  <th class=" more_width">Revenue(60[<?php echo $current_year ?>])</th>
+                                  <th class=" more_width">%Revenue(60[<?php echo $last_year;?>])</th>
+                                  <th class=" more_width">Revenue(60[[<?php echo $last_year;?>])</th>
 
                                   <th>Is Updated</th>
                                   <th>Is Activated</th>
@@ -694,6 +712,21 @@ if ($result = $conn->query($sql)) {
                                 <input type="checkbox" value="87" name="preview_stijging" class="show_cols chbs"><span>Preview Stijging %</span>
                             </label>
 
+                             <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="88" name="percentage_revenue" class="show_cols chbs"><span>% Revenue(60[<?php echo $current_year ?>])</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="89" name="compare_revenue_60" class="show_cols chbs"><span>Revenue(60[<?php echo $current_year ?>])</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="90" name="last_year_percentage_revenue" class="show_cols chbs"><span>% Revenue(60[<?php echo $last_year ?>])</span>
+                            </label>
+
+                            <label for="brand-a" class="col-6">
+                                <input type="checkbox" value="91" name="compare_revenue_year" class="show_cols chbs"><span>Revenue(60[<?php echo $last_year ?>])</span>
+                            </label>
                             <div style="clear:both;"></div>
 
                             
