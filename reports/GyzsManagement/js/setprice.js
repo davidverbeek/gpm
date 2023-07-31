@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
   $("#p_s_p").click(function () {
     if ($(this).html() == "+") {
       $(this).html("-");
@@ -905,6 +906,8 @@ $(document).ready(function () {
                     && that[0][0] != column_index["ean"] && that[0][0] != column_index["brand"]
                     && that[0][0] != column_index["afwijkenidealeverpakking"] && that[0][0] != column_index["webshop_afwijkenidealeverpakking"]
                     && that[0][0] != column_index["productset_incl_dispatch"]
+                    && that[0][0] != column_index["compare_revenue_60"]
+                    && that[0][0] != column_index["compare_revenue_year"]
                     )) {
                       if(that[0][0] == column_index["minimum_bol_percentage"]) {
                         var select = $('<select id="group_indx_'+that[0][0]+'" class="search_group_dd" style="width:92px"><option value="0">All</option><option value="'+default_bol_percentage+'">Default Percentage ("'+default_bol_percentage+'")</option><option value="1">Less than OR Equal to</option><option value="2">Greater than OR Equal to</option><option value="3">Between</option></select>')
@@ -4688,8 +4691,8 @@ $('#sel_merk').on('change', function() {
       }
 
       var sellingPrices = Array();
-
-      if(isAllChecked == 0) {
+      let update_vice_versa = $('#is_update_vice_versa').val();
+      if(isAllChecked == 0 || update_vice_versa) {
         $.each( table.rows('.selected').data(), function( key, value ) {
 
           sellingPrices[key] = {
@@ -4712,14 +4715,19 @@ $('#sel_merk').on('change', function() {
           }
         });
       }
-
+             $("#showloader").addClass("loader");
+              var store_html = $("#showloader").find('span').html();
+              $("#showloader").find('span').html('Please wait....updating Selling Price.');
+              $(".loader_txt").show();
             $(".update_loader").show();
-            let update_vice_versa = $('#is_update_vice_versa').val();
             $.ajax({
               url: document_root_url+'/scripts/process_data_price_management.php',
               method:"POST",
               data: ({ sellingPrices: sellingPrices, type: 'bulk_bs_update_selling_price', bs_price_option_checked: bs_price_option, isAllChecked: isAllChecked, expression: expression, update_excluding: update_vice_versa}),
                 success: function(response_data) {
+                  $("#showloader").removeClass("loader");
+                  $(".loader_txt").hide();
+                  $("#showloader").find('span').html(store_html);
                   $(".update_loader").hide();
 
                   // Reset expression fields
@@ -4772,10 +4780,10 @@ function btnNextPrice(next_price) {
     if($("#chkall").is(':checked')) {
       isAllChecked = 1;
     }
-
+    let update_vice_versa = $('#is_update_vice_versa').val();
     var sellingPrices = Array();
 
-        if(isAllChecked == 0) {
+        if(isAllChecked == 0 || update_vice_versa) {
 
           if(!confirm("Are you sure to update Selling Price to Next Price")) {
             return false;
@@ -4807,7 +4815,6 @@ function btnNextPrice(next_price) {
     $("#showloader").find('span').html('Please wait....updating to Next Price.');
     $(".loader_txt").show();
 
-    let update_vice_versa = $('#is_update_vice_versa').val();
     $.post( document_root_url+'/scripts/process_data_price_management.php', { sellingPrices: sellingPrices, type: "bulk_update_to_next_price", isAllChecked: isAllChecked,subtype:next_price, more_or_less: $('#bs_np_percent_type').val(), percentage_of_np: $('#bs_np_percent_text').val(), update_excluding: update_vice_versa}, function(response_data) {
 
       var resp_obj = jQuery.parseJSON(response_data);
@@ -4912,6 +4919,7 @@ function reset_bs_modal() {
 }
 
 
+
 $('#bsmodalPreview').on( "click",function() {
 
         var expression = Array();
@@ -4942,6 +4950,7 @@ $('#bsmodalPreview').on( "click",function() {
                 "sku": value[column_index["sku"]],
                 "gyzs_selling_price": value[column_index["gyzs_selling_price"]],
                 "buying_price": value[column_index["buying_price"]],
+                "supplier_gross_price": value[column_index["supplier_gross_price"]],
                 "bigshopper_highest_price" : value[column_index["bigshopper_highest_price"]],
                 "bigshopper_lowest_price" : value[column_index["bigshopper_lowest_price"]],
                 "selling_price" :  value[column_index["selling_price"]],
@@ -4977,6 +4986,10 @@ $('#bsmodalPreview').on( "click",function() {
               }, 4000);
 
               table.column(column_index["preview_stijging"]).visible(true);
+              table.column(column_index["preview_profit_percentage_bp"]).visible(true);
+              table.column(column_index["preview_profit_percentage_sp"]).visible(true);
+              table.column(column_index["preview_discount_on_gross"]).visible(true);
+
             });
 
   })//end bsmodalPreview()
@@ -5019,4 +5032,4 @@ $('#bsmodalPreview').on( "click",function() {
       $("#bsmodalOk").trigger('click');
       $('#is_update_vice_versa').val('0');
    });
-});
+ })

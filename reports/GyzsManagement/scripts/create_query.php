@@ -25,7 +25,8 @@ LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.
 
 LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'
 LEFT JOIN price_management_afzet_data AS pmaf ON pmaf.product_id = pmd.product_id
-LEFT JOIN bigshopper_prices AS mktpr ON mktpr.product_id = pmd.product_id";
+LEFT JOIN bigshopper_prices AS mktpr ON mktpr.product_id = pmd.product_id
+LEFT JOIN revenue_study_price_management AS rspm ON rspm.product_id = pmd.product_id";
 
 //mcpev_grossprice
 //mcpev_netprice
@@ -208,6 +209,10 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
             //$extra_where .= ' AND ('.str_replace('group_indx_83', $diff_column_generated, $also_and_column).')';
         }
 
+      } elseif($db_column_name == 'precentage_revenue') {
+         $db_column_name = 'rspm.percentage_revenue';
+      } elseif($db_column_name == 'last_year_percentage_revenue') {
+          $db_column_name = 'rspm.last_year_percentage_revenue';
       } else {
         $db_column_name = 'pmd.'.$db_column_name;
       }
@@ -345,7 +350,16 @@ $columns = array(
        array('db' => 'CASE WHEN mktpr.price_of_the_next_excl_shipping IS NOT NULL THEN mktpr.price_of_the_next_excl_shipping ELSE "---" END AS price_of_the_next_excl_shipping', 'dt' => $column_index["price_of_the_next_excl_shipping"]),
        array('db' => 'CAST(CASE WHEN pmd.afwijkenidealeverpakking = "0" THEN (pmd.selling_price/pmd.idealeverpakking)ELSE pmd.selling_price END AS DECIMAL (10 , '.$scale.')) AS pm_vkpr_per_piece', 'dt' => $column_index["pmvkpr_per_piece"]),
        array('db' => 'CAST(CASE WHEN (pmd.afwijkenidealeverpakking = "0") AND mktpr.lowest_price IS NOT NULL THEN ((((pmd.selling_price/pmd.idealeverpakking) - mktpr.lowest_price)/mktpr.lowest_price)*100) WHEN (pmd.afwijkenidealeverpakking = "1") AND mktpr.lowest_price IS NOT NULL THEN (((pmd.selling_price - mktpr.lowest_price)/mktpr.lowest_price)*100) ELSE 0 END AS DECIMAL(10, '.$scale.')) AS diff_pm_vkpr_per_piece_bslp', 'dt' => $column_index["diff_pmvkpr_pp_bslp"]),
+
+        array( 'db' => 'pmd.preview_profit_percentage_bp AS preview_pp_bp', 'dt' => $column_index["preview_profit_percentage_bp"]),
+        array( 'db' => 'pmd.preview_profit_percentage_sp AS preview_pp_sp', 'dt' => $column_index["preview_profit_percentage_sp"]),
+        array( 'db' => 'pmd.preview_discount_on_gross AS preview_discount_gp', 'dt' => $column_index["preview_discount_on_gross"]),
         array( 'db' => 'pmd.preview_stijging AS preview_stijging',  'dt' => $column_index["preview_stijging"]),
+
+        array( 'db' => 'rspm.percentage_revenue AS percentage_revenue',  'dt' => $column_index["precentage_revenue"]),
+        array( 'db' => 'CONCAT( rspm.current_revenue, " == ", rspm.previous_revenue ) AS compare_revenue_60',  'dt' => $column_index["compare_revenue_60"]),
+        array( 'db' => 'rspm.last_year_percentage_revenue AS last_year_percentage_revenue',  'dt' => $column_index["last_year_percentage_revenue"]),
+        array( 'db' => 'CONCAT( rspm.current_revenue, " == ", rspm.last_year_current_revenue) AS compare_revenue_year',  'dt' => $column_index["compare_revenue_year"]),
 
   array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])
   /*array( 'db' => 'CAST((SELECT COUNT(*) AS updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and buying_price_changed = "1" and is_synced = "No") AS UNSIGNED) AS updated_product_cnt',  'dt' => $column_index["updated_product_cnt"]), */
