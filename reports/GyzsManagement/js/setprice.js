@@ -4305,6 +4305,7 @@ $("#flexCheckDefault").change(function () {
     $('#filter_with').val('');
     $('#hdn_selectedbrand').val('');
     $('#hdn_filters').val('');
+    $('.search_group_dd').val('');
     reset_bs_modal();
     table.search('').columns().search('').draw();
   });

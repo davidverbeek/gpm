@@ -697,35 +697,35 @@ if ($result = $conn->query($sql)) {
                             </label>
 
                              <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="84" name="preview_marge_inkpr" class="show_cols chbs"><span>Preview Marge Inkpr %</span>
+                                <input type="checkbox" value="84" name="preview_marge_inkpr" class="show_cols"><span>Preview Marge Inkpr %</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="85" name="preview_marge_verkpr" class="show_cols chbs"><span>Preview Marge Verkpr %</span>
+                                <input type="checkbox" value="85" name="preview_marge_verkpr" class="show_cols"><span>Preview Marge Verkpr %</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="86" name="preview_korting_brupr" class="show_cols chbs"><span>Preview Korting Brupr %</span>
+                                <input type="checkbox" value="86" name="preview_korting_brupr" class="show_cols"><span>Preview Korting Brupr %</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="87" name="preview_stijging" class="show_cols chbs"><span>Preview Stijging %</span>
+                                <input type="checkbox" value="87" name="preview_stijging" class="show_cols"><span>Preview Stijging %</span>
                             </label>
 
                              <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="88" name="percentage_revenue" class="show_cols chbs"><span>% Revenue(60[<?php echo $current_year ?>])</span>
+                                <input type="checkbox" value="88" name="percentage_revenue" class="show_cols"><span>% Revenue(60[<?php echo $current_year ?>])</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="89" name="compare_revenue_60" class="show_cols chbs"><span>Revenue(60[<?php echo $current_year ?>])</span>
+                                <input type="checkbox" value="89" name="compare_revenue_60" class="show_cols"><span>Revenue(60[<?php echo $current_year ?>])</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="90" name="last_year_percentage_revenue" class="show_cols chbs"><span>% Revenue(60[<?php echo $last_year ?>])</span>
+                                <input type="checkbox" value="90" name="last_year_percentage_revenue" class="show_cols"><span>% Revenue(60[<?php echo $last_year ?>])</span>
                             </label>
 
                             <label for="brand-a" class="col-6">
-                                <input type="checkbox" value="91" name="compare_revenue_year" class="show_cols chbs"><span>Revenue(60[<?php echo $last_year ?>])</span>
+                                <input type="checkbox" value="91" name="compare_revenue_year" class="show_cols"><span>Revenue(60[<?php echo $last_year ?>])</span>
                             </label>
                             <div style="clear:both;"></div>
 
