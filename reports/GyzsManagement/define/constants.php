@@ -113,10 +113,10 @@ $column_index = array(
   "preview_discount_on_gross" => 86,
   "preview_stijging" => 87,
 
-  "precentage_revenue" => 88,
-  "compare_revenue_60" => 89,
-  "last_year_percentage_revenue" => 90,
-  "compare_revenue_year" => 91,
+ "compare_revenue_60" => 88,
+  "precentage_revenue" => 89,
+ "compare_revenue_year" => 90,
+  "last_year_percentage_revenue" => 91,
 
   "is_updated" => 92,
   "is_activated" => 93,
