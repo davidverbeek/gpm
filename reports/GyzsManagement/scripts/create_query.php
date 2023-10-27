@@ -357,7 +357,7 @@ $columns = array(
         array( 'db' => 'pmd.preview_stijging AS preview_stijging',  'dt' => $column_index["preview_stijging"]),
  array( 'db' =>'CASE WHEN (rspm.current_revenue IS NOT NULL && rspm.previous_revenue IS NOT NULL) THEN CONCAT(rspm.current_revenue," == ",rspm.previous_revenue) ELSE CONCAT( ifnull(current_revenue,""),ifnull(previous_revenue,"")) END AS compare_revenue_60',  'dt' => $column_index["compare_revenue_60"]),
         array( 'db' => 'rspm.percentage_revenue AS percentage_revenue',  'dt' => $column_index["precentage_revenue"]),
-        array( 'db' => 'CASE WHEN (rspm.current_revenue IS NOT NULL && rspm.last_year_current_revenue IS NOT NULL) THEN CONCAT(rspm.current_revenue," == ",rspm.last_year_current_revenue) ELSE CONCAT( ifnull(current_revenue,""),ifnull(last_year_current_revenue,"")) END AS compare_revenue_year',  'dt' => $column_index["compare_revenue_year"]),
+        array( 'db' => 'CASE WHEN (rspm.current_revenue IS NOT NULL && rspm.last_year_current_revenue IS NOT NULL) THEN CONCAT(rspm.current_revenue," == ",rspm.last_year_current_revenue) ELSE CONCAT( ifnull(current_revenue,"00")," == ",ifnull(last_year_current_revenue,"00")) END AS compare_revenue_year',  'dt' => $column_index["compare_revenue_year"]),
         array( 'db' => 'rspm.last_year_percentage_revenue AS last_year_percentage_revenue',  'dt' => $column_index["last_year_percentage_revenue"]),
 
         array( 'db' => 'CAST((SELECT COUNT(*) AS mag_updated_product_cnt FROM price_management_history WHERE product_id = mcpe.entity_id and is_viewed = "No" and updated_by = "Magento" and buying_price_changed = "1") AS UNSIGNED) AS mag_updated_product_cnt',  'dt' => $column_index["mag_updated_product_cnt"])

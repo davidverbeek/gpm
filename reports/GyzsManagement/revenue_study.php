@@ -16,22 +16,22 @@ $revenue_data_60 = $all_col_data = array();
 // $days = $setting_row['roas']['sku_afzet_in_days'] ?? '1 year';
 
 $col_data = array();
-
 $current_date = date('Y-m-d H:i:s');
 $days = 60;
 $sixty_days_back = strtotime("-".$days." day", time());
 $sixty_days_back_date = date("Y-m-d",  $sixty_days_back);
-
  $revenue_data_60 = getRevenue_study($sixty_days_back_date, $current_date, 'current_revenue');
 $revenue_data_60 = array_slice($revenue_data_60, 0,6,true);
+//print_r($revenue_data_60);
 
 $sixty_one_days_back_date = date('Y-m-d H:i:s', strtotime('-1 day', strtotime($sixty_days_back_date)));
 $date = new DateTime($sixty_one_days_back_date);
 $date->modify('-60 days');
-$previous_date = $date->format('Y-m-d');//exit;
+$previous_date = $date->format('Y-m-d');
+//echo $sixty_one_days_back_date; echo $previous_date;
+//exit;
 
 $revenue_data_120 = getRevenue_study($previous_date, $sixty_one_days_back_date, 'previous_revenue');
-//$revenue_data_120 = array_slice($revenue_data_120,0,6,true);
 
 $result = array();
 foreach($revenue_data_60 as $key => $value) {
@@ -39,8 +39,8 @@ foreach($revenue_data_60 as $key => $value) {
       $result[$key] = array_merge($revenue_data_120[$key], $revenue_data_60[$key]);      
 
       // calculate
-      $pecentage_revenue = (($revenue_data_60[$key]['current_revenue'] - $revenue_data_120[$key]['previous_revenue'])/$revenue_data_60[$key]['current_revenue'])*100;
-      $result[$key]['percentage_revenue'] = $pecentage_revenue;
+      $pecentage_revenue = (($revenue_data_60[$key]['current_revenue']  * 100)/$revenue_data_120[$key]['previous_revenue']);
+      $result[$key]['percentage_revenue'] = ($pecentage_revenue-100);
 
       unset($revenue_data_120[$key]);
       unset($revenue_data_60[$key]);
@@ -53,27 +53,19 @@ print_r($result);
 echo "</pre>";
 exit;*/
 
- $lastyear = strtotime("-5 year", time());
+ $lastyear = strtotime("-1 year", time());
  $last_year_date = date("Y-m-d H:i:s", $lastyear);//echo $last_year_date;
  $sixty_days_back_last_year_date = date('Y-m-d', strtotime('-60 days', $lastyear));
 
  $revenue_data_365 = getRevenue_study($sixty_days_back_last_year_date, $last_year_date, 'last_year_current_revenue');
-
-/*  $revenue_data_365[1417105] = Array
-        (
-           
-            'product_id' => 33534,
-            'last_year_current_revenue' => 100
-        );*/
-
 
  foreach($result as $key => $value) {
     if(isset($revenue_data_365[$key])) {
       $result[$key] = array_merge($revenue_data_365[$key], $result[$key]);
 
       // calculate
-      $last_year_percentage_revenue = (($result[$key]['current_revenue'] - $revenue_data_365[$key]['last_year_current_revenue'])/$result[$key]['current_revenue'])*100;
-      $result[$key]['last_year_percentage_revenue'] = $last_year_percentage_revenue;
+      $last_year_percentage_revenue = (($result[$key]['current_revenue'] * 100)/$revenue_data_365[$key]['last_year_current_revenue']);
+      $result[$key]['last_year_percentage_revenue'] = ($last_year_percentage_revenue-100);
       unset($revenue_data_365[$key]);
     }  
 }
@@ -91,7 +83,7 @@ foreach($revenue_data_60 as $key => $value) {
       unset($revenue_data_365[$key]);
       unset($revenue_data_60[$key]);
 
-    }  
+    }
 }
 
 storeRevenueInDB($revenue_data_60);
@@ -111,7 +103,7 @@ function getRevenue_study($start_date, $end_date, $new_key) {
   $current_date = date('Y-m-d H:i:s');
 
        $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$start_date." 00:00:00' AND  created_at <= '".$end_date."')";
-      //echo $sql_all_orders;
+      //echo $sql_all_orders;exit;
 
   $allactiveOrdersByDays = $conn->query($sql_all_orders);
   $allactiveOrdersByDays = $allactiveOrdersByDays->fetch_all(MYSQLI_ASSOC);
@@ -163,7 +155,7 @@ function getRevenue_study($start_date, $end_date, $new_key) {
     }
   }
 
-  
+  //print_r($all_ordered_skus_revenue);exit;
   return $all_ordered_skus_revenue;
 }
 
@@ -203,6 +195,6 @@ function storeRevenueInDB($data_with_column_name) {
         echo "Error in chunk insertion:- ".mysqli_error($conn)."\n";
       }
   } else {
-    echo 'no data';
+    echo 'no data<br>';
   }
 }
