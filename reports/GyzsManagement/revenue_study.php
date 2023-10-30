@@ -16,13 +16,16 @@ $revenue_data_60 = $all_col_data = array();
 // $days = $setting_row['roas']['sku_afzet_in_days'] ?? '1 year';
 
 $col_data = array();
+
+
+ 
+
 $current_date = date('Y-m-d H:i:s');
 $days = 60;
 $sixty_days_back = strtotime("-".$days." day", time());
 $sixty_days_back_date = date("Y-m-d",  $sixty_days_back);
  $revenue_data_60 = getRevenue_study($sixty_days_back_date, $current_date, 'current_revenue');
 $revenue_data_60 = array_slice($revenue_data_60, 0,6,true);
-//print_r($revenue_data_60);
 
 $sixty_one_days_back_date = date('Y-m-d H:i:s', strtotime('-1 day', strtotime($sixty_days_back_date)));
 $date = new DateTime($sixty_one_days_back_date);
@@ -39,12 +42,16 @@ foreach($revenue_data_60 as $key => $value) {
       $result[$key] = array_merge($revenue_data_120[$key], $revenue_data_60[$key]);      
 
       // calculate
-      $pecentage_revenue = (($revenue_data_60[$key]['current_revenue']  * 100)/$revenue_data_120[$key]['previous_revenue']);
-      $result[$key]['percentage_revenue'] = ($pecentage_revenue-100);
-
+      if($revenue_data_120[$key]['previous_revenue']) {
+        $pecentage_revenue = (($revenue_data_60[$key]['current_revenue']  * 100)/$revenue_data_120[$key]['previous_revenue']);
+        $result[$key]['percentage_revenue'] = ($pecentage_revenue-100);
+      } elseif($revenue_data_60[$key]['current_revenue']) {
+        $result[$key]['percentage_revenue'] = 100;
+      } else {
+        $result[$key]['percentage_revenue'] = 0;
+      }
       unset($revenue_data_120[$key]);
       unset($revenue_data_60[$key]);
-
     }  
 }
 
@@ -59,13 +66,19 @@ exit;*/
 
  $revenue_data_365 = getRevenue_study($sixty_days_back_last_year_date, $last_year_date, 'last_year_current_revenue');
 
- foreach($result as $key => $value) {
+foreach($result as $key => $value) {
     if(isset($revenue_data_365[$key])) {
       $result[$key] = array_merge($revenue_data_365[$key], $result[$key]);
 
       // calculate
-      $last_year_percentage_revenue = (($result[$key]['current_revenue'] * 100)/$revenue_data_365[$key]['last_year_current_revenue']);
-      $result[$key]['last_year_percentage_revenue'] = ($last_year_percentage_revenue-100);
+      if($revenue_data_365[$key]['last_year_current_revenue']) {
+        $last_year_percentage_revenue = (($result[$key]['current_revenue'] * 100)/$revenue_data_365[$key]['last_year_current_revenue']);
+        $result[$key]['last_year_percentage_revenue'] = ($last_year_percentage_revenue-100);
+      } elseif($result[$key]['current_revenue']) {
+        $result[$key]['last_year_percentage_revenue'] = 100;
+      } else {
+        $result[$key]['last_year_percentage_revenue'] = 0;
+      }
       unset($revenue_data_365[$key]);
     }  
 }
@@ -77,12 +90,17 @@ foreach($revenue_data_60 as $key => $value) {
       $revenue_60_365[$key] = array_merge($revenue_data_365[$key], $revenue_data_60[$key]);      
 
       // calculate
-      $last_year_percentage_revenue = (($revenue_data_60[$key]['current_revenue'] - $revenue_data_365[$key]['last_year_current_revenue'])/$revenue_data_60[$key]['current_revenue'])*100;
-      $revenue_60_365[$key]['last_year_percentage_revenue'] = $last_year_percentage_revenue;
+      if($revenue_data_365[$key]['last_year_current_revenue']) {
+        $last_year_percentage_revenue = ($revenue_data_60[$key]['current_revenue'] * 100)/$revenue_data_365[$key]['last_year_current_revenue'];
+        $revenue_60_365[$key]['last_year_percentage_revenue'] = ($last_year_percentage_revenue-100);
 
+      } elseif($revenue_data_60[$key]['current_revenue']) {
+        $revenue_60_365[$key]['last_year_percentage_revenue'] = 100;
+      } else {
+        $revenue_60_365[$key]['last_year_percentage_revenue'] = 0;
+      }
       unset($revenue_data_365[$key]);
       unset($revenue_data_60[$key]);
-
     }
 }
 
