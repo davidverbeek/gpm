@@ -55,7 +55,7 @@ $(document).ready(function () {
           is_debter_checked = 1;
         }
       });
-       console.log(flag+'58');
+       
         if(flag == 0) {
           selected_cats = getTreeCategories();
         } else if(is_debter_checked == 1) {
