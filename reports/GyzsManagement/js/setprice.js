@@ -55,7 +55,7 @@ $(document).ready(function () {
           is_debter_checked = 1;
         }
       });
-
+       
         if(flag == 0) {
           selected_cats = getTreeCategories();
         } else if(is_debter_checked == 1) {
@@ -832,6 +832,8 @@ $(document).ready(function () {
                     if(parseInt(row[column_index["mag_updated_product_cnt"]]) != 0) {
                       magento_notify_price_changed = '<i class="fas fa-bell" style="font-size:14px; color:#3a3d99; position:relative;"><span class="position-absolute badge rounded-pill bg-danger">'+row[column_index["mag_updated_product_cnt"]]+'</span></i>';
                     }
+
+
                   return '<a id="pricelogs.php?pid='+row[column_index["product_id"]]+'&s='+row[column_index["sku"]]+'&e='+row[column_index["ean"]]+'" title="View Buying/Selling Price History" class="history_link">'+data+' '+magento_notify_price_changed+'</a>';  
               },
               "className": "mag_buying_change"
@@ -1124,6 +1126,17 @@ $(document).ready(function () {
         } else {
           $(row).removeClass("selected");
         }
+
+
+      if( data[column_index["precentage_revenue"]] !== null && parseFloat(data[column_index["precentage_revenue"]]) < 0)  {
+       $('td:eq('+(column_index["sku"]-1)+')', row).append('&nbsp;<img src="images/euro_down_sp.gif" width="auto" height="17" title="'+parseFloat(data[column_index["precentage_revenue"]])+'" style="position:absolute; margin-left:30px; cursor:pointer;" />');
+      } else {
+        if(data[column_index["precentage_revenue"]] !== null && parseFloat(data[column_index["precentage_revenue"]]) > 0) {
+        $('td:eq('+(column_index["sku"]-1)+')', row).append('&nbsp;<img src="images/euro_up_sp.gif" width="auto" height="17" title="'+parseFloat(data[column_index["precentage_revenue"]])+'" style="position:absolute; margin-left:30px; cursor:pointer;" />');
+        }
+      }
+
+
       },
 
       "ajax": {
@@ -4193,15 +4206,15 @@ $("#chkavges").change(function() {
             $('#UndoModal').modal('toggle');
             $('<div class="alert alert-success" role="alert">'+resp_obj["msg"]+'</div>').insertBefore("#data_filters");
 
-                      window.setTimeout(function() {
-                        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-                            $(this).remove(); 
-                        });
-                      }, 4000);
+              window.setTimeout(function() {
+                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                    $(this).remove();
+                });
+              }, 4000);
 
-                      $("#chkall").prop('checked', false);
-                      $("#check_all_cnt").html(0);
-                      table.ajax.reload( null, false );
+              $("#chkall").prop('checked', false);
+              $("#check_all_cnt").html(0);
+              table.ajax.reload( null, false );
           } 
         }
       }
@@ -4333,7 +4346,7 @@ $("#flexCheckDefault").change(function () {
       flag = 0;
 
      // $('.dropdown').val([]);
-      table
+     table
       .columns([column_index["brand"], column_index["supplier_type"]])
       .search('')
       .draw();

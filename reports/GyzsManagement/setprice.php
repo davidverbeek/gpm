@@ -827,6 +827,7 @@ if ($result = $conn->query($sql)) {
     var debter_product_data = <?php echo json_encode($debter_data) ?>; 
     var collect_category_ids = [];
     var flag = 0;
+    var current_year_js = '<?php echo $current_year ?>';
   </script>
   <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/twitter-bootstrap.bundle.js"></script>
   <script type="text/javascript" src="<?php echo $document_root_url; ?>/js/bootstrap-select.min.js"></script>
