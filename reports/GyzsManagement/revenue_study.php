@@ -20,12 +20,11 @@ $col_data = array();
 
  
 
-$current_date = date('Y-m-d H:i:s');
+$current_date = date('Y-m-d');
 $days = 60;
 $sixty_days_back = strtotime("-".$days." day", time());
 $sixty_days_back_date = date("Y-m-d",  $sixty_days_back);
  $revenue_data_60 = getRevenue_study($sixty_days_back_date, $current_date, 'current_revenue');
-$revenue_data_60 = array_slice($revenue_data_60, 0,6,true);
 
 $sixty_one_days_back_date = date('Y-m-d H:i:s', strtotime('-1 day', strtotime($sixty_days_back_date)));
 $date = new DateTime($sixty_one_days_back_date);
@@ -35,6 +34,8 @@ $previous_date = $date->format('Y-m-d');
 //exit;
 
 $revenue_data_120 = getRevenue_study($previous_date, $sixty_one_days_back_date, 'previous_revenue');
+
+
 
 $result = array();
 foreach($revenue_data_60 as $key => $value) {
@@ -61,10 +62,11 @@ echo "</pre>";
 exit;*/
 
  $lastyear = strtotime("-1 year", time());
- $last_year_date = date("Y-m-d H:i:s", $lastyear);//echo $last_year_date;
+ $last_year_date = date("Y-m-d", $lastyear);//echo $last_year_date;
  $sixty_days_back_last_year_date = date('Y-m-d', strtotime('-60 days', $lastyear));
 
  $revenue_data_365 = getRevenue_study($sixty_days_back_last_year_date, $last_year_date, 'last_year_current_revenue');
+
 
 foreach($result as $key => $value) {
     if(isset($revenue_data_365[$key])) {
@@ -104,21 +106,20 @@ foreach($revenue_data_60 as $key => $value) {
     }
 }
 
-storeRevenueInDB($revenue_data_60);
-storeRevenueInDB($revenue_data_120);
-storeRevenueInDB($revenue_data_365);
-storeRevenueInDB($result);
-storeRevenueInDB($revenue_60_365);
+storeRevenueInDB($revenue_data_60, 'percentage_revenue',100);
+storeRevenueInDB($revenue_data_120, 'percentage_revenue',-100);
+storeRevenueInDB($revenue_data_365, 'last_year_percentage_revenue',-100);
+storeRevenueInDB($result,'',0);
+storeRevenueInDB($revenue_60_365,'',0);
 
 /*echo "<pre>";
-print_r($revenue_data_365);
+print_r($result);
 echo "</pre>";
 exit;*/
 
 
 function getRevenue_study($start_date, $end_date, $new_key) {
   global $conn;
-  $current_date = date('Y-m-d H:i:s');
 
        $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$start_date." 00:00:00' AND  created_at <= '".$end_date."')";
       //echo $sql_all_orders;exit;
@@ -178,7 +179,7 @@ function getRevenue_study($start_date, $end_date, $new_key) {
 }
 
 
-function storeRevenueInDB($data_with_column_name) {
+function storeRevenueInDB($data_with_column_name,$extra_col_name, $extra_col_value) {
   global $conn;
 
   if (count(($data_with_column_name))) {   
@@ -186,15 +187,23 @@ function storeRevenueInDB($data_with_column_name) {
     $sql_cols = array_keys($data_with_column_name);//print_r($sql_cols);exit;
     $table_cols = array_keys($data_with_column_name[$sql_cols[0]]);
 
-    $sql = "INSERT INTO revenue_study_price_management(".implode(',', array_keys($data_with_column_name[$sql_cols[0]])).") VALUES";
+    if($extra_col_name == '') {
+      $sql = "INSERT INTO revenue_study_price_management(".implode(',', array_keys($data_with_column_name[$sql_cols[0]])).") VALUES";
+    } else {
+      $sql = "INSERT INTO revenue_study_price_management(".implode(',', array_keys($data_with_column_name[$sql_cols[0]])).", {$extra_col_name}) VALUES";
+    }
 
     foreach($data_with_column_name as $sku=>$r_data) {
       $make_one_data = array();
       foreach($table_cols as $col_name_key) {
-        $make_one_data[] = $r_data[$col_name_key];
+        $make_one_data[] = $r_data[$col_name_key] ?? 0;
       }
 
-      $all_col_data[] = "(".implode(',', $make_one_data).")";
+      if($extra_col_name != '') {
+        $all_col_data[] = "(".implode(',', $make_one_data).", {$extra_col_value})";
+      } else {
+        $all_col_data[] = "(".implode(',', $make_one_data).")";
+      }
     }      
 
       unset($sql_cols['product_id']);
@@ -203,10 +212,14 @@ function storeRevenueInDB($data_with_column_name) {
       foreach($table_cols as $col_name) {
         $back_part_cols[] = "{$col_name} = VALUES({$col_name})";
       }
+
+      if($extra_col_name != '') {
+        $back_part_cols[] = "{$extra_col_name} = VALUES({$extra_col_name})";
+      }
       $last_part_sql .= implode(',', $back_part_cols);
       $sql .= implode(",", $all_col_data);
+     
       $sql .= $last_part_sql;
-      
       if($conn->query($sql)) {
         echo "Inserted:-".count($data_with_column_name)."\n";
       } else {
