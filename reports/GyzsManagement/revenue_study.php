@@ -21,7 +21,6 @@ $col_data = array();
  
 
 $current_date = date('Y-m-d');
-
 $days = 60;
 $sixty_days_back = strtotime("-".$days." day", time());
 $sixty_days_back_date = date("Y-m-d",  $sixty_days_back);
@@ -67,7 +66,8 @@ exit;*/
  $sixty_days_back_last_year_date = date('Y-m-d', strtotime('-60 days', $lastyear));
 
  $revenue_data_365 = getRevenue_study($sixty_days_back_last_year_date, $last_year_date, 'last_year_current_revenue');
-foreach($result as $key => $value) {
+
+ foreach($result as $key => $value) {
     if(isset($revenue_data_365[$key])) {
       $result[$key] = array_merge($revenue_data_365[$key], $result[$key]);
 
@@ -120,64 +120,71 @@ exit;*/
 function getRevenue_study($start_date, $end_date, $new_key) {
   global $conn;
 
-       $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE state != 'canceled' AND (created_at >= '".$start_date." 00:00:00' AND  created_at <= '".$end_date." 59:59:59')";
-      //echo $sql_all_orders;exit;
+  $sql_all_orders = "SELECT entity_id, created_at FROM mage_sales_flat_order WHERE (state != 'canceled' ) AND (created_at >= '".$start_date." 00:00:00' AND  created_at <= '".$end_date." 23:59:00')";
+  // echo $sql_all_orders;exit;
 
-  $allactiveOrdersByDays = $conn->query($sql_all_orders);
-  $allactiveOrdersByDays = $allactiveOrdersByDays->fetch_all(MYSQLI_ASSOC);
-  $all_ordered_skus_revenue = $sku_quantities_in_order = array();
-  if(count($allactiveOrdersByDays)) {
-    foreach($allactiveOrdersByDays as $order) {
-        $order_id = $order['entity_id'];
-        
-        $sql_order_items = "SELECT * FROM mage_sales_flat_order_item WHERE order_id = '".$order_id."'";
-        $allOrderItems = $conn->query($sql_order_items);
-        $allOrderItems = $allOrderItems->fetch_all(MYSQLI_ASSOC);
+  $allactiveOrders = $conn->query($sql_all_orders);
+  $allactiveOrders = $allactiveOrders->fetch_all(MYSQLI_ASSOC);
 
-        foreach($allOrderItems as $order_item) {
-            $qty_ordered = $order_item['qty_ordered'];
-            $qty_refunded = $order_item['qty_refunded'];
-            $product_id = $order_item['product_id'];
-            $sku = $order_item['sku'];
+  $all_ordered_skus = $sku_quantities_in_order = array();
 
-            $sku_quantities_in_order[$order_item['sku']][0]['product_id'] = $product_id;
-            $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['Quantity'] = $qty_ordered;
-            $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['Refunded'] = $qty_refunded;
-           // $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['price'] = $order_item['price'];
-            $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['base_price'] = $order_item['base_price'];
-//$sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['afwijkenidealeverpakking'] =  $order_item['afwijkenidealeverpakking'];
-//$sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['idealeverpakking'] =  $order_item['idealeverpakking'];
+  if(count($allactiveOrders)) {
+    foreach($allactiveOrders as $order) {
+      $order_id = $order['entity_id'];
 
-        }
+      $sql_order_items = "SELECT * FROM mage_sales_flat_order_item WHERE order_id = '".$order_id."'";
+      $allOrderItems = $conn->query($sql_order_items);
+      $allOrderItems = $allOrderItems->fetch_all(MYSQLI_ASSOC);
+
+      foreach($allOrderItems as $order_item) {
+
+        $product_id = $order_item['product_id'];
+        $qty_ordered = $order_item['qty_ordered'];
+        $qty_refunded = $order_item['qty_refunded'];
+        $product_price_excl_tax = $order_item['base_price'];
+
+        $sku_quantities_in_order[$order_item['sku']][0]['product_id'] = $product_id;
+        $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['Quantity'] = $qty_ordered;
+        $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['Refunded'] = $qty_refunded;
+        $sku_quantities_in_order[$order_item['sku']][$order_item['order_id']]['base_price'] = $product_price_excl_tax;
+
+      }
     }
-/* print_r($sku_quantities_in_order);exit; */
+    /* print_r($sku_quantities_in_order);exit; */
     if(count($sku_quantities_in_order)) {
-        foreach($sku_quantities_in_order as $sku=>$orders) {
-            if($sku) {
-              $order_wise_quantities = array();
-              $order_wise_refunded_quantities_365 = array();
-              foreach($orders as $order_id=>$sku_data) {
-                if($order_id != 0) {
-                  $order_wise_quantities[] = $sku_data['Quantity'];
-                  $order_wise_refunded_quantities[] = $sku_data['Refunded'];
+      foreach($sku_quantities_in_order as $sku=>$orders) {
 
-                  $order_wise_sku_price_excl_tax[] = $sku_data['base_price'] * $sku_data['Quantity'];
-                  $refunded_sp_excl_tax[] = $sku_data['base_price'] * $sku_data['Refunded'];
-                }
-              }
+        if($sku) {
 
-              $total_revenue = array_sum($order_wise_sku_price_excl_tax) - array_sum($refunded_sp_excl_tax);
-              if($total_revenue > 0) {
-                $all_ordered_skus_revenue[$sku]['product_id'] = $orders[0]['product_id'];
-                $all_ordered_skus_revenue[$sku][$new_key] = array_sum($order_wise_sku_price_excl_tax) - array_sum($refunded_sp_excl_tax);
-              }
+          $order_wise_quantities = array();
+          $order_wise_sku_price_excl_tax = array();
+
+          $order_wise_refunded_quantities = array();
+          $refunded_sp_excl_tax = array();
+
+          foreach($orders as $order_id=>$sku_data) {
+            if($order_id != 0) {
+              $order_wise_quantities[] = $sku_data['Quantity'];
+              $order_wise_refunded_quantities[] = $sku_data['Refunded'];
+
+              $order_wise_sku_price_excl_tax[] = $sku_data['base_price'] * $sku_data['Quantity'];
+              $refunded_sp_excl_tax[] = $sku_data['base_price'] * $sku_data['Refunded'];
+            }
+          }
+
+          $sku_total_revenue = array_sum($order_wise_sku_price_excl_tax) - array_sum($refunded_sp_excl_tax);
+
+          if ($sku_total_revenue > 0) {
+            $all_ordered_skus[$sku]['product_id'] = $orders[0]['product_id'];
+            $all_ordered_skus[$sku][$new_key] =  $sku_total_revenue;
+          }
         }
       }
     }
   }
 
-  //print_r($all_ordered_skus_revenue);exit;
-  return $all_ordered_skus_revenue;
+  //print_r($all_ordered_skus);exit;
+  return $all_ordered_skus;
 }
 
 
