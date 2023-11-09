@@ -81,7 +81,9 @@ exit;*/
         $result[$key]['last_year_percentage_revenue'] = 0;
       }
       unset($revenue_data_365[$key]);
-    }  
+    } else {
+      $result[$key]['last_year_percentage_revenue'] = 100;
+    }
 }
 
 
@@ -201,7 +203,7 @@ function storeRevenueInDB($data_with_column_name,$extra_col_name, $extra_col_val
     } else {
       $sql = "INSERT INTO revenue_study_price_management(".implode(',', array_keys($data_with_column_name[$sql_cols[0]])).", {$extra_col_name}, {$extra_col_name_2}) VALUES";
     }
-
+    $all_col_data=array();
     foreach($data_with_column_name as $sku=>$r_data) {
       $make_one_data = array();
       foreach($table_cols as $col_name_key) {
@@ -215,7 +217,6 @@ function storeRevenueInDB($data_with_column_name,$extra_col_name, $extra_col_val
       }
     }      
 
-      unset($sql_cols['product_id']);
       $last_part_sql = " ON DUPLICATE KEY UPDATE ";
       $back_part_cols = array();
       foreach($table_cols as $col_name) {
