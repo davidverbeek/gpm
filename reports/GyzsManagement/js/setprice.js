@@ -837,6 +837,28 @@ $(document).ready(function () {
                   return '<a id="pricelogs.php?pid='+row[column_index["product_id"]]+'&s='+row[column_index["sku"]]+'&e='+row[column_index["ean"]]+'" title="View Buying/Selling Price History" class="history_link">'+data+' '+magento_notify_price_changed+'</a>';  
               },
               "className": "mag_buying_change"
+            },
+            {
+            "targets": [column_index["precentage_revenue"]],
+            "render": function ( data, type, row ) {
+              if(data < 0) {
+                return '<span class="percentage_revenue_red">'+data+'</span>';
+              } else {
+                return '<span class="percentage_revenue_green">'+data+'</span>';
+              }
+            },
+            "className": ""
+            },
+             {
+            "targets": [column_index["last_year_percentage_revenue"]],
+            "render": function ( data, type, row ) {
+              if(data < 0) {
+                return '<span class="percentage_revenue_red">'+data+'</span>';
+              } else {
+                return '<span class="percentage_revenue_green">'+data+'</span>';
+              }
+            },
+            "className": ""
             }
       ],
       initComplete: function () {

@@ -21,8 +21,7 @@ if(isset($_POST['hidden_field']))
 		$allowed_extension = array('xlsx');
 		$file_array = explode(".", $_FILES["file"]["name"]);
 		$extension = end($file_array);
-		if(in_array($extension, $allowed_extension))
-		{
+		if(in_array($extension, $allowed_extension)) {
 			$xlsx = SimpleXLSX::parse($_FILES['file']['tmp_name']);
 			$chunk_xlsx_data = array_chunk($xlsx->rows(), PMCHUNK);
 			$progress_status = $upload_summary = array();
@@ -51,7 +50,6 @@ if(isset($_POST['hidden_field']))
 								if($current_rec == 1) {
 									if(in_array("Marge Inkpr %", $chunk_xlsx_data[0][0]) || in_array("Marge Verkpr %", $chunk_xlsx_data[0][0])) {
 										list($sql, $last_part_sql) = makeSqlStatement();
-
 									} else {
 										list($sql, $last_part_sql) = makeSqlDependingOnXl($chunk_xlsx_data[0][0]);
 										$allcustomer_groups = $_SESSION['debters'];
@@ -105,6 +103,7 @@ if(isset($_POST['hidden_field']))
 													$pmd_buying_price = roundValue((float) $buying_price);
 													$selling_price = roundValue((1 + ($profit_margin/100)) * $pmd_buying_price);
 												}
+
 												list($one_rowString, $one_historyString) = getSqlOfColumns_removed_multiplication($chunked_xlsx_sku, $pmd_buying_price, $selling_price);
 
 												$join_cols_names .= $one_rowString;
@@ -211,8 +210,6 @@ if(isset($_POST['hidden_field']))
 								usleep(50000);
 							}
 
-
-
 							if(count($all_col_data) > 0) {
 								$chunk_sql = $sql.implode(",", $all_col_data) . $last_part_sql;
 								if($conn->query($chunk_sql)) {
@@ -227,6 +224,9 @@ if(isset($_POST['hidden_field']))
 									bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn)."\n".$chunk_sql);
 								}
 							}
+							unset($all_col_data);
+							unset($historyArray);
+							unset($updated_product_skus);
 						}//end of chunk loop
 
 						unset($_SESSION['import']);
@@ -314,7 +314,7 @@ function getAllPriceManagementData() {
 			LEFT JOIN mage_catalog_product_entity_decimal AS mcped ON mcped.entity_id = pmd.product_id AND mcped.attribute_id = '".COST."'
 			LEFT JOIN mage_catalog_product_entity_decimal AS mcped_selling_price ON mcped_selling_price.entity_id = pmd.product_id AND mcped_selling_price.attribute_id = '".PRICE."'";
 
-    if ($result = $conn->query($sql)) { 
+    if ($result = $conn->query($sql)) {
 		$all_pm_data = array();
 		while ($row = $result->fetch_assoc()) {
 			$comp_sku = trim($row['sku']);
@@ -346,6 +346,9 @@ function getAllPriceManagementData() {
 	echo $conn->error;
 }
     $_SESSION['import'] = $all_pm_data;
+
+    unset($allcustomer_groups);
+
 	return $all_pm_data;
 }
 
@@ -490,7 +493,7 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 		'".$buying_price_changed."'
 	  )";
 	}
-
+	unset($fields_changed);
 	return array($col_data, $historyArray);
 }//end getSqlOfColumns()
 
@@ -538,6 +541,11 @@ function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
 		$last_part_sql .= $back_part_cols;
 		$sql .= ") VALUES ";
 	}
+
+	unset($xls_debter_header_arr);
+	unset($check_debter_header);
+	unset($allcustomer_groups);
+
 	return array($sql, $last_part_sql);
 
 }//end makeSqlDependingOnXl();
@@ -570,6 +578,9 @@ function makeSqlForUpdateSp($xlsx_header_row)
 		$last_part_sql .= $back_part_cols;
 		$sql .= ") VALUES ";
 	} */
+
+	unset($debter_not_in_xlsx_arr);
+	unset($allcustomer_groups);
 
 	return array($sql, $last_part_sql);
 }
@@ -651,6 +662,10 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
         }
 		$col_data .= "'".$debter_selling_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
 	}
+
+	unset($debter_product_arr);
+	unset($debter_not_in_xlsx_arr);
+	unset($given_debter_product_arr);
 	$col_data = rtrim($col_data, ',');
 	return array($col_data);
 }//end getSqlOfAllDebtersDueToBp()
@@ -703,7 +718,7 @@ function getSqlOfColumns_removed_multiplication($chunked_xlsx_sku, $pmd_buying_p
 		'".$buying_price_changed."'
 	  )";
 	}
-
+	unset($fields_changed);
 	return array($col_data, $historyArray);
 }
 
@@ -785,5 +800,6 @@ function getSqlDataByMargin($chunked_xlsx_sku, $pmd_buying_price, $profit_margin
 	  )";
 	}
 
+	unset($fields_changed);
 	return array($col_data, $historyArray);
 }//end getSqlDataByMargin()

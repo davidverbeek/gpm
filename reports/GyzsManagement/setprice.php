@@ -222,6 +222,14 @@ if ($result = $conn->query($sql)) {
     white-space: nowrap!important;
 }
 
+span.percentage_revenue_red {
+  color: red;
+}
+
+span.percentage_revenue_green {
+  color: green;
+}
+
 </style>
 <div id="showloader"><span class="loader_txt" style="display:none;">Please Wait....<br>Calculating Averages</span></div>
 
