@@ -1,15 +1,11 @@
 <?php
-  include "../config/config.php";
+
+ini_set('max_execution_time', 0);
+ini_set('memory_limit','6G');
+
+include "../config/config.php";
 include "../define/constants.php";
 include "../lib/SimpleXLSX.php";
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
-/*
-what to do ?
-it is reading file
-
-*/
 
 if(isset($_POST['hidden_field']))
 {
@@ -21,7 +17,8 @@ if(isset($_POST['hidden_field']))
 		$allowed_extension = array('xlsx');
 		$file_array = explode(".", $_FILES["file"]["name"]);
 		$extension = end($file_array);
-		if(in_array($extension, $allowed_extension)) {
+		if(in_array($extension, $allowed_extension))
+		{
 			$xlsx = SimpleXLSX::parse($_FILES['file']['tmp_name']);
 			$chunk_xlsx_data = array_chunk($xlsx->rows(), PMCHUNK);
 			$progress_status = $upload_summary = array();
@@ -32,7 +29,7 @@ if(isset($_POST['hidden_field']))
 
 			$progress_file_path = $document_root_path."/import_export/progress.txt";
 			if(count($chunk_xlsx_data[0]) > 1 && count($chunk_xlsx_data)) {
-					$valid_header = array("Artikelnummer (Artikel)","Inkoopprijs (Inkpr per piece)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)","ZZP","Aannemer M","Aannemer L","Metaal","Interieurbouw","Slotenservice","Scholen/Zorg","DHZ","Installatie","Glashandel","VVE","Groen","Timmerfabriek","Overheid","Weder1","Weder2", "Marge Inkpr %", "Marge Verkpr %");
+					$valid_header = array("Artikelnummer (Artikel)","Inkoopprijs (Inkpr per piece)","Nieuwe Verkoopprijs (Niewe Vkpr per piece)","ZZP","Aannemer M","Aannemer L","Metaal","Interieurbouw","Slotenservice","Scholen/zorg","DHZ","Installatie","Glashandel","VVE","Groen","Timmerfabriek","Overheid","Weder1","Weder2");
 					$check_header = array_diff($chunk_xlsx_data[0][0], $valid_header);
 
 					if(count($check_header) > 0) {
@@ -48,18 +45,14 @@ if(isset($_POST['hidden_field']))
 							foreach($chunked_xlsx_values as $c_k=>$chunked_xlsx_value) {
 								$chunked_xlsx_sku = trim($chunked_xlsx_value[0]);
 								if($current_rec == 1) {
-									if(in_array("Marge Inkpr %", $chunk_xlsx_data[0][0]) || in_array("Marge Verkpr %", $chunk_xlsx_data[0][0])) {
-										list($sql, $last_part_sql) = makeSqlStatement();
-									} else {
-										list($sql, $last_part_sql) = makeSqlDependingOnXl($chunk_xlsx_data[0][0]);
-										$allcustomer_groups = $_SESSION['debters'];
-										$check_debter_header = array_diff($allcustomer_groups, $chunk_xlsx_data[0][0]);
-										if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && count($check_debter_header) > 0) {
-											list($sql_debters, $last_part_sql_debters) = makeSqlForUpdateSp($chunk_xlsx_data[0][0]);
-											$sql = str_replace(') VALUES', ',', $sql);
-											$sql .= $sql_debters.") VALUES ";
-											$last_part_sql .= ','.$last_part_sql_debters;
-										}
+									list($sql, $last_part_sql) = makeSqlDependingOnXl($chunk_xlsx_data[0][0]);
+									$allcustomer_groups = $_SESSION['debters'];
+									$check_debter_header = array_diff($allcustomer_groups, $chunk_xlsx_data[0][0]);
+									if(in_array("Inkoopprijs (Inkpr per piece)", $chunk_xlsx_data[0][0]) && count($check_debter_header) > 0) {
+										list($sql_debters, $last_part_sql_debters) = makeSqlForUpdateSp($chunk_xlsx_data[0][0]);
+										$sql = str_replace(') VALUES', ',', $sql);
+										$sql .= $sql_debters.") VALUES ";
+										$last_part_sql .= ','.$last_part_sql_debters;
 									}
 									$current_rec++;
 									continue;
@@ -103,7 +96,6 @@ if(isset($_POST['hidden_field']))
 													$pmd_buying_price = roundValue((float) $buying_price);
 													$selling_price = roundValue((1 + ($profit_margin/100)) * $pmd_buying_price);
 												}
-
 												list($one_rowString, $one_historyString) = getSqlOfColumns_removed_multiplication($chunked_xlsx_sku, $pmd_buying_price, $selling_price);
 
 												$join_cols_names .= $one_rowString;
@@ -121,28 +113,10 @@ if(isset($_POST['hidden_field']))
 											$join_cols_names .= $one_rowString;
 											$historyArray[] = $one_historyString;
 											$updated_product_skus[] = $chunked_xlsx_sku;
-										} elseif(in_array("Marge Inkpr %", $chunk_xlsx_data[0][0]) || in_array("Marge Verkpr %", $chunk_xlsx_data[0][0])) {
-
-											$debter_buying_price = $buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"];
-
-											if(in_array("Marge Inkpr %", $chunk_xlsx_data[0][0])) {
-												$key = array_search ("Marge Inkpr %", $chunk_xlsx_data[0][0]);
-												$margin_type = 'bp';
-											} else {
-												$key = array_search ("Marge Verkpr %", $chunk_xlsx_data[0][0]);
-												$margin_type = 'sp';
-											}
-
-											$profit_margin = $chunked_xlsx_value[$key];
-											list($one_rowString, $one_historyString) = getSqlDataByMargin($chunked_xlsx_sku, $buying_price, $profit_margin, $margin_type);
-
-											$join_cols_names .= $one_rowString;
-											$historyArray[] = $one_historyString;
-											$updated_product_skus[] = $chunked_xlsx_sku;
-
 										} else { // means both buying and sp are not in xlsx
 											$debter_buying_price = $get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"];
 											$join_cols_names .= "'".$chunked_xlsx_sku."'";
+											$updated_product_skus[] = $chunked_xlsx_sku;
 										}
 										$allcustomer_groups = $_SESSION['debters'];
 										$check_debter_header = array_diff($allcustomer_groups, $chunk_xlsx_data[0][0]);
@@ -224,9 +198,10 @@ if(isset($_POST['hidden_field']))
 									bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn)."\n".$chunk_sql);
 								}
 							}
-							unset($all_col_data);
-							unset($historyArray);
-							unset($updated_product_skus);
+							
+
+
+							
 						}//end of chunk loop
 
 						unset($_SESSION['import']);
@@ -320,7 +295,6 @@ function getAllPriceManagementData() {
 			$comp_sku = trim($row['sku']);
 			$all_pm_data[$comp_sku]["product_id"] = $row['product_id'];
 			$all_pm_data[$comp_sku]["sku"] = $row['sku'];
-
 			$all_pm_data[$comp_sku]["old_net_unit_price"] = $row['gyzs_buying_price'];	
 			$all_pm_data[$comp_sku]["old_gross_unit_price"] = $row['webshop_grossprice'];
 			$all_pm_data[$comp_sku]["old_idealeverpakking"] = $row['webshop_idealeverpakking'];
@@ -346,9 +320,6 @@ function getAllPriceManagementData() {
 	echo $conn->error;
 }
     $_SESSION['import'] = $all_pm_data;
-
-    unset($allcustomer_groups);
-
 	return $all_pm_data;
 }
 
@@ -493,7 +464,7 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 		'".$buying_price_changed."'
 	  )";
 	}
-	unset($fields_changed);
+
 	return array($col_data, $historyArray);
 }//end getSqlOfColumns()
 
@@ -541,11 +512,6 @@ function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
 		$last_part_sql .= $back_part_cols;
 		$sql .= ") VALUES ";
 	}
-
-	unset($xls_debter_header_arr);
-	unset($check_debter_header);
-	unset($allcustomer_groups);
-
 	return array($sql, $last_part_sql);
 
 }//end makeSqlDependingOnXl();
@@ -578,9 +544,6 @@ function makeSqlForUpdateSp($xlsx_header_row)
 		$last_part_sql .= $back_part_cols;
 		$sql .= ") VALUES ";
 	} */
-
-	unset($debter_not_in_xlsx_arr);
-	unset($allcustomer_groups);
 
 	return array($sql, $last_part_sql);
 }
@@ -662,10 +625,6 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
         }
 		$col_data .= "'".$debter_selling_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
 	}
-
-	unset($debter_product_arr);
-	unset($debter_not_in_xlsx_arr);
-	unset($given_debter_product_arr);
 	$col_data = rtrim($col_data, ',');
 	return array($col_data);
 }//end getSqlOfAllDebtersDueToBp()
@@ -718,88 +677,6 @@ function getSqlOfColumns_removed_multiplication($chunked_xlsx_sku, $pmd_buying_p
 		'".$buying_price_changed."'
 	  )";
 	}
-	unset($fields_changed);
+
 	return array($col_data, $historyArray);
 }
-
-
-function makeSqlStatement() {
-		$sql = "INSERT INTO price_management_data (sku";
-		$last_part_sql = " ON DUPLICATE KEY UPDATE";
-		$back_part_cols = "";
-		//if(in_array("Marge Inkpr %", $chunk_xlsx_heading_row) || in_array("Marge Vkpr %", $chunk_xlsx_heading_row)) {
-		$sql .= ",selling_price, profit_percentage_buying_price, profit_percentage_selling_price, percentage_increase, discount_on_gross";
-		$back_part_cols = " selling_price = VALUES(selling_price),profit_percentage_buying_price = VALUES(profit_percentage_buying_price),profit_percentage_selling_price = VALUES(profit_percentage_selling_price),percentage_increase = VALUES(percentage_increase),discount_on_gross = VALUES(discount_on_gross), ";
-		//}
-
-		$back_part_cols = rtrim($back_part_cols, ', ');
-		$last_part_sql .= $back_part_cols;
-		$sql .= ") VALUES ";
-
-		return array($sql, $last_part_sql);
-
-}//makeSqlStatement()
-
-
-function getSqlDataByMargin($chunked_xlsx_sku, $pmd_buying_price, $profit_margin,$margin_type='bp') {
-	$get_all_price_management_data = $_SESSION['import'];
-	$supplier_gross_price = ($get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"] == 0 ? 1:$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]);	
-	$webshop_selling_price = $get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"];
-
-	if($margin_type == 'bp') {
-		$new_selling_price = roundValue((1 + ($profit_margin/100)) * $pmd_buying_price);
-		$profit_margin_sp = roundValue((($new_selling_price - $pmd_buying_price)/$new_selling_price) * 100);
-		$percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
-		$discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
-		$profit_margin_bp = $profit_margin;
-	} else {
-		$new_selling_price = roundValue($pmd_buying_price / (1-($profit_margin/100)));
-    $profit_margin_bp = roundValue((($new_selling_price - $pmd_buying_price)/$pmd_buying_price) * 100);
-    $profit_margin_sp = $profit_margin;
-    $percentage_increase = roundValue((($new_selling_price - $webshop_selling_price)/$webshop_selling_price) * 100);
-    $discount_percentage = roundValue((1 - ($new_selling_price/$supplier_gross_price)) * 100);
-	}
-
-	$col_data = "'".$chunked_xlsx_sku."', '".$new_selling_price."', '".$profit_margin_bp ."', '".$profit_margin_sp."', '".$percentage_increase."', '".$discount_percentage."'";
-
-	// Add in history
-	$fields_changed = array();
-	$buying_price_changed = 0;
-
-	/* if($get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"] !=  $pmd_buying_price) {
-		  $fields_changed[] = "new_buying_price";
-		  $buying_price_changed = 1;
-	} */
-	if($get_all_price_management_data[$chunked_xlsx_sku]["new_selling_price"] !=  $new_selling_price) {
-		  $fields_changed[] = "new_selling_price";
-	}
-
-
-	$old_gross = !empty($get_all_price_management_data[$chunked_xlsx_sku]["old_gross_unit_price"])??'0.0';
-		file_put_contents('jjy.txt', $old_gross);
-
-	if( ($get_all_price_management_data[$chunked_xlsx_sku]["new_buying_price"] !=  $pmd_buying_price) || ($get_all_price_management_data[$chunked_xlsx_sku]["new_selling_price"] !=  $new_selling_price) ) {
-		$historyArray = "('".$get_all_price_management_data[$chunked_xlsx_sku]["product_id"]."',
-		'".$get_all_price_management_data[$chunked_xlsx_sku]["old_net_unit_price"]."',
-		'".(float)$old_gross."',
-		'".roundValue($get_all_price_management_data[$chunked_xlsx_sku]["old_idealeverpakking"])."',
-		'".roundValue($get_all_price_management_data[$chunked_xlsx_sku]["old_afwijkenidealeverpakking"])."',
-		'".$get_all_price_management_data[$chunked_xlsx_sku]["old_buying_price"]."',
-		'".$get_all_price_management_data[$chunked_xlsx_sku]["gyzs_selling_price"]."',
-		'".roundValue($pmd_buying_price)."',
-		'".$get_all_price_management_data[$chunked_xlsx_sku]["new_gross_unit_price"]."',
-		'".$get_all_price_management_data[$chunked_xlsx_sku]["new_idealeverpakking"]."',
-		'".$get_all_price_management_data[$chunked_xlsx_sku]["new_afwijkenidealeverpakking"]."',
-		'".roundValue($pmd_buying_price)."',
-		'".roundValue($new_selling_price)."',
-		'".date("Y-m-d H:i:s")."',
-		'Price Management',
-		'No',
-		'".json_encode($fields_changed)."',
-		'".$buying_price_changed."'
-	  )";
-	}
-
-	unset($fields_changed);
-	return array($col_data, $historyArray);
-}//end getSqlDataByMargin()
