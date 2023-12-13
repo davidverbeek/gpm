@@ -200,7 +200,9 @@ if(isset($_POST['hidden_field']))
 							}
 							
 
-
+							unset($all_col_data);
+							unset($historyArray);
+							unset($updated_product_skus);
 							
 						}//end of chunk loop
 
@@ -320,6 +322,7 @@ function getAllPriceManagementData() {
 	echo $conn->error;
 }
     $_SESSION['import'] = $all_pm_data;
+     unset($allcustomer_groups);
 	return $all_pm_data;
 }
 
@@ -465,6 +468,7 @@ function getSqlOfColumns($chunked_xlsx_sku, $buying_price, $selling_price) {
 	  )";
 	}
 
+	unset($fields_changed);
 	return array($col_data, $historyArray);
 }//end getSqlOfColumns()
 
@@ -512,6 +516,10 @@ function makeSqlDependingOnXl($chunk_xlsx_heading_row) {
 		$last_part_sql .= $back_part_cols;
 		$sql .= ") VALUES ";
 	}
+
+	unset($xls_debter_header_arr);
+	unset($check_debter_header);
+	unset($allcustomer_groups);
 	return array($sql, $last_part_sql);
 
 }//end makeSqlDependingOnXl();
@@ -544,6 +552,9 @@ function makeSqlForUpdateSp($xlsx_header_row)
 		$last_part_sql .= $back_part_cols;
 		$sql .= ") VALUES ";
 	} */
+
+	unset($debter_not_in_xlsx_arr);
+	unset($allcustomer_groups);
 
 	return array($sql, $last_part_sql);
 }
@@ -625,6 +636,11 @@ function getSqlOfAllDebtersDueToBp($xlsx_sku, $buying_price,$xlsx_header_row) {
         }
 		$col_data .= "'".$debter_selling_price."','".$deb_margin_on_selling_price."','".$deb_discount_on_gross_price."',";
 	}
+
+	unset($debter_product_arr);
+	unset($debter_not_in_xlsx_arr);
+	unset($given_debter_product_arr);
+
 	$col_data = rtrim($col_data, ',');
 	return array($col_data);
 }//end getSqlOfAllDebtersDueToBp()
@@ -677,6 +693,6 @@ function getSqlOfColumns_removed_multiplication($chunked_xlsx_sku, $pmd_buying_p
 		'".$buying_price_changed."'
 	  )";
 	}
-
+	unset($fields_changed);
 	return array($col_data, $historyArray);
 }
