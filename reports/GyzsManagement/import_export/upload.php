@@ -123,9 +123,7 @@ if(isset($_POST['hidden_field']))
 										}
 										//$allcustomer_groups = $_SESSION['debters'];
 										//$check_debter_header = array_diff($allcustomer_groups, $chunk_xlsx_data[0][0]);
-file_put_contents('ffdfd.txt', json_encode($check_debter_header));
 										if(count($check_debter_header) < count($allcustomer_groups)) {
-											file_put_contents('ffdfd.txt', json_encode($check_debter_header));
 											$xls_debter_header_arr = array_diff($allcustomer_groups,$check_debter_header);
 											$join_cols_names .= ",";
 											$debter_product_arr = $_SESSION['related_products'];
