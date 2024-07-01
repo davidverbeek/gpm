@@ -1,5 +1,7 @@
 <?php
 
+
+
 // Get the image and convert into string
 //$img = file_get_contents('https://cdn.gyzs.nl/media/catalog/product/cache/3/image/700x700/9df78eab33525d08d6e5fb8d27136e95/1/0/1091125.png');
   
@@ -109,6 +111,10 @@ if(!isset($_SESSION["price_id"])) {
 $last_year = date('Y',strtotime("-1 year", time()));
 $current_year = date('Y');
 
+//getCustomerGroups();
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -117,25 +123,78 @@ $current_year = date('Y');
 include "config/config.php";
 include "define/constants.php";
 include "layout/header.php";
+
+ $roas_SQL ="SELECT roas FROM pm_settings WHERE id = 1";
+  $setting_resource =$conn->query($roas_SQL);
+  $setting_row = $setting_resource->fetch_assoc();
+//knowledge this line will print in the page evenif there is not print_r
+  $setting_row['roas'] = json_decode($setting_row['roas'], true);//exit;
+
+
+//print_r($setting_row['roas']['discount_rule_1_first']);
+//print_r(($setting_row['roas']['discount_rule_1_first']));exit;
+
+
+$roas_SQL ="SELECT roas FROM pm_settings WHERE id = 1";
+  $setting_resource =$conn->query($roas_SQL);
+  $setting_row = $setting_resource->fetch_assoc();
+$setting_row['roas'] = json_decode($setting_row['roas'], true);
+/*print_r($fixed_rule = $setting_row['roas']['discount_rule_1_first']);
+print_r($many_rules = $setting_row['roas']['discount_rule_one_range']);
+*/
+/*function getCustomerGroups($group_number=null) {
+  global $conn;*/
+  $sql = "SELECT * FROM price_management_customer_groups ORDER BY sort_order";
+  if(!is_null($group_number)) {
+    $sql = "SELECT * FROM price_management_customer_groups where customer_group_name='".$group_number."'";
+  }
+  
+  $all_customer_groups = array();
+  if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_assoc()) {
+      $all_customer_groups[$row['magento_id']] = $row['customer_group_name'];
+    }
+  }
+  //$_SESSION['debters'] = $all_customer_groups;
+//   return $all_customer_groups;
+// }
+
 // Get Updated records categories
-$sql_updated_recs = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, price_management_data AS pmd WHERE mccp.product_id = pmd.product_id AND pmd.is_updated = '1'";
+/*$sql_updated_recs = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, price_management_data AS pmd WHERE mccp.product_id = pmd.product_id AND pmd.is_updated = '1'";
 $result_updated_recs = $conn->query($sql_updated_recs);
 $allUpdatedRecords = $result_updated_recs->fetch_all(MYSQLI_ASSOC);
 $all_updated_categories = array();
 foreach($allUpdatedRecords as $updated_rec) {
     $all_updated_categories[] = $updated_rec["category_id"];
-}
+}*/
+
+
 // Get Updated records categories
 // Get debter product ids
-$sql = "SELECT customer_group_name, product_ids  FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id";
+$sql = "SELECT customer_group, product_ids  FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id";
 
 if ($result = $conn->query($sql)) {
   $debter_data = array();
   while($row = $result->fetch_assoc()) {
-    $group_number = substr($row['customer_group_name'], -3);
+    $group_number = substr($row['customer_group'], -3);
     $debter_data[$group_number] = $row["product_ids"];
   }
+   file_put_contents('thursday-301.txt',json_encode( $debter_data));
 }
+
+$sql = "SELECT customer_group_name,magento_id FROM price_management_customer_groups";
+
+ $all_customer_groups = array();
+  if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_assoc()) {
+      $all_customer_groups[$row['magento_id']] = $row['customer_group_name'];
+    }
+    file_put_contents('thursday-302.txt',json_encode( $all_customer_groups));
+  }
+
+
+ 
+
 
 $sql = "SELECT bigshopper_xml_import_date FROM bigshopper_prices LIMIT 1";
 $xml_imported_at = "";
@@ -222,11 +281,11 @@ if ($result = $conn->query($sql)) {
     white-space: nowrap!important;
 }
 
-span.percentage_revenue_red {
+td.percentage_revenue_red {
   color: red;
 }
 
-span.percentage_revenue_green {
+td.percentage_revenue_green {
   color: green;
 }
 
@@ -253,7 +312,11 @@ span.percentage_revenue_green {
                             <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update</div>
-                         <div style="float:right;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%) <?php if($xml_imported_at)?>[<span title="Bigshopper Data on.." style="color:DodgerBlue;"><?php echo $xml_imported_at ?></span>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
+                         <div style="float:right;">
+                            <input type="checkbox" name="chkbigshopper" id="chkbigshopper"/>
+                            <span> B.S. (%) <?php if($xml_imported_at)?>
+                            [<span title="Bigshopper Data on.." style="color:DodgerBlue;"><?php echo $xml_imported_at ?></span>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
+                        </div>
                      </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->

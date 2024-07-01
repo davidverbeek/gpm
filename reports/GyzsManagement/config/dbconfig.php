@@ -2,7 +2,9 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "gpm";
+$dbname = "live_gyzs_admin_management";
+//$dbname = "gpm";
+
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
