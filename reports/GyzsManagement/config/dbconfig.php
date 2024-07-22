@@ -2,8 +2,8 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "live_gyzs_admin_management";
-//$dbname = "gpm";
+//$dbname = "live_gyzs_admin_management";
+$dbname = "gpm";
 
 
 // Create connection
