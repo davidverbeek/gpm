@@ -12,9 +12,7 @@ insertInRowFormat();
 function insertInRowFormat() {
     global $conn;
 
-
-
-    $webshop_sql = "SELECT * FROM all_suppliers_data_source WHERE is_present ='webshop' AND eancode != '' ORDER BY eancode";
+    $webshop_sql = "SELECT sku,supplier,supplier_sku,eancode,net_price,product_id,actual_supplier FROM all_suppliers_data_source WHERE is_present ='webshop' ORDER BY eancode";
     $result = $conn->query($webshop_sql);
     
     $supplier_row_format_array = array();
@@ -36,7 +34,7 @@ function insertInRowFormat() {
         $supplier_row_format_array[$row_webshop['eancode']]['polvosku'] = '';
         $supplier_row_format_array[$row_webshop['eancode']]['polvonetprice'] = '';
 
-        $supplier_row_format_array[$row_webshop['eancode']]['nordwestean'] = '';
+          $supplier_row_format_array[$row_webshop['eancode']]['nordwestean'] = '';
         $supplier_row_format_array[$row_webshop['eancode']]['nordwestsku'] = '';
         $supplier_row_format_array[$row_webshop['eancode']]['nordwestnetprice'] = '';
 
@@ -48,57 +46,65 @@ function insertInRowFormat() {
         $supplier_row_format_array[$row_webshop['eancode']]['dozonsku'] = '';
         $supplier_row_format_array[$row_webshop['eancode']]['dozonnetprice'] = '';
 
+        if($row_webshop['eancode'] == '' && $row_webshop['supplier'] == 'JRS') {
+            $supplier_row_format_array[$row_webshop['eancode']]['jrssku'] = $row_webshop['supplier_sku'];
+            $supplier_row_format_array[$row_webshop['eancode']]['jrsnetprice'] = $row_webshop['net_price'];
+        } elseif ($row_webshop['eancode'] == '' && $row_webshop['supplier'] == 'Polvo') {
+            $supplier_row_format_array[$row_webshop['eancode']]['polvosku']  = $row_webshop['supplier_sku'];
+            $supplier_row_format_array[$row_webshop['eancode']]['polvonetprice'] = $row_webshop['net_price'];
+        } elseif ($row_webshop['eancode'] == '' && $row_webshop['supplier'] == 'Nordwest') {
+            $supplier_row_format_array[$row_webshop['eancode']]['nordwestsku']  = $row_webshop['supplier_sku'];
+            $supplier_row_format_array[$row_webshop['eancode']]['nordwestnetprice'] = $row_webshop['net_price'];
+        } elseif ($row_webshop['eancode'] == '' && $row_webshop['supplier'] == 'Zevij') {
+            $supplier_row_format_array[$row_webshop['eancode']]['zevijsku']  = $row_webshop['supplier_sku'];
+            $supplier_row_format_array[$row_webshop['eancode']]['zevijnetprice'] = $row_webshop['net_price'];
+        } elseif ($row_webshop['eancode'] == '' && $row_webshop['supplier'] == 'Dozon') {
+            $supplier_row_format_array[$row_webshop['eancode']]['dozonsku']  = $row_webshop['supplier_sku'];
+            $supplier_row_format_array[$row_webshop['eancode']]['dozonnetprice'] = $row_webshop['net_price'];
+        }
 
- 
-        if(strlen($row_webshop['eancode']) == 13) {
-            //$i = 0;
+        if($row_webshop['eancode'] != '' && strlen($row_webshop['eancode']) == 13) {
             $eancode_14 = '0'+$row_webshop['eancode'];      
-            $suppliers_sql = "SELECT * FROM all_suppliers_data_source WHERE eancode = '".$row_webshop['eancode']."' || eancode = '".$eancode_14."'";
+            $suppliers_sql = "SELECT eancode, supplier_sku, net_price FROM all_suppliers_data_source WHERE eancode = '".$row_webshop['eancode']."' || eancode = '".$eancode_14."' ORDER BY supplier";
              $result_s = $conn->query($suppliers_sql);
             while($row_s=$result_s->fetch_assoc()) {
-               // $make_cols = $row_s['suppliers_count'];
-              //  if($make_cols > 1) {
-                    //echo $row_s;
                     file_put_contents('thursday_2507.txt',$row_s['eancode'].'/n', FILE_APPEND);
-             //   }
 
               
                 if($row_s['supplier'] == 'JRS') {
 
-                    $supplier_row_format_array[$row_webshop['eancode']]['jrsean'] = $row_webshop['eancode'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['jrssku'] = $row_webshop['sku'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['jrsnetprice'] = $row_webshop['net_price'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['jrsean'] = $row_s['eancode'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['jrssku'] = $row_s['supplier_sku'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['jrsnetprice'] = $row_s['net_price'];
 
                 }
 
                 if($row_s['supplier'] == 'Polvo') {
-                    $supplier_row_format_array[$row_webshop['eancode']]['polvoean'] =$row_webshop['eancode'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['polvosku'] = $row_webshop['sku'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['polvonetprice'] = $row_webshop['net_price'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['polvoean'] =$row_s['eancode'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['polvosku'] = $row_s['supplier_sku'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['polvonetprice'] = $row_s['net_price'];
 
                 }
 
                 if($row_s['supplier'] == 'Nordwest') {
-                    $supplier_row_format_array[$row_webshop['eancode']]['nordwestean'] = $row_webshop['eancode'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['nordwestsku'] = $row_webshop['sku'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['nordwestnetprice'] = $row_webshop['net_price'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['nordwestean'] = $row_s['eancode'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['nordwestsku'] = $row_s['supplier_sku'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['nordwestnetprice'] = $row_s['net_price'];
 
                 }
 
                 if($row_s['supplier'] == 'zevij') {
-                    $supplier_row_format_array[$row_webshop['eancode']]['zevijean'] = $row_webshop['eancode'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['zevijsku'] = $row_webshop['sku'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['zevijnetprice'] = $row_webshop['net_price'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['zevijean'] = $row_s['eancode'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['zevijsku'] = $row_s['supplier_sku'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['zevijnetprice'] = $row_s['net_price'];
 
                 }
                 if($row_s['supplier'] == 'dozon') {
-                    $supplier_row_format_array[$row_webshop['eancode']]['dozonean'] = $row_webshop['eancode'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['dozonsku'] = $row_webshop['sku'];
-                    $supplier_row_format_array[$row_webshop['eancode']]['dozonnetprice'] = $row_webshop['net_price'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['dozonean'] = $row_s['eancode'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['dozonsku'] = $row_s['supplier_sku'];
+                    $supplier_row_format_array[$row_webshop['eancode']]['dozonnetprice'] = $row_s['net_price'];
                 }       
        
-
-                //$i++;
 
             }//end loop of all rows of each ean
 
@@ -119,7 +125,7 @@ function insertInRowFormat() {
         list($sql_row_format, $last_part_sql) = makeSqlForRowFormat();
 
         foreach($chunk_format_data as $chunked_idx=>$chunked_item) {
-            $all_col_data = $updated_product_skus = $historyArray = array();
+            $all_col_data = $updated_product_skus = array();
             $chunk_sql = "";
             foreach($chunked_item as $c_k=>$row) {
                 $one_rowString = '';
@@ -138,9 +144,7 @@ function insertInRowFormat() {
                     bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn)."\n".$chunk_sql);
                 }
             }
-
             unset($all_col_data);
-
         }
 
     }
