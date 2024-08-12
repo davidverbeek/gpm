@@ -1,11 +1,19 @@
 <?php
+/**
+ * $file_pricechunks_log =   $document_root_path."/import_export/insert_supplier_json.txt";
+ * $progress_file_path = $document_root_path."/import_export/supplier_json_progress.txt";
+ * */
 
 include "config/config.php";
 include "define/constants.php";
+require_once("insert_suppliers_row_format.php");
+
  error_reporting(E_ALL);
 //error_reporting(1);
 ini_set("memory_limit", "10G");
 ini_set("max_execution_time", 0);
+
+
 
 
 // Path to the JSON file
@@ -42,20 +50,20 @@ if(count($chunk_json_data) > 0) {
             $progress_status['er_imp'][$current_rec] = "<div style='color:red;'><i class='fas fa-exclamation-triangle'></i>&nbsp; Row data not valid. (Row ".($current_rec).")</div>";
             $current_rec++; continue;
             }*/
-            $valid_count++;
 
-            $one_rowString = '';
-            $join_cols_names = "(";
+            $col_data = "";
 
             $col_data = "'".$item["sku"]."', '".$item["product_id"]."', '".$item["supplier"]."', '".$item["supplier_sku"]."', '".$item["status"]."', '".$item["idealeverpakking"]."', '".$item["afwijkenidealeverpakking "]."', '".$item["verkoopeenheid"]."', '".$item["delivery_time"]."', '".$item["eancode"]."', '".$item["advise_price"]."', '".$item["net_price"]."', '".$item["currentdate"]."', '".$item["actual_supplier"]."', '".$item["present_in"]."'";
 
-            $join_cols_names .= $col_data;
-            $updated_product_ids[] = $item["product_id"];
-            $join_cols_names .= ')';
+            $join_cols_names = '('.$col_data .')';
             $all_col_data[] = $join_cols_names;
+
+            $updated_product_ids[] = $item["product_id"];
+
             $progress_status["current_record"] = $current_rec;
             $progress_status["percentage"] = intval($current_rec/$progress_status["total_records"] * 100);
-            $progress_status['er_imp']["er_summary"] = "<div>Imported ".$valid_count." Out Of ".($progress_status["total_records"]-1)."</div>";
+            $progress_status['er_imp']["er_summary"] = "<div>Imported ".$current_rec." Out Of ".($progress_status["total_records"]-1)."</div>";
+
             //, FILE_APPEND
             file_put_contents($progress_file_path, json_encode($progress_status));
             $current_rec++;
@@ -69,9 +77,10 @@ if(count($chunk_json_data) > 0) {
             //truncate first
             if($chunked_idx == 0) {
                 $truncate_sql = "TRUNCATE TABLE all_suppliers_data_source";
-                if($conn->query($truncate_sql)) {
-                    $truncate_sql_format = "TRUNCATE TABLE suppliers_row_format";
+                if($conn->query($truncate_sql)) {                    
                     bulkInsertLog($chunked_idx,"Truncated TABLE all_suppliers_data_source successfully");
+
+                    $truncate_sql_format = "TRUNCATE TABLE suppliers_row_format";
                     if($conn->query($truncate_sql_format)) {
                         bulkInsertLog($chunked_idx,"Truncated TABLE suppliers_row_format successfully");
                     } else {
@@ -82,10 +91,8 @@ if(count($chunk_json_data) > 0) {
                 }
             }
 
-
-
             if($conn->query($chunk_sql)) {
-                bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_json_values));    
+                bulkInsertLog($chunked_idx,"Bulk Update:".count($all_col_data));    
             } else {
                 bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn)."\n".$chunk_sql);
             }
@@ -114,6 +121,7 @@ function makeSqlDependingOnJson($chunk_xlsx_heading_row) {
 
 function bulkInsertLog($chunk_index,$chunk_msg) {
     global $document_root_path;
-    $file_pricechunks_log =  "insert_supplier_json.txt";
+
+    $file_pricechunks_log =   $document_root_path."/import_export/insert_supplier_json.txt";
     file_put_contents($file_pricechunks_log,"".date("d-m-Y H:i:s")." Updated Price Chunk (".$chunk_index."):-".$chunk_msg."\n", FILE_APPEND);
 }
