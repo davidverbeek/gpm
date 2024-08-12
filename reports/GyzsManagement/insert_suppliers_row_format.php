@@ -10,7 +10,6 @@ insertInRowFormat();
 
 function insertInRowFormat() {
     global $conn;
-//4033119000223
     $webshop_sql = "SELECT * FROM all_suppliers_data_source WHERE is_present ='webshop' ORDER BY eancode, id";
     $result = $conn->query($webshop_sql);
     
@@ -27,21 +26,7 @@ function insertInRowFormat() {
         $supplier_row_format_array[$row_webshop['product_id']]['product_id'] = $row_webshop['product_id'];
         $supplier_row_format_array[$row_webshop['product_id']]['actual_supplier'] = $row_webshop['actual_supplier'];
 
-       /*
-
-        $supplier_row_format_array[$row_webshop['product_id']]['zevijean'] = '';
-        $supplier_row_format_array[$row_webshop['product_id']]['zevijsku'] = '';
-        $supplier_row_format_array[$row_webshop['product_id']]['zevijnetprice'] = '';
-
-        $supplier_row_format_array[$row_webshop['product_id']]['dozonean'] = '';
-        $supplier_row_format_array[$row_webshop['product_id']]['dozonsku'] = '';
-        $supplier_row_format_array[$row_webshop['product_id']]['dozonnetprice'] = '55';
-
-         $supplier_row_format_array[$row_webshop['product_id']]['polvoean'] = '';
-            $supplier_row_format_array[$row_webshop['product_id']]['polvosku']  = '';
-            $supplier_row_format_array[$row_webshop['product_id']]['polvonetprice'] = '';*/
-
-            $initiate_non_webshop_supplier_data['product_id'] = $row_webshop['product_id'];
+        $initiate_non_webshop_supplier_data['product_id'] = $row_webshop['product_id'];
             $initiate_non_webshop_supplier_data['eancode'] = '';
             $initiate_non_webshop_supplier_data['supplier_sku'] = '';
             $initiate_non_webshop_supplier_data['net_price'] = '';
@@ -58,41 +43,14 @@ function insertInRowFormat() {
             $initiate_non_webshop_supplier_data['is_present'] = '';
             $initiate_non_webshop_supplier_data['actual_supplier'] = '';
 
-        if(($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' && $row_webshop['eancode'] != '?') && $row_webshop['supplier'] == 'JRS') {
+        if(($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || $row_webshop['eancode'] == '?') && $row_webshop['supplier'] == 'JRS') {
             makeRowFormat('JRS', $row_webshop, $supplier_row_format_array);
             makeRowFormat('Polvo', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Nordwest', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Zevij', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Dozon', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
 
-           // file_put_contents('thursday_8824.json',json_encode($supplier_row_format_array));exit;
-
-             /*$col_data = $supplier_row_format_array['6973'];
-
-             echo "a1 is: '".implode("','",$col_data)."'<br>";exit;
-
-
-             var_dump($col_data);exit;*/
-
-             /*  $supplier_row_format_array[$row_webshop['product_id']]['jrsean'] = '';
-            $supplier_row_format_array[$row_webshop['product_id']]['jrssku'] = $row_webshop['supplier_sku'];
-            $supplier_row_format_array[$row_webshop['product_id']]['jrsnetprice'] = $row_webshop['net_price'];
-
-
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_status'] = $row_webshop['status'];
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_idealeverpakking'] = $row_webshop['idealeverpakking'];
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_afwijkenidealeverpakking'] = $row_webshop['afwijkenidealeverpakking'];
-
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_verkoopeenheid'] = $row_webshop['verkoopeenheid'];
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_delivery_time'] = $row_webshop['delivery_time'];
-
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_advice_price'] = $row_webshop['advise_price'];
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_currentdate'] = $row_webshop['currentdate'];
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_is_present'] = $row_webshop['is_present'];
-            $supplier_row_format_array[$row_webshop['product_id']]['jrs_actual_supplier'] = $row_webshop['actual_supplier'];*/
-
-
-        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' && $row_webshop['eancode'] != '?') && $row_webshop['supplier'] == 'Polvo') {
+        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || $row_webshop['eancode'] == '?') && $row_webshop['supplier'] == 'Polvo') {
             makeRowFormat('JRS', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
 
             makeRowFormat('Polvo', $row_webshop, $supplier_row_format_array);
@@ -101,12 +59,7 @@ function insertInRowFormat() {
             makeRowFormat('Zevij', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Dozon', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
 
-
-           /* $supplier_row_format_array[$row_webshop['product_id']]['polvoean'] = '';
-            $supplier_row_format_array[$row_webshop['product_id']]['polvosku']  = $row_webshop['supplier_sku'];
-            $supplier_row_format_array[$row_webshop['product_id']]['polvonetprice'] = $row_webshop['net_price'];*/
-
-        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' && $row_webshop['eancode'] != '?') && $row_webshop['supplier'] == 'Nordwest') {
+        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || $row_webshop['eancode'] == '?') && $row_webshop['supplier'] == 'Nordwest') {
             makeRowFormat('JRS', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Polvo', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
 
@@ -114,7 +67,7 @@ function insertInRowFormat() {
 
             makeRowFormat('Zevij', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Dozon', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
-        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' && $row_webshop['eancode'] != '?') && $row_webshop['supplier'] == 'Zevij') {
+        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || $row_webshop['eancode'] == '?') && $row_webshop['supplier'] == 'Zevij') {
             makeRowFormat('JRS', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Polvo', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Nordwest', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
@@ -122,23 +75,16 @@ function insertInRowFormat() {
             makeRowFormat('Zevij', $row_webshop, $supplier_row_format_array);
 
             makeRowFormat('Dozon', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
-
-
-           /* $supplier_row_format_array[$row_webshop['product_id']]['zevijsku']  = $row_webshop['supplier_sku'];
-            $supplier_row_format_array[$row_webshop['product_id']]['zevijnetprice'] = $row_webshop['net_price'];*/
-        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || && $row_webshop['eancode'] != '?') && $row_webshop['supplier'] == 'Dozon') {
+        } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || $row_webshop['eancode'] == '?') && $row_webshop['supplier'] == 'Dozon') {
               makeRowFormat('JRS', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Polvo', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Nordwest', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Zevij', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
 
             makeRowFormat('Dozon', $row_webshop, $supplier_row_format_array);
-
-            /*$supplier_row_format_array[$row_webshop['product_id']]['dozonsku']  = $row_webshop['supplier_sku'];
-            $supplier_row_format_array[$row_webshop['product_id']]['dozonnetprice'] = $row_webshop['net_price'];*/
         }
 
-       // file_put_contents('sevem.json', json_encode($supplier_row_format_array));// to add ean of length 14,12 also
+
         if($row_webshop['eancode'] != '' && $row_webshop['eancode'] != '?' && $row_webshop['eancode'] !== '0') { 
         //    echo $row_webshop['eancode'];exit;
 
@@ -174,54 +120,20 @@ function insertInRowFormat() {
                 if($row_s['supplier'] == 'JRS') {
                     makeRowFormat('JRS', $row_s, $supplier_row_format_array);
 
-
-
-                  /*  $supplier_row_format_array[$row_webshop['product_id']]['jrsean'] = $row_s['eancode'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrssku'] = $row_s['supplier_sku'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrsnetprice'] = $row_s['net_price'];
-
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrs_status'] = $row_s['status'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrs_idealeverpakking'] = $row_s['idealeverpakking'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrs_afwijkenidealeverpakking'] = $row_s['afwijkenidealeverpakking'];
-
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrs_verkoopeenheid'] = $row_s['verkoopeenheid'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrs_delivery_time'] = $row_s['delivery_time'];
-                  
-                    $supplier_row_format_array[$row_webshop['product_id']]['jrs_advice_price'] = $row_s['advise_price'];
-                     $supplier_row_format_array[$row_webshop['product_id']]['jrs_currentdate'] = $row_s['currentdate'];
-                       $supplier_row_format_array[$row_webshop['product_id']]['jrs_is_present'] = $row_s['is_present'];
-                       $supplier_row_format_array[$row_webshop['product_id']]['jrs_actual_supplier'] = $row_s['actual_supplier'];*/
                 }elseif($row_s['supplier'] == 'Polvo') {
+
                     makeRowFormat('Polvo', $row_s, $supplier_row_format_array);
-
-                   /* $supplier_row_format_array[$row_webshop['product_id']]['polvoean'] =$row_s['eancode'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['polvosku'] = $row_s['supplier_sku'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['polvonetprice'] = $row_s['net_price'];*/
-
-                   // makeRowFormat('Polvo', $row_s,  $supplier_row_format_array);
 
                 }elseif($row_s['supplier'] == 'Nordwest') {
 
                      makeRowFormat('Nordwest', $row_s, $supplier_row_format_array);
-                   /* $supplier_row_format_array[$row_webshop['product_id']]['nordwestean'] = $row_s['eancode'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['nordwestsku'] = $row_s['supplier_sku'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['nordwestnetprice'] = $row_s['net_price'];*/
 
                 }elseif($row_s['supplier'] == 'Zevij') { //Zevij is case sensitive
 
                       makeRowFormat('Zevij', $row_s, $supplier_row_format_array);
 
-                      /* $supplier_row_format_array[$row_webshop['product_id']]['zevijean'] = $row_s['eancode'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['zevijsku'] = $row_s['supplier_sku'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['zevijnetprice'] = $row_s['net_price'];*/
-
                 }elseif($row_s['supplier'] == 'Dozon') {
                       makeRowFormat('Dozon', $row_s, $supplier_row_format_array);
-
-
-                   /* $supplier_row_format_array[$row_webshop['product_id']]['dozonean'] = $row_s['eancode'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['dozonsku'] = $row_s['supplier_sku'];
-                    $supplier_row_format_array[$row_webshop['product_id']]['dozonnetprice'] = $row_s['net_price'];*/
                 }
 
             }//end loop of all rows of each ean
@@ -232,14 +144,8 @@ function insertInRowFormat() {
         
     }//end loop getting all webshop
 
-    //file_put_contents('friday.json',json_encode($supplier_row_format_array));exit;
-
     // insert this data into database
     $chunk_format_data = array_chunk($supplier_row_format_array, PMCHUNK);
-
-    //var_dump($chunk_format_data);exit;
-
-//file_put_contents($chunk_format_data);exit;
 
     if(count($chunk_format_data)) {
         list($sql_row_format, $last_part_sql) = makeSqlForRowFormat();
@@ -257,9 +163,10 @@ function insertInRowFormat() {
                 }*/
 
                 $col_data = implode("', '", $row);
-               // var_dump($col_data);exit;
 
                 //$one_rowString = getSqlOfColumns($row);
+
+
                 $one_rowString = "'".$col_data."'";
                 $join_cols_names .= $one_rowString;
                 $join_cols_names .= ')';
@@ -428,4 +335,3 @@ function makeRowFormat($supplier_name, $its_data, &$supplier_row_format_array) {
 
     }
 }//end makeRowFormat()
-
