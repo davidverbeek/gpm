@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * 
+ *   $file_pricechunks_log = "insert_suppliers_row_format.txt";
+ * */
 include "config/config.php";
 include "define/constants.php";
  error_reporting(E_ALL);
@@ -6,15 +11,48 @@ include "define/constants.php";
 ini_set("memory_limit", "10G");
 ini_set("max_execution_time", 0);
 
+$roas_SQL ="SELECT roas FROM pm_settings WHERE id = 1";
+
+$setting_resource = $conn->query($roas_SQL);
+if (!$setting_resource) {
+    die('Invalid query: ' . mysqli_error($conn));
+}
+
+$setting_row = $setting_resource->fetch_assoc();
+//knowledge this line will print in the page evenif there is not print_r
+$setting_row['roas'] = json_decode($setting_row['roas'], true);
+
 insertInRowFormat();
 
 function insertInRowFormat() {
+   
     global $conn;
-    $webshop_sql = "SELECT * FROM all_suppliers_data_source WHERE is_present ='webshop' ORDER BY eancode, id";
+    $webshop_sql = "SELECT * FROM all_suppliers_data_source WHERE is_present ='webshop'";
     $result = $conn->query($webshop_sql);
+  // var_dump($result->fetch_assoc());exit;
     
     $supplier_row_format_array = array();
     $initiate_non_webshop_supplier_data = array();
+
+    list($sql_row_format, $last_part_sql) = makeSqlForRowFormat();
+
+    $initiate_non_webshop_supplier_data['eancode'] = '';
+    $initiate_non_webshop_supplier_data['supplier_sku'] = '';
+    $initiate_non_webshop_supplier_data['net_price'] = '';
+
+    $initiate_non_webshop_supplier_data['status'] = '';
+    $initiate_non_webshop_supplier_data['idealeverpakking'] = '';
+    $initiate_non_webshop_supplier_data['afwijkenidealeverpakking'] = '';
+
+    $initiate_non_webshop_supplier_data['verkoopeenheid'] = '';
+    $initiate_non_webshop_supplier_data['delivery_time'] = '';
+
+    $initiate_non_webshop_supplier_data['advise_price'] = '';
+    $initiate_non_webshop_supplier_data['currentdate'] = '';
+    $initiate_non_webshop_supplier_data['is_present'] = '';
+    $initiate_non_webshop_supplier_data['actual_supplier'] = '';
+  
+
     while($row_webshop = $result->fetch_assoc())
     {
 
@@ -27,7 +65,7 @@ function insertInRowFormat() {
         $supplier_row_format_array[$row_webshop['product_id']]['actual_supplier'] = $row_webshop['actual_supplier'];
 
         $initiate_non_webshop_supplier_data['product_id'] = $row_webshop['product_id'];
-            $initiate_non_webshop_supplier_data['eancode'] = '';
+          /*  $initiate_non_webshop_supplier_data['eancode'] = '';
             $initiate_non_webshop_supplier_data['supplier_sku'] = '';
             $initiate_non_webshop_supplier_data['net_price'] = '';
 
@@ -41,7 +79,7 @@ function insertInRowFormat() {
             $initiate_non_webshop_supplier_data['advise_price'] = '';
             $initiate_non_webshop_supplier_data['currentdate'] = '';
             $initiate_non_webshop_supplier_data['is_present'] = '';
-            $initiate_non_webshop_supplier_data['actual_supplier'] = '';
+            $initiate_non_webshop_supplier_data['actual_supplier'] = '';*/
 
         if(($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || $row_webshop['eancode'] == '?') && $row_webshop['supplier'] == 'JRS') {
             makeRowFormat('JRS', $row_webshop, $supplier_row_format_array);
@@ -76,16 +114,16 @@ function insertInRowFormat() {
 
             makeRowFormat('Dozon', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
         } elseif (($row_webshop['eancode'] == '' || $row_webshop['eancode'] == '0' || $row_webshop['eancode'] == '?') && $row_webshop['supplier'] == 'Dozon') {
-              makeRowFormat('JRS', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
-            makeRowFormat('Polvo', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
-            makeRowFormat('Nordwest', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
-            makeRowFormat('Zevij', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
+                makeRowFormat('JRS', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
+                makeRowFormat('Polvo', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
+                makeRowFormat('Nordwest', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
+                makeRowFormat('Zevij', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
 
-            makeRowFormat('Dozon', $row_webshop, $supplier_row_format_array);
+                makeRowFormat('Dozon', $row_webshop, $supplier_row_format_array);
         }
 
 
-        if($row_webshop['eancode'] != '' && $row_webshop['eancode'] != '?' && $row_webshop['eancode'] !== '0') { 
+        if($row_webshop['eancode'] != '' && $row_webshop['eancode'] != '?' && $row_webshop['eancode'] !== '0') {
         //    echo $row_webshop['eancode'];exit;
 
             $ean = $row_webshop['eancode'];
@@ -96,10 +134,13 @@ function insertInRowFormat() {
             }
 
             //echo $for_query;exit;
+            // these are four suppliers of both type webshop and nonwebshop, lets calculate relevance score of both type
             $suppliers_sql = "SELECT * FROM all_suppliers_data_source WHERE eancode IN (".$for_query.") ORDER BY is_present DESC";
 
-            if(!$conn->query($suppliers_sql)) {
-                bulkInsertLog(0,"Bulk Update Error:".mysqli_error($conn)."\n".$suppliers_sql."\n".$row_webshop['product_id']);
+
+
+            if($conn->query($suppliers_sql) === FALSE) {
+                bulkInsertLog(0,"Bulk Update Error:". $conn->error."\n".$suppliers_sql."\n".$row_webshop['product_id']);
                 exit;
             }
 
@@ -109,7 +150,7 @@ function insertInRowFormat() {
             makeRowFormat('Zevij', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
             makeRowFormat('Dozon', $initiate_non_webshop_supplier_data, $supplier_row_format_array);
 
-           // var_dump($supplier_row_format_array);exit;
+            //var_dump($supplier_row_format_array);exit;
 
             $result_s = $conn->query($suppliers_sql);
 
@@ -119,15 +160,10 @@ function insertInRowFormat() {
 
                 if($row_s['supplier'] == 'JRS') {
                     makeRowFormat('JRS', $row_s, $supplier_row_format_array);
-
                 }elseif($row_s['supplier'] == 'Polvo') {
-
                     makeRowFormat('Polvo', $row_s, $supplier_row_format_array);
-
                 }elseif($row_s['supplier'] == 'Nordwest') {
-
                      makeRowFormat('Nordwest', $row_s, $supplier_row_format_array);
-
                 }elseif($row_s['supplier'] == 'Zevij') { //Zevij is case sensitive
 
                       makeRowFormat('Zevij', $row_s, $supplier_row_format_array);
@@ -138,66 +174,31 @@ function insertInRowFormat() {
 
             }//end loop of all rows of each ean
 
+ print_r(count($supplier_row_format_array[20]));echo 'gg';exit;
+            
+
         }//end if of ean having 13 digits
-        
-      //var_dump($supplier_row_format_array);exit;
-        
+
+        // If batch size is reached, insert the batch
+       // echo count($supplier_row_format_array);exit;
+       
+            if (count($supplier_row_format_array) >= PMCHUNK) { //var_dump(count($supplier_row_format_array));exit;
+
+                insertBatch_2($sql_row_format, $last_part_sql, $supplier_row_format_array,$i);
+               $supplier_row_format_array=[]; // Reset batch data
+               $i++;
+            }
+
+           
+
+         
     }//end loop getting all webshop
-
-    // insert this data into database
-    $chunk_format_data = array_chunk($supplier_row_format_array, PMCHUNK);
-
-    if(count($chunk_format_data)) {
-        list($sql_row_format, $last_part_sql) = makeSqlForRowFormat();
-
-        foreach($chunk_format_data as $chunked_idx=>$chunked_item) {
-            $all_col_data = $updated_product_skus = array();
-            $chunk_sql = "";
-            foreach($chunked_item as $c_k=>$row) {
-                $one_rowString = $col_data ='';
-                $join_cols_names = '(';
-
-                //file_put_contents('hhhello.txt', $c_k."----".count($row),FILE_APPEND);
-            /* if($chunked_idx==0 && $c_k == 4) {
-                    var_dump($row);exit;
-                }*/
-
-                $col_data = implode("', '", $row);
-
-                //$one_rowString = getSqlOfColumns($row);
-
-
-                $one_rowString = "'".$col_data."'";
-                $join_cols_names .= $one_rowString;
-                $join_cols_names .= ')';
-
-                $all_col_data[] = $join_cols_names;
-            }
-
-            //var_dump($all_col_data);exit;
-
-            if(count($all_col_data) > 0) {
-                $chunk_sql = $sql_row_format.implode(",", $all_col_data) . $last_part_sql;
-
-                if($chunked_idx == 0) {
-                    if($conn->query("TRUNCATE TABLE suppliers_row_format")) {
-                        bulkInsertLog($chunked_idx,"Truncated suppliers_row_format:");
-                    }
-                }
-
-                    if($conn->query($chunk_sql)) {
-                        bulkInsertLog($chunked_idx,"Bulk Update:".count($chunked_item));                    
-                    } else {
-                       // echo mysqli_error($conn)."\n".$chunk_sql;exit;
-                        bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn)."\n".$chunk_sql);
-                    }
-            }
-            unset($all_col_data);
-        }
-
+//echo "sdfas";
+//exit;
+    if (!empty($supplier_row_format_array)) {
+        insertBatch_2($sql_row_format, $last_part_sql, $supplier_row_format_array,1);
     }
 
-   
 }
 
 function makeSqlForRowFormat()
@@ -232,7 +233,7 @@ function getSqlOfColumns($chunked_row) {
 function bulkInsertLog($chunk_index,$chunk_msg) {
   $file_pricechunks_log = "insert_suppliers_row_format.txt";
 
-  $result = file_put_contents($file_pricechunks_log,"".date("d-m-Y H:i:s")." Updated Price Chunk (".$chunk_index."):-".$chunk_msg."\n", FILE_APPEND);
+  $result = file_put_contents($file_pricechunks_log,"".date("d-m-Y H:i:s")." Inserted Suppliers-Row-Format Chunk (".$chunk_index."):-".$chunk_msg."\n", FILE_APPEND);
 
   if ($result === false) {
     $error = error_get_last();
@@ -260,6 +261,8 @@ function makeRowFormat($supplier_name, $its_data, &$supplier_row_format_array) {
         $supplier_row_format_array[$its_data['product_id']]['jrs_currentdate'] = $its_data['currentdate'];
         $supplier_row_format_array[$its_data['product_id']]['jrs_is_present'] = $its_data['is_present'];
         $supplier_row_format_array[$its_data['product_id']]['jrs_actual_supplier'] = $its_data['actual_supplier'];
+
+        $supplier_row_format_array[$its_data['product_id']]['jrs_relevance'] =  $its_data['net_price'];
     } elseif($supplier_name == 'Polvo') {
         $supplier_row_format_array[$its_data['product_id']]['polvoean'] =$its_data['eancode'];
         $supplier_row_format_array[$its_data['product_id']]['polvosku'] = $its_data['supplier_sku'];
@@ -335,3 +338,55 @@ function makeRowFormat($supplier_name, $its_data, &$supplier_row_format_array) {
 
     }
 }//end makeRowFormat()
+
+
+
+function insertBatch_2($sql_row_format, $last_part_sql,$batchData, $chunked_idx) {
+
+    $all_col_data = array();
+    $chunk_sql = "";
+    global $conn;
+    foreach($batchData as $c_k=>$row) {
+        $one_rowString = $col_data ='';
+        $join_cols_names = '(';
+
+        //file_put_contents('hhhello.txt', $c_k."----".count($row),FILE_APPEND);
+        /* if($chunked_idx==0 && $c_k == 4) {
+        var_dump($row);exit;
+        }*/
+
+        $col_data = implode("', '", $row);
+
+        //$one_rowString = getSqlOfColumns($row);
+
+
+        $one_rowString = "'".$col_data."'";
+        $join_cols_names .= $one_rowString;
+        $join_cols_names .= ')';
+
+        $all_col_data[] = $join_cols_names;
+    }
+
+    $total_updates = count($all_col_data);
+
+    if($total_updates > 0) {
+        $chunk_sql = $sql_row_format.implode(",", $all_col_data) . $last_part_sql;
+
+        if($chunked_idx == 0) {
+            if($conn->query("TRUNCATE TABLE suppliers_row_format")) {
+            bulkInsertLog($chunked_idx,"Truncated suppliers_row_format:");
+            }
+        }
+
+echo $chunk_sql;
+        if($conn->query($chunk_sql)) {
+            bulkInsertLog($chunked_idx,"Bulk Update:".$total_updates);                    
+        } else {
+            // echo mysqli_error($conn)."\n".$chunk_sql;exit;
+            bulkInsertLog($chunked_idx,"Bulk Update Error:".mysqli_error($conn)."\n".$chunk_sql);
+        }
+    }
+    unset($all_col_data);
+
+
+}

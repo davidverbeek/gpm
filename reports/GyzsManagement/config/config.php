@@ -5,7 +5,9 @@ include "dbconfig.php";
 $sql = "SELECT * FROM pm_settings WHERE id = 1";
 $result = $conn->query($sql);
 $settings_data = $result->fetch_assoc();
-$settings_data['roas'] = unserialize($settings_data["roas"]);
+$settings_data['roas'] = @unserialize($settings_data["roas"]);
+//$settings_data['roas'] = $settings_data["roas"];
+
 
 
 /* Get Shipping and Packing Costs Starts */
@@ -26,7 +28,7 @@ $shpment_reveenue_wo["Not_Transmission"] = $settings_data['roas']['shipment_reve
 
 /* Get Employee Costs Starts */
 //$employee_cost_wo = 1.15;
-$get_lowest_emp_cost = array_values($settings_data['roas']['employeecost_lower_bound']);
+$get_lowest_emp_cost = @array_values($settings_data['roas']['employeecost_lower_bound']);
 $employee_cost_wo = $get_lowest_emp_cost[0];
 /* Get Employee Costs Ends */
 

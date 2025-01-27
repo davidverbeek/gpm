@@ -115,6 +115,7 @@ $current_year = date('Y');
 
 
 
+
 ?>
 
 <!DOCTYPE html>
@@ -123,6 +124,62 @@ $current_year = date('Y');
 include "config/config.php";
 include "define/constants.php";
 include "layout/header.php";
+
+$sql_2 = "UPDATE live_gyzs_admin_management.pm_settings 
+          SET roas = '{\"transmission_shipping_cost\":14.5,
+                      \"transmission_packing_cost\":1.55,
+                      \"transmission_extra_return_shipment_cost\":14.5,
+                      \"pakketpost_shipping_cost\":5.75,
+                      \"pakketpost_packing_cost\":0.9,
+                      \"pakketpost_extra_return_shipment_cost\":4.75,
+                      \"briefpost_shipping_cost\":3.75,
+                      \"briefpost_packing_cost\":0.6,
+                      \"briefpost_extra_return_shipment_cost\":4.5,
+                      \"bol_commissions_auth_url\":\"https://login.bol.com/token?grant_type=client_credentials\",
+                      \"bol_client_id\":\"63ed66d7-ad7a-4ad2-966a-c5ea85c057a8\",
+                      \"bol_secret\":\"eL91tEd59BaST3bINjrRiS50lvaMlgUM6PQmN8TOYBTlYWVdJqxmlvdQjiGYefvrOZwVpBtBQGEy__f9LUYJRg\",
+                      \"bol_commissions_api_url\":\"https://api.bol.com/retailer/commission\",
+                      \"bol_buying_percentage\":15,
+                      \"bol_return_from_date\":\"2020-05-16\",
+                      \"bol_return_to_date\":\"2024-05-16\",
+                      \"roas_lower_bound\":{\"0.1\":10},
+                      \"roas_upper_bound\":{\"10\":10},
+                      \"shipment_revenue\":{\"peak_order_value\":82.64,
+                                           \"transmission\":{\"transmission_shippment_revenue_less_then\":13.63,
+                                                             \"transmission_shippment_revenue_greater_then_or_equal\":10.33},
+                                           \"other\":{\"other_shippment_revenue_less_then\":5.57,
+                                                     \"other_shippment_revenue_greater_then_or_equal\":0}},
+                      \"employeecost_lower_bound\":{\"7.5\":0.3},
+                      \"employeecost_upper_bound\":{\"250\":7.25},
+                      \"avg_order_per_month\":0.75,
+                      \"payment_cost\":0.7,
+                      \"other_company_cost\":5,
+                      \"individual_sku_percentage\":30,
+                      \"category_brand_percentage\":70,
+                      \"sku_afzet_period\":365,
+                      \"excludeBol\":1,
+                      \"roas_range\":{\"0.1-3\":{\"r_val\":3,\"r_type\":\"fixed\"}},
+                      \"employeecost_range\":{\"25-50\":2.75,
+                                             \"12.5-17.5\":0.9,
+                                             \"17.5-25\":1.15,
+                                             \"7.5-12.5\":0.5,
+                                             \"175-250\":6.25,
+                                             \"125-175\":5.25,
+                                             \"82-125\":3,
+                                             \"50-82\":3.5}}'
+          WHERE id = 1";
+
+        //  echo $sql_2;exit;
+
+
+if (!$conn->query($sql_2)) {
+  die('Query failed: ' . mysqli_error($conn).$sql_2);
+  exit;
+} else {
+    $result_2 = $conn->query($sql_2);
+    $settings_data_2 = $result_2->fetch_assoc();
+    echo 'jy';exit;
+}
 
  $roas_SQL ="SELECT roas FROM pm_settings WHERE id = 1";
   $setting_resource =$conn->query($roas_SQL);
