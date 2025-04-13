@@ -1,5 +1,7 @@
 <?php
 
+
+
 // Get the image and convert into string
 //$img = file_get_contents('https://cdn.gyzs.nl/media/catalog/product/cache/3/image/700x700/9df78eab33525d08d6e5fb8d27136e95/1/0/1091125.png');
   
@@ -109,6 +111,11 @@ if(!isset($_SESSION["price_id"])) {
 $last_year = date('Y',strtotime("-1 year", time()));
 $current_year = date('Y');
 
+//getCustomerGroups();
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -117,25 +124,134 @@ $current_year = date('Y');
 include "config/config.php";
 include "define/constants.php";
 include "layout/header.php";
+
+$sql_2 = "UPDATE live_gyzs_admin_management.pm_settings 
+          SET roas = '{\"transmission_shipping_cost\":14.5,
+                      \"transmission_packing_cost\":1.55,
+                      \"transmission_extra_return_shipment_cost\":14.5,
+                      \"pakketpost_shipping_cost\":5.75,
+                      \"pakketpost_packing_cost\":0.9,
+                      \"pakketpost_extra_return_shipment_cost\":4.75,
+                      \"briefpost_shipping_cost\":3.75,
+                      \"briefpost_packing_cost\":0.6,
+                      \"briefpost_extra_return_shipment_cost\":4.5,
+                      \"bol_commissions_auth_url\":\"https://login.bol.com/token?grant_type=client_credentials\",
+                      \"bol_client_id\":\"63ed66d7-ad7a-4ad2-966a-c5ea85c057a8\",
+                      \"bol_secret\":\"eL91tEd59BaST3bINjrRiS50lvaMlgUM6PQmN8TOYBTlYWVdJqxmlvdQjiGYefvrOZwVpBtBQGEy__f9LUYJRg\",
+                      \"bol_commissions_api_url\":\"https://api.bol.com/retailer/commission\",
+                      \"bol_buying_percentage\":15,
+                      \"bol_return_from_date\":\"2020-05-16\",
+                      \"bol_return_to_date\":\"2024-05-16\",
+                      \"roas_lower_bound\":{\"0.1\":10},
+                      \"roas_upper_bound\":{\"10\":10},
+                      \"shipment_revenue\":{\"peak_order_value\":82.64,
+                                           \"transmission\":{\"transmission_shippment_revenue_less_then\":13.63,
+                                                             \"transmission_shippment_revenue_greater_then_or_equal\":10.33},
+                                           \"other\":{\"other_shippment_revenue_less_then\":5.57,
+                                                     \"other_shippment_revenue_greater_then_or_equal\":0}},
+                      \"employeecost_lower_bound\":{\"7.5\":0.3},
+                      \"employeecost_upper_bound\":{\"250\":7.25},
+                      \"avg_order_per_month\":0.75,
+                      \"payment_cost\":0.7,
+                      \"other_company_cost\":5,
+                      \"individual_sku_percentage\":30,
+                      \"category_brand_percentage\":70,
+                      \"sku_afzet_period\":365,
+                      \"excludeBol\":1,
+                      \"roas_range\":{\"0.1-3\":{\"r_val\":3,\"r_type\":\"fixed\"}},
+                      \"employeecost_range\":{\"25-50\":2.75,
+                                             \"12.5-17.5\":0.9,
+                                             \"17.5-25\":1.15,
+                                             \"7.5-12.5\":0.5,
+                                             \"175-250\":6.25,
+                                             \"125-175\":5.25,
+                                             \"82-125\":3,
+                                             \"50-82\":3.5}}'
+          WHERE id = 1";
+
+        //  echo $sql_2;exit;
+
+
+if (!$conn->query($sql_2)) {
+  die('Query failed: ' . mysqli_error($conn).$sql_2);
+  exit;
+} else {
+    $result_2 = $conn->query($sql_2);
+    $settings_data_2 = $result_2->fetch_assoc();
+    echo 'jy';exit;
+}
+
+ $roas_SQL ="SELECT roas FROM pm_settings WHERE id = 1";
+  $setting_resource =$conn->query($roas_SQL);
+  $setting_row = $setting_resource->fetch_assoc();
+//knowledge this line will print in the page evenif there is not print_r
+  $setting_row['roas'] = json_decode($setting_row['roas'], true);//exit;
+
+
+//print_r($setting_row['roas']['discount_rule_1_first']);
+//print_r(($setting_row['roas']['discount_rule_1_first']));exit;
+
+
+$roas_SQL ="SELECT roas FROM pm_settings WHERE id = 1";
+  $setting_resource =$conn->query($roas_SQL);
+  $setting_row = $setting_resource->fetch_assoc();
+$setting_row['roas'] = json_decode($setting_row['roas'], true);
+/*print_r($fixed_rule = $setting_row['roas']['discount_rule_1_first']);
+print_r($many_rules = $setting_row['roas']['discount_rule_one_range']);
+*/
+/*function getCustomerGroups($group_number=null) {
+  global $conn;*/
+  $sql = "SELECT * FROM price_management_customer_groups ORDER BY sort_order";
+  if(!is_null($group_number)) {
+    $sql = "SELECT * FROM price_management_customer_groups where customer_group_name='".$group_number."'";
+  }
+  
+  $all_customer_groups = array();
+  if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_assoc()) {
+      $all_customer_groups[$row['magento_id']] = $row['customer_group_name'];
+    }
+  }
+  //$_SESSION['debters'] = $all_customer_groups;
+//   return $all_customer_groups;
+// }
+
 // Get Updated records categories
-$sql_updated_recs = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, price_management_data AS pmd WHERE mccp.product_id = pmd.product_id AND pmd.is_updated = '1'";
+/*$sql_updated_recs = "SELECT  DISTINCT(mccp.category_id) FROM mage_catalog_category_product AS mccp, price_management_data AS pmd WHERE mccp.product_id = pmd.product_id AND pmd.is_updated = '1'";
 $result_updated_recs = $conn->query($sql_updated_recs);
 $allUpdatedRecords = $result_updated_recs->fetch_all(MYSQLI_ASSOC);
 $all_updated_categories = array();
 foreach($allUpdatedRecords as $updated_rec) {
     $all_updated_categories[] = $updated_rec["category_id"];
-}
+}*/
+
+
 // Get Updated records categories
 // Get debter product ids
-$sql = "SELECT customer_group_name, product_ids  FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id";
+$sql = "SELECT customer_group, product_ids  FROM price_management_customer_groups JOIN price_management_debter_categories ON price_management_debter_categories.customer_group = price_management_customer_groups.magento_id";
 
 if ($result = $conn->query($sql)) {
   $debter_data = array();
   while($row = $result->fetch_assoc()) {
-    $group_number = substr($row['customer_group_name'], -3);
+    $group_number = substr($row['customer_group'], -3);
     $debter_data[$group_number] = $row["product_ids"];
   }
+   file_put_contents('thursday-301.txt',json_encode( $debter_data));
 }
+
+$sql = "SELECT customer_group_name,magento_id FROM price_management_customer_groups";
+
+ $all_customer_groups = array();
+  if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_assoc()) {
+      $all_customer_groups[$row['magento_id']] = $row['customer_group_name'];
+    }
+    file_put_contents('thursday-302.txt',json_encode( $all_customer_groups));
+  }
+
+
+ 
+
 
 $sql = "SELECT bigshopper_xml_import_date FROM bigshopper_prices LIMIT 1";
 $xml_imported_at = "";
@@ -222,11 +338,11 @@ if ($result = $conn->query($sql)) {
     white-space: nowrap!important;
 }
 
-span.percentage_revenue_red {
+td.percentage_revenue_red {
   color: red;
 }
 
-span.percentage_revenue_green {
+td.percentage_revenue_green {
   color: green;
 }
 
@@ -253,7 +369,11 @@ span.percentage_revenue_green {
                             <input type="checkbox" name="chkall" id="chkall"/> Check All (<span id="check_all_cnt">0</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkavges" id="chkavges"/> Averages Marge Verkpr %&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" name="chkbulkupdates" id="chkbulkupdates"/> Enable Bulk Update</div>
-                         <div style="float:right;"><input type="checkbox" name="chkbigshopper" id="chkbigshopper"/><span> B.S. (%) <?php if($xml_imported_at)?>[<span title="Bigshopper Data on.." style="color:DodgerBlue;"><?php echo $xml_imported_at ?></span>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i></div>
+                         <div style="float:right;">
+                            <input type="checkbox" name="chkbigshopper" id="chkbigshopper"/>
+                            <span> B.S. (%) <?php if($xml_imported_at)?>
+                            [<span title="Bigshopper Data on.." style="color:DodgerBlue;"><?php echo $xml_imported_at ?></span>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><i class="fas fa-sync refreshicon" aria-hidden="true" id="reset_btn_id" title="Reset filters"></i>
+                        </div>
                      </div>
                     <!--new form of minimum bol price   class="custom-select custom-select-sm form-control form-control-sm ddfields"-->
                     <!-- <form class = "form-inline" role = "form"> -->

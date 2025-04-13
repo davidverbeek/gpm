@@ -1,7 +1,7 @@
 <?php
 
 include "../config/config.php";
-include "../define/constants.php";
+include "../define/server_constants.php";
 
 session_start();
 
@@ -18,7 +18,7 @@ switch ($type) {
     
     $from = $_REQUEST['from'];
     $to = $_REQUEST['to'];
-    $url_path = ''.$roas_document_root_url.'/fetch_revenue_data.php';
+    $url_path = $roas_document_root_url.'/fetch_revenue_data.php';
     $post_data = array('from' => $from, 'to' => $to, 'roas_settings' => $settings_data['roas']);
 
     $options = array( 

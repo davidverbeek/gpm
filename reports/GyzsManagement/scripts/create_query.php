@@ -53,7 +53,7 @@ function diff_col_generation() {
   return $db_column_name;
 }
 
-if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
+if(null !== $_POST['hdn_filters'] && $_POST['hdn_filters'] != '') {
   switch($_POST['hdn_filters']) {
     case "1":
       $extra_where = "CAST(pmd.buying_price AS DECIMAL(10,".$scale.")) > CAST(pmd.selling_price AS DECIMAL(10,".$scale."))";  
@@ -156,7 +156,7 @@ if(isset(($_POST['hdn_filters'])) && $_POST['hdn_filters'] != '') {
         $db_column_name = 'pma.avg_brand';
       } elseif($db_column_name == 'gyzs_buying_price') {
         $db_column_name = '(CASE WHEN (CASE WHEN mcpet_af.value IS NOT NULL THEN mcpet_af.value = 0 ELSE mcpev_afw.value = 0 END) THEN CAST((mcped.value * CASE WHEN mcpet.value IS NOT NULL THEN mcpet.value ELSE mcpev_ideal.value END) AS DECIMAL (10 , '.$scale.' )) ELSE CAST((mcped.value) AS DECIMAL (10 , '.$scale.' )) END)';
-      }elseif($db_column_name == 'gyzs_selling_price') {
+      } elseif($db_column_name == 'gyzs_selling_price') {
         $db_column_name = '(CASE WHEN (CASE WHEN mcpet_af.value IS NOT NULL THEN mcpet_af.value = 0 ELSE mcpev_afw.value = 0 END) THEN CAST((mcped_selling_price.value * CASE WHEN mcpet.value IS NOT NULL THEN mcpet.value ELSE mcpev_ideal.value END) AS DECIMAL (10 , '.$scale.' )) ELSE CAST((mcped_selling_price.value) AS DECIMAL (10 , '.$scale.' )) END)';
       } elseif($db_column_name == 'avg_per_category_per_brand') {
         $db_column_name = 'pma.avg_per_category_per_brand';
@@ -348,7 +348,9 @@ $columns = array(
      array('db' => 'CASE WHEN mktpr.number_competitors IS NOT NULL THEN mktpr.number_competitors ELSE "---" END AS number_competitors', 'dt' => $column_index["number_competitors"]),
       array('db' => 'CASE WHEN mktpr.productset_incl_dispatch IS NOT NULL THEN mktpr.productset_incl_dispatch ELSE "---" END AS productset_incl_dispatch', 'dt' => $column_index["productset_incl_dispatch"]),
        array('db' => 'CASE WHEN mktpr.price_of_the_next_excl_shipping IS NOT NULL THEN mktpr.price_of_the_next_excl_shipping ELSE "---" END AS price_of_the_next_excl_shipping', 'dt' => $column_index["price_of_the_next_excl_shipping"]),
-       array('db' => 'CAST(CASE WHEN pmd.afwijkenidealeverpakking = "0" THEN (pmd.selling_price/pmd.idealeverpakking)ELSE pmd.selling_price END AS DECIMAL (10 , '.$scale.')) AS pm_vkpr_per_piece', 'dt' => $column_index["pmvkpr_per_piece"]),
+
+       array('db' => 'CAST(CASE WHEN pmd.afwijkenidealeverpakking = "0" THEN (pmd.selling_price/pmd.idealeverpakking) ELSE pmd.selling_price END AS DECIMAL (10 , '.$scale.')) AS pm_vkpr_per_piece', 'dt' => $column_index["pmvkpr_per_piece"]),
+
        array('db' => 'CAST(CASE WHEN (pmd.afwijkenidealeverpakking = "0") AND mktpr.lowest_price IS NOT NULL THEN ((((pmd.selling_price/pmd.idealeverpakking) - mktpr.lowest_price)/mktpr.lowest_price)*100) WHEN (pmd.afwijkenidealeverpakking = "1") AND mktpr.lowest_price IS NOT NULL THEN (((pmd.selling_price - mktpr.lowest_price)/mktpr.lowest_price)*100) ELSE 0 END AS DECIMAL(10, '.$scale.')) AS diff_pm_vkpr_per_piece_bslp', 'dt' => $column_index["diff_pmvkpr_pp_bslp"]),
 
         array( 'db' => 'pmd.preview_profit_percentage_bp AS preview_pp_bp', 'dt' => $column_index["preview_profit_percentage_bp"]),
